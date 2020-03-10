@@ -29,20 +29,12 @@ def convert(origFile):
     for line in fileIn:
 
         # the single quotation mark causes issues, so it is converted to the double quotations
-        if line.contains("'"):
+        if line.contains("\'"):
             fileOut.write(line.replace("\'", "\""))
         
         # the single quotation mark causes issues, so it is converted to the double quotations
-        if line.contains("'"):
-            fileOut.write(line.replace("\'", "\""))
-
-        # the single quotation mark causes issues, so it is converted to the double quotations
-        if line.contains("'"):
-            fileOut.write(line.replace("\'", "\""))
-
-        # the single quotation mark causes issues, so it is converted to the double quotations
-        if line.contains("'"):
-            fileOut.write(line.replace("\'", "\""))
+        if line.contains("DB"):
+            fileOut.write(line.replace("DB", "DC.B"))
 
         # if no problems in line, write as is to converted file
         else:
