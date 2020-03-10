@@ -28,21 +28,27 @@ def convert(origFile):
     fileOut.write("    processor 6502\n")
     
     for line in fileIn:
+        tempLine = ""
+        alreadyChanged = False
 
         # the single quotation mark causes issues, so it is converted to the double quotations
         if line.contains("\'"):
-            fileOut.write(line.replace("\'", "\""))
+            templine = line.replace("\'", "\"")
+            alreadyChanged = True
         
         # the single quotation mark causes issues, so it is converted to the double quotations
-        if line.contains("DB"):
-            fileOut.write(line.replace("DB", "DC.B"))
+        if line.contains("DB") and alreadyChanged:
+            tempLine = tempLine.replace("DB", "DC.B")
+        elif line.contains("DB") and alreadyChanged == False:
+            templine = line.replace("DB", "DC.B")
+            alreadyChanged == True
 
         # if no problems in line, write as is to converted file
-        else:
-            fileOut.write(line)
+        if alreadyChanged == False:
+            tempLine = line
 
-
-
+        # write the line with all the changes in the out file
+        fileOut.write(tempLine)
 
 # TESTING AREA
 # origFile = "DIGDUG.ASM"
