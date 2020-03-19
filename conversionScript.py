@@ -13,6 +13,9 @@ def convert(origFile):
     for root, dirs, filenames in os.walk(folder):
         for filename in filenames:
             filename = os.path.join(root, filename)
+
+    
+            
     oldExtension = ".S"
     newExtension = ".ASM"
     for root, dirs, filenames in os.walk(folder):
