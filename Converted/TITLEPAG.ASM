@@ -167,16 +167,16 @@ ATITLEDO  PLA
           JSR     HSCINIT
           TXA
           BNE     TRYTEDDY
-          LDX     #L(HSCRAM)
-          LDY     #H(HSCRAM)
+          LDX     #<.HSCRAM
+          LDY     #>.HSCRAM
           JSR     HSCATRCT
           JSR     HSCDISPL               ;DISPLAY HIGH SCORE FOR 10 SECONDS.
 TRYTEDDY  LDA     #0                     ;PINEAPPLE MODE
           JSR     HSCINIT
           TXA
           BNE     ATTNOHSC
-;*;*;*       LDX     #L(HSCRAM)             ;X CONTAINS 0 ALREADY...
-          LDY     #H(HSCRAM)
+;*;*;*       LDX     #<.HSCRAM             ;X CONTAINS 0 ALREADY...
+          LDY     #>.HSCRAM
           JSR     HSCATRCT
           JSR     HSCDISPL
 HSCSTOP   LDX     #1

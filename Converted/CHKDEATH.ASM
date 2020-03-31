@@ -287,7 +287,7 @@ HSCDISPL                                 ;THIS ALSO ACTS AS AN ENTRY POINT FOR
           STA     CTRL                   ;RESTORE REGISTERS CHANGED BY HSC.
           LDA     #CSET1
           STA     CHARBASE
-          LDA     #L(DLISETUP)
+          LDA     #<.DLISETUP
           STA     DLIVECT
 HSCRTS    RTS
 
@@ -298,8 +298,8 @@ ENTERHSC  LDA     SCOREL,X               ;WRITE PLAYER X"S SCORE INTO SCORE
           STA     HSCOREM                ;  FIRST BYTE IS MOST SIGNIFICANT
           LDA     SCOREH,X               ;  BYTE OF SCORE.
           STA     HSCOREH
-          LDX     #L(HSCRAM)
-          LDY     #H(HSCRAM)
+          LDX     #<.HSCRAM
+          LDY     #>.HSCRAM
           JMP     HSCENTER               ;;*;*;* = RTS!
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
@@ -323,7 +323,7 @@ HSCINIT
           JSR     SCRNOFF
 ;*;*;*       LDA     #$FF                   ;TURN OFF DMA.
 ;*;*;*       STA     CTRL
-          LDA     #L(DLITOP)
+          LDA     #<.DLITOP
           STA     DLIVECT
 
           LDX     #14

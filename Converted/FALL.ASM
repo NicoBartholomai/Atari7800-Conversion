@@ -83,7 +83,7 @@ RFALL0    TAY
           CPY     #6
           BCC     CRUSH
 
-          LDA     #H(SOUTH7)
+          LDA     #>.SOUTH7
           STA     DRTPTR+1
           LDA     ROCKSY,X
 ;*         SEC
@@ -119,17 +119,17 @@ ROCKHALF  JSR     ROCKPUSH               ;USES TEMP+0, RETURNS DIRTMAP,X IN A
           BPL     CRUSH
 
 
-ROCKONE   LDA     #L(SOUTH1)             ;TO
+ROCKONE   LDA     #<.SOUTH1             ;TO
           STA     DRTPTR
           JSR     ROCKPUSH               ;USES TEMP+0
           CMP     #36
           BCS     ROCKONE3
-          LDY     #L(VERTBOT)
+          LDY     #<.VERTBOT
           STY     DRTPTR
           JSR     BORE1
 ROCKONE3
 
-ROCKONE2  LDA     #L(VERTTOP)            ;FROM
+ROCKONE2  LDA     #<.VERTTOP            ;FROM
           STA     DRTPTR
           LDX     CURROCK
           LDA     ROCKSX,X

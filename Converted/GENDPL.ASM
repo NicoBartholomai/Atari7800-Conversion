@@ -179,7 +179,7 @@ DLFLIP
 ;*         INX
 ;*GETDLST   LDA     LDPPL,X
 ;*         STA     DPPL
-;*         LDA     #H(DPL0LIST)           ;SAME FOR EITHER DPLLIST.
+;*         LDA     #>.DPL0LIST           ;SAME FOR EITHER DPLLIST.
 ;*         STA     DPPH
 ;*         RTS
 

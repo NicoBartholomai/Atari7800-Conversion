@@ -66,7 +66,7 @@ SCRAT2    ASL     PROPORT2
 
 DISPCHAR  LDA     CHARSEQL,X             (DISPLAY CHARACTER)
           STA     TEMP1                  TEMP1 MUST BE ZERO PAGE
-          LDA     #H(RPOOKA)
+          LDA     #>.RPOOKA
           STA     TEMP2                  TEMP2 MUST BE TEMP1+1
           LDY     CHARSEQN,X             INDEX INTO SEQUENCE
 PREV1     LDA     (TEMP1),Y              ZERO PAGE INDIRECT ADDRESSING
@@ -190,7 +190,7 @@ MOVECONT  JSR     GHSTSUB1
           LDY     #$0F
 ZNXT51    LDA     DIRTABLE,Y             GET LOW BYTE OF DIRTCODE ADDR.
           STA     TEMP1                  PUT IN ZERO PAGE FOR INDIRECT
-          LDA     #H(DIRT0)
+          LDA     #>.DIRT0
 ;*         INY
 ;*         LDA     DIRTABLE,Y             GET HIGH BYTE OF DIRTCODE ADDR.
           STA     TEMP2                  TEMP2 = TEMP1 + 1 (ZERO PAGE)
@@ -223,9 +223,9 @@ MOVEMODE  JSR     MOVECONT
           BCC     FLAMOUT
           LDY     FLAMIE
           BNE     FLAMOUT
-;*G        LDA     #H(FLAMDET)
+;*G        LDA     #>.FLAMDET
 ;*G        PHA
-;*G        LDA     #L(FLAMDET)
+;*G        LDA     #<.FLAMDET
 ;*G        PHA
 ;*G        JMP     MOVECONT
 ;*;*;*       JSR     MOVECONT
@@ -442,9 +442,9 @@ ESCAPE    STA     TEMP5                  (TO ESCAPE UPPER LEFT SCREEN)
           STA     TEMP4
           JSR     GETPOINT
           BNE     ZNXT111
-SCRAM     LDA     #L(OFFSCR)
+SCRAM     LDA     #<.OFFSCR
           STA     MODEL,X
-          LDA     #H(OFFSCR)
+          LDA     #>.OFFSCR
           STA     MODEH,X
           BNE     OFFSCR
 
@@ -478,7 +478,7 @@ GHOSTER   STA     TEMP1                  SEE IF IT"S TIME TO GHOST THEN
           JSR     NOREV
           EOR     #$0F
           STA     GHOSTTMP
-          LDA     #L(ESCAPE)             ;THERE IS PROBABLY A NEATER WAY TO
+          LDA     #<.ESCAPE             ;THERE IS PROBABLY A NEATER WAY TO
           CMP     MODEL,X                ;    DO THIS...
           BEQ     GHOSTER3
 
@@ -530,7 +530,7 @@ GHOSTER7  LDY     GHOSTOUT
 GHOSTER3  LDA     TEMP1
 GHOSTER2  STA     DIR,X
           JSR     NEWSEQ
-          LDA     #L(ESCAPE)             KLUDGE TO FORCE GHOSTING WHEN
+          LDA     #<.ESCAPE             KLUDGE TO FORCE GHOSTING WHEN
           CMP     MODEL,X
           BNE     ENDTHIS2
           LDA     DIR,X
@@ -640,7 +640,7 @@ PREV47    LDA     MONSTAT,X              ;ENABLED?
           BCC     ZNXT108
           LDA     ESCAPER
           BNE     ZNXT108
-          LDA     #L(DIGVERT)            ;RESTORED WHEN ROCK IS DONE FALLING
+          LDA     #<.DIGVERT            ;RESTORED WHEN ROCK IS DONE FALLING
           STA     MODEL,X
 ;*         BEQ     ZNXT108                DO NOT GO DOWN IF AT BOTTOM OF TUNNEL
 ;*         JSR     GETDIRT
@@ -693,7 +693,7 @@ DIGMODE   LDA     MONSTAT,X              ; ALSO CALLED BY FALL IF ESCAPER
           BMI     ZNXT35                 ;  IS NOT SET IN ORDER TO RESTORE
           LDA     MODETAB,Y              ;  MODES DESTROYED BY AVOID
           STA     MODEL,X
-          LDA     #H(DIGVERT)
+          LDA     #>.DIGVERT
 ;*         INY
 ;*         LDA     MODETAB,Y
           STA     MODEH,X
@@ -740,9 +740,9 @@ PREV2     DEX
           BEQ     NOESCMUS
           LDY     #SNG9                  ESCAPING NOISE
           JSR     NOISE
-NOESCMUS  LDA     #L(ESCAPE)
+NOESCMUS  LDA     #<.ESCAPE
           STA     MODEL,X
-          LDA     #H(ESCAPE)
+          LDA     #>.ESCAPE
           STA     MODEH,X
           INC     ESCAPER
 ;*         LDA     #1

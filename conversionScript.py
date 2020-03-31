@@ -22,16 +22,46 @@ def convert(input, output):
                 out = line
 
                 # Change single quote to double
-                if "\'" in line:
+                if "\'" in out:
                     out = out.replace("\'", "\"")
 
                 # Adds semicolon to mark off old comments
-                if "*" in line:
+                if "*" in out:
                     out = out.replace("*", ";*")
 
                 # Change DB command to DC.B
-                if "DB" in line:
+                if "DB" in out:
                     out = out.replace("DB", "DC.B")
+
+                # Change all Low Bit commands
+                while "L(" in out:
+                    index = out.index("L(")
+                    out = out[:index] + "<." + out[index + 2:]
+                    index += 2
+                    paren_count = 1
+                    while index < len(out) and paren_count > 0:
+                        if out[index] == "(":
+                            paren_count += 1
+                        elif out[index] == ")":
+                            paren_count -= 1
+                        if paren_count == 0:
+                            out = out[:index] + out[index + 1:]
+                        index += 1
+
+                # Change all High Bit commands
+                while "H(" in out:
+                    index = out.index("H(")
+                    out = out[:index] + ">." + out[index + 2:]
+                    index += 2
+                    paren_count = 1
+                    while index < len(out) and paren_count > 0:
+                        if out[index] == "(":
+                            paren_count += 1
+                        elif out[index] == ")":
+                            paren_count -= 1
+                        if paren_count == 0:
+                            out = out[:index] + out[index + 1:]
+                        index += 1
 
                 file_out.write(out)
 

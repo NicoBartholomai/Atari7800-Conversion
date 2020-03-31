@@ -294,7 +294,7 @@ NEXT115   STA     DIR,X                  SETUP FOR JSR NEWSEQ
           JSR     SPEEDER
 ;*         LDA     CHARSEQL,X             ;NOW DONE IN NEWSEQ - 1/18/84
 ;*         STA     TEMP1
-;*         LDA     #H(RPOOKA)
+;*         LDA     #>.RPOOKA
 ;*         STA     TEMP2
 ;*         LDY     #$00
 ;*         LDA     (TEMP1),Y

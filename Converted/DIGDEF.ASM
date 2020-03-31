@@ -843,8 +843,8 @@ PL1COLR   EQU     WHITE
           DC.B      $C7                    ;MARIA SIGNATURE AND START OF CODE
 ;*                                        ;DLI VECTOR:  THIS LOCATION IS A
 ;*                                        ;  JMP TO LOCATION IN RAM (DLIJMP).
-          DC.B      L(GENEJMP),H(GENEJMP)  ;  JUMP ADDRESS IS CHANGED AS DMA
+          DC.B      <.GENEJMP,>.GENEJMP  ;  JUMP ADDRESS IS CHANGED AS DMA
                                          ;  MOVES DOWN SCREEN.
           ORG     $FFFC
-          DC.B      L(MAIN),H(MAIN)        ;INTERRUPT RESET VECTOR.
-          DC.B      L(GENERTI),H(GENERTI)  ;JUST IN CASE....
+          DC.B      <.MAIN,>.MAIN        ;INTERRUPT RESET VECTOR.
+          DC.B      <.GENERTI,>.GENERTI  ;JUST IN CASE....

@@ -843,11 +843,11 @@ PL1COLR   EQU     WHITE
           DC.B      $C7                    ;MARIA SIGNATURE AND START OF CODE
 ;*                                        ;DLI VECTOR:  THIS LOCATION IS A
 ;*                                        ;  JMP TO LOCATION IN RAM (DLIJMP).
-          DC.B      L(GENEJMP),H(GENEJMP)  ;  JUMP ADDRESS IS CHANGED AS DMA
+          DC.B      <.GENEJMP,>.GENEJMP  ;  JUMP ADDRESS IS CHANGED AS DMA
                                          ;  MOVES DOWN SCREEN.
           ORG     $FFFC
-          DC.B      L(MAIN),H(MAIN)        ;INTERRUPT RESET VECTOR.
-          DC.B      L(GENERTI),H(GENERTI)  ;JUST IN CASE....
+          DC.B      <.MAIN,>.MAIN        ;INTERRUPT RESET VECTOR.
+          DC.B      <.GENERTI,>.GENERTI  ;JUST IN CASE....
           ORG     $D000
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 
@@ -965,9 +965,9 @@ INIT
           STX     SYNCFRAM               ;WILL NEED DIFF VALUE FOR PAL/SECAM
           LDX     #$4C                   ;SET UP JUMP INSTRUCTION FOR DLI"S.
           STX     DLIJMP
-          LDX     #L(DLISETUP)
+          LDX     #<.DLISETUP
           STX     DLIVECT
-          LDX     #H(DLISETUP)
+          LDX     #>.DLISETUP
           STX     DLIVECT+1
 
           STA     $38                    ; A CONTAINS 0
@@ -1058,13 +1058,13 @@ SETDPLS   LDA     DLIBITS,Y
           STA     DPL0LIST,X
           LDA     LISTTBH1+1,Y
           STA     DPL1LIST,X
-          LDA     #H(DUMMYDPL)
+          LDA     #>.DUMMYDPL
           STA     DPL2LIST,X
           INX
           LDA     LISTTABL+1,Y
           STA     DPL0LIST,X
           STA     DPL1LIST,X
-          LDA     #L(DUMMYDPL)
+          LDA     #<.DUMMYDPL
           STA     DPL2LIST,X
           INX
           CPX     #69
@@ -1129,7 +1129,7 @@ INITBACK  JSR     SETDPLH                ;ADDRESS OF ZONE DISPLAY LIST.
           STA     (DPLOW),Y
           STA     L0Z0+1
           INY
-          LDA     #H(DIRTMAP)            ;INIT TO CURRENT PLAYER"S DIRT MAP.
+          LDA     #>.DIRTMAP            ;INIT TO CURRENT PLAYER"S DIRT MAP.
           STA     (DPLOW),Y
           INY
           LDA     PALWIDZ,X              ;PALETTE/WIDTH FOR ZONE.
@@ -1165,9 +1165,9 @@ FILLBLNK  STA     DIRTMAP,X              ;ZERO OUT END OF DIRTMAP FOR SELECT,
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 SCRNOFF
           JSR     WAITVBL
-          LDA     #L(DPL2LIST)           ;TURN DISPLAY OFF BY SETTING DPPL,DPPH
+          LDA     #<.DPL2LIST           ;TURN DISPLAY OFF BY SETTING DPPL,DPPH
           STA     DPPL                   ;  TO POINT TO BLANK DISPLAY LIST.
-          LDA     #H(DPL2LIST)
+          LDA     #>.DPL2LIST
           STA     DPPH
           RTS
 SCRNON
@@ -1178,7 +1178,7 @@ SCRNON
           INX
 ZSCRNON   LDA     LDPPL,X
           STA     DPPL
-          LDA     #H(DPL0LIST)
+          LDA     #>.DPL0LIST
           STA     DPPH
           RTS
 
@@ -1641,7 +1641,7 @@ NEXT115   STA     DIR,X                  SETUP FOR JSR NEWSEQ
           JSR     SPEEDER
 ;*         LDA     CHARSEQL,X             ;NOW DONE IN NEWSEQ - 1/18/84
 ;*         STA     TEMP1
-;*         LDA     #H(RPOOKA)
+;*         LDA     #>.RPOOKA
 ;*         STA     TEMP2
 ;*         LDY     #$00
 ;*         LDA     (TEMP1),Y
@@ -2156,7 +2156,7 @@ DIGFAST   EQU     $F7                    DUGDUG FAST    7 BITS
 
 
 DDMOVE
-          LDA     #H(SOUTH7)             ;ASSUME ALL ARRAYS ON SAME PAGE.
+          LDA     #>.SOUTH7             ;ASSUME ALL ARRAYS ON SAME PAGE.
           STA     DRTPTR+1
 
           LDA     DIGGING
@@ -3232,7 +3232,7 @@ HSCDISPL                                 ;THIS ALSO ACTS AS AN ENTRY POINT FOR
           STA     CTRL                   ;RESTORE REGISTERS CHANGED BY HSC.
           LDA     #CSET1
           STA     CHARBASE
-          LDA     #L(DLISETUP)
+          LDA     #<.DLISETUP
           STA     DLIVECT
 HSCRTS    RTS
 
@@ -3243,8 +3243,8 @@ ENTERHSC  LDA     SCOREL,X               ;WRITE PLAYER X"S SCORE INTO SCORE
           STA     HSCOREM                ;  FIRST BYTE IS MOST SIGNIFICANT
           LDA     SCOREH,X               ;  BYTE OF SCORE.
           STA     HSCOREH
-          LDX     #L(HSCRAM)
-          LDY     #H(HSCRAM)
+          LDX     #<.HSCRAM
+          LDY     #>.HSCRAM
           JMP     HSCENTER               ;;*;*;* = RTS!
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
@@ -3268,7 +3268,7 @@ HSCINIT
           JSR     SCRNOFF
 ;*;*;*       LDA     #$FF                   ;TURN OFF DMA.
 ;*;*;*       STA     CTRL
-          LDA     #L(DLITOP)
+          LDA     #<.DLITOP
           STA     DLIVECT
 
           LDX     #14
@@ -3706,7 +3706,7 @@ SCRAT2    ASL     PROPORT2
 
 DISPCHAR  LDA     CHARSEQL,X             (DISPLAY CHARACTER)
           STA     TEMP1                  TEMP1 MUST BE ZERO PAGE
-          LDA     #H(RPOOKA)
+          LDA     #>.RPOOKA
           STA     TEMP2                  TEMP2 MUST BE TEMP1+1
           LDY     CHARSEQN,X             INDEX INTO SEQUENCE
 PREV1     LDA     (TEMP1),Y              ZERO PAGE INDIRECT ADDRESSING
@@ -3830,7 +3830,7 @@ MOVECONT  JSR     GHSTSUB1
           LDY     #$0F
 ZNXT51    LDA     DIRTABLE,Y             GET LOW BYTE OF DIRTCODE ADDR.
           STA     TEMP1                  PUT IN ZERO PAGE FOR INDIRECT
-          LDA     #H(DIRT0)
+          LDA     #>.DIRT0
 ;*         INY
 ;*         LDA     DIRTABLE,Y             GET HIGH BYTE OF DIRTCODE ADDR.
           STA     TEMP2                  TEMP2 = TEMP1 + 1 (ZERO PAGE)
@@ -3863,9 +3863,9 @@ MOVEMODE  JSR     MOVECONT
           BCC     FLAMOUT
           LDY     FLAMIE
           BNE     FLAMOUT
-;*G        LDA     #H(FLAMDET)
+;*G        LDA     #>.FLAMDET
 ;*G        PHA
-;*G        LDA     #L(FLAMDET)
+;*G        LDA     #<.FLAMDET
 ;*G        PHA
 ;*G        JMP     MOVECONT
 ;*;*;*       JSR     MOVECONT
@@ -4082,9 +4082,9 @@ ESCAPE    STA     TEMP5                  (TO ESCAPE UPPER LEFT SCREEN)
           STA     TEMP4
           JSR     GETPOINT
           BNE     ZNXT111
-SCRAM     LDA     #L(OFFSCR)
+SCRAM     LDA     #<.OFFSCR
           STA     MODEL,X
-          LDA     #H(OFFSCR)
+          LDA     #>.OFFSCR
           STA     MODEH,X
           BNE     OFFSCR
 
@@ -4118,7 +4118,7 @@ GHOSTER   STA     TEMP1                  SEE IF IT"S TIME TO GHOST THEN
           JSR     NOREV
           EOR     #$0F
           STA     GHOSTTMP
-          LDA     #L(ESCAPE)             ;THERE IS PROBABLY A NEATER WAY TO
+          LDA     #<.ESCAPE             ;THERE IS PROBABLY A NEATER WAY TO
           CMP     MODEL,X                ;    DO THIS...
           BEQ     GHOSTER3
 
@@ -4170,7 +4170,7 @@ GHOSTER7  LDY     GHOSTOUT
 GHOSTER3  LDA     TEMP1
 GHOSTER2  STA     DIR,X
           JSR     NEWSEQ
-          LDA     #L(ESCAPE)             KLUDGE TO FORCE GHOSTING WHEN
+          LDA     #<.ESCAPE             KLUDGE TO FORCE GHOSTING WHEN
           CMP     MODEL,X
           BNE     ENDTHIS2
           LDA     DIR,X
@@ -4280,7 +4280,7 @@ PREV47    LDA     MONSTAT,X              ;ENABLED?
           BCC     ZNXT108
           LDA     ESCAPER
           BNE     ZNXT108
-          LDA     #L(DIGVERT)            ;RESTORED WHEN ROCK IS DONE FALLING
+          LDA     #<.DIGVERT            ;RESTORED WHEN ROCK IS DONE FALLING
           STA     MODEL,X
 ;*         BEQ     ZNXT108                DO NOT GO DOWN IF AT BOTTOM OF TUNNEL
 ;*         JSR     GETDIRT
@@ -4333,7 +4333,7 @@ DIGMODE   LDA     MONSTAT,X              ; ALSO CALLED BY FALL IF ESCAPER
           BMI     ZNXT35                 ;  IS NOT SET IN ORDER TO RESTORE
           LDA     MODETAB,Y              ;  MODES DESTROYED BY AVOID
           STA     MODEL,X
-          LDA     #H(DIGVERT)
+          LDA     #>.DIGVERT
 ;*         INY
 ;*         LDA     MODETAB,Y
           STA     MODEH,X
@@ -4380,9 +4380,9 @@ PREV2     DEX
           BEQ     NOESCMUS
           LDY     #SNG9                  ESCAPING NOISE
           JSR     NOISE
-NOESCMUS  LDA     #L(ESCAPE)
+NOESCMUS  LDA     #<.ESCAPE
           STA     MODEL,X
-          LDA     #H(ESCAPE)
+          LDA     #>.ESCAPE
           STA     MODEH,X
           INC     ESCAPER
 ;*         LDA     #1
@@ -4708,7 +4708,7 @@ RFALL0    TAY
           CPY     #6
           BCC     CRUSH
 
-          LDA     #H(SOUTH7)
+          LDA     #>.SOUTH7
           STA     DRTPTR+1
           LDA     ROCKSY,X
 ;*         SEC
@@ -4744,17 +4744,17 @@ ROCKHALF  JSR     ROCKPUSH               ;USES TEMP+0, RETURNS DIRTMAP,X IN A
           BPL     CRUSH
 
 
-ROCKONE   LDA     #L(SOUTH1)             ;TO
+ROCKONE   LDA     #<.SOUTH1             ;TO
           STA     DRTPTR
           JSR     ROCKPUSH               ;USES TEMP+0
           CMP     #36
           BCS     ROCKONE3
-          LDY     #L(VERTBOT)
+          LDY     #<.VERTBOT
           STY     DRTPTR
           JSR     BORE1
 ROCKONE3
 
-ROCKONE2  LDA     #L(VERTTOP)            ;FROM
+ROCKONE2  LDA     #<.VERTTOP            ;FROM
           STA     DRTPTR
           LDX     CURROCK
           LDA     ROCKSX,X
@@ -5821,7 +5821,7 @@ DLFLIP
 ;*         INX
 ;*GETDLST   LDA     LDPPL,X
 ;*         STA     DPPL
-;*         LDA     #H(DPL0LIST)           ;SAME FOR EITHER DPLLIST.
+;*         LDA     #>.DPL0LIST           ;SAME FOR EITHER DPLLIST.
 ;*         STA     DPPH
 ;*         RTS
 
@@ -6044,16 +6044,16 @@ ATITLEDO  PLA
           JSR     HSCINIT
           TXA
           BNE     TRYTEDDY
-          LDX     #L(HSCRAM)
-          LDY     #H(HSCRAM)
+          LDX     #<.HSCRAM
+          LDY     #>.HSCRAM
           JSR     HSCATRCT
           JSR     HSCDISPL               ;DISPLAY HIGH SCORE FOR 10 SECONDS.
 TRYTEDDY  LDA     #0                     ;PINEAPPLE MODE
           JSR     HSCINIT
           TXA
           BNE     ATTNOHSC
-;*;*;*       LDX     #L(HSCRAM)             ;X CONTAINS 0 ALREADY...
-          LDY     #H(HSCRAM)
+;*;*;*       LDX     #<.HSCRAM             ;X CONTAINS 0 ALREADY...
+          LDY     #>.HSCRAM
           JSR     HSCATRCT
           JSR     HSCDISPL
 HSCSTOP   LDX     #1
@@ -6389,11 +6389,11 @@ DISPTS    DC.B  THOUSND1,THOUS25,THOUS4,THOUS6
           DC.B  THOUS8,THOUS10,THOUS12,THOUS15
 
 
-DOROCKL   DC.B      L(RSLIP),L(RTOTTER),L(RFALL),L(RBOTTOM)
-          DC.B      L(RSPLIT),L(RCRUMBL),L(RPOINTS),L(RFINISH)
+DOROCKL   DC.B      <.RSLIP,<.RTOTTER,<.RFALL,<.RBOTTOM
+          DC.B      <.RSPLIT,<.RCRUMBL,<.RPOINTS,<.RFINISH
 
-DOROCKH   DC.B      H(RSLIP),H(RTOTTER),H(RFALL),H(RBOTTOM)
-          DC.B      H(RSPLIT),H(RCRUMBL),H(RPOINTS),H(RFINISH)
+DOROCKH   DC.B      >.RSLIP,>.RTOTTER,>.RFALL,>.RBOTTOM
+          DC.B      >.RSPLIT,>.RCRUMBL,>.RPOINTS,>.RFINISH
 
 RKANIM    DC.B      SPLTROCK,CRMBROCK
 
@@ -6435,10 +6435,10 @@ ENDE0AA
           ORG     $E1AA
 CTURNS    DC.B      124,47,4,71,255
 
-HALFXFM   DC.B      L(EAST5),L(WEST5),L(SOUTH7),L(NORTH7)
-FROMXFM   DC.B      L(HORLFT),L(HORRGT),L(VERTTOP),L(VERTBOT)
-TOXFM     DC.B      L(HORRGT),L(HORLFT),L(VERTBOT),L(VERTTOP)
-ENTRXFM   DC.B      L(EAST1),L(WEST1),L(SOUTH1),L(NORTH1)
+HALFXFM   DC.B      <.EAST5,<.WEST5,<.SOUTH7,<.NORTH7
+FROMXFM   DC.B      <.HORLFT,<.HORRGT,<.VERTTOP,<.VERTBOT
+TOXFM     DC.B      <.HORRGT,<.HORLFT,<.VERTBOT,<.VERTTOP
+ENTRXFM   DC.B      <.EAST1,<.WEST1,<.SOUTH1,<.NORTH1
 
 HARPSTMP  DC.B      RHARPOON,LHARPOON,DHARPOON,UHARPOON
 
@@ -6601,13 +6601,13 @@ FRUITAB   DC      TEDDY
           DC      GALAXIAN,PINEAPPL      ;BETTY AND AVA-ROBIN WERE HERE!
 
 
-DIRTABLE  DC.B      L(DIRT0),L(DIRT1),L(DIRT2),L(DIRT3),L(DIRT4),L(DIRT5)
-          DC.B      L(DIRT6),L(DIRT7),L(DIRT8),L(DIRT9),L(DIRT10),L(DIRT11)
-          DC.B      L(DIRT12),L(DIRT13),L(DIRT14),L(SKY15)
+DIRTABLE  DC.B      <.DIRT0,<.DIRT1,<.DIRT2,<.DIRT3,<.DIRT4,<.DIRT5
+          DC.B      <.DIRT6,<.DIRT7,<.DIRT8,<.DIRT9,<.DIRT10,<.DIRT11
+          DC.B      <.DIRT12,<.DIRT13,<.DIRT14,<.SKY15
 
-MODETAB   DC.B      L(DIGDIAG),L(DIGVERT),L(DIGHORIZ)
-          DC.B      L(DIGVERT),L(DIGHORIZ),L(DIGDIAG)
-          DC.B      L(DIGVERT),L(DIGHORIZ)
+MODETAB   DC.B      <.DIGDIAG,<.DIGVERT,<.DIGHORIZ
+          DC.B      <.DIGVERT,<.DIGHORIZ,<.DIGDIAG
+          DC.B      <.DIGVERT,<.DIGHORIZ
 
 
 PRITES0   DC.B      RPUMP4,RPUMP8,RPUMP12,RPUMP16,RPUMP20,RPUMP24
@@ -6706,7 +6706,7 @@ ENDE5AA
           ORG     $E6AA
 ;*;*;*;*;* FROM IGAMERAK.S
 ;* HEADERS FOR INITIAL SCORE LINE STAMPS: 4 EXTRA MEN PER PLAYER, PLAYER POINTER.
-ISCORLIN  DC.B      L(SCOREMAP),W1ZONE,H(SCOREMAP),$B0,16
+ISCORLIN  DC.B      <.SCOREMAP,W1ZONE,>.SCOREMAP,$B0,16
           DC.B      BLANK1,$3E,CSET1,24,BLANK1,$3E,CSET1,32,BLANK1,$3E,CSET1,40
           DC.B      BLANK1,$3E,CSET1,48,BLANK1,$3E,CSET1,56,FULL0,$3E,CSET1,64
           DC.B      BLANK1,$3E,CSET1,88,BLANK1,$3E,CSET1,96,BLANK1,$3E,CSET1,104
@@ -6766,8 +6766,8 @@ CRYOFST   DC.B      0,12,24,12,0,12,24,12
 
 TITLCBOR  DC.B      124,47,4,255,124,4,255,255
 
-SEQTAB    DC      L(GPOOKA),L(LPOOKA),L(GFYGAR),L(LFYGAR)
-          DC      L(RPOOKA),L(GPOOKA),L(RFYGAR),L(GFYGAR)
+SEQTAB    DC      <.GPOOKA,<.LPOOKA,<.GFYGAR,<.LFYGAR
+          DC      <.RPOOKA,<.GPOOKA,<.RFYGAR,<.GFYGAR
 ;*;*;*;*;* PAGE 86 BYTES FULL
 ENDE7AA
 
@@ -6811,11 +6811,11 @@ ASNGHBF0
 ; SNGHBF0 IS INDEXED BY SONG NUMBER.
 ; IT CONTAINS THE HIGH BYTE FOR FREQUENCY OF FIRST VOICE.
 ;  20 BYTES
-SNGHBF0   DC.B      $00,H(SNGCF0),H(SNGDF0),H(SNGDF0),H(SNGNULLF)
-          DC.B      H(SNG1F0),H(SNG2F0),H(SNG3F0)
-          DC.B      H(SNG5F0),H(SNG4F0),H(SNG6F0),H(SNG7F0)
-          DC.B      H(SNG8F0),H(SNG9F0),H(SNG10F0),H(SNG11F0)
-          DC.B      H(SNG12F0),H(SNG13F0),H(SNG14F0),H(SNG15F0)
+SNGHBF0   DC.B      $00,>.SNGCF0,>.SNGDF0,>.SNGDF0,>.SNGNULLF
+          DC.B      >.SNG1F0,>.SNG2F0,>.SNG3F0
+          DC.B      >.SNG5F0,>.SNG4F0,>.SNG6F0,>.SNG7F0
+          DC.B      >.SNG8F0,>.SNG9F0,>.SNG10F0,>.SNG11F0
+          DC.B      >.SNG12F0,>.SNG13F0,>.SNG14F0,>.SNG15F0
 
 PEBBCOLR  DC.B      PEBBLE0A,PEBBLE0B,PEBBLE0C,PEBBLE0D
           DC.B      PEBBLE1A,PEBBLE1B,PEBBLE1C,PEBBLE1D
@@ -6832,12 +6832,12 @@ RANDCRET  DC.B      $AA,$E1,$55,$0F,$8D,$69,$2D,$96
 ;*;*;*;*;* FROM SELECT.S
 
 ;*;*;*;*;* FROM CHKDEATH.S
-;*HSCARGS   DC.B      LCARTNUM,HCARTNUM,0,1,L(GAMENAME),H(GAMENAME)
+;*HSCARGS   DC.B      LCARTNUM,HCARTNUM,0,1,<.GAMENAME,>.GAMENAME
 HSCARGS   DC.B      LCARTNUM,HCARTNUM,0,1,0,0
-;*         DC.B      L(BONZDIFF),H(BONZDIFF),L(HSCOREX),H(HSCOREX)
-          DC.B      0,0,L(HSCOREX),H(HSCOREX)
-;*         DC.B      L(LOGODLL),H(LOGODLL),L(SOUND),H(SOUND),0
-          DC.B      L(LOGODLL),H(LOGODLL),L(HSCRTS),H(HSCRTS),10
+;*         DC.B      <.BONZDIFF,>.BONZDIFF,<.HSCOREX,>.HSCOREX
+          DC.B      0,0,<.HSCOREX,>.HSCOREX
+;*         DC.B      <.LOGODLL,>.LOGODLL,<.SOUND,>.SOUND,0
+          DC.B      <.LOGODLL,>.LOGODLL,<.HSCRTS,>.HSCRTS,10
 
 SETRACK1  LDA     #1
           STA     RACKNUM
@@ -6852,7 +6852,7 @@ ENDE9AA
 
 ;*;*;*;*;* FROM GENDPL.S
 ;*DISPLAY LIST POINTERS FOR TWO DISPLAY LISTS.
-LDPPL     DC.B      L(DPL0LIST),L(DPL1LIST)
+LDPPL     DC.B      <.DPL0LIST,<.DPL1LIST
 
 ;* ZONE SCAN LINE BOUNDARIES....
 TOPZONE   DC.B      11,23,35,47,59,71,83,95,107,119,131,143,155,167,179,191,191
@@ -6884,18 +6884,18 @@ ENDEAAA
 
           ORG     $EBAA
 ;* LOW AND HIGH ADDRESSES OF DISPLAY LISTS FOR EACH ZONE.
-LISTTABL  DC.B      L(L0Z0),L(L0Z1),L(L0Z2),L(L0Z3),L(L0Z4),L(L0Z5),L(L0Z6)
-          DC.B      L(L0Z7),L(L0Z8),L(L0Z9),L(L0Z10),L(L0Z11),L(L0Z12)
-          DC.B      L(L0Z13),L(L0Z14),L(L0Z15),L(L0Z0),L(DUMMYDPL),L(DUMMYDPL)
-          DC.B      L(DUMMYDPL),L(DUMMYDPL),L(DUMMYDPL)
-LISTTBH0  DC.B      H(L0Z0),H(L0Z1),H(L0Z2),H(L0Z3),H(L0Z4),H(L0Z5),H(L0Z6)
-          DC.B      H(L0Z7),H(L0Z8),H(L0Z9),H(L0Z10),H(L0Z11),H(L0Z12)
-          DC.B      H(L0Z13),H(L0Z14),H(L0Z15),H(L0Z0),H(DUMMYDPL),H(DUMMYDPL)
-          DC.B      H(DUMMYDPL),H(DUMMYDPL),H(DUMMYDPL)
-LISTTBH1  DC.B      H(L0Z0),H(L1Z1),H(L1Z2),H(L1Z3),H(L1Z4),H(L1Z5),H(L1Z6)
-          DC.B      H(L1Z7),H(L1Z8),H(L1Z9),H(L1Z10),H(L1Z11),H(L1Z12)
-          DC.B      H(L1Z13),H(L1Z14),H(L1Z15),H(L0Z0),H(DUMMYDPL),H(DUMMYDPL)
-          DC.B      H(DUMMYDPL),H(DUMMYDPL),H(DUMMYDPL)
+LISTTABL  DC.B      <.L0Z0,<.L0Z1,<.L0Z2,<.L0Z3,<.L0Z4,<.L0Z5,<.L0Z6
+          DC.B      <.L0Z7,<.L0Z8,<.L0Z9,<.L0Z10,<.L0Z11,<.L0Z12
+          DC.B      <.L0Z13,<.L0Z14,<.L0Z15,<.L0Z0,<.DUMMYDPL,<.DUMMYDPL
+          DC.B      <.DUMMYDPL,<.DUMMYDPL,<.DUMMYDPL
+LISTTBH0  DC.B      >.L0Z0,>.L0Z1,>.L0Z2,>.L0Z3,>.L0Z4,>.L0Z5,>.L0Z6
+          DC.B      >.L0Z7,>.L0Z8,>.L0Z9,>.L0Z10,>.L0Z11,>.L0Z12
+          DC.B      >.L0Z13,>.L0Z14,>.L0Z15,>.L0Z0,>.DUMMYDPL,>.DUMMYDPL
+          DC.B      >.DUMMYDPL,>.DUMMYDPL,>.DUMMYDPL
+LISTTBH1  DC.B      >.L0Z0,>.L1Z1,>.L1Z2,>.L1Z3,>.L1Z4,>.L1Z5,>.L1Z6
+          DC.B      >.L1Z7,>.L1Z8,>.L1Z9,>.L1Z10,>.L1Z11,>.L1Z12
+          DC.B      >.L1Z13,>.L1Z14,>.L1Z15,>.L0Z0,>.DUMMYDPL,>.DUMMYDPL
+          DC.B      >.DUMMYDPL,>.DUMMYDPL,>.DUMMYDPL
 
 
 BACKMAP
@@ -6975,7 +6975,7 @@ ADEATH    DC.B      ZBLANK,SDEATH,HRDEATH3,HRDEATH2,HRDEATH1
 
 
           ORG     $C15F
-GENEJMP   DC.B      $4C,L(DLIJMP),H(DLIJMP)
+GENEJMP   DC.B      $4C,<.DLIJMP,>.DLIJMP
 ENDC100
 
 
@@ -6986,11 +6986,11 @@ ASNGLBF0
 ; SNGLBF0 IS INDEXED BY SONG NUMBER.
 ; IT CONTAINS THE LOW BYTE FOR FREQUENCY OF FIRST VOICE.
 ;  20 BYTES
-SNGLBF0   DC.B      $00,L(SNGCF0),L(SNGDF0),L(SNGDF0),L(SNGNULLF)
-          DC.B      L(SNG1F0),L(SNG2F0),L(SNG3F0)
-          DC.B      L(SNG5F0),L(SNG4F0),L(SNG6F0),L(SNG7F0)
-          DC.B      L(SNG8F0),L(SNG9F0),L(SNG10F0),L(SNG11F0)
-          DC.B      L(SNG12F0),L(SNG13F0),L(SNG14F0)    ;,L(SNG15F0)
+SNGLBF0   DC.B      $00,<.SNGCF0,<.SNGDF0,<.SNGDF0,<.SNGNULLF
+          DC.B      <.SNG1F0,<.SNG2F0,<.SNG3F0
+          DC.B      <.SNG5F0,<.SNG4F0,<.SNG6F0,<.SNG7F0
+          DC.B      <.SNG8F0,<.SNG9F0,<.SNG10F0,<.SNG11F0
+          DC.B      <.SNG12F0,<.SNG13F0,<.SNG14F0    ;,<.SNG15F0
 
 
 ASNGLBF1
@@ -6998,11 +6998,11 @@ ASNGLBF1
 ; IT CONTAINS THE LOW BYTE FOR FREQUENCY OF SECOND VOICE, IF THERE IS ONE.
 ; HIGH BYTE IS ASSUMED TO BE SNGHBF0.
 ;  20 BYTES
-SNGLBF1   DC.B      L(SNG15F0),0,L(SNGDF1),L(SNGDF1)
-          DC.B      0,L(SNG1F1),0,L(SNG3F1)
+SNGLBF1   DC.B      <.SNG15F0,0,<.SNGDF1,<.SNGDF1
+          DC.B      0,<.SNG1F1,0,<.SNG3F1
           DC.B      0,0,0,0
-          DC.B      L(SNG8F1),L(SNG9F1),0,0
-          DC.B      L(SNG12F1),L(SNG13F1),L(SNG14F1)    ;,L(SNG15F1)
+          DC.B      <.SNG8F1,<.SNG9F1,0,0
+          DC.B      <.SNG12F1,<.SNG13F1,<.SNG14F1    ;,<.SNG15F1
 
 
 ; SNGC0 IS INDEXED BY SONG NUMBER.
@@ -7010,7 +7010,7 @@ SNGLBF1   DC.B      L(SNG15F0),0,L(SNGDF1),L(SNGDF1)
 ; 0 VALUE MEANS SPECIAL CASE - ROCK FALLING.
 ;  20 BYTES
 ASNGC0
-SNGC0     DC.B      L(SNG15F1),$04,$D4,$D4,$00,$11,$0D,$47,$04,$04
+SNGC0     DC.B      <.SNG15F1,$04,$D4,$D4,$00,$11,$0D,$47,$04,$04
           DC.B      $04,$00,$D4,$D4,$04,$04,$DD,$D4,$DD      ;,$D4
 
 
@@ -7381,14 +7381,14 @@ LFYGAR    DC      LFYGAR1,LFYGAR1,LFYGAR2,LFYGAR2
           DC      LFYGAR1,LFYGAR1,LFYGAR2,LFYGAR2,0
 GFYGAR    DC      GFYGAR1,GFYGAR2,GFYGAR2,GFYGAR2        ;,0
 TITLCDIR  DC.B      0,1,2,4,0,2,4,4        ;OVERLAPPED WITH ABOVE.
-LOGODLL   DC.B      $CF,H(DUMMYDPL),L(DUMMYDPL)
-          DC.B      $4F,H(DUMMYDPL),L(DUMMYDPL)
-          DC.B      $43,H(DUMMYDPL),L(DUMMYDPL)
-          DC.B      $4B,H(L0Z13),L0Z13P5
-          DC.B      $4B,H(L0Z12),L0Z12P5
-          DC.B      $43,H(DUMMYDPL),L(DUMMYDPL)
-          DC.B      $4B,H(L0Z9),L0Z9P5
-          DC.B      $4C,H(DUMMYDPL),L(DUMMYDPL)
+LOGODLL   DC.B      $CF,>.DUMMYDPL,<.DUMMYDPL
+          DC.B      $4F,>.DUMMYDPL,<.DUMMYDPL
+          DC.B      $43,>.DUMMYDPL,<.DUMMYDPL
+          DC.B      $4B,>.L0Z13,L0Z13P5
+          DC.B      $4B,>.L0Z12,L0Z12P5
+          DC.B      $43,>.DUMMYDPL,<.DUMMYDPL
+          DC.B      $4B,>.L0Z9,L0Z9P5
+          DC.B      $4C,>.DUMMYDPL,<.DUMMYDPL
 
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
@@ -7426,9 +7426,9 @@ LOGODLL   DC.B      $CF,H(DUMMYDPL),L(DUMMYDPL)
 ;*         PHA
 ;*;*        LDA     #1                     ;THIS DLI IS FOR THE DUMMY ZONE JUST
 ;*;*        STA     ONSCREEN               ;  BEFORE ZONE 0.  IT SETS ONSCREEN
-;*         LDA     #L(DLISCORE)           ;  AND LOW BYTE OF ADDRESS OF NEXT DLI.
+;*         LDA     #<.DLISCORE           ;  AND LOW BYTE OF ADDRESS OF NEXT DLI.
 ;*         STA     DLIVECT                ;  EVENTUALLY, WE CAN OPTIMIZE THIS SO
-;*;*        LDA     #H(DLISCORE)           ;  THAT ALL DLI CODE IS ON SAME PAGE:
+;*;*        LDA     #>.DLISCORE           ;  THAT ALL DLI CODE IS ON SAME PAGE:
 ;*;*        STA     DLIVECT+1              ;  THEN ONLY LOW BYTE NEED BE UPDATED.
 ;*         INC     FRMCNT
 ;*         INC     TITLETIM
@@ -7447,10 +7447,10 @@ DLISETUP
           STA     WSYNC
           STX     P5C2
           STA     P5C1
-          LDA     #L(DLISKY)
+          LDA     #<.DLISKY
           BNE     DLIEND
 ;*         STA     DLIVECT
-;*         LDA     #H(DLISKY)
+;*         LDA     #>.DLISKY
 ;*         STA     DLIVECT+1
 ;*         PLA
 ;*         TAX
@@ -7467,10 +7467,10 @@ DLISKY
           STA     WSYNC
           STX     P7C1
           STA     P7C3
-          LDA     #L(DLIDIRT0)
+          LDA     #<.DLIDIRT0
           BNE     DLIEND
 ;*         STA     DLIVECT
-;*         LDA     #H(DLIDIRT0)
+;*         LDA     #>.DLIDIRT0
 ;*         STA     DLIVECT+1
 ;*         PLA
 ;*         TAX
@@ -7488,9 +7488,9 @@ DLIDIRT0
           STA     WSYNC
           STX     P6C1
           STA     P6C3
-          LDA     #L(DLIDIRT1)
+          LDA     #<.DLIDIRT1
 DLIEND    STA     DLIVECT
-;*         LDA     #H(DLIDIRT1)
+;*         LDA     #>.DLIDIRT1
 ;*         STA     DLIVECT+1
           BNE     DLIEXIT
 ;*         PLA
@@ -7516,10 +7516,10 @@ DLIDIRT1
 STUFF     INC     TITLETIM
           BNE     ZYXWVU
           INC     SELCTIM
-ZYXWVU    LDA     #L(DLIVBLNK)
+ZYXWVU    LDA     #<.DLIVBLNK
           BNE     DLIEND
 ;*         STA     DLIVECT
-;*         LDA     #H(DLIDIRT3)
+;*         LDA     #>.DLIDIRT3
 ;*         STA     DLIVECT+1
 ;*         PLA
 ;*         TAX
@@ -7531,9 +7531,9 @@ ZYXWVU    LDA     #L(DLIVBLNK)
 ;*         PHA                            ;CLEARS ONSCREEN FLAG AND SETS DLI
 ;*         LDA     #0                     ;  POINTER TO DLI FOR TOP OF SCREEN.
 ;*         STA     ONSCREEN
-;*         LDA     #L(DLIVBLNK)
+;*         LDA     #<.DLIVBLNK
 ;*ZDLIRTI   STA     DLIVECT
-;*         LDA     #H(DLIVBLNK)
+;*         LDA     #>.DLIVBLNK
 ;*         STA     DLIVECT+1
 ;*         PLA
 ;*         RTI
@@ -7554,9 +7554,9 @@ ZDLIVBL   LDA     CTRLRD                 ;WAIT FOR VBLANK TO SYNC DLI"S.
           BPL     ENDDLIV
           JSR     DOCOLORS
           JSR     SOUND
-          LDA     #L(DLISETUP)
+          LDA     #<.DLISETUP
           STA     DLIVECT
-;*         LDA     #H(DLISETUP)
+;*         LDA     #>.DLISETUP
 ;*         STA     DLIVECT+1
 ENDDLIV   PLA
           TAY
@@ -7574,7 +7574,7 @@ DLITOP    PHA
           LDA     P0C0SHAD+27
           STA     WSYNC
           STA     P0C0+27
-          LDA     #L(DLIBOTM)
+          LDA     #<.DLIBOTM
           BNE     ZDLIRTI
 
 DLIBOTM   PHA
@@ -7582,7 +7582,7 @@ DLIBOTM   PHA
           STA     CTRL
           LDA     #$39
           STA     CHARBASE
-          LDA     #L(DLITOP)
+          LDA     #<.DLITOP
 ZDLIRTI   STA     DLIVECT
           PLA
           RTI

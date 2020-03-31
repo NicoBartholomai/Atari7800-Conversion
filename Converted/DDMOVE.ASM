@@ -25,7 +25,7 @@ DIGFAST   EQU     $F7                    DUGDUG FAST    7 BITS
 
 
 DDMOVE
-          LDA     #H(SOUTH7)             ;ASSUME ALL ARRAYS ON SAME PAGE.
+          LDA     #>.SOUTH7             ;ASSUME ALL ARRAYS ON SAME PAGE.
           STA     DRTPTR+1
 
           LDA     DIGGING
