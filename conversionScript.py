@@ -2,8 +2,8 @@ import os
 import glob
 import sys
 from shutil import copyfile
-# add more
 
+# takes in 2 folders (Original and Converted)
 def convert(input, output):
 
     input_path = os.getcwd() + "\\" + input
@@ -12,10 +12,11 @@ def convert(input, output):
     for root, dirs, files in os.walk(input_path):
         for file in files:
             # Adds all files from input to output and changes extension
-            copyfile(root + "\\" + file, output_path + "\\" + file[:-2] + ".ASM")
+            # produces the normal asm files in converted folder
+            # copyfile(root + "\\" + file, output_path + "\\" + file[:-4] + ".ASM")
 
             file_in = open(root + "\\" + file, 'r')
-            file_out = open(output_path + "\\" + file[:-2] + ".ASM", 'w')
+            file_out = open(output_path + "\\" + file[:-4] + ".ASM", 'w')
 
             # Adds compilation setting
             file_out.write("\t" + "processor 6502 \n")
