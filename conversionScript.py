@@ -21,7 +21,6 @@ def convert(input, output):
             file_out.write("\t" + "processor 6502 \n")
 
             for line in file_in:
-
                 out = line
 
                 # Change single quote to double
