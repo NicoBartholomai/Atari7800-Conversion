@@ -2,6 +2,7 @@
           ORG     $A000
 ENDA000
 
+;;Array isnt working prooperly, processor needs to be changed
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;  ARRAYS:  PUT RANDOM ARRAYS HERE SO       ;;;;;;;;;;;;;;;;;;;;;
