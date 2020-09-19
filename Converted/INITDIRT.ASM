@@ -1,17 +1,17 @@
 	processor 6502 
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                           ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*       INITDIRT:  CALLED AT START OF EACH RACK TO          ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  INITIALIZE DIRT, TUNNELS, AND            ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  CREATURES FOR THE RACK.                  ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                           ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*       INITDIRT:  CALLED AT START OF EACH RACK TO;          ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  INITIALIZE DIRT, TUNNELS, AND            ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  CREATURES FOR THE RACK.                  ;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 INITDIRT
           LDA     NOTUNNEL
           BNE     JUSTCRET
 
-          LDA     #FULLDIRT              ;FULL DIRT CHARACTER INDEX.
-          LDX     #224                   ;FIRST, FILL IN ALL THE DIRT.
+          LDA     #FULLDIRT;              ;FULL DIRT CHARACTER INDEX.
+          LDX     #224;                   ;FIRST, FILL IN ALL THE DIRT.
 FILLDRT   STA     DIRTMAP+$F,X
           DEX
           BNE     FILLDRT
@@ -19,10 +19,10 @@ FILLDRT   STA     DIRTMAP+$F,X
           LDX     #$76
           JSR     HCARVE
 
-          LDX     #13                    ;FILL LEFT AND RIGHT EDGES OF DIRT WITH
-BLACKEDG  LDY     MAPLOW,X               ;  BLANKS: THIS CREATES 14 COLUMNS OF
+          LDX     #13;                    ;FILL LEFT AND RIGHT EDGES OF DIRT WITH
+BLACKEDG  LDY     MAPLOW,X;               ;  BLANKS: THIS CREATES 14 COLUMNS OF
           LDA     #BLANKL
-          STA     DIRTMAP,Y              ;  DIRT, 8 PIXELS WIDE EACH.
+          STA     DIRTMAP,Y;              ;  DIRT, 8 PIXELS WIDE EACH.
           STA     DIRTMAP+$10
           LDA     #BLANKR
           STA     DIRTMAP-1,Y
@@ -30,23 +30,23 @@ BLACKEDG  LDY     MAPLOW,X               ;  BLANKS: THIS CREATES 14 COLUMNS OF
           BNE     BLACKEDG
           STA     DIRTMAP+$EF
 
-;*;*;*       LDX     #0                     ;X IS ALREADY 0.
-          TXA                            ;CALCULATE EFFECTIVE RACK NUMBER, GIVEN
-          LDY     ATTRACT                ;  THAT RACKS 12-15 REPEAT.
+;*;*;*       LDX     #0;                     ;X IS ALREADY 0.
+          TXA;                            ;CALCULATE EFFECTIVE RACK NUMBER, GIVEN
+          LDY     ATTRACT;                ;  THAT RACKS 12-15 REPEAT.
           BNE     GOTERACK
           LDX     PLAYNUM
-          LDY     RACKNUM,X              ;ACTUAL RACK NUMBER.
-          BNE     RACKN                  ;  NUMBER WHEN WE"RE DONE.
+          LDY     RACKNUM,X;              ;ACTUAL RACK NUMBER.
+          BNE     RACKN;                  ;  NUMBER WHEN WE"RE DONE.
           INY
           STY     RACKNUM,X
 RACKN     DEY
           LDA     BONZO
           BEQ     NOBONZ
-          TYA                            ;BONZO MODE: EFFRACK MAX AT 2+15.
+          TYA;                            ;BONZO MODE: EFFRACK MAX AT 2+15.
           CLC
           ADC     #15
           BCS     WRAPBONZ
-          CMP     #MAXEFFR               ;17
+          CMP     #MAXEFFR;               ;17
           BCC     GOTERACK
 WRAPBONZ  LDA     #MAXEFFR
           BNE     GOTERACK
@@ -54,10 +54,10 @@ NOBONZ    TYA
           CPY     #15
           BCC     GOTERACK
           LDA     RACKNUM,X
-          AND     #3                     ;CLOSEST MULTIPLE OF 4.
+          AND     #3;                     ;CLOSEST MULTIPLE OF 4.
 ;*;*;*       CLC
 ;*;*;*       ADC     #11
-          ADC     #10                    ;(CARRY SET).
+          ADC     #10;                    ;(CARRY SET).
 GOTERACK  STA     EFFRACK,X
 
 JUSTCRET  LDY     PLAYNUM
@@ -84,20 +84,20 @@ ZANYCRET  STA     RTUNNELS
           CLC
           ADC     #17
           BNE     ZTUNNEL0
-REGTUNL   LDY     CREATS,X               ;CREATURE BYTE: 0=> POOKA, 1=> FYGAR.
+REGTUNL   LDY     CREATS,X;               ;CREATURE BYTE: 0=> POOKA, 1=> FYGAR.
           STY     RCREATS
-          LDY     TUNLDIR,X              ;TUNNEL DIRECTION: 0=> HORIZ, 1=> VERT.
+          LDY     TUNLDIR,X;              ;TUNNEL DIRECTION: 0=> HORIZ, 1=> VERT.
           STY     RTUNNELS
           TXA
-ZTUNNEL0  ASL     A                      ;MULTIPLY BY 8 FOR INDEX INTO TUNNELS.
+ZTUNNEL0  ASL     A;                      ;MULTIPLY BY 8 FOR INDEX INTO TUNNELS.
           ASL     A
           ASL     A
           TAY
-          LDA     #0                     ;INITIALIZE POINTERS INTO POOKA AND
-          STA     PCOUNT                 ;  FYGAR ARRAYS.
+          LDA     #0;                     ;INITIALIZE POINTERS INTO POOKA AND
+          STA     PCOUNT;                 ;  FYGAR ARRAYS.
           LDA     #4
           STA     FCOUNT
-          LDX     #7                     ;POSSIBLE 8 TUNNELS PER RACK.
+          LDX     #7;                     ;POSSIBLE 8 TUNNELS PER RACK.
           STX     TCOUNT
 ITUNNEL   LDX     TUNNELS,Y
           BNE     ZTUNNEL
@@ -105,27 +105,27 @@ ITUNNEL   LDX     TUNNELS,Y
           PHA
           PHP
           BEQ     ZCREATS
-ZTUNNEL   ASL     RTUNNELS               ;GET TUNNEL DIRECTION.
-          LDA     NOTUNNEL               ;JUST INIT CREATURES?
+ZTUNNEL   ASL     RTUNNELS;               ;GET TUNNEL DIRECTION.
+          LDA     NOTUNNEL;               ;JUST INIT CREATURES?
           BNE     ICREATS
-          BCS     VTUNNEL                ;(SET BY ASL).
+          BCS     VTUNNEL;                ;(SET BY ASL).
           JSR     HCARVE
           BNE     ICREATS
-VTUNNEL   LDA     #DTOPEND               ;;*;*;*MARIA 1...
-          STA     DIRTMAP,X              ;VERTICAL TUNNEL.
-          LDA     #DVMIDDLE              ;;*;*;*MARIA 1...
+VTUNNEL   LDA     #DTOPEND;               ;;*;*;*MARIA 1...
+          STA     DIRTMAP,X;              ;VERTICAL TUNNEL.
+          LDA     #DVMIDDLE;              ;;*;*;*MARIA 1...
           STA     DIRTMAP+$10,X
-          LDA     #DC.BOTEND               ;;*;*;*MARIA 1...
+          LDA     #DC.BOTEND;               ;;*;*;*MARIA 1...
           STA     DIRTMAP+$20,X
 ICREATS
-          TXA                            ;IF CARRY CLEAR, HORIZONTAL TUNNEL.
-          JSR     GETRXY                 ;RETURNS X POS IN A, Y IN X.
+          TXA;                            ;IF CARRY CLEAR, HORIZONTAL TUNNEL.
+          JSR     GETRXY;                 ;RETURNS X POS IN A, Y IN X.
           PHA
           PHP
           TXA
 ZCREATS   ASL     RCREATS
           BCS     IFYGAR
-          LDX     PCOUNT                 ;INDEX INTO POOKA ARRAY.
+          LDX     PCOUNT;                 ;INDEX INTO POOKA ARRAY.
           INC     PCOUNT
           BNE     GOTCINDX
 IFYGAR    LDX     FCOUNT
@@ -134,7 +134,7 @@ GOTCINDX
           PLP
           PHP
           BCC     ZHTUNL
-          SBC     CRYOFST,X              ;VERT TUNNEL - OFFSET CREATURE Y POS.
+          SBC     CRYOFST,X;              ;VERT TUNNEL - OFFSET CREATURE Y POS.
           BCS     ZHTUNL
           LDA     #0
 ZHTUNL    STA     POOKAY,X
@@ -150,7 +150,7 @@ ZGOTCRET
           PLP
           PLA
           BCS     ZVTUNL
-          ADC     CRXOFST,X              ;HORIZ TUNNEL: OFFSET CREATURE X POS.
+          ADC     CRXOFST,X;              ;HORIZ TUNNEL: OFFSET CREATURE X POS.
 ZVTUNL    STA     POOKAX,X
           LDA     MONSTAT,X
           BMI     NOCREAT
@@ -195,8 +195,8 @@ DORAK1
           BNE     ZDORAK1
           LDA     BONZO
           BNE     ADJ12
-ZDORAK1   LDA     #DHMIDDLE              ;RACK 1 IS ONLY RACK WITH TUNNELS
-          STA     DIRTMAP+$2C            ;  TALLER OR WIDER THAN 3 DIRT BLOCKS.
+ZDORAK1   LDA     #DHMIDDLE;              ;RACK 1 IS ONLY RACK WITH TUNNELS
+          STA     DIRTMAP+$2C;            ;  TALLER OR WIDER THAN 3 DIRT BLOCKS.
           STA     DIRTMAP+$A5
           LDA     #DRHTEND
           STA     DIRTMAP+$2D
@@ -212,12 +212,12 @@ ZDORAK1   LDA     #DHMIDDLE              ;RACK 1 IS ONLY RACK WITH TUNNELS
 ADJ12     TXA
           CMP     #12
           BCC     GOTDCOLR
-ADJ12A    SBC     #12                    ;3 COLOR SCHEMES: EACH COLOR SCHEME
+ADJ12A    SBC     #12;                    ;3 COLOR SCHEMES: EACH COLOR SCHEME
           CMP     #12
-          BCS     ADJ12A                 ;  LASTS FOR FOUR RACKS.
+          BCS     ADJ12A;                 ;  LASTS FOR FOUR RACKS.
 GOTDCOLR  AND     #$C
           TAX
-          LDA     DIRTCOLR,X             ;INITIALIZE PALETTES FOR THIS RACK.
+          LDA     DIRTCOLR,X;             ;INITIALIZE PALETTES FOR THIS RACK.
           STA     P0C0SHAD+25
           LDA     PEBBCOLR,X
           STA     P0C0SHAD+27
@@ -231,15 +231,15 @@ ZTOPLOOP  LDA     DIRTCOLR+1,X
           INY
           CPY     #6
           BCC     ZTOPLOOP
-;*         LDA     DIRTCOLR+1,X           LDY #0
-;*         STA     DRT1COLR               LDA DIRTCOLR+1,X
-;*         LDA     PEBBCOLR+1,X           STA DRT1COLR,Y
-;*         STA     DRT1COLR+1             LDA PEBBCOLR+1,X
-;*         LDA     DIRTCOLR+2,X           STA DRT1COLR+1,Y
-;*         STA     DRT2COLR               INX
-;*         LDA     PEBBCOLR+2,X           INY  INY
-;*         STA     DRT2COLR+1             CPY #6
-;*         LDA     DIRTCOLR+3,X           BCC TOPLOOP
+;*         LDA     DIRTCOLR+1,X;           LDY #0
+;*         STA     DRT1COLR;               LDA DIRTCOLR+1,X
+;*         LDA     PEBBCOLR+1,X;           STA DRT1COLR,Y
+;*         STA     DRT1COLR+1;             LDA PEBBCOLR+1,X
+;*         LDA     DIRTCOLR+2,X;           STA DRT1COLR+1,Y
+;*         STA     DRT2COLR;               INX
+;*         LDA     PEBBCOLR+2,X;           INY  INY
+;*         STA     DRT2COLR+1;             CPY #6
+;*         LDA     DIRTCOLR+3,X;           BCC TOPLOOP
 ;*         STA     DRT3COLR
 ;*         LDA     PEBBCOLR+3,X
 ;*         STA     DRT3COLR+1
@@ -247,15 +247,15 @@ ZTOPLOOP  LDA     DIRTCOLR+1,X
 ;*;*;*;*;*;*;*;*  RTS     OLD RTS FOR INITDIRT!!!!!!!!!!!!!!!!
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*       INCREATS:  INITIALIZE CREATURES IN TUNNELS.        ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*    INCREATS : NOW A PART OF INITDIRT!!!!!
 
 ;-------- INITIALIZE RAM VARIABLES FOR MONSTER MOVEMENT ALGORITHMS
 ;-------- AND OTHER THINGS .....
 
-          JSR     DOSTART                ;RETURNS 0 IN A
+          JSR     DOSTART;                ;RETURNS 0 IN A
 
 ;*         LDA     #0
           LDX     #8
@@ -272,27 +272,27 @@ EACHMONS  LDA     #$00
           STA     FACING,X
           JSR     GHSTSUB1
 ;*         JSR     GETDIRT
-;*         STY     TEMP3                  NECESSARY FOR CHKOTHER CODE
+;*         STY     TEMP3;                  NECESSARY FOR CHKOTHER CODE
 ;*         JSR     CHKOTHER
-          LSR     A                      INDEX=CHAR
+          LSR     A;                      INDEX=CHAR
           STA     TEMP1
           LDA     #$04
           LSR     TEMP1
           BCC     NEXT115
-          ASL     A                      ;ASSUME A CONTAINS 4
+          ASL     A;                      ;ASSUME A CONTAINS 4
           LSR     TEMP1
           BCC     NEXT115
           LDA     #$01
           LSR     TEMP1
           BCC     NEXT115
-          ASL     A                      ;ASSUME A CONTAINS 1
+          ASL     A;                      ;ASSUME A CONTAINS 1
           LSR     TEMP1
           BCC     NEXT115
           LDA     #$00
-NEXT115   STA     DIR,X                  SETUP FOR JSR NEWSEQ
+NEXT115   STA     DIR,X;                  SETUP FOR JSR NEWSEQ
           JSR     NEWSEQ
           JSR     SPEEDER
-;*         LDA     CHARSEQL,X             ;NOW DONE IN NEWSEQ - 1/18/84
+;*         LDA     CHARSEQL,X;             ;NOW DONE IN NEWSEQ - 1/18/84
 ;*         STA     TEMP1
 ;*         LDA     #>.RPOOKA
 ;*         STA     TEMP2
@@ -302,33 +302,33 @@ NEXT115   STA     DIR,X                  SETUP FOR JSR NEWSEQ
           DEX
           BPL     EACHMONS
 
-          JMP     GETMODE                ;GETMODE IS A SUBR
+          JMP     GETMODE;                ;GETMODE IS A SUBR
 ;-------- END OF MONSTER MOVEMENT VAR. INITIALIZATION
 
 ;*         RTS
 
-DOSTART   LDA     FRMCNT                 ;CALLED FROM INCREATS AND DDMOVE
+DOSTART   LDA     FRMCNT;                 ;CALLED FROM INCREATS AND DDMOVE
           CLC
-          ADC     #60                    ; CHANGE FOR PAL/SECAM
-          STA     NXTSEC                 ;  ...ALSO NEXT LINE
+          ADC     #60;                    ; CHANGE FOR PAL/SECAM
+          STA     NXTSEC;                 ;  ...ALSO NEXT LINE
 
-          LDX     #67                    ;1 MINUTE, 7 SECONDS
+          LDX     #67;                    ;1 MINUTE, 7 SECONDS
           LDA     BONZO
           BNE     BONZSPED
           LDY     PLAYNUM
           LDA     RACKNUM,Y
 BONZSPED  CMP     #24
           BCC     SETFAST
-          LDX     #2                     ;ABOUT TWO SECONDS
+          LDX     #2;                     ;ABOUT TWO SECONDS
 SETFAST   STX     SPEEDUP
 
-          JSR     SETDFAST               ;SET DD SPEEDS
+          JSR     SETDFAST;               ;SET DD SPEEDS
 
-          JSR     INITALLS               ;SETS A TO 0, USES Y
+          JSR     INITALLS;               ;SETS A TO 0, USES Y
           STA     CURSONG
           STA     SNGTEMP1
 ;*         LDA     #$00
-;*         STA     ANIMCNT                ;THESE 20 REGISTERS MUST STAY ADJACENT
+;*         STA     ANIMCNT;                ;THESE 20 REGISTERS MUST STAY ADJACENT
 ;*         STA     DIGGING
 ;*         STA     PUMPNUM
 ;*         STA     SQUASH
@@ -355,8 +355,8 @@ ZIFSCOR   STA     ANIMCNT,X
           DEX
           BPL     ZIFSCOR
 
-          STX     PUMPIE                 ;EXPECTS X TO BE FF
-          STA     FLEE                   ;EXPECTS A TO BE 0
+          STX     PUMPIE;                 ;EXPECTS X TO BE FF
+          STA     FLEE;                   ;EXPECTS A TO BE 0
           STA     FAST
           STA     LASTMOVE
 
@@ -365,17 +365,17 @@ ZIFSCOR   STA     ANIMCNT,X
           STX     PROPORT3
           STX     PROPORT2
           STX     PROPORT
-          LDX     #4                     ;FORCE GHOSTING AFTER ABOUT 4 SECONDS
+          LDX     #4;                     ;FORCE GHOSTING AFTER ABOUT 4 SECONDS
           STX     GHOSTOUT
 
-          JMP     INITDIGS               ;SETS A TO 0, USES Y (INITDIGS IS SUBR)
+          JMP     INITDIGS;               ;SETS A TO 0, USES Y (INITDIGS IS SUBR)
 ;*         RTS
 
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*       INITROCK:  INITIALIZE ROCKS IN DIRT.               ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*       INITROCK:  INITIALIZE ROCKS IN DIRT.;               ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 INITROCK
           LDA     #0
@@ -387,12 +387,12 @@ ZIROCK0   STA     TEMP+5,Y
           LDA     FRMCNT
           ROR     A
           STA     RANDROCK
-          LDY     #4                     ;MAXIMUM OF 5 ROCKS.
+          LDY     #4;                     ;MAXIMUM OF 5 ROCKS.
           LDX     PLAYNUM
           LDA     EFFRACK,X
           CMP     #MAXEFFR
           BCC     ZIROCK
-          INC     REGROCK                ;RANDOM ROCK RACK.
+          INC     REGROCK;                ;RANDOM ROCK RACK.
           BPL     DOROCKS
 ZIROCK    ASL     A
           ASL     A
@@ -404,35 +404,35 @@ DOROCKS   LDX     TEMPX
           LDA     REGROCK
           BEQ     TABLROCK
 
-          JSR     RANDOM                 ;RANDOM ROCK RACK:  SHOULD WE PLACE A
-          AND     #1                     ;  ROCK HERE?
+          JSR     RANDOM;                 ;RANDOM ROCK RACK:  SHOULD WE PLACE A
+          AND     #1;                     ;  ROCK HERE?
           BEQ     ZTABROK0
-ZGETROK   ROR     RANDROCK               ;YES: GET A RANDOM INDEX INTO POSSIBLE
-          JSR     RANDOM                 ;  ROCKS FOR RANDOM RACKS.
+ZGETROK   ROR     RANDROCK;               ;YES: GET A RANDOM INDEX INTO POSSIBLE
+          JSR     RANDOM;                 ;  ROCKS FOR RANDOM RACKS.
           EOR     RANDROCK
           AND     #7
           TAX
           LDA     TEMP+5,X
           BNE     ZGETROK
-          LDA     RANDROKS,X             ;GET ROCK POSITION.
+          LDA     RANDROKS,X;             ;GET ROCK POSITION.
           STA     TEMP+5,X
           BNE     ZROCK
 
-TABLROCK  LDA     ROCKS,X                ;ROCK X,Y COMBINED POSITION.
+TABLROCK  LDA     ROCKS,X;                ;ROCK X,Y COMBINED POSITION.
           BNE     ZROCK
 
-ZTABROK0  TAX                            ;NO ROCK HERE...
+ZTABROK0  TAX;                            ;NO ROCK HERE...
           BEQ     ZROCK1
 
-ZROCK     JSR     GETRXY                 ;RETURNS X IN A, Y IN X.
+ZROCK     JSR     GETRXY;                 ;RETURNS X IN A, Y IN X.
           STA     ROCKSX,Y
 ZROCK1    STX     ROCKSY,Y
           LDA     #STRTROCK
           STA     ROCKSIX,Y
           LDA     #0
           STA     TUMBLE,Y
-          INC     TEMPX                  ;MOVE TO NEXT ENTRY IN ROCK TABLE.
-          DEY                            ;MOVE TO NEXT POSSIBLE ROCK.
+          INC     TEMPX;                  ;MOVE TO NEXT ENTRY IN ROCK TABLE.
+          DEY;                            ;MOVE TO NEXT POSSIBLE ROCK.
           BPL     DOROCKS
           RTS
 
@@ -545,12 +545,12 @@ PTUNNELS  DC.B      $2A,$A3
           DC.B      $36,$36,$96,$98
 ;*                 PP F F
 
-          DC.B      $3B,$A2,0              ;BONZO LEVEL 0.
+          DC.B      $3B,$A2,0;              ;BONZO LEVEL 0.
 ;*                 F P
-          DC.B      $23,$A7,0              ;BONZO LEVEL 1.
+          DC.B      $23,$A7,0;              ;BONZO LEVEL 1.
 ;*                 P F
 
-          DC.B      $6B,$42,$BA,0          ;RANDOM RACKS.
+          DC.B      $6B,$42,$BA,0;          ;RANDOM RACKS.
 ;*                 F F P
           DC.B      $23,$93,$3A,0
 ;*                 F F F
@@ -567,9 +567,9 @@ PTUNNELS  DC.B      $2A,$A3
           DC.B      $93,$6B,$42,$3A,0
 ;*                 F P P F
 ;*MOVED TO ARRAYS:
-;*TEDYPINE  DC.B      TEDDY,$BE,CSET1,76,0,0             ;(PALETTE 5).
+;*TEDYPINE  DC.B      TEDDY,$BE,CSET1,76,0,0;             ;(PALETTE 5).
 
-ISCOREL   LDX     #58                    ;INIT DISPLAY LIST FOR SCORE LINE.
+ISCOREL   LDX     #58;                    ;INIT DISPLAY LIST FOR SCORE LINE.
 ISCOREL0  LDA     ISCORLIN,X
           STA     L0Z0,X
           DEX
@@ -579,20 +579,20 @@ ISCOREL0  LDA     ISCORLIN,X
 ISCOREL1  STA     SCOREL,X
           DEX
           BPL     ISCOREL1
-          RTS                            ;RETURNS 0 IN A.
+          RTS;                            ;RETURNS 0 IN A.
 
 
 CRUNCH    STA     VICTIMY
-          LDA     ROCKSX,X               ;ROCK HOR POS
+          LDA     ROCKSX,X;               ;ROCK HOR POS
           SEC
           SBC     VICTIMX
           BPL     CRUNCH2
-          EOR     #$FF                   ; DOES NOT AFFECT CARRY
-;*         CLC                            ; MINUS MEANS CARRY CLEAR
+          EOR     #$FF;                   ; DOES NOT AFFECT CARRY
+;*         CLC;                            ; MINUS MEANS CARRY CLEAR
           ADC     #1
-CRUNCH2   CMP     #6                     ;REQUIRE OVERLAP OF 2
+CRUNCH2   CMP     #6;                     ;REQUIRE OVERLAP OF 2
           BCS     CRUNCH5
-          LDA     ROCKSY,X               ;LDA DOES NOT AFFECT CARRY
+          LDA     ROCKSY,X;               ;LDA DOES NOT AFFECT CARRY
 ;*         CLC
           ADC     #6
           SEC
@@ -602,10 +602,10 @@ CRUNCH2   CMP     #6                     ;REQUIRE OVERLAP OF 2
           BCS     CRUNCH5
 
           LDA     ROCKSY,X
-;*         SEC                            ; CARRY IS CLEAR HERE
-          SBC     #$06-1                 ;MIGHT NEED TO TWEAK THIS
+;*         SEC;                            ; CARRY IS CLEAR HERE
+          SBC     #$06-1;                 ;MIGHT NEED TO TWEAK THIS
           STA     RTEMP
-          CMP     #MINDDY                ;DON"T SQUASH OFF EDGE
+          CMP     #MINDDY;                ;DON"T SQUASH OFF EDGE
           BCC     MINSQSHY
 ;*         SEC
           SBC     VICTIMY
@@ -615,9 +615,9 @@ CRUNCH2   CMP     #6                     ;REQUIRE OVERLAP OF 2
           LDA     VICTIMY
           BNE     NOCADJST
 NEWSQSHY  LDA     RTEMP
-NOCADJST  SEC                            ;SQUASH
+NOCADJST  SEC;                            ;SQUASH
           RTS
-CRUNCH5   CLC                            ;NO SQUASH
+CRUNCH5   CLC;                            ;NO SQUASH
           RTS
 MINSQSHY  LDA     #MINDDY
           SEC
@@ -628,8 +628,8 @@ LOOKDIRT  LDA     DIRTMAP,Y
           BCS     ENDLOOK
           CMP     #CHARDF
           BCC     ZNXT120
-          LDA     #$02                   ;SKY CHARACTER
-;*         LDA     #$01                   SKY CHARACTER
+          LDA     #$02;                   ;SKY CHARACTER
+;*         LDA     #$01;                   SKY CHARACTER
 ;*         RTS
 ZNXT120   LSR     A
           RTS
@@ -656,16 +656,16 @@ PINECOLR  LDA     VEGCOL1+17
 
 SETTITLE
           JSR     BACKMAP
-          LDX     #9                     ;ZONE 9.
-          LDA     #163                   ;COPYRIGHT ATARI AND NAMCO.
+          LDX     #9;                     ;ZONE 9.
+          LDA     #163;                   ;COPYRIGHT ATARI AND NAMCO.
           LDY     #14
           JSR     PUTTITLE
-          LDX     #13                    ;ZONE 13.
-          LDA     #29                    ;TOP OF DIGDUG LOGO.
+          LDX     #13;                    ;ZONE 13.
+          LDA     #29;                    ;TOP OF DIGDUG LOGO.
           LDY     #34
           JSR     PUTTITLE
-          LDX     #12                    ;ZONE 12.
-          LDA     #153                   ;BOTTOM OF DIGDUG LOGO.
+          LDX     #12;                    ;ZONE 12.
+          LDA     #153;                   ;BOTTOM OF DIGDUG LOGO.
           LDY     #34
           JMP     PUTTITLE
 ;*;*;*       RTS
@@ -676,7 +676,7 @@ SETTITLE
 ;*;*;*       DC.B      29,29
 
 
-;-------- BUTTON INPUT ROUTINE           (FROM COLLISON FILE)
+;-------- BUTTON INPUT ROUTINE;           (FROM COLLISON FILE)
 
 
 INPUT     LDX     #0
@@ -691,7 +691,7 @@ INPUT     LDX     #0
           LDA     PUMPCNT
           BEQ     DOPUMP
           INC     PUMPCNT
-          CMP     #$18                   TIME DELAY FOR PUMPING
+          CMP     #$18;                   TIME DELAY FOR PUMPING
           BEQ     DPUMPING
           BNE     INOUT2
 ;*         LDA     #$00
@@ -731,9 +731,9 @@ DOPUMP
 DOPEND    RTS
 
 
-TEDYPINE  DC.B      TEDDY,$BE,CSET1,72   ;  ,0,0             ;(PALETTE 5).
+TEDYPINE  DC.B      TEDDY,$BE,CSET1,72   ;  ,0,0;             ;(PALETTE 5).
 ;*;*;*;*;*  FROM DDMOVE.S FILE
-YFROMPL   DC.B      $00                         ;       ,$00,$00,$F4
+YFROMPL   DC.B      $00;                         ;       ,$00,$00,$F4
 
 YTOPL     DC.B      $00,$00,$F4,$00,$00,$00,$F4,$0C,$0C,$0C,$00,$11
           DC.B      $00,$00,$E8,$0C
@@ -743,23 +743,23 @@ DIRTCOLR  DC.B      YELLOW0,GOLD0,ORANG0,DKORANG0
           DC.B      PALPURP1,PALBRWN1,YELLOW1,GOLD1
           DC.B      PALPURP2,PALBRWN2,PALTURQ2,DKPURP2
 
-GHSTSUB2  SEC                            ;USED BY GHOSTONX AND CHKOTHER
+GHSTSUB2  SEC;                            ;USED BY GHOSTONX AND CHKOTHER
           SBC     #$10
           TAY
           LDA     DIRTMAP,Y
           CMP     #CHARD12
           RTS
 
-SKYSUB    LDA     TEMP3                  ;USED BY SKY15 AND CHKDOWN
-          CLC                            GET DIRT UNDER POSITION
+SKYSUB    LDA     TEMP3;                  ;USED BY SKY15 AND CHKDOWN
+          CLC;                            GET DIRT UNDER POSITION
           ADC     #$10
           TAY
           LDA     DIRTMAP,Y
           RTS
 
-GHSTSUB1  JSR     GETDIRT                ;USED BY GHOSTONX AND MOVECONT
-          STY     TEMP3                  ;   AND EACHMONS
-          JMP     CHKOTHER               ;CHKOTHER IS A SUBR
+GHSTSUB1  JSR     GETDIRT;                ;USED BY GHOSTONX AND MOVECONT
+          STY     TEMP3;                  ;   AND EACHMONS
+          JMP     CHKOTHER;               ;CHKOTHER IS A SUBR
 
 SUB3      LDA     DDYPOS
           CLC

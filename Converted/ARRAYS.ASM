@@ -3,14 +3,14 @@
 ENDA000
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;  ARRAYS:  PUT RANDOM ARRAYS HERE SO       ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;           THEY CAN BE OVERLAPPED TO       ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;           SAVE ROOM.                      ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;           THEY CAN BE OVERLAPPED TO       ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;           SAVE ROOM.                      ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
           ORG     $E0AA
@@ -31,7 +31,7 @@ RKANIM    DC.B      SPLTROCK,CRMBROCK
 ;  DON"T USE THIS SUBR UNTIL SURE DIGDUG IS GOING TO ANIMATE.
 ;  USES X,A.
 ;  USES TEMP.
-ANIM      LDA     ANIMCNT                ;THERE ARE THREE STAMPS EACH DIRECTION
+ANIM      LDA     ANIMCNT;                ;THERE ARE THREE STAMPS EACH DIRECTION
           SEC
           SBC     #1
           BPL     ANIM2
@@ -48,11 +48,11 @@ ANIM2     STA     ANIMCNT
           RTS
 
 ;*;*;*;*;*  FROM DDMOVE.S FILE
-XFROMPL   DC.B      $00                         ;      ,$08,$00,$00
+XFROMPL   DC.B      $00;                         ;      ,$08,$00,$00
 
 XTOPL     DC.B      $08,$00,$00,$00,$08,$F8,$00,$00,$03,$FD,$00,$00
           DC.B      $10,$F8,$00,$00
-          DC.B      $07,$F9,$00                 ;      ,$00
+          DC.B      $07,$F9,$00;                 ;      ,$00
 
 ; NOTE:  FLATPTS IS STORED AS HALF OF TRUE POINT VALUE
 FLATPTS   DC.B      $00,$05,$50,$12,$00,$20,$00,$30
@@ -77,27 +77,27 @@ DANIMS    DC.B      RDIGDUG1,LDIGDUG1,DDIGDUG1,UDIGDUG1
           DC.B      RDIGDUG3,LDIGDUG3,DDIGDUG3,UDIGDUG3
 
 
-VONE      DC.B      01,07,10               ;   ,00
+VONE      DC.B      01,07,10;               ;   ,00
 VBOUND    DC.B      00,00,11,11
-VHALF     DC.B      05,03,04               ;   ,06
-VPRE2     DC.B      06,02,01,09            ;MIGHT BE UNNECESSARY FOR HORIZONTAL
+VHALF     DC.B      05,03,04;               ;   ,06
+VPRE2     DC.B      06,02,01,09;            ;MIGHT BE UNNECESSARY FOR HORIZONTAL
 VPRE1     DC.B      07,01,00,10
 
-WHNSPEED  DC.B      2,3,4,5                ;   ,6
+WHNSPEED  DC.B      2,3,4,5;                ;   ,6
 
-VPRE3     DC.B      06,02,02,08            ;UNNECESSARY FOR HORIZONTAL
-;*VPRE4     DC.B      06,02,03,07            ;PROBABLY NOT NECESSARY
+VPRE3     DC.B      06,02,02,08;            ;UNNECESSARY FOR HORIZONTAL
+;*VPRE4     DC.B      06,02,03,07;            ;PROBABLY NOT NECESSARY
 
 ;*;*;*;*;*
 ; USES A,X.
-ADJUSTTO  LDA     DDYPOS                 ;CALC DIGDUG LEADING EDGE
+ADJUSTTO  LDA     DDYPOS;                 ;CALC DIGDUG LEADING EDGE
           CLC
           ADC     YTOPL,Y
           TAX
           LDA     DDXPOS
           CLC
           ADC     XTOPL,Y
-          RTS                            ;14
+          RTS;                            ;14
 
 MOREPUMP  LDA     MAXPUMP
           CLC
@@ -113,31 +113,31 @@ ENDE1AA
 
 JOYSWCH   DC.B      $7F,$BF,$DF,$EF
 
-BAR       DC.B      $20,$40                ; S,W      BOUND TO NEXT PAGE!!!
-          DC.B      $10,$90                ; N,NE     BOUND TO PREVIOUS PAGE!!!
-          DC.B      $30,$C0                ; FILTER OUT ILLEGAL COMBINATIONS
+BAR       DC.B      $20,$40;                ; S,W      BOUND TO NEXT PAGE!!!
+          DC.B      $10,$90;                ; N,NE     BOUND TO PREVIOUS PAGE!!!
+          DC.B      $30,$C0;                ; FILTER OUT ILLEGAL COMBINATIONS
 
 FOO
-          DC.B      $7F                    ; E
+          DC.B      $7F;                    ; E
 FJOY      DC.B      $DF,$BF,$EF,$7F        ; S,W,N,E
-          DC.B      $FF,$FF                ; END OF FOO
+          DC.B      $FF,$FF;                ; END OF FOO
 REVSWCH
           DC.B      $BF,$7F,$EF,$DF
 ;*         DC.B      $BF,$7F,$EF,$DF
 ;*         DC.B      $BF
 
 
-DIGSONG   CMP     #SNGD                  ;RETURNS EQ IF DIGDUG MUSIC
+DIGSONG   CMP     #SNGD;                  ;RETURNS EQ IF DIGDUG MUSIC
           BEQ     DIGSONG2
           CMP     #SNGDF
 DIGSONG2
-          RTS                            ;OVERLAPPED WITH FOLLOWING ARRAY!!!
+          RTS;                            ;OVERLAPPED WITH FOLLOWING ARRAY!!!
 
 ;*ATTBOUND  DC.B      $60,$28,$20,$2F,$50    ;OVERLAPPED WITH PRECEDING SUBR!!!
 ;*         DC.B      $10,$28,$8F,$83
-;*         DC.B      $10                    ;OVERLAPPED WITH FOLLOWING ARRAY!!!
+;*         DC.B      $10;                    ;OVERLAPPED WITH FOLLOWING ARRAY!!!
 
-RKTIM     DC.B      $10,$10,$1E            ;FROM FALL.S, OVERLAPPED!
+RKTIM     DC.B      $10,$10,$1E;            ;FROM FALL.S, OVERLAPPED!
 
 ; NOTE:  ONLY TOP BYTE IS STORED SINCE BOTTOM BYTE IS ALWAYS 0
 ;        INDEX OF 0 IS FOR TEDDYBEAR MODE
@@ -153,7 +153,7 @@ FPOINTS   DC.B      VHUND2,VHUND4,VHUND6,VHUND8,VTHOUS1,VTHOUS1
 
 
 HCARVE    LDA     #DLEFTEND
-          STA     DIRTMAP,X              ;CARVE OUT CENTER HORIZONTAL TUNNEL.
+          STA     DIRTMAP,X;              ;CARVE OUT CENTER HORIZONTAL TUNNEL.
           LDA     #DHMIDDLE
           STA     DIRTMAP+1,X
           LDA     #DRHTEND
@@ -169,26 +169,26 @@ ENDE2AA
 ;-------- ROM TABLES
 
 XTABLE    DC      $00,$00,$FF,$FF,$00,$00,$FF,$FF
-          DC      $01,$01,$00,$00,$01,$01,$00          ;     ,$00
+          DC      $01,$01,$00,$00,$01,$01,$00;          ;     ,$00
 
 YTABLE    DC      $00,$FF,$00,$FF,$01,$00,$01,$00
           DC      $00,$FF,$00,$FF,$01,$00,$01,$00
 
-SPEEDTAB  DC      $EE                    POOKA SLOW     12 BITS
+SPEEDTAB  DC      $EE;                    POOKA SLOW     12 BITS
           DC      $EE
-          DC      $92                    POOKA GHOST    5 BITS
+          DC      $92;                    POOKA GHOST    5 BITS
           DC      $48
-          DC      $7F                    POOKA FAST     15 BITS
+          DC      $7F;                    POOKA FAST     15 BITS
           DC      $FF
-          DC      $95                    POOKA GHOST    7
+          DC      $95;                    POOKA GHOST    7
           DC      $4A
-          DC      $F7                    FYGAR SLOW     13 BITS
+          DC      $F7;                    FYGAR SLOW     13 BITS
           DC      $77
-          DC      $89                    FYGAR GHOST    5
+          DC      $89;                    FYGAR GHOST    5
           DC      $24
-          DC      $FF                    FYGAR FAST     16 BITS
+          DC      $FF;                    FYGAR FAST     16 BITS
           DC      $FF
-          DC      $A9                    FYGAR GHOST    7
+          DC      $A9;                    FYGAR GHOST    7
           DC      $54
 
 ;* FJOY: FAKE JOYSTICK MOVEMENTS FOR ROTATING SELECT OPTIONS WITH SELECT BUTTON.
@@ -200,11 +200,11 @@ RFALLTBL  DC.B      1,2,2,2,1,2,2
 ANDF0     AND     #$F0
           BNE     NOTZERO1
           BCC     NOTZERO1
-          LDA     #BLANK1                ;BLANK STAMP.
+          LDA     #BLANK1;                ;BLANK STAMP.
 ;*         BEQ     ANDF0RTS
           RTS
-NOTZERO1  LSR     A                      ;GET INDEX INTO STAMP TABLE FOR THIS
-          LSR     A                      ;  DIGIT OF SCORE.
+NOTZERO1  LSR     A;                      ;GET INDEX INTO STAMP TABLE FOR THIS
+          LSR     A;                      ;  DIGIT OF SCORE.
           LSR     A
 ;*         CLC
           ADC     #FULL0
@@ -213,7 +213,7 @@ ANDF0RTS  RTS
 
 INITDIGS  LDY     #4
           LDA     #0
-INITSNDD  STA     DURINDX0,Y             ;TIME TO START DD MUSIC OVER
+INITSNDD  STA     DURINDX0,Y;             ;TIME TO START DD MUSIC OVER
           DEY
           BPL     INITSNDD
           STY     DUNINDX0
@@ -241,7 +241,7 @@ MODETAB   DC.B      <.DIGDIAG,<.DIGVERT,<.DIGHORIZ
 
 
 PRITES0   DC.B      RPUMP4,RPUMP8,RPUMP12,RPUMP16,RPUMP20,RPUMP24
-;                                        ;FROM COLLISON.S
+;         ;                               ;FROM COLLISON.S
 
 DDMIDDLE
           LDA     #DDMIDLY
@@ -253,14 +253,14 @@ DDMIDDLE
           RTS
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*       GETRXY: TURN DIRTMAP INDEX INTO X AND Y COORDINATE.;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               RETURNS X IN A, Y IN X.                    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               RETURNS X IN A, Y IN X.                    ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 GETRXY
           PHP
-          PHA                            ;SAVE INDEX.
-          LSR     A                      ;Y IN TOP NIBBLE.
+          PHA;                            ;SAVE INDEX.
+          LSR     A;                      ;Y IN TOP NIBBLE.
           LSR     A
           LSR     A
           LSR     A
@@ -272,7 +272,7 @@ GETRXY
           TAX
           PLA
           AND     #$0F
-          ASL     A                      ;MULTIPLY BOTTOM NIBBLE BY 8 FOR X.
+          ASL     A;                      ;MULTIPLY BOTTOM NIBBLE BY 8 FOR X.
           ASL     A
           ASL     A
           PLP
@@ -285,20 +285,20 @@ ENDE4AA
 ;*;*;*;*;*  FROM COLLISON.S FILE
 
 ;*;*;* PUMP TABLES: ARRANGED BY DIRECTION, THEN STAMP NUMBER.  STAMP 0 SHOULD
-;*;*;*              BE LOCATED AT X,Y POSITION OF UPPER LEFTMOST CORNER OF
-;*;*;*              PUMP.  STAMP 1 WILL BE AT X,(Y-12), AND STAMP 2 AT X,(Y-24).
-;*;*;*              READING ACROSS EACH VERTICAL TABLE GIVES THE APPROPRIATE STAMP
-;*;*;*              FOR PUMP LENGTHS 6,12,18,24,30,36; AND WIDTHS 4,8,12,16,20,24
-;*;*;*              FOR HORIZONTAL TABLES.  HORIZONTAL TABLES DO NOT EXIST FOR
-;*;*;*              STAMPS 1 AND 2 AS A HORIZONTAL PUMP IS ONLY ONE STAMP HIGH.
-;*;*;*              INSTEAD, ZBLANK WILL BE LOADED INTO APPROPRIATE STMPYPOS ENTRY.
+;*;*;*    ;          BE LOCATED AT X,Y POSITION OF UPPER LEFTMOST CORNER OF
+;*;*;*    ;          PUMP.  STAMP 1 WILL BE AT X,(Y-12), AND STAMP 2 AT X,(Y-24).
+;*;*;*    ;          READING ACROSS EACH VERTICAL TABLE GIVES THE APPROPRIATE STAMP
+;*;*;*    ;          FOR PUMP LENGTHS 6,12,18,24,30,36; AND WIDTHS 4,8,12,16,20,24
+;*;*;*    ;          FOR HORIZONTAL TABLES.  HORIZONTAL TABLES DO NOT EXIST FOR
+;*;*;*    ;          STAMPS 1 AND 2 AS A HORIZONTAL PUMP IS ONLY ONE STAMP HIGH.
+;*;*;*    ;          INSTEAD, ZBLANK WILL BE LOADED INTO APPROPRIATE STMPYPOS ENTRY.
 
-PDOWNS2   DC.B      ZBLANK,ZBLANK          ; ,ZBLANK,ZBLANK,DPUMP6,DPUMP12
-PDOWNS1   DC.B      ZBLANK,ZBLANK          ; ,DPUMP6,DPUMP12,DFULL6,DFULL12
+PDOWNS2   DC.B      ZBLANK,ZBLANK;          ; ,ZBLANK,ZBLANK,DPUMP6,DPUMP12
+PDOWNS1   DC.B      ZBLANK,ZBLANK;          ; ,DPUMP6,DPUMP12,DFULL6,DFULL12
 PDOWNS0   DC.B      DPUMP6,DPUMP12,DFULL6,DFULL12,DFULL6,DFULL12
 
 PUPS0     DC.B      UPUMP6,UPUMP12,UPUMP12,UPUMP12,UPUMP12,UPUMP12
-PUPS2     DC.B      ZBLANK,ZBLANK          ; ,ZBLANK,ZBLANK,UFULL6,UFULL12
+PUPS2     DC.B      ZBLANK,ZBLANK;          ; ,ZBLANK,ZBLANK,UFULL6,UFULL12
 PUPS1     DC.B      ZBLANK,ZBLANK,UFULL6,UFULL12,UFULL12,UFULL12
 
 PLEFTS0   DC.B      LPUMP4,LPUMP8,LPUMP12,LPUMP16,LPUMP20,LPUMP24
@@ -318,13 +318,13 @@ BLWSTMPS  DC.B      LBPOOKA1,LBPOOKA2,LBPOOKA3,LBPOOKA4
           DC.B      RBFYGAR1,RBFYGAR2,RBFYGAR3,RBFYGAR4
 
 SETPAL3   LDX     #2
-PHAMSGC   LDA     #$84                   ;USE PALETTE 3 FOR COLORS OF LETTERS.
+PHAMSGC   LDA     #$84;                   ;USE PALETTE 3 FOR COLORS OF LETTERS.
           STA     P0C0SHAD+13,X
           DEX
           BPL     PHAMSGC
           RTS
 
-SAVDUN    LDY     #6                     ;SAVES CURRENT DIGDUG MUSIC INFO
+SAVDUN    LDY     #6;                     ;SAVES CURRENT DIGDUG MUSIC INFO
 SAVDUN2   LDA     CURINDX0,Y
           STA     DURINDX0,Y
           DEY
@@ -379,11 +379,11 @@ DLIBITS   DC.B      $4B,$4B,$4B,$4B,$4B,$CB,$4B,$4B,$4B,$CB,$4B,$4B,$4B,$CB
 ;* LOW ADDRESSES FOR CHARACTER MAPS FOR EACH ZONE...
 MAPLOW    DC.B      $EF,$E0,$D0,$C0,$B0,$A0,$90,$80,$70,$60,$50,$40,$30,$20,$10
 ;         DC.B      0
-;* INITIAL PALETTE COLORS...              ;OVERLAPS WITH ABOVE (BLACK = 0)
+;* INITIAL PALETTE COLORS...;              ;OVERLAPS WITH ABOVE (BLACK = 0)
 IPALETTE  DC.B      BLACK,DDC.BLUE,WHITE,BLACK
-          DC.B      $34,$1A,$0E            ;RED,YELLOW,WHITE
-          DC.B      $30,$00,$44            ;BROWN,BLACK,TAN
-          DC.B      $D6,$24,$0E            ;GREEN, ORANGE, WHITE
+          DC.B      $34,$1A,$0E;            ;RED,YELLOW,WHITE
+          DC.B      $30,$00,$44;            ;BROWN,BLACK,TAN
+          DC.B      $D6,$24,$0E;            ;GREEN, ORANGE, WHITE
           DC.B      YELLOW,DDC.BLUE,$A0      ;NUMLIVES IN COL 3.
           DC.B      SKYBLUE,SKYBLUE,PL1COLR ;SCORE,VEGGIE
           DC.B      YELLOW,DDC.BLUE,PEBBLE1  ;DIRT0, DIRT2
@@ -421,11 +421,11 @@ VEGCOL3   DC.B      $38,$EE,$04,$FC,$FC,$58,$58,$E8
 TUNLDIR
           DC.B      $30,$08,$18,$18,$1C,$04,$06,$0E
           DC.B      $03,$0F,$0F,$01,$03,$07,$0F
-          DC.B      $40,$80                ;BONZO LEVELS 0,1.
+          DC.B      $40,$80;                ;BONZO LEVELS 0,1.
 
-RESPAL3   LDY     #2                     ;RESTORE PALETTE 3: USE Y IN LOOP SO
-PLAMSGC   LDA     IPALETTE+10,Y          ;  X RETURNED FROM FREEZFRM WON"T
-          STA     P0C0SHAD+13,Y          ;  BE CLOBBERED.
+RESPAL3   LDY     #2;                     ;RESTORE PALETTE 3: USE Y IN LOOP SO
+PLAMSGC   LDA     IPALETTE+10,Y;          ;  X RETURNED FROM FREEZFRM WON"T
+          STA     P0C0SHAD+13,Y;          ;  BE CLOBBERED.
           DEY
           BPL     PLAMSGC
           RTS
@@ -454,7 +454,7 @@ PEBBCOLR  DC.B      PEBBLE0A,PEBBLE0B,PEBBLE0C,PEBBLE0D
 CREATS
           DC.B      $47,$63,$A3,$4B,$65,$3C,$A9,$A3
           DC.B      $3C,$63,$47,$4E,$3C,$3A,$33
-          DC.B      $87,$78                ;BONZO LEVELS 0,1.
+          DC.B      $87,$78;                ;BONZO LEVELS 0,1.
 
 RANDCRET  DC.B      $AA,$E1,$55,$0F,$8D,$69,$2D,$96
 
@@ -490,24 +490,24 @@ TOPZONE   DC.B      11,23,35,47,59,71,83,95,107,119,131,143,155,167,179,191,191
 
 ;*;*;*;*;* FROM TITLEPAG.S
 TLISTSIZ  DC.B      5,5,5,5,5,5,5,5,5,13,5,5,33,33,5
-;         DC.B      5                      ;OVERLAPS
+;         DC.B      5;                      ;OVERLAPS
 NUMBYTES  DC.B      5,1,1,0,0,1,2,0        ;OVERLAPS
           DC.B      1,4,0,0,2,1,0,0
           DC.B      0,7,0,7,0,6,1,3
           DC.B      3,1,8,0,0,2,2,5
           DC.B      15,8,7,0,2,3,3,2
-;         DC.B      0                      ;OVERLAPS
-;* BLACK BOX HEADER...                    ;OVERLAPS
+;         DC.B      0;                      ;OVERLAPS
+;* BLACK BOX HEADER...;                    ;OVERLAPS
 BLAKBOX   DC.B      0,CSET1,$1A,BLACKBOX
 
-LFLAMSEQ  DC      LFLAME4                LEFT FLAME SMALL
-          DC      LFLAME8                LEFT FLAME 8 PIX
-          DC      LFLAME16               LEFT FLAME 16 PIX
-          DC      LFLAME24               LEFT FLAME 24 PIX (MAXIMUM)
-RFLAMSEQ  DC      RFLAME4                RIGHT FLAME SMALL
-          DC      RFLAME8                RIGHT FLAME 8 PIX
-          DC      RFLAME16               RIGHT FLAME 16 PIX
-          DC      RFLAME24               RIGHT FLAME 24 PIX (MAXIMUM)
+LFLAMSEQ  DC      LFLAME4;                LEFT FLAME SMALL
+          DC      LFLAME8;                LEFT FLAME 8 PIX
+          DC      LFLAME16;               LEFT FLAME 16 PIX
+          DC      LFLAME24;               LEFT FLAME 24 PIX (MAXIMUM)
+RFLAMSEQ  DC      RFLAME4;                RIGHT FLAME SMALL
+          DC      RFLAME8;                RIGHT FLAME 8 PIX
+          DC      RFLAME16;               RIGHT FLAME 16 PIX
+          DC      RFLAME24;               RIGHT FLAME 24 PIX (MAXIMUM)
 
 ENDEAAA
 
@@ -529,10 +529,10 @@ LISTTBH1  DC.B      >.L0Z0,>.L1Z1,>.L1Z2,>.L1Z3,>.L1Z4,>.L1Z5,>.L1Z6
 
 
 BACKMAP
-          LDX     #NUMZONES              ;SET UP DISPLAY LIST FOR TITLE PAGE.
+          LDX     #NUMZONES;              ;SET UP DISPLAY LIST FOR TITLE PAGE.
 SETTBACK  JSR     SETDPLH
-          LDY     #0                     ;ZERO OUT DIRT BACKGROUND BY SETTING
-          LDA     #$F0                   ;  CHAR MAP TO POINT TO ZEROS.
+          LDY     #0;                     ;ZERO OUT DIRT BACKGROUND BY SETTING
+          LDA     #$F0;                   ;  CHAR MAP TO POINT TO ZEROS.
           STA     (DPLOW),Y
           TYA
           LDY     #6
@@ -658,9 +658,9 @@ SETDFAST  LDA     #DHFASTL
           STA     DHORSPDH
           LDA     #DIGFAST
           STA     DIGSPEED
-          RTS                            ;15
+          RTS;                            ;15
 
-HARPXPL   DC.B      $02,$FE                ;          ,$00,$00
+HARPXPL   DC.B      $02,$FE;                ;          ,$00,$00
 HARPYPL   DC.B      $00,$00,$FC,$04
 
 ;*;*;*;*;* 98 BYTES FULL
@@ -670,7 +670,7 @@ ENDC200
 
           ORG     $C300
 ; ROCKPUSH MUST IMMEDIATELY PRECEDE CALCINDX
-ROCKPUSH  LDA     ROCKSX,X               ;ENTRANCE POINT FROM FALL
+ROCKPUSH  LDA     ROCKSX,X;               ;ENTRANCE POINT FROM FALL
           PHA
           LDA     ROCKSY,X
           SEC
@@ -683,41 +683,41 @@ ROCKPUSH  LDA     ROCKSX,X               ;ENTRANCE POINT FROM FALL
 CALCINDX  LSR     A
           LSR     A
           LSR     A
-          STA     TEMP                   ;COLUMN
+          STA     TEMP;                   ;COLUMN
           TXA
           LSR     A
           LSR     A
           TAX
           LDA     DIV3TAB,X
-          TAX                            ;ROW
-          LDA     MAPLOW,X               ;ROW ADDRESS
+          TAX;                            ;ROW
+          LDA     MAPLOW,X;               ;ROW ADDRESS
           CLC
           ADC     TEMP
-          TAX                            ;INDEX INTO DIRTMAP
+          TAX;                            ;INDEX INTO DIRTMAP
           LDA     DIRTMAP,X
-          RTS                            ;34
+          RTS;                            ;34
 
 
 ;  USES X,A,Y.
 ;  EXPECTS DIRTMAP,X IN A.
 ;  USES TEMP.
 ;  ASSUMES NEVER CALLED WHEN A<36.
-DIGGER    STA     TEMP                   ;DIRTMAP,X
-          JSR     BORE                   ;FOUND IN FALL FILE
-          CMP     #30                    ;NEVER GOT HERE IF ALREADY < 30.
+DIGGER    STA     TEMP;                   ;DIRTMAP,X
+          JSR     BORE;                   ;FOUND IN FALL FILE
+          CMP     #30;                    ;NEVER GOT HERE IF ALREADY < 30.
           BCS     DIGGER5
-          LDA     #10                    ;ADD PTS FIRST TIME <30.
+          LDA     #10;                    ;ADD PTS FIRST TIME <30.
           LDY     #0
           JSR     ADDSCORE
-          LDX     TEMP                   ;DON"T SLOW DOWN FOR HOURGLASS+BOWTIE
+          LDX     TEMP;                   ;DON"T SLOW DOWN FOR HOURGLASS+BOWTIE
           CPX     #46
           BCS     DIGGER6
-DIGGER3   LDA     #1                     ;WANT HARPOON AND SLOW SPEED
+DIGGER3   LDA     #1;                     ;WANT HARPOON AND SLOW SPEED
           STA     DIGTEMP
           RTS
-DIGGER5   CMP     TEMP                   ;ANY CHANGE?
+DIGGER5   CMP     TEMP;                   ;ANY CHANGE?
           BNE     DIGGER3
-DIGGER6   RTS                            ;32
+DIGGER6   RTS;                            ;32
 
 
 CHKNXTD   CLC
@@ -727,31 +727,31 @@ CHKNXTD   CLC
           JSR     CALCINDX
           CMP     #36
           BCS     CHKNXTD2
-          LDA     #0                     ;DOES NOT AFFECT CARRY
-          STA     DIGTEMP                ;DOES NOT AFFECT CARRY
-CHKNXTD2  RTS                            ;19
+          LDA     #0;                     ;DOES NOT AFFECT CARRY
+          STA     DIGTEMP;                ;DOES NOT AFFECT CARRY
+CHKNXTD2  RTS;                            ;19
 
 ;  USES X AND A.
 ;  RETURNS EQ IF ON ROW, NE IF NOT ON ROW.
 ROWHERE   LDX     #15
           LDA     DDYPOS
-CHKINROW  CMP     TOPZONE,X              ;ARE WE ON A ROW BORDER?
+CHKINROW  CMP     TOPZONE,X;              ;ARE WE ON A ROW BORDER?
           BEQ     ROWHERE2
           DEX
           BPL     CHKINROW
-ROWHERE2  RTS                            ;13
+ROWHERE2  RTS;                            ;13
 
 ;*;*;* ??? BYTE LEFT...
 ENDC300
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;  ORG: PUT STUFF HERE WHICH IS PAGE      ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;       BOUNDARY DEPENDENT.               ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;       BOUNDARY DEPENDENT.;               ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -770,15 +770,15 @@ SNG2F0    DC.B      $14,$12,$14,$13    ;,$0F,$0E,$0F,$0E      ;8 BYTES-4
 ;NOTE: IN 2600 THERE IS ALSO 0F,0E,0F,0E.....1F,1E,1F,1E
 ;      FOR A TOTAL OF 24 BYTES
 ASNGCF0
-SNGCF0    DC.B      $0F,$0E,$0F,$0E                      ;16 BYTES-8
+SNGCF0    DC.B      $0F,$0E,$0F,$0E;                      ;16 BYTES-8
           DC.B      $0F,$0E,$0F,$0E
-;                              DC.B      $1F,$1E,$1F,$1E
-;                              DC.B      $1F,$1E,$1F,$1E
+;         ;                     DC.B      $1F,$1E,$1F,$1E
+;         ;                     DC.B      $1F,$1E,$1F,$1E
 
 ASNG6F0
 SNG6F0    DC.B      $1F,$1E,$1F,$1E,$1F,$1E,$1F,$1E      ;20 BYTES-5
           DC.B      $0F,$0E,$0F,$10,$11,$10,$0E     ;,$0D
-                     ;          DC.B      $0E,$0F,$0E,$0F
+          ;           ;          DC.B      $0E,$0F,$0E,$0F
 
 
 ASNG14F0
@@ -816,13 +816,13 @@ SNG7C0    DC.B      $0D,$0D,$0D,$0D,$04,$04,$04,$04      ;8 BYTES
 
 
 ASNG4V0
-SNG4V0    DC.B      $0A,$0A,$0A,$0A                      ;15 BYTES
+SNG4V0    DC.B      $0A,$0A,$0A,$0A;                      ;15 BYTES
           DC.B      $0A,$0A,$0A,$0A
           DC.B      $04,$04,$04,$04,$04,$04,$04
 
 
 ASNG4F0
-SNG4F0    DC.B      $9A,$99,$98,$97                      ;15 BYTES-1
+SNG4F0    DC.B      $9A,$99,$98,$97;                      ;15 BYTES-1
           DC.B      $96,$95,$94,$93
           DC.B      $32,$17,$18,$19,$1A,$1B     ;,$1C
 
@@ -832,35 +832,35 @@ SNG1F1    DC.B      $1C,$19,$16,$15,$13,$11,$0F    ;,$0E      ;8 BYTES-1
 
 
 ASNG8F1
-SNG8F1    DC.B      $0E,$11,$14,$18,$0E                  ;5 BYTES
+SNG8F1    DC.B      $0E,$11,$14,$18,$0E;                  ;5 BYTES
 
 
 ASNG12F1
-SNG12F1   DC.B      $20,$93,$93,$93                       ;12 BYTES
+SNG12F1   DC.B      $20,$93,$93,$93;                       ;12 BYTES
           DC.B      $20,$93,$93,$93
           DC.B      $20,$93,$93,$13
 
 
 ASNG12F0
-SNG12F0   DC.B      $8F,$92,$91,$92                       ;12 BYTES-1
+SNG12F0   DC.B      $8F,$92,$91,$92;                       ;12 BYTES-1
           DC.B      $8E,$92,$91,$92
           DC.B      $8D,$92,$91       ;,$12
 
 
 ASNG13F0
-SNG13F0   DC.B      $12,$11,$10,$8F,$12,$91               ;15 BYTES
+SNG13F0   DC.B      $12,$11,$10,$8F,$12,$91;               ;15 BYTES
           DC.B      $14,$92,$17,$94,$18,$17
           DC.B      $97,$2B,$17
 
 
 ASNG9F1
-SNG9F1    DC.B      $8B,$8F,$20,$8F                      ;16 BYTES
+SNG9F1    DC.B      $8B,$8F,$20,$8F;                      ;16 BYTES
           DC.B      $8B,$8F,$20,$8F
           DC.B      $8B,$8F,$20,$8F
           DC.B      $20,$8F,$8F,$0F
 
 ASNG9F0
-SNG9F0    DC.B      $97,$97,$9C,$97                      ;14 BYTES-1
+SNG9F0    DC.B      $97,$97,$9C,$97;                      ;14 BYTES-1
           DC.B      $94,$92,$91,$8F
           DC.B      $8D,$8D,$8D,$8D
           DC.B      $60      ;,$40
@@ -868,27 +868,27 @@ SNG9F0    DC.B      $97,$97,$9C,$97                      ;14 BYTES-1
 
 
 ASNG13F1
-SNG13F1   DC.B      $40,$94,$00,$93                       ;12 BYTES-1
+SNG13F1   DC.B      $40,$94,$00,$93;                       ;12 BYTES-1
           DC.B      $00,$92,$00,$90,$00,$8F
           DC.B      $40       ;,$0F
 
 
 
 ASNG8F0
-SNG8F0    DC.B      $0F,$12,$15,$19,$0F                  ;5 BYTES
+SNG8F0    DC.B      $0F,$12,$15,$19,$0F;                  ;5 BYTES
 
 
 ASNG3F0
-SNG3F0    DC.B      $30,$2F,$2E,$2D                      ;5 BYTES
+SNG3F0    DC.B      $30,$2F,$2E,$2D;                      ;5 BYTES
           DC.B      $2E
 
 
 ASNG3F1
-SNG3F1    DC.B      $8A,$8A,$8A,$8A                      ;5 BYTES
+SNG3F1    DC.B      $8A,$8A,$8A,$8A;                      ;5 BYTES
           DC.B      $8A
 
 
-SNGNULLF  DC.B      $60                    ; 1 BYTE
+SNGNULLF  DC.B      $60;                    ; 1 BYTE
 
 FLAMTABL  DC      RFYGAR2,LFYGAR2
           DC      RFLAMFYG,LFLAMFYG
@@ -903,7 +903,7 @@ ENDEC00
 ;  THESE SOUND ARRAYS NEED 109 BYTES
 
 ASNGDF0
-SNGDF0    DC.B      $8F,$8F,$CF                          ;26 BYTES
+SNGDF0    DC.B      $8F,$8F,$CF;                          ;26 BYTES
           DC.B      $8F,$8F,$8F,$8F
           DC.B      $8F,$8F,$CF
           DC.B      $8F,$8F,$8F,$32
@@ -914,7 +914,7 @@ SNGDF0    DC.B      $8F,$8F,$CF                          ;26 BYTES
 
 
 ASNGDF1
-SNGDF1    DC.B      $CF,$CF                              ;16 BYTES
+SNGDF1    DC.B      $CF,$CF;                              ;16 BYTES
           DC.B      $D0,$D0
           DC.B      $D1,$D1
           DC.B      $D2,$D2
@@ -927,17 +927,17 @@ SNGDF1    DC.B      $CF,$CF                              ;16 BYTES
 
 
 ASNG10F0
-SNG10F0   DC.B      $12,$11,$10,$0F,$0D,$0F              ;6 BYTES
+SNG10F0   DC.B      $12,$11,$10,$0F,$0D,$0F;              ;6 BYTES
 
 
 ASNG11F0
-SNG11F0   DC.B      $17,$14,$12,$17,$9F,$8D               ;7 BYTES
+SNG11F0   DC.B      $17,$14,$12,$17,$9F,$8D;               ;7 BYTES
           DC.B      $6F
 
 
 
 ASNG15F0
-SNG15F0   DC.B      $8F,$8F,$8F,$6F                      ;22 BYTES
+SNG15F0   DC.B      $8F,$8F,$8F,$6F;                      ;22 BYTES
           DC.B      $72,$2F
           DC.B      $72,$2F,$2D
           DC.B      $92,$92,$72
@@ -948,7 +948,7 @@ SNG15F0   DC.B      $8F,$8F,$8F,$6F                      ;22 BYTES
 
 
 ASNG15F1
-SNG15F1   DC.B      $34,$32,$30,$2F                      ;32 BYTES
+SNG15F1   DC.B      $34,$32,$30,$2F;                      ;32 BYTES
           DC.B      $34,$2F,$34,$2F
           DC.B      $34,$2F,$34,$2F
           DC.B      $34,$2F,$34,$2F
@@ -963,16 +963,16 @@ SNG15F1   DC.B      $34,$32,$30,$2F                      ;32 BYTES
 
 ;  FOLLOWING TWELVE  ARRAYS MUST OCCUR ON SAME PAGE - NEED 128 BYTES
 
-SOUTH7    DC.B      36,38,40,42,28,46,20          ;$FF,$FF,$FF,$FF,28,$FF,20
+SOUTH7    DC.B      36,38,40,42,28,46,20;          ;$FF,$FF,$FF,$FF,28,$FF,20
 SOUTH1    DC.B      44,12,48,24,44,08,48
 
-NORTH7    DC.B      36,38,22,42,44,46,20          ;$FF,$FF,22,$FF,$FF,$FF,20
+NORTH7    DC.B      36,38,22,42,44,46,20;          ;$FF,$FF,22,$FF,$FF,$FF,20
 NORTH1    DC.B      40,06,40,18,48,02,48
 
-WEST5     DC.B      36,38,40,26,44,10,48          ;$FF,$FF,$FF,26,$FF,10,$FF
+WEST5     DC.B      36,38,40,26,44,10,48;          ;$FF,$FF,$FF,26,$FF,10,$FF
 WEST1     DC.B      42,46,18,42,24,46,16
 
-EAST5     DC.B      36,14,40,42,44,10,48          ;$FF,14,$FF,$FF,$FF,10,$FF
+EAST5     DC.B      36,14,40,42,44,10,48;          ;$FF,14,$FF,$FF,$FF,10,$FF
 EAST1     DC.B      38,38,06,46,12,46,04
 
 VERTTOP   DC.B      00,02,04,06,00,02,04,06,16,18,20,22,16,18,20,30,32,34
@@ -983,14 +983,14 @@ VERTBOT   DC.B      00,00,04,04,08,08,12,12,16,16,20,20,24,24,28,30,32,34
 HORRGT    DC.B      00,02,04,06,08,10,12,14,00,02,04,06,08,10,12,30,32,34
 HORLFT    DC.B      00,02,00,02,08,10,08,10,16,18,16,18,24,26,24,30,32,34
 
-FLAMPOS   DC      $04,$08                PIXEL X-POS OFFSETS FOR FLAME
-;  FROM MONSTER.S                         BOUND TO NEXT PAGE!!!
+FLAMPOS   DC      $04,$08;                PIXEL X-POS OFFSETS FOR FLAME
+;  FROM MONSTER.S;                         BOUND TO NEXT PAGE!!!
 
 ENDED00
 
           ORG     $EE00
 
-          DC      $10,$18                ; BOUND TO PREVIOUS PAGE!!!
+          DC      $10,$18;                ; BOUND TO PREVIOUS PAGE!!!
 
 ;*;*;*;*;*  FROM MONSTER.S FILE
 ;-------- CHARACTER SEQUENCE VALUES
@@ -1022,44 +1022,44 @@ LOGODLL   DC.B      $CF,>.DUMMYDPL,<.DUMMYDPL
 
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*       DLI ROUTINES:  NMI VECTOR POINTS AT A RAM          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               LOCATION WHICH CONTAINS A JUMP TO          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               THE NEXT DLI, DEPENDING ON THE             ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               CURRENT POSITION ON THE SCREEN.            ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               THE DLI"S ARE ARRANGED AS FOLLOWS:         ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLISETUP   -   JUST BEFORE ZONE 0:         ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              SETS ONSCREEN FLAG TO 1.    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLISCORE   -   SCORE ZONE USES PALETTE 5,  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              SO THIS DLI RESETS PAL 5    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              FOR VEGGIE COLORS.          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLISKY     -   SKY USES PALETTE 7, SO DLI  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              RESETS IT FOR DIRT LAYER 1. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLIDIRT0   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              PALETTE 6 FOR DIRT LAYER 2. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLIDIRT1   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              PALETTE 7 FOR DIRT LAYER 3. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLIDIRT2   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              PALETTE 6 FOR DIRT LAYER 0. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLIRESET   -   RESETS PALETTE 5 FOR SCORE. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLIDIRT3   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              PALETTE 7 FOR SKY.          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLIBOTOM   -   RESETS ONSCREEN TO 0.       ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*               DLIVBLNK   -   WAITS FOR VBLANK TO SYNC    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              DLI"S; RESTORES ORIGINAL    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                              PALETTES.                   ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*  NOTE: DLI ROUTINES MUST NOT BEGIN PAGE !!!!!            ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*       DLI ROUTINES:  NMI VECTOR POINTS AT A RAM;          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               LOCATION WHICH CONTAINS A JUMP TO          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               THE NEXT DLI, DEPENDING ON THE             ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               CURRENT POSITION ON THE SCREEN.            ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               THE DLI"S ARE ARRANGED AS FOLLOWS:         ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLISETUP   -   JUST BEFORE ZONE 0:         ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              SETS ONSCREEN FLAG TO 1.    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLISCORE   -   SCORE ZONE USES PALETTE 5,  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              SO THIS DLI RESETS PAL 5    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              FOR VEGGIE COLORS.          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLISKY     -   SKY USES PALETTE 7, SO DLI  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              RESETS IT FOR DIRT LAYER 1. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT0   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 6 FOR DIRT LAYER 2. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT1   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 7 FOR DIRT LAYER 3. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT2   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 6 FOR DIRT LAYER 0. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIRESET   -   RESETS PALETTE 5 FOR SCORE. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT3   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 7 FOR SKY.          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIBOTOM   -   RESETS ONSCREEN TO 0.       ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIVBLNK   -   WAITS FOR VBLANK TO SYNC    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              DLI"S; RESTORES ORIGINAL    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTES.                   ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*  NOTE: DLI ROUTINES MUST NOT BEGIN PAGE !!!!!;            ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ;*DLISETUP
 ;*         PHA
-;*;*        LDA     #1                     ;THIS DLI IS FOR THE DUMMY ZONE JUST
-;*;*        STA     ONSCREEN               ;  BEFORE ZONE 0.  IT SETS ONSCREEN
-;*         LDA     #<.DLISCORE           ;  AND LOW BYTE OF ADDRESS OF NEXT DLI.
-;*         STA     DLIVECT                ;  EVENTUALLY, WE CAN OPTIMIZE THIS SO
-;*;*        LDA     #>.DLISCORE           ;  THAT ALL DLI CODE IS ON SAME PAGE:
-;*;*        STA     DLIVECT+1              ;  THEN ONLY LOW BYTE NEED BE UPDATED.
+;*;*        LDA     #1;                     ;THIS DLI IS FOR THE DUMMY ZONE JUST
+;*;*        STA     ONSCREEN;               ;  BEFORE ZONE 0.  IT SETS ONSCREEN
+;*         LDA     #<.DLISCORE;           ;  AND LOW BYTE OF ADDRESS OF NEXT DLI.
+;*         STA     DLIVECT;                ;  EVENTUALLY, WE CAN OPTIMIZE THIS SO
+;*;*        LDA     #>.DLISCORE;           ;  THAT ALL DLI CODE IS ON SAME PAGE:
+;*;*        STA     DLIVECT+1;              ;  THEN ONLY LOW BYTE NEED BE UPDATED.
 ;*         INC     FRMCNT
 ;*         INC     TITLETIM
 ;*         BNE     BYESETUP
@@ -1070,9 +1070,9 @@ LOGODLL   DC.B      $CF,>.DUMMYDPL,<.DUMMYDPL
 DLISETUP
           PHA
           TXA
-          PHA                            ;ZONE 0 DLI: SCORE/LIVES LINE.  THIS
-          LDX     VEGCOLR                ;  USES PALETTE 5, SO IT MUST RESET
-          LDA     VEGCOLR+1              ;  COLORS FOR VEGETABLES WHEN DONE.
+          PHA;                            ;ZONE 0 DLI: SCORE/LIVES LINE.  THIS
+          LDX     VEGCOLR;                ;  USES PALETTE 5, SO IT MUST RESET
+          LDA     VEGCOLR+1;              ;  COLORS FOR VEGETABLES WHEN DONE.
 ;*         STA     WSYNC
           STA     WSYNC
           STX     P5C2
@@ -1090,8 +1090,8 @@ DLISETUP
 DLISKY
           PHA
           TXA
-          PHA                            ;SKY ZONE:  USES PALETTE 7, RESETS
-          LDX     DRT1COLR               ;  PALETTE 7 FOR USE IN DIRT LAYER 1.
+          PHA;                            ;SKY ZONE:  USES PALETTE 7, RESETS
+          LDX     DRT1COLR;               ;  PALETTE 7 FOR USE IN DIRT LAYER 1.
           LDA     DRT1COLR+1
 ;*         STA     WSYNC
           STA     WSYNC
@@ -1111,8 +1111,8 @@ DLISKY
 DLIDIRT0
           PHA
           TXA
-          PHA                            ;DIRT LAYER 0: USES PALETTE 6, RESETS
-          LDX     DRT2COLR               ;  PALETTE 6 FOR USE IN DIRT LAYER 2.
+          PHA;                            ;DIRT LAYER 0: USES PALETTE 6, RESETS
+          LDX     DRT2COLR;               ;  PALETTE 6 FOR USE IN DIRT LAYER 2.
           LDA     DRT2COLR+1
 ;*         STA     WSYNC
           STA     WSYNC
@@ -1132,8 +1132,8 @@ DLIEND    STA     DLIVECT
 DLIDIRT1
           PHA
           TXA
-          PHA                            ;DIRT LAYER 1: USES PALETTE 7, RESETS
-          LDX     DRT3COLR               ;  PALETTE 7 FOR USE IN DIRT LAYER 3.
+          PHA;                            ;DIRT LAYER 1: USES PALETTE 7, RESETS
+          LDX     DRT3COLR;               ;  PALETTE 7 FOR USE IN DIRT LAYER 3.
           LDA     DRT3COLR+1
 ;*         STA     WSYNC
           STA     WSYNC
@@ -1158,8 +1158,8 @@ ZYXWVU    LDA     #<.DLIVBLNK
 
 
 ;*DLIDIRT3
-;*         PHA                            ;CLEARS ONSCREEN FLAG AND SETS DLI
-;*         LDA     #0                     ;  POINTER TO DLI FOR TOP OF SCREEN.
+;*         PHA;                            ;CLEARS ONSCREEN FLAG AND SETS DLI
+;*         LDA     #0;                     ;  POINTER TO DLI FOR TOP OF SCREEN.
 ;*         STA     ONSCREEN
 ;*         LDA     #<.DLIVBLNK
 ;*ZDLIRTI   STA     DLIVECT
@@ -1178,7 +1178,7 @@ DLIVBLNK
 DLIWLOOP  STA     WSYNC
           DEY
           BPL     DLIWLOOP
-ZDLIVBL   LDA     CTRLRD                 ;WAIT FOR VBLANK TO SYNC DLI"S.
+ZDLIVBL   LDA     CTRLRD;                 ;WAIT FOR VBLANK TO SYNC DLI"S.
           BPL     ENDDLIV
           LDA     CTRLRD
           BPL     ENDDLIV

@@ -1,10 +1,10 @@
 	processor 6502 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                           ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                           ;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*       INIT:  CALLED UPON POWER-UP, THIS INITIALIZES       ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*              THE DISPLAY LISTS, SKY IN DIRTMAP, AND       ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*              CALLS INITGAME TO INITIALIZE ATTRACT MODE.   ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                           ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;              THE DISPLAY LISTS, SKY IN DIRTMAP, AND       ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;              CALLS INITGAME TO INITIALIZE ATTRACT MODE.   ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                           ;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ;*IGAMERAK
 INIT
@@ -17,21 +17,21 @@ INIT
 
           LDX     #CSET1
           STX     CHARBASE
-          LDX     #$B5                   ;WILL NEED DIFF VALUE FOR PAL/SECAM
-          STX     SYNCFRAM               ;WILL NEED DIFF VALUE FOR PAL/SECAM
-          LDX     #$4C                   ;SET UP JUMP INSTRUCTION FOR DLI"S.
+          LDX     #$B5;                   ;WILL NEED DIFF VALUE FOR PAL/SECAM
+          STX     SYNCFRAM;               ;WILL NEED DIFF VALUE FOR PAL/SECAM
+          LDX     #$4C;                   ;SET UP JUMP INSTRUCTION FOR DLI"S.
           STX     DLIJMP
           LDX     #<.DLISETUP
           STX     DLIVECT
           LDX     #>.DLISETUP
           STX     DLIVECT+1
 
-          STA     $38                    ; A CONTAINS 0
+          STA     $38;                    ; A CONTAINS 0
           STA     DUMMYDPL+1
 
-;*         STA     CURSONG                ;THESE 11 REGISTERS ARE ZERO PAGE.
-;*         STA     SNGTEMP1               ;THEY MUST BE KEPT ADJACENT TO BE
-;*         STA     LASTMOVE               ;SERVED BY THE FOLLOWING LOOP.
+;*         STA     CURSONG;                ;THESE 11 REGISTERS ARE ZERO PAGE.
+;*         STA     SNGTEMP1;               ;THEY MUST BE KEPT ADJACENT TO BE
+;*         STA     LASTMOVE;               ;SERVED BY THE FOLLOWING LOOP.
 ;*         STA     DLSTPTR
 ;*         STA     NUMPLAYR
 ;*         STA     DEATH
@@ -42,12 +42,12 @@ INIT
 ;*         STA     BONZO
 
           LDX     #10
-ZIVARS    STA     CURSONG,X             ;SEE DIGDEF FOR WHICH VARS ARE INIT"ED
+ZIVARS    STA     CURSONG,X;             ;SEE DIGDEF FOR WHICH VARS ARE INIT"ED
           DEX
           BPL     ZIVARS
 
           LDX     #TOTLSTMP
-ZEROSTMY  STA     STMPYPOS,X             ;NO STAMPS ON SCREEN INITIALLY.
+ZEROSTMY  STA     STMPYPOS,X;             ;NO STAMPS ON SCREEN INITIALLY.
           STA     STMPRIOR,X
           DEX
           BPL     ZEROSTMY
@@ -61,7 +61,7 @@ ZPRIOR1   STA     PUMPRIOR,X
           BPL     ZPRIOR1
           STA     RCKPRIOR+4
 
-          LDY     #143                   ;SET UP STMPPALW ARRAY.
+          LDY     #143;                   ;SET UP STMPPALW ARRAY.
           LDX     #40
 EXPANDA   LDA     NUMBYTES,X
           STA     TEMP
@@ -73,8 +73,8 @@ EXPANDC.B   STA     STMPPALW,Y
           DEX
           BPL     EXPANDA
 
-          LDX     #47                    ;THIS LOOP LEAVES A=0,Y=FF,X=FF
-          LDY     #15                    ;SET UP DIV3TAB IN RAM.
+          LDX     #47;                    ;THIS LOOP LEAVES A=0,Y=FF,X=FF
+          LDY     #15;                    ;SET UP DIV3TAB IN RAM.
 ZEXPAND0  LDA     #2
           STA     TEMP
           TYA
@@ -85,8 +85,8 @@ ZEXPAND1  STA     DIV3TAB,X
           DEY
           BPL     ZEXPAND0
 
-          TAY                            ;ASSUME A CONTAINS 0
-          TAX                            ;ASSUME A CONTAINS 0
+          TAY;                            ;ASSUME A CONTAINS 0
+          TAX;                            ;ASSUME A CONTAINS 0
 RACKTUNL  LDA     PTUNNELS,X
 ZEROTUNL  PHA
           STA     TUNNELS,Y
@@ -130,27 +130,27 @@ SETDPLS   LDA     DLIBITS,Y
           LDY     #20
           BNE     SETDPLS
 
-ZDPLDONE  LDX     #14                    ;INIT CHARACTER MAP FOR SCORE LINE.
-          LDA     #FULLSKY               ;SKY BEHIND NUMBERS AT TOP OF SCREEN.
+ZDPLDONE  LDX     #14;                    ;INIT CHARACTER MAP FOR SCORE LINE.
+          LDA     #FULLSKY;               ;SKY BEHIND NUMBERS AT TOP OF SCREEN.
 ISCOREM   STA     SCOREMAP,X
           DEX
           BNE     ISCOREM
 
 
-          JSR     IDIRTRAM               ;INITIALIZE DIRT RAM.
+          JSR     IDIRTRAM;               ;INITIALIZE DIRT RAM.
           JSR     ISCOREL
 
           JSR     SETRACK1
-          TAX                            ;ATTRACT MODE.
+          TAX;                            ;ATTRACT MODE.
           JSR     INITGAME
 
-          JMP     SCRNON                 ;TURN DISPLAY BACK ON.
+          JMP     SCRNON;                 ;TURN DISPLAY BACK ON.
 ;*;*;*       RTS
 
 
-ICOLORS   LDX     #24                    ;INIT ORIGINAL PALETTE COLORS.
+ICOLORS   LDX     #24;                    ;INIT ORIGINAL PALETTE COLORS.
           LDY     #31
-IPALS     LDA     IPALETTE,X             ;X INDEXES THROUGH PALETTE COLOR TABLE
+IPALS     LDA     IPALETTE,X;             ;X INDEXES THROUGH PALETTE COLOR TABLE
           STA     P0C0SHAD,Y
           DEX
           BEQ     ENDIPAL
@@ -160,7 +160,7 @@ IPALS     LDA     IPALETTE,X             ;X INDEXES THROUGH PALETTE COLOR TABLE
           BNE     IPALS
           DEY
           BPL     IPALS
-ENDIPAL   STX     P0C0                   ;BACKGROUND COLOR 0.
+ENDIPAL   STX     P0C0;                   ;BACKGROUND COLOR 0.
           STX     P0C0SHAD
           RTS
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
@@ -176,27 +176,27 @@ IDLISTS   JSR     CHARDPL
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 CHARDPL
           LDX     #NUMZONES
-INITBACK  JSR     SETDPLH                ;ADDRESS OF ZONE DISPLAY LIST.
+INITBACK  JSR     SETDPLH;                ;ADDRESS OF ZONE DISPLAY LIST.
           LDY     #0
-          LDA     MAPLOW,X               ;LOW ADDRESS OF CHARACTER MAP.
+          LDA     MAPLOW,X;               ;LOW ADDRESS OF CHARACTER MAP.
           STA     (DPLOW),Y
           INY
           LDA     #W1ZONE
           STA     (DPLOW),Y
           STA     L0Z0+1
           INY
-          LDA     #>.DIRTMAP            ;INIT TO CURRENT PLAYER"S DIRT MAP.
+          LDA     #>.DIRTMAP;            ;INIT TO CURRENT PLAYER"S DIRT MAP.
           STA     (DPLOW),Y
           INY
-          LDA     PALWIDZ,X              ;PALETTE/WIDTH FOR ZONE.
+          LDA     PALWIDZ,X;              ;PALETTE/WIDTH FOR ZONE.
           STA     (DPLOW),Y
           INY
-          LDA     #16                    ;HORIZONTAL POSITION.
+          LDA     #16;                    ;HORIZONTAL POSITION.
           STA     (DPLOW),Y
           INY
           INY
           LDA     #0
-          STA     (DPLOW),Y              ;ZERO OUT WIDTH OF NEXT HEADER IN ZONE.
+          STA     (DPLOW),Y;              ;ZERO OUT WIDTH OF NEXT HEADER IN ZONE.
           DEX
           BNE     INITBACK
           RTS
@@ -204,13 +204,13 @@ INITBACK  JSR     SETDPLH                ;ADDRESS OF ZONE DISPLAY LIST.
 IDIRTRAM
           LDA     #BLANK1
           LDX     #$F0
-FILLBLNK  STA     DIRTMAP,X              ;ZERO OUT END OF DIRTMAP FOR SELECT,
-          STA     BACKDIRT,X             ;  TITLE PAGE USE.
+FILLBLNK  STA     DIRTMAP,X;              ;ZERO OUT END OF DIRTMAP FOR SELECT,
+          STA     BACKDIRT,X;             ;  TITLE PAGE USE.
           INX
           BNE     FILLBLNK
 
           LDA     #LSKYHALF
-          STA     SCOREMAP               ;HALF SKY.
+          STA     SCOREMAP;               ;HALF SKY.
           STA     DIRTMAP
           STA     BACKDIRT
           LDA     #RSKYHALF
@@ -221,15 +221,15 @@ FILLBLNK  STA     DIRTMAP,X              ;ZERO OUT END OF DIRTMAP FOR SELECT,
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 SCRNOFF
           JSR     WAITVBL
-          LDA     #<.DPL2LIST           ;TURN DISPLAY OFF BY SETTING DPPL,DPPH
-          STA     DPPL                   ;  TO POINT TO BLANK DISPLAY LIST.
+          LDA     #<.DPL2LIST;           ;TURN DISPLAY OFF BY SETTING DPPL,DPPH
+          STA     DPPL;                   ;  TO POINT TO BLANK DISPLAY LIST.
           LDA     #>.DPL2LIST
           STA     DPPH
           RTS
 SCRNON
           JSR     WAITVBL
-          LDX     #0                     ;TURN DISPLAY ON BY SETTING DPPL,DPPH
-          BIT     DLSTPTR                ;  TO POINT TO CURRENT DISPLAY LIST.
+          LDX     #0;                     ;TURN DISPLAY ON BY SETTING DPPL,DPPH
+          BIT     DLSTPTR;                ;  TO POINT TO CURRENT DISPLAY LIST.
           BVC     ZSCRNON
           INX
 ZSCRNON   LDA     LDPPL,X
@@ -239,23 +239,23 @@ ZSCRNON   LDA     LDPPL,X
           RTS
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*       INITGAME:  INITIALIZE DIGDUG GAME.                 ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  INPUT:  X = 0 => REAL GAME.             ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                          X = 1 => ATTRACT GAME.          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*       INITGAME:  INITIALIZE DIGDUG GAME.;                 ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  INPUT:  X = 0 => REAL GAME.             ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                          X = 1 => ATTRACT GAME.          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 INITGAME
           STX     ATTRACT
           TXA
-          EOR     #1                     ;IF ATTRACT MODE, DON"T GO THROUGH
-          STA     ENTRY                  ;  ENTRY WALK.
+          EOR     #1;                     ;IF ATTRACT MODE, DON"T GO THROUGH
+          STA     ENTRY;                  ;  ENTRY WALK.
 
           JSR     IDLISTS
-          JSR     ICOLORS                ;RETURNS 0 IN X.
+          JSR     ICOLORS;                ;RETURNS 0 IN X.
 
           TXA
-;*;*;*       LDA     #0                     ;START WITH PLAYER 0.
+;*;*;*       LDA     #0;                     ;START WITH PLAYER 0.
           STA     P2INIT
           STA     PLAYNUM
           STA     DEATH
@@ -272,77 +272,77 @@ ZISTAMPS  STA     STMPYPOS,X
           INX
           JSR     PLAYREDY
 
-ZNOPLAY0  JSR     INITRACK               ;INITIALIZE APPROPRIATE RACK: THIS
-                                         ;  INVOLVES FILLING IN DIRT, PUTTING
-                                         ;  CREATURES IN TUNNELS, AND UPDATING
-                                         ;  FLOWERS AT TOP OF SCREEN.
+ZNOPLAY0  JSR     INITRACK;               ;INITIALIZE APPROPRIATE RACK: THIS
+          ;                               ;  INVOLVES FILLING IN DIRT, PUTTING
+          ;                               ;  CREATURES IN TUNNELS, AND UPDATING
+          ;                               ;  FLOWERS AT TOP OF SCREEN.
 
 
-          LDX     ATTRACT                ;ATTRACT MODE?
+          LDX     ATTRACT;                ;ATTRACT MODE?
           BNE     IATTRACT
-          LDX     #5                     ;SET UP NUMBER OF MEN LEFT.
-          STX     NUMMEN                 ;PLAYER 0"S MEN.
+          LDX     #5;                     ;SET UP NUMBER OF MEN LEFT.
+          STX     NUMMEN;                 ;PLAYER 0"S MEN.
           LDA     NUMPLAYR
           BNE     ISCORE
           TAX
-ISCORE    STX     NUMMEN+1               ;PLAYER 1"S MEN.
-          JSR     ISCOREL                ;RETURNS 0 IN A.
+ISCORE    STX     NUMMEN+1;               ;PLAYER 1"S MEN.
+          JSR     ISCOREL;                ;RETURNS 0 IN A.
 
-;*;*;*       LDA     #0                     ;SET UP SCORE:  IT TAKES MORE TIME TO
-          TAY                            ;  CALL UPDSCORE, BUT LESS ROM.
+;*;*;*       LDA     #0;                     ;SET UP SCORE:  IT TAKES MORE TIME TO
+          TAY;                            ;  CALL UPDSCORE, BUT LESS ROM.
           JSR     UPDSCORE
           LDA     NUMPLAYR
           BEQ     ZISETBZ
-          INC     PLAYNUM                ;ALSO SET UP SCORE FOR PLAYER 2.
+          INC     PLAYNUM;                ;ALSO SET UP SCORE FOR PLAYER 2.
           LDA     #FULL0
           STA     L0Z0+49
           LDA     #0
           TAY
           JSR     UPDSCORE
           DEC     PLAYNUM
-ZISETBZ   JMP     UPDMEN                 ;UPDMEN IS A SUBR
+ZISETBZ   JMP     UPDMEN;                 ;UPDMEN IS A SUBR
 
 ;*IGAMEDON  RTS
 
-IATTRACT  INX                            ;2 MEN IN ATTRACT MODE.
+IATTRACT  INX;                            ;2 MEN IN ATTRACT MODE.
           STX     NUMMEN
           LDA     #0
           STA     ASTAGE
-          STA     NUMMEN+1               ;NO MEN FOR PLAYER 1.
+          STA     NUMMEN+1;               ;NO MEN FOR PLAYER 1.
           RTS
 
 
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*       INITRACK:  CALLED WHEN INITIALIZING A GAME, OR     ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  WHEN ALL CREATURES HAVE BEEN KILLED     ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  OR HAVE ESCAPED, AND A NEW RACK IS      ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  NEEDED.                                 ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  WHEN ALL CREATURES HAVE BEEN KILLED     ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  OR HAVE ESCAPED, AND A NEW RACK IS      ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  NEEDED.                                 ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 INITRACK
-          LDX     #7                     ;SET UP MONSTAT SO ALL POSSIBLE
-          LDA     #0                     ;  CREATURES ARE INITIALIZED.
+          LDX     #7;                     ;SET UP MONSTAT SO ALL POSSIBLE
+          LDA     #0;                     ;  CREATURES ARE INITIALIZED.
 PUTALLC   STA     MONSTAT,X
-          STA     FLAMEY-3,X             ;FRUITY,PUMPY,FLAMEY,ROCKYS REDUNDANT
+          STA     FLAMEY-3,X;             ;FRUITY,PUMPY,FLAMEY,ROCKYS REDUNDANT
           DEX
           BPL     PUTALLC
-                                         ;DO TUNNELS AND CREATURES.
-          STA     NOTUNNEL               ;ZERO PAGE
-          STA     FALLCNT                ;ZERO PAGE
-;*         STA     FRUIT                  ;ABSOLUTE
-          STA     RACKTIME               ;ABSOLUTE
+          ;                               ;DO TUNNELS AND CREATURES.
+          STA     NOTUNNEL;               ;ZERO PAGE
+          STA     FALLCNT;                ;ZERO PAGE
+;*         STA     FRUIT;                  ;ABSOLUTE
+          STA     RACKTIME;               ;ABSOLUTE
 
-          JSR     INITDIRT               ;FILL IN DIRT FOR NEW RACK.
-          JSR     INITROCK               ;INITIALIZE ROCKS IN DIRT.
+          JSR     INITDIRT;               ;FILL IN DIRT FOR NEW RACK.
+          JSR     INITROCK;               ;INITIALIZE ROCKS IN DIRT.
 
           LDA     ENTRY
           BNE     DOEWALK
           TAY
-          JSR     DDMIDDLE               ;USES A ONLY
+          JSR     DDMIDDLE;               ;USES A ONLY
 WELLOOP   LDA     #20
-          STA     $2617,Y                ;DIG OUT VERTICAL TUNNEL.
+          STA     $2617,Y;                ;DIG OUT VERTICAL TUNNEL.
           TYA
           CLC
           ADC     #$10
@@ -350,7 +350,7 @@ WELLOOP   LDA     #20
           CPY     #$60
           BNE     WELLOOP
 
-;*         STX     $2617                  ;DIG OUT VERTICAL TUNNEL.
+;*         STX     $2617;                  ;DIG OUT VERTICAL TUNNEL.
 ;*         STX     $2627
 ;*         STX     $2637
 ;*         STX     $2647
@@ -359,8 +359,8 @@ WELLOOP   LDA     #20
           LDX     #8
           STX     $2677
           BNE     DOFLOWR
-DOEWALK   LDA     #DDSTRTX               ;DIGDUG WILL MAKE ENTRANCE: SET HIM
-          STA     DDXPOS                 ;  UP IN TOP RIGHT CORNER OF DIRT.
+DOEWALK   LDA     #DDSTRTX;               ;DIGDUG WILL MAKE ENTRANCE: SET HIM
+          STA     DDXPOS;                 ;  UP IN TOP RIGHT CORNER OF DIRT.
           LDA     #DDSTRTY
           STA     DDYPOS
           LDA     #LDIGDUG1
@@ -377,18 +377,18 @@ GETBIG    INX
           SBC     #10
           CMP     #10
           BCS     GETBIG
-GOTBIG    STA     TEMP                   ;TEMP CONTAINS NUMBER OF SMALL FLOWERS.
-          TXA                            ;X CONTAINS NUMBER OF BIG FLOWERS.
-          BEQ     GETSMALL               ;ANY BIG FLOWERS?
-          LDA     #BIGFLOWR              ;STAMP INDEX FOR BIG FLOWER.
+GOTBIG    STA     TEMP;                   ;TEMP CONTAINS NUMBER OF SMALL FLOWERS.
+          TXA;                            ;X CONTAINS NUMBER OF BIG FLOWERS.
+          BEQ     GETSMALL;               ;ANY BIG FLOWERS?
+          LDA     #BIGFLOWR;              ;STAMP INDEX FOR BIG FLOWER.
 PUTBIG    STA     DIRTMAP,Y
           DEY
-          BEQ     IRACKDON               ;SKY IS FULL OF FLOWERS ALREADY.
+          BEQ     IRACKDON;               ;SKY IS FULL OF FLOWERS ALREADY.
           DEX
           BNE     PUTBIG
-GETSMALL  LDX     TEMP                   ;NUMBER OF SMALL FLOWERS.
+GETSMALL  LDX     TEMP;                   ;NUMBER OF SMALL FLOWERS.
           BEQ     IFILLSKY
-          LDA     #SMLFLOWR              ;STAMP INDEX FOR SMALL FLOWER.
+          LDA     #SMLFLOWR;              ;STAMP INDEX FOR SMALL FLOWER.
 PUTSMALL  STA     DIRTMAP,Y
           DEY
           BEQ     IRACKDON
@@ -396,7 +396,7 @@ PUTSMALL  STA     DIRTMAP,Y
           BNE     PUTSMALL
 
 IFILLSKY
-          LDA     #FULLSKY               ;FILL IN REST OF SKY WITH SKY CHAR.
+          LDA     #FULLSKY;               ;FILL IN REST OF SKY WITH SKY CHAR.
 ZFILLSKY  STA     DIRTMAP,Y
           DEY
           BNE     ZFILLSKY
