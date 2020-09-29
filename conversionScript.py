@@ -1,9 +1,6 @@
 import os
-import glob
-import sys
 from shutil import copyfile
 
-# takes in 2 folders (Original and Converted)
 def convert(input, output):
 
     input_path = os.getcwd() + "\\" + input
@@ -12,16 +9,16 @@ def convert(input, output):
     for root, dirs, files in os.walk(input_path):
         for file in files:
             # Adds all files from input to output and changes extension
-            # produces the normal asm files in converted folder
-            # copyfile(root + "\\" + file, output_path + "\\" + file[:-4] + ".ASM")
+            copyfile(root + "\\" + file, output_path + "\\" + file[:-2] + ".ASM")
 
             file_in = open(root + "\\" + file, 'r')
-            file_out = open(output_path + "\\" + file[:-4] + ".ASM", 'w')
+            file_out = open(output_path + "\\" + file[:-2] + ".ASM", 'w')
 
             # Adds compilation setting
             file_out.write("\t" + "processor 6502 \n")
 
             for line in file_in:
+
                 out = line
 
                 # Change single quote to double
@@ -67,36 +64,11 @@ def convert(input, output):
                         index += 1
 
                 file_out.write(out)
+
             file_in.close()
             file_out.close()
 
 convert("Original", "Converted")
-
-# TESTING AREA
-# origFile = "DIGDUG.ASM"
-# fileIn = open(os.getcwd() + "\\Original\\" + origFile, "r")
-# fileOut = open(os.getcwd() + "\\Converted\\" + origFile, "w")
-# fileIn.close()
-# fileOut.close()
-
-# CHANGES ALL FILES TO ASM IN ORIGINAL FOLDER IN THE FIRST PLACE
-# folder = os.getcwd()
-# for root, dirs, filenames in os.walk(folder):
-#     for filename in filenames:
-#         filename = os.path.join(root, filename)
-# oldExtension = ".S"
-# newExtension = ".ASM"
-# for root, dirs, filenames in os.walk(folder):
-#     for filename in filenames:
-#         if oldExtension in filename:
-#             filename = os.path.join(root, filename)
-#             os.rename(filename, filename.replace(oldExtension, newExtension))
-
-# fileIn = open(os.getcwd() + "\\Original\\" + origFile, "r")
-# fileOut = open(os.getcwd() + "\\Converted\\" + origFile, "w")
-# fileOut.write("processor 6502\n")
-# for line in fileIn:
-#     fileOut.write(line)
 
 
 
