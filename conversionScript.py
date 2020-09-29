@@ -1,4 +1,5 @@
 import os
+import re
 from shutil import copyfile
 
 def convert(input, output):
@@ -24,7 +25,7 @@ def convert(input, output):
                 # Change single quote to double
                 if "\'" in out:
                     out = out.replace("\'", "\"")
-
+ 
                 # Adds semicolon to mark off old comments
                 if "*" in out:
                     out = out.replace("*", ";*")
@@ -33,6 +34,12 @@ def convert(input, output):
                 if "DB" in out:
                     out = out.replace("DB", "DC.B")
 
+                # Comment out extraneous info
+                x = re.search('\s{10}', out[10:])
+                if x is not None:
+                    index = 10 + x.start()
+                    out = out[:index] + ';' + out[index:]
+                
                 # Change all Low Bit commands
                 while "L(" in out:
                     index = out.index("L(")

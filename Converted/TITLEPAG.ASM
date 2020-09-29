@@ -1,20 +1,20 @@
 	processor 6502 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                         ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                         ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*       TITLEPAG:  DRIVER FOR TITLE PAGE ANIMATION.       ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  CONTROL STAYS IN THIS ROUTINE UNTIL    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  TITLE PAGE HAS COMPLETED.  A NEW GAME  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  IS THEN INITIALIZED FOR ATTRACT MODE,  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  UNLESS THE PLAYER HAS PUSHED RESET,    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                  SELECT, OR THE JOYSTICK BUTTON.        ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*                                                         ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  CONTROL STAYS IN THIS ROUTINE UNTIL    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  TITLE PAGE HAS COMPLETED.  A NEW GAME  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  IS THEN INITIALIZED FOR ATTRACT MODE,  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  UNLESS THE PLAYER HAS PUSHED RESET,    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                  SELECT, OR THE JOYSTICK BUTTON.        ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                         ;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ATITLEPA
 TITLEPAG
           JSR     SCRNOFF
 
-          JSR     SETTITLE               ;LOAD TITLEPAG LOGO INTO BOTH DISPLAY
-          LDA     DLSTPTR                ;  LISTS.
+          JSR     SETTITLE;               ;LOAD TITLEPAG LOGO INTO BOTH DISPLAY
+          LDA     DLSTPTR;                ;  LISTS.
           EOR     #$40
           STA     DLSTPTR
           JSR     SETTITLE
@@ -28,7 +28,7 @@ TITLALL   LDA     TITLCDIR,X
           STA     MONSTAT,X
           DEX
           BPL     TITLALL
-          STA     L0Z0+1                 ;SCORE LINE...
+          STA     L0Z0+1;                 ;SCORE LINE...
           STA     IGNORE
           STA     TITLETIM
 
@@ -58,9 +58,9 @@ TLOOP
           LDX     #10
           JSR     SETDPLH
 
-          LDA     #1                     ;MOVE CREATURES ON SCREEN.
+          LDA     #1;                     ;MOVE CREATURES ON SCREEN.
           STA     TCTEMP
-          LDA     TITLETIM               ;ONLY UPDATE EVERY OTHER CYCLE.
+          LDA     TITLETIM;               ;ONLY UPDATE EVERY OTHER CYCLE.
           LSR     A
           BCS     TCRTS
           LSR     A
@@ -74,11 +74,11 @@ CMOVLOOP
           BMI     NXTCMOVE
 ;*         AND     #$C0
 ;*         BNE     NXTCMOVE
-          INC     TCTEMP                 ;WE HAVE A CREATURE...
+          INC     TCTEMP;                 ;WE HAVE A CREATURE...
           LDA     CDIREC,X
           LSR     A
           BCS     CLIMBUP
-          TAY                            ;CREATURE IS MOVING LEFT OR RIGHT.
+          TAY;                            ;CREATURE IS MOVING LEFT OR RIGHT.
           LDA     POOKAX,X
 ;*         CLC
           ADC     CWALK,Y
@@ -86,8 +86,8 @@ CMOVLOOP
           CMP     #150
           BCC     CSTILL
           DEC     TCTEMP
-          JSR     OFFSCR2                ;SUBR FOUND IN MONSTER FILE
-;*         LDA     #$80                   ;IT RETURNS A 0
+          JSR     OFFSCR2;                ;SUBR FOUND IN MONSTER FILE
+;*         LDA     #$80;                   ;IT RETURNS A 0
 ;*         STA     MONSTAT,X
 ;*         ASL     A
 ;*         STA     POOKAY,X
@@ -103,7 +103,7 @@ CSTILL    TYA
 HPOOKA    TAY
           PLP
           BCC     ACRLEFT
-          LDA     LPOOKA,Y               ; LDA DOESN"T AFFECT CARRY
+          LDA     LPOOKA,Y;               ; LDA DOESN"T AFFECT CARRY
           BCS     ACRINDX
 ACRLEFT   LDA     RPOOKA,Y
 ACRINDX   STA     POOKAIX,X
@@ -121,10 +121,10 @@ CLIMBUP   INC     POOKAY,X
 UPOOKA    TAY
           LDA     LPOOKA,Y
           STA     POOKAIX,X
-          LDA     POOKAY,X               ;CREATURE MOVING UP.
+          LDA     POOKAY,X;               ;CREATURE MOVING UP.
           CMP     CBORDER,X
           BNE     NXTCMOVE
-NDIREC    INC     CDIREC,X               ;MOVE TO NEW DIRECTION.
+NDIREC    INC     CDIREC,X;               ;MOVE TO NEW DIRECTION.
           LDY     CDIREC,X
           LDA     CTURNS,Y
           STA     CBORDER,X
@@ -133,8 +133,8 @@ NXTCMOVE  DEX
           BPL     CMOVLOOP
           PLA
 
-TCRTS     LDA     TCTEMP                 ;IF 0 UPON RETURN FROM TCMOVE,
-          BEQ     TITLEDON               ;  CREATURES ALL WALKED OFF SCREEN.
+TCRTS     LDA     TCTEMP;                 ;IF 0 UPON RETURN FROM TCMOVE,
+          BEQ     TITLEDON;               ;  CREATURES ALL WALKED OFF SCREEN.
 
           PLA
 TWAITFRM  CMP     FRMCNT
@@ -162,27 +162,27 @@ TITLLIST  LDA     TLISTSIZ,X
 
 TITLEDON
 ATITLEDO  PLA
-          JSR     SETRACK1               ;RETURNS 1 IN A.
-;*;*        LDA     #1                     ;BONZO
+          JSR     SETRACK1;               ;RETURNS 1 IN A.
+;*;*        LDA     #1;                     ;BONZO
           JSR     HSCINIT
           TXA
           BNE     TRYTEDDY
           LDX     #<.HSCRAM
           LDY     #>.HSCRAM
           JSR     HSCATRCT
-          JSR     HSCDISPL               ;DISPLAY HIGH SCORE FOR 10 SECONDS.
-TRYTEDDY  LDA     #0                     ;PINEAPPLE MODE
+          JSR     HSCDISPL;               ;DISPLAY HIGH SCORE FOR 10 SECONDS.
+TRYTEDDY  LDA     #0;                     ;PINEAPPLE MODE
           JSR     HSCINIT
           TXA
           BNE     ATTNOHSC
-;*;*;*       LDX     #<.HSCRAM             ;X CONTAINS 0 ALREADY...
+;*;*;*       LDX     #<.HSCRAM;             ;X CONTAINS 0 ALREADY...
           LDY     #>.HSCRAM
           JSR     HSCATRCT
           JSR     HSCDISPL
 HSCSTOP   LDX     #1
-ATTNOHSC  JMP     NEWAGAME               ;NEWAGAME IS A SUBR
+ATTNOHSC  JMP     NEWAGAME;               ;NEWAGAME IS A SUBR
 
-BORE      SEC                            ;ALSO USED BY DDMOVE
+BORE      SEC;                            ;ALSO USED BY DDMOVE
           SBC     #36
 BORE1     LSR     A
           TAY
