@@ -70,10 +70,6 @@ def convert(input, output):
                             out = out[:index] + out[index + 1:]
                         index += 1
 
-                x = re.search(0, out)
-                if x is not None:
-
-
                 file_out.write(out)
 
             file_in.close()
