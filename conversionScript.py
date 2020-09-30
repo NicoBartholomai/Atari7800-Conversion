@@ -31,7 +31,7 @@ def convert(input, output):
                     out = out.replace("*", ";*")
 
                 # Change DB command to DC.B
-                if "DB" in out:
+                if " DB " in out:
                     out = out.replace("DB", "DC.B")
 
                 # Comment out extraneous info
@@ -43,7 +43,7 @@ def convert(input, output):
                 # Change all Low Bit commands
                 while "L(" in out:
                     index = out.index("L(")
-                    out = out[:index] + "<." + out[index + 2:]
+                    out = out[:index] + "<" + out[index + 2:]
                     index += 2
                     paren_count = 1
                     while index < len(out) and paren_count > 0:
@@ -58,7 +58,7 @@ def convert(input, output):
                 # Change all High Bit commands
                 while "H(" in out:
                     index = out.index("H(")
-                    out = out[:index] + ">." + out[index + 2:]
+                    out = out[:index] + ">" + out[index + 2:]
                     index += 2
                     paren_count = 1
                     while index < len(out) and paren_count > 0:
@@ -69,6 +69,10 @@ def convert(input, output):
                         if paren_count == 0:
                             out = out[:index] + out[index + 1:]
                         index += 1
+
+                x = re.search(0, out)
+                if x is not None:
+
 
                 file_out.write(out)
 
