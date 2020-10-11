@@ -55,9 +55,9 @@ FLAMCOLL  LDA     SQUASH
           EOR     #$FF;                   ;DOES NOT AFFECT C
 ;*         CLC
           ADC     #$03;                   SINCE FLAMNUM IS INCREMENTED BY ONE
-          LSR     A
-          LSR     A
-          LSR     A
+          LSR
+          LSR
+          LSR
           CMP     FLAMNUM
           BCS     ENDCOLL
           LDA     DDYPOS
@@ -101,7 +101,7 @@ PUMPWAIT  LDX     PUMPIE
           BMI     ZNXT102
           LDA     MONSTAT,X
           BMI     ZNXT102;                IF DISABLED BIT SET
-          ASL     A
+          ASL
           BMI     ZNXT102;                IF SQUASHED BIT SET
           AND     #$08
           BEQ     ZNXT102;                IF GBNF BIT IS SET
@@ -153,15 +153,15 @@ ZNXT104   LDA     #$FF
           RTS
 
 DISPPUMP  LDA     LASTMOVE
-          ROR     A
-          ROR     A
+          ROR
+          ROR
           BCS     NORTSOUT
           PHP
           LDA     PUMPNUM;                SETUP PUMP XPOS
-          ROR     A;                      -FOR THE WIDE PUMP
+          ROR;                      -FOR THE WIDE PUMP
           LDA     #$00
-          ROL     A
-          ASL     A
+          ROL
+          ASL
           STA     TEMP1
           PLP
           BMI     WEST
@@ -173,15 +173,15 @@ EAST      LDA     DDXPOS
           LDA     DDYPOS
           STA     PUMPY
           LDA     PUMPNUM;                SETUP THE INDEX FOR PUMP
-          LSR     A
+          LSR
           TAY
           LDA     PRITES0,Y;              -FROM PRITES# TABLES
           BNE     WESTA;                  ;USE AS JMP
 WEST      LDA     PUMPNUM;                SETUP THE INDEX FOR PUMP
-          LSR     A
+          LSR
           STA     TEMP2
-          ASL     A
-          ASL     A
+          ASL
+          ASL
           STA     TEMP3
           LDA     DDXPOS
           SEC
@@ -201,7 +201,7 @@ WESTA     STA     PUMPIX
           RTS
 NORTSOUT  BPL     SOUTH
 NORTH     LDA     PUMPNUM;                SETUP THE INDEX FOR PUMP
-          LSR     A
+          LSR
           STA     TEMP2
 
           LDY     TEMP2
@@ -213,7 +213,7 @@ NORTH     LDA     PUMPNUM;                SETUP THE INDEX FOR PUMP
           STA     PUMPIX+2
 
           LDA     PUMPNUM
-          ASL     A
+          ASL
           CLC
           ADC     PUMPNUM
           ADC     DDYPOS
@@ -223,9 +223,9 @@ NORTH     LDA     PUMPNUM;                SETUP THE INDEX FOR PUMP
           LDA     #191;                   DECIMAL
 ZNXT166   JMP     SUB4;                   ;SUB4 IS A SUBR
 SOUTH     LDA     PUMPNUM;                SETUP PUMP XPOS
-;*         ROR     A;                      -FOR THE WIDE PUMP
+;*         ROR;                      -FOR THE WIDE PUMP
 ;*         LDA     #$00
-;*         ROL     A
+;*         ROL
           AND     #$01;                   ;WITH THANKS TO TOM CALDERWOOD
           STA     TEMP1
           CLC
@@ -234,7 +234,7 @@ SOUTH     LDA     PUMPNUM;                SETUP PUMP XPOS
           STA     TEMP1
 
           LDA     PUMPNUM;                SETUP THE INDEX FOR PUMP
-          LSR     A
+          LSR
           TAY
           LDA     PDOWNS0,Y;                -FROM PRITES# TABLES
           STA     PUMPIX
@@ -260,12 +260,12 @@ SOUTHA    CMP     #23;                    DECIMAL
 ZNXT156   JMP     SUB4;                   ;SUB4 IS A SUBR
 
 PUMPCOLL  LDA     LASTMOVE
-          ROR     A
-          ROR     A
+          ROR
+          ROR
           BCS     PUPDOWN
           BMI     PLEFT
 PRIGHT    LDA     PUMPNUM
-          ASL     A
+          ASL
           CLC
           ADC     DDXPOS
           ADC     #$01;                   IN CONNECTION WITH WIDTH OF COLL
@@ -283,7 +283,7 @@ PUPDOWN   BPL     PDOWN
 PUP       LDA     PUMPY
           JMP     PDOWN2
 PDOWN     LDA     PUMPNUM
-          ASL     A
+          ASL
           CLC
           ADC     PUMPNUM
           STA     TEMP1
@@ -301,7 +301,7 @@ PDOWN2    STA     TEMP2
 PCOLL     LDX     #$07
 PREV39    LDA     MONSTAT,X
           BMI     ENDPCOLL
-          ASL     A
+          ASL
           BMI     ENDPCOLL
           AND     #$0C
           CMP     #$04;                   WHEN (NOT GBNF) & (BLOWUP)
@@ -352,8 +352,8 @@ GETMAXP   LDX     #$0E
           JSR     GETDIRT
           LDX     #$02
           LDA     LASTMOVE
-          ROR     A
-          ROR     A
+          ROR
+          ROR
           BCS     PDNS
           BMI     PDW
 PDE
@@ -372,7 +372,7 @@ ENDPDE    LDA     DDXPOS
           BEQ     ENDPDE2
           SEC
           SBC     #1
-          LSR     A
+          LSR
           EOR     #$03
 ENDPDE2   BPL     SUB2;                   ;SUB2 IS A SUBR
 PDW       LDA     NOTGRID
@@ -386,7 +386,7 @@ PDW1      JSR     MOREPUMP
           BPL     PDWLOOP
 ENDPDW    LDA     DDXPOS
           AND     #$07
-          LSR     A
+          LSR
           BPL     SUB2;                   ;SUB2 IS A SUBR
 PDNS      BPL     PDS
 PDN
@@ -436,7 +436,7 @@ ENDPDS    JSR     SUB3
 ;*         BCC     ZNXT120
 ;*         LDA     #$01;                   SKY CHARACTER
 ;*         RTS
-;*ZNXT120   LSR     A
+;*ZNXT120   LSR
 ;*         RTS
 ;*ENDLOOK   LDA     #$0F
 ;*         RTS
@@ -622,15 +622,15 @@ PUFF      LDY     BLWSTAT,X
           DEY
           STY     BLWTEMP
           LDA     FACING,X
-          LSR     A
-          LSR     A
-          ASL     A
+          LSR
+          LSR
+          ASL
 ;*         CLC
           ADC     BLWTEMP
           STA     BLWTEMP
           TXA
           AND     #$04
-          ASL     A
+          ASL
 ;*         CLC
           ADC     BLWTEMP
           TAY
@@ -649,13 +649,13 @@ FNDLEVEL  SEC
           INY
           BPL     FNDLEVEL
 GOTLEVEL  TYA;                            ;RANGE 0 - 14
-          LSR     A;                      ;FROM BOTTOM UP TUNNELS ARE
-          LSR     A;                      ;  GROUPED:  3,4,4,4 (INCLUDING SKY)
+          LSR;                      ;FROM BOTTOM UP TUNNELS ARE
+          LSR;                      ;  GROUPED:  3,4,4,4 (INCLUDING SKY)
           TAY
           TXA
           AND     #$04;                   ;FYGAR?
           BEQ     LOWPTS
-          LSR     A
+          LSR
           AND     BLWLSTMV,X;             ;DIGDUG PUMPING HORIZONTALLY?
           BNE     LOWPTS
           INY;                            ;DOUBLE POINT VALUE

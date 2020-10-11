@@ -69,8 +69,8 @@ GETSTAMP
           LDA     STMPYPOS,Y;             ;VERTICAL POSITION OF STAMP.
           BEQ     NXTSTAMP;               ;IF ZERO, DON"T DISPLAY STAMP.
           STA     TEMPYPOS
-          LSR     A;                      ;FIND WHICH ZONE BY DIVIDING BY 12.
-          LSR     A
+          LSR;                      ;FIND WHICH ZONE BY DIVIDING BY 12.
+          LSR
           TAX
           LDA     DIV3TAB,X;              ;ZONE NUMBER.
           TAX
@@ -80,7 +80,7 @@ GETSTAMP
           STA     HEADER3
           LDA     STMPINDX,Y;             ;INDEX = LOW ADDRESS OF STAMP.
           STA     HEADER0
-          LSR     A
+          LSR
           TAY
           LDA     TEMPY;                  ;IS THIS FRUIT STAMP?
           CMP     #TOTLSTMP;              ;IF SO, HEADER1 ALREADY SET UP.
@@ -179,7 +179,7 @@ DLFLIP
 ;*         INX
 ;*GETDLST   LDA     LDPPL,X
 ;*         STA     DPPL
-;*         LDA     #>.DPL0LIST;           ;SAME FOR EITHER DPLLIST.
+;*         LDA     #>DPL0LIST;           ;SAME FOR EITHER DPLLIST.
 ;*         STA     DPPH
 ;*         RTS
 

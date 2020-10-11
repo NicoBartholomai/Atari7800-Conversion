@@ -31,8 +31,20 @@ def convert(input, output):
                     out = out.replace("*", ";*")
 
                 # Change DB command to DC.B
-                if "DB" in out:
-                    out = out.replace("DB", "DC.B")
+                if " DB " in out:
+                    out = out.replace(" DB ", " DC.B ")
+
+                # Remove Accumulator References
+                x = re.search('((LSR)|(ASL)|(ROR)|(ROL))(\s+)(A)', out)
+                if x is not None:
+                    out = out[:x.start() + 3] + out[x.end():]
+
+                # Remove 0 Prefixes that are not octal
+                x = re.finditer('(,|\s)0\d+', out)
+                offset = 0
+                for i in x:
+                    out = out[:i.start() + 1 - offset] + out[i.start() + 2 - offset:]
+                    offset += 1
 
                 # Comment out extraneous info
                 x = re.search('\s{10}', out[10:])
@@ -43,7 +55,7 @@ def convert(input, output):
                 # Change all Low Bit commands
                 while "L(" in out:
                     index = out.index("L(")
-                    out = out[:index] + "<." + out[index + 2:]
+                    out = out[:index] + "<" + out[index + 2:]
                     index += 2
                     paren_count = 1
                     while index < len(out) and paren_count > 0:
@@ -58,7 +70,7 @@ def convert(input, output):
                 # Change all High Bit commands
                 while "H(" in out:
                     index = out.index("H(")
-                    out = out[:index] + ">." + out[index + 2:]
+                    out = out[:index] + ">" + out[index + 2:]
                     index += 2
                     paren_count = 1
                     while index < len(out) and paren_count > 0:

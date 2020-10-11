@@ -217,7 +217,7 @@ UPDMEN
           LDY     #BLANK1
           LDA     NUMMEN,X
           BEQ     ZRESET0
-          ASL     A
+          ASL
           ADC     #FULL0-2
           TAY
 ZRESET0   STY     L0Z0+53
@@ -287,7 +287,7 @@ HSCDISPL  ;                               ;THIS ALSO ACTS AS AN ENTRY POINT FOR
           STA     CTRL;                   ;RESTORE REGISTERS CHANGED BY HSC.
           LDA     #CSET1
           STA     CHARBASE
-          LDA     #<.DLISETUP
+          LDA     #<DLISETUP
           STA     DLIVECT
 HSCRTS    RTS
 
@@ -298,8 +298,8 @@ ENTERHSC  LDA     SCOREL,X;               ;WRITE PLAYER X"S SCORE INTO SCORE
           STA     HSCOREM;                ;  FIRST BYTE IS MOST SIGNIFICANT
           LDA     SCOREH,X;               ;  BYTE OF SCORE.
           STA     HSCOREH
-          LDX     #<.HSCRAM
-          LDY     #>.HSCRAM
+          LDX     #<HSCRAM
+          LDY     #>HSCRAM
           JMP     HSCENTER;               ;;*;*;* = RTS!
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
@@ -323,7 +323,7 @@ HSCINIT
           JSR     SCRNOFF
 ;*;*;*       LDA     #$FF;                   ;TURN OFF DMA.
 ;*;*;*       STA     CTRL
-          LDA     #<.DLITOP
+          LDA     #<DLITOP
           STA     DLIVECT
 
           LDX     #14
@@ -503,7 +503,7 @@ CHKBUTN   LDA     IGNORE
           INX
 
 CHKRSET   LDA     SWCHB;                  ;RESET PRESSED?
-          LSR     A
+          LSR
           BCS     CHKSEL
 PRESET    JSR     SETRACK1;               ;START ON RACK 1 (RETURNS 1 IN A).
           STA     NONOISE
@@ -512,7 +512,7 @@ DEBRSET   LSR     SWCHB;                  ;STAY HERE UNTIL RESET RELEASED.
           LDX     #0;                     ;REAL GAME.
           BCS     NEWAGAME
 
-CHKSEL    LSR     A;                      ;SELECT PRESSED?
+CHKSEL    LSR;                      ;SELECT PRESSED?
           BCC     GOSELCT;                ;IF SO, STAY IN SELECT MODE UNTIL RESET
           ;                               ;  OR BUTTON PRESSED.
           LDA     ATTRACT;                ;TWO WAYS TO ENTER SELECT: IF ATTRACT
@@ -580,11 +580,11 @@ RADD      RTS
 RSELRES
           LDX     #0
           LDA     SWCHB
-          LSR     A
+          LSR
           BCS     RSELECT
           INX;                            ; RESET PRESSED.
           BNE     DMAON;                  ; JMP.
-RSELECT   LSR     A
+RSELECT   LSR
           BCS     BREAD
           LDX     #2;                     ; SELECT PRESSED.
 DMAON     LDA     #$50;                   ; TURN DMA ON BECAUSE IT MAY HAVE BEEN
@@ -622,11 +622,11 @@ UPDSCORE  LDX     PLAYNUM
           ADC     SCOREH,X;               ;HIGH BYTE OF SCORE.
           STA     SCOREH,X
 
-          CMP     #2;                     ;DID WE JUST PASS 20,000?
+          CMP     #2;                     ;DID WE JUST PASS 20,00?
           BEQ     NEWMAN
-          AND     #$F;                    ;MULTIPLE OF 100,000?
+          AND     #$F;                    ;MULTIPLE OF 100,00?
           BEQ     NEWMAN
-          CMP     #5;                     ;MULTIPLE OF 50,000?
+          CMP     #5;                     ;MULTIPLE OF 50,00?
           BNE     ADDSDONE
 
 NEWMAN    CLD
@@ -677,9 +677,9 @@ SCOREDON  RTS
 ;*         BCC     NOTZERO1
 ;*         LDA     #BLANK1;                ;BLANK STAMP.
 ;*         BEQ     ANDF0RTS
-;*NOTZERO1  LSR     A;                      ;GET INDEX INTO STAMP TABLE FOR THIS
-;*         LSR     A;                      ;  DIGIT OF SCORE.
-;*         LSR     A
+;*NOTZERO1  LSR;                      ;GET INDEX INTO STAMP TABLE FOR THIS
+;*         LSR;                      ;  DIGIT OF SCORE.
+;*         LSR
 ;*         CLC
 ;*         ADC     #FULL0
 ;*ANDF0RTS  RTS
@@ -690,7 +690,7 @@ ANDF      AND     #$F
           LDA     #BLANK1;                ;NO, SO KEEP DISPLAYING BLANK.
           BEQ     ANDFRTS
 NOTZERO2
-          ASL     A
+          ASL
           CLC
           ADC     #FULL0
 ANDFRTS   RTS

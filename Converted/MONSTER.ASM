@@ -66,7 +66,7 @@ SCRAT2    ASL     PROPORT2
 
 DISPCHAR  LDA     CHARSEQL,X;             (DISPLAY CHARACTER)
           STA     TEMP1;                  TEMP1 MUST BE ZERO PAGE
-          LDA     #>.RPOOKA
+          LDA     #>RPOOKA
           STA     TEMP2;                  TEMP2 MUST BE TEMP1+1
           LDY     CHARSEQN,X;             INDEX INTO SEQUENCE
 PREV1     LDA     (TEMP1),Y;              ZERO PAGE INDIRECT ADDRESSING
@@ -137,8 +137,8 @@ GHOSTONX  JSR     GETDIRT
 ;*         LDA     DIRTMAP,Y
 ;*         CMP     #CHARD12
           BCS     JMODE
-          LSR     A;                      SEE IF GHOST CAN APPEAR
-          LSR     A
+          LSR;                      SEE IF GHOST CAN APPEAR
+          LSR
           ORA     TEMP3
           AND     #$02;                   CHAR 1
           BNE     JMODE
@@ -150,7 +150,7 @@ GHOSTONX  JSR     GETDIRT
 ;*         JSR     GETDIRT
 ;*         STY     TEMP3
 ;*         JSR     CHKOTHER
-          LSR     A
+          LSR
           AND     #$04
           BEQ     ZNXT130
           STA     DIR,X;                  HERE A = 4
@@ -168,8 +168,8 @@ GHOSTONY  JSR     GETDIRT
           LDA     DIRTMAP,Y
           CMP     #CHARD12
           BCS     JMODE
-          LSR     A;                      SEE IF GHOST CAN APPEAR
-          LSR     A
+          LSR;                      SEE IF GHOST CAN APPEAR
+          LSR
           ORA     TEMP3
           AND     #$04;                   CHAR 2
           BNE     JMODE
@@ -183,14 +183,14 @@ MOVECONT  JSR     GHSTSUB1
 ;*         STY     TEMP3;                  NECESSARY FOR CHKOTHER CODE
 ;*         JSR     CHKOTHER
 ;*         AND     #$FE
-          LSR     A
+          LSR
           TAY;                            USE DIRT CHAR. AS INDEX INTO
           CMP     #$0F;                   UPPER LIMIT OF DIRTABLE
           BCC     ZNXT51
           LDY     #$0F
 ZNXT51    LDA     DIRTABLE,Y;             GET LOW BYTE OF DIRTCODE ADDR.
           STA     TEMP1;                  PUT IN ZERO PAGE FOR INDIRECT
-          LDA     #>.DIRT0
+          LDA     #>DIRT0
 ;*         INY
 ;*         LDA     DIRTABLE,Y;             GET HIGH BYTE OF DIRTCODE ADDR.
           STA     TEMP2;                  TEMP2 = TEMP1 + 1 (ZERO PAGE)
@@ -223,9 +223,9 @@ MOVEMODE  JSR     MOVECONT
           BCC     FLAMOUT
           LDY     FLAMIE
           BNE     FLAMOUT
-;*G        LDA     #>.FLAMDET
+;*G        LDA     #>FLAMDET
 ;*G        PHA
-;*G        LDA     #<.FLAMDET
+;*G        LDA     #<FLAMDET
 ;*G        PHA
 ;*G        JMP     MOVECONT
 ;*;*;*       JSR     MOVECONT
@@ -427,7 +427,7 @@ OFFSCR    LDA     #$00
 OFFSCR2   ;                               ;CALLED AS SUBR BY BLOWUP,CHKDEATH
           LDA     #$80;                   ;  AND TITLEPAG
           STA     MONSTAT,X
-          ASL     A;                      ;STOP DISPLAYING CREATURE
+          ASL;                      ;STOP DISPLAYING CREATURE
           STA     POOKAY,X;               ;SUBR MUST RETURN A 0
 ZNXT112   RTS
 
@@ -442,9 +442,9 @@ ESCAPE    STA     TEMP5;                  (TO ESCAPE UPPER LEFT SCREEN)
           STA     TEMP4
           JSR     GETPOINT
           BNE     ZNXT111
-SCRAM     LDA     #<.OFFSCR
+SCRAM     LDA     #<OFFSCR
           STA     MODEL,X
-          LDA     #>.OFFSCR
+          LDA     #>OFFSCR
           STA     MODEH,X
           BNE     OFFSCR
 
@@ -461,7 +461,7 @@ ZNXT41    AND     TEMP5;                  FOR NORMAL (NOT GHOST) USE
           LDY     POOKAY,X
           CPY     #$BF
           BCC     ZNXT41A
-          LSR     A;                      ;GO WEST YOUNG MONSTER
+          LSR;                      ;GO WEST YOUNG MONSTER
           LDY     POOKAX,X
           CPY     #$10
           BCS     ZNXT41B
@@ -478,7 +478,7 @@ GHOSTER   STA     TEMP1;                  SEE IF IT"S TIME TO GHOST THEN
           JSR     NOREV
           EOR     #$0F
           STA     GHOSTTMP
-          LDA     #<.ESCAPE;             ;THERE IS PROBABLY A NEATER WAY TO
+          LDA     #<ESCAPE;             ;THERE IS PROBABLY A NEATER WAY TO
           CMP     MODEL,X;                ;    DO THIS...
           BEQ     GHOSTER3
 
@@ -494,8 +494,8 @@ GHOSTER   STA     TEMP1;                  SEE IF IT"S TIME TO GHOST THEN
           LDY     PLAYNUM
           LDA     RACKNUM,Y
 GHOSTER0
-          ASL     A
-;*         ASL     A
+          ASL
+;*         ASL
 ;*         AND     #$03
           CLC
           ADC     #$0A
@@ -507,11 +507,11 @@ GHOSTER0
           STA     GHOSTIME
 
           LDA     DIGREST;                ;MORE LIKELY TO GHOST IF DD NOT MOVING
-          LSR     A
-          LSR     A
-          LSR     A
-          LSR     A
-          LSR     A
+          LSR
+          LSR
+          LSR
+          LSR
+          LSR
           CLC
           ADC     GHOSTIME
           BCS     ZNXT9
@@ -530,7 +530,7 @@ GHOSTER7  LDY     GHOSTOUT
 GHOSTER3  LDA     TEMP1
 GHOSTER2  STA     DIR,X
           JSR     NEWSEQ
-          LDA     #<.ESCAPE;             KLUDGE TO FORCE GHOSTING WHEN
+          LDA     #<ESCAPE;             KLUDGE TO FORCE GHOSTING WHEN
           CMP     MODEL,X
           BNE     ENDTHIS2
           LDA     DIR,X
@@ -577,7 +577,7 @@ NEWSEQ    AND     #$0A;                   INPUT: A=DIR
 SEQER     TXA;                            TYPE OF MONSTER
           AND     #$04
           ORA     FACING,X;               DIRECTION
-          LSR     A
+          LSR
           EOR     GHOST,X;                GHOST OR NOT
           TAY
           LDA     SEQTAB,Y
@@ -640,7 +640,7 @@ PREV47    LDA     MONSTAT,X;              ;ENABLED?
           BCC     ZNXT108
           LDA     ESCAPER
           BNE     ZNXT108
-          LDA     #<.DIGVERT;            ;RESTORED WHEN ROCK IS DONE FALLING
+          LDA     #<DIGVERT;            ;RESTORED WHEN ROCK IS DONE FALLING
           STA     MODEL,X
 ;*         BEQ     ZNXT108;                DO NOT GO DOWN IF AT BOTTOM OF TUNNEL
 ;*         JSR     GETDIRT
@@ -659,7 +659,7 @@ FRUITER   LDA     FRUIT
           BEQ     FRUITOUT
           TAY
           LDA     RACKTIME
-          LSR     A
+          LSR
           BCC     FRUITOUT
           TYA
           INC     FRUIT
@@ -693,7 +693,7 @@ DIGMODE   LDA     MONSTAT,X;              ; ALSO CALLED BY FALL IF ESCAPER
           BMI     ZNXT35;                 ;  IS NOT SET IN ORDER TO RESTORE
           LDA     MODETAB,Y;              ;  MODES DESTROYED BY AVOID
           STA     MODEL,X
-          LDA     #>.DIGVERT
+          LDA     #>DIGVERT
 ;*         INY
 ;*         LDA     MODETAB,Y
           STA     MODEH,X
@@ -717,8 +717,8 @@ ZNXT35    DEX
 ;*         BCS     ENDTHIS3;               ; TO 2 IN INCREATS
 TEDSPED   CMP     #4
           BCC     ENDTHIS3
-          LSR     A
-          LSR     A
+          LSR
+          LSR
           TAX
 ;*         DEX;                            ;!
           TYA
@@ -740,9 +740,9 @@ PREV2     DEX
           BEQ     NOESCMUS
           LDY     #SNG9;                  ESCAPING NOISE
           JSR     NOISE
-NOESCMUS  LDA     #<.ESCAPE
+NOESCMUS  LDA     #<ESCAPE
           STA     MODEL,X
-          LDA     #>.ESCAPE
+          LDA     #>ESCAPE
           STA     MODEH,X
           INC     ESCAPER
 ;*         LDA     #1
@@ -752,10 +752,10 @@ NOESCMUS  LDA     #<.ESCAPE
 SPEEDER   TXA;                            MODIFIES MONSTER SPEED BASED UPON
           AND     #$04;                   -FAST OR NOT, GHOST AND TYPE
           ORA     GHOST,X
-          LSR     A
+          LSR
           ORA     FAST
-          ROL     A
-          ASL     A;                      FOR 16 BIT VERSION
+          ROL
+          ASL;                      FOR 16 BIT VERSION
           TAY
           LDA     SPEEDTAB,Y
           STA     SPEEDH,X
@@ -854,23 +854,23 @@ DONEPNT   TYA
           RTS
 
 GETDIRT   LDA     XPOS,X;                 RETURNS DIRT, A = CHAR, Y = ADDR.
-GETX      LSR     A;                      (GET DIRT CHARACTER)
-          LSR     A
-          LSR     A
+GETX      LSR;                      (GET DIRT CHARACTER)
+          LSR
+          LSR
           STA     TEMP1;                  PUT X VALUE IN TEMP1 (ZERO PAGE)
 GETY      LDA     YPOS,X;                 GET Y POSITION
           SEC
 ;*         SBC     YMODC,X;                MAKE Y POSITION CENTERED IF IT"S NOT
           SBC     #$0B;                   -CENTER TO GRID BECAUSE OF 11 OFFSET
-          LSR     A;                      DIVIDE BY 4
-          LSR     A
+          LSR;                      DIVIDE BY 4
+          LSR
           TAY
           LDA     DIV3TAB,Y
           EOR     #$0F;                   DIRT ADDR. IS F - Y ADDR.
-GETCHAR   ASL     A;                      MOVE Y ADDR. TO LEFT NIBBLE
-          ASL     A;                      -OF A
-          ASL     A
-          ASL     A
+GETCHAR   ASL;                      MOVE Y ADDR. TO LEFT NIBBLE
+          ASL;                      -OF A
+          ASL
+          ASL
           ORA     TEMP1;                  MERGE X ADDR. WITH Y ADDR.
           TAY;                            PUT DIRT ADDR. IN Y INDEX
           LDA     DIRTMAP,Y;              GET DIRT CHARACTER FROM MAP
@@ -893,14 +893,14 @@ FLAMER    LDX     FLAMIE
           INC     FLAMNUM
           EOR     #$FF;                   ; FLAP YOUR WINGS AND SMILE
           AND     #$0F
-          LSR     A
-          LSR     A
+          LSR
+          LSR
           STA     TEMP1
           LDA     FACING,X
-          LSR     A
-          LSR     A
+          LSR
+          LSR
           LDA     TEMP1
-          ROL     A
+          ROL
           TAY
           LDA     FLAMTABL,Y;             SEQUENCE FOR FLAMING FYGAR
           STA     MONSI,X;                <--- 

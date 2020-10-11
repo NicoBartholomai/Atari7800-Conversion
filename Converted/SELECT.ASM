@@ -42,8 +42,8 @@ ZDEBSEL   LDA     SWCHA
           CMP     #$FF;                   ;  FOR JOYSTICK TO CENTER.
           BNE     ZDEBSEL
 ZDEBSEL2  LDA     SWCHB;                  ;ALSO WAIT FOR SELECT BUTTON RELEASE.
-          LSR     A
-          LSR     A
+          LSR
+          LSR
           BCC     ZDEBSEL2
 
           LDA     SELCTIM
@@ -59,7 +59,7 @@ SLOOP
           LDA     INPT4;                  ;BUTTON ON JOYSTICK PRESSED?
           BPL     LEAVSLCT
           LDA     SWCHB;                  ;RESET PRESSED?
-          LSR     A
+          LSR
           BCS     DOSLCT
 WAITRSET  LSR     SWCHB;                  ;WAIT TILL RESET BUTTON UP.
           BCC     WAITRSET
@@ -73,7 +73,7 @@ LEAVSLCT  LDX     #0
           BEQ     ZGOATTR
 
 DOSLCT
-          LSR     A
+          LSR
           BCS     DOJOY;                  ;SELECT PRESSED: ROTATE OPTIONS.
           DEC     FAKEJOY
           LDA     FAKEJOY
@@ -84,13 +84,13 @@ DOSLCT
 
 DOJOY     LDA     SWCHA;                  ;READ JOYSTICK: UP/DOWN WILL TOGGLE
 ZDOJOY    LDX     #1
-          ASL     A;                      ;  NUMBER OF PLAYERS, RIGHT/LEFT WILL
+          ASL;                      ;  NUMBER OF PLAYERS, RIGHT/LEFT WILL
           BCC     HGHLEVEL;               ;  INCREASE/DECREASE STARTING LEVEL.
-          ASL     A
+          ASL
           BCC     LOWLEVEL
-          ASL     A
+          ASL
           BCC     ONEPGAME
-;*         ASL     A
+;*         ASL
 ;*         BCC     TWOPGAME
           BPL     TWOPGAME
           LDX     FRMCNT
@@ -156,7 +156,7 @@ ZTITLEP   LDX     #$FF
 
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 SETOPT    LDA     NUMPLAYR
-          ASL     A;                      ;TOP BIT OF NUMPLAYR ALWAYS 0!
+          ASL;                      ;TOP BIT OF NUMPLAYR ALWAYS 0!
 ;*;*;*       CLC
           ADC     #FULL0+2
           STA     L0Z6+33

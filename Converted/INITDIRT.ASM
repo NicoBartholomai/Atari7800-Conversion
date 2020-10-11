@@ -89,9 +89,9 @@ REGTUNL   LDY     CREATS,X;               ;CREATURE BYTE: 0=> POOKA, 1=> FYGAR.
           LDY     TUNLDIR,X;              ;TUNNEL DIRECTION: 0=> HORIZ, 1=> VERT.
           STY     RTUNNELS
           TXA
-ZTUNNEL0  ASL     A;                      ;MULTIPLY BY 8 FOR INDEX INTO TUNNELS.
-          ASL     A
-          ASL     A
+ZTUNNEL0  ASL;                      ;MULTIPLY BY 8 FOR INDEX INTO TUNNELS.
+          ASL
+          ASL
           TAY
           LDA     #0;                     ;INITIALIZE POINTERS INTO POOKA AND
           STA     PCOUNT;                 ;  FYGAR ARRAYS.
@@ -115,7 +115,7 @@ VTUNNEL   LDA     #DTOPEND;               ;;*;*;*MARIA 1...
           STA     DIRTMAP,X;              ;VERTICAL TUNNEL.
           LDA     #DVMIDDLE;              ;;*;*;*MARIA 1...
           STA     DIRTMAP+$10,X
-          LDA     #DC.BOTEND;               ;;*;*;*MARIA 1...
+          LDA     #DBOTEND;               ;;*;*;*MARIA 1...
           STA     DIRTMAP+$20,X
 ICREATS
           TXA;                            ;IF CARRY CLEAR, HORIZONTAL TUNNEL.
@@ -206,7 +206,7 @@ ZDORAK1   LDA     #DHMIDDLE;              ;RACK 1 IS ONLY RACK WITH TUNNELS
           STA     DIRTMAP+$52
           STA     DIRTMAP+$BA
           STA     DIRTMAP+$CA
-          LDA     #DC.BOTEND
+          LDA     #DBOTEND
           STA     DIRTMAP+$62
           STA     DIRTMAP+$DA
 ADJ12     TXA
@@ -274,18 +274,18 @@ EACHMONS  LDA     #$00
 ;*         JSR     GETDIRT
 ;*         STY     TEMP3;                  NECESSARY FOR CHKOTHER CODE
 ;*         JSR     CHKOTHER
-          LSR     A;                      INDEX=CHAR
+          LSR;                      INDEX=CHAR
           STA     TEMP1
           LDA     #$04
           LSR     TEMP1
           BCC     NEXT115
-          ASL     A;                      ;ASSUME A CONTAINS 4
+          ASL;                      ;ASSUME A CONTAINS 4
           LSR     TEMP1
           BCC     NEXT115
           LDA     #$01
           LSR     TEMP1
           BCC     NEXT115
-          ASL     A;                      ;ASSUME A CONTAINS 1
+          ASL;                      ;ASSUME A CONTAINS 1
           LSR     TEMP1
           BCC     NEXT115
           LDA     #$00
@@ -294,7 +294,7 @@ NEXT115   STA     DIR,X;                  SETUP FOR JSR NEWSEQ
           JSR     SPEEDER
 ;*         LDA     CHARSEQL,X;             ;NOW DONE IN NEWSEQ - 1/18/84
 ;*         STA     TEMP1
-;*         LDA     #>.RPOOKA
+;*         LDA     #>RPOOKA
 ;*         STA     TEMP2
 ;*         LDY     #$00
 ;*         LDA     (TEMP1),Y
@@ -385,7 +385,7 @@ ZIROCK0   STA     TEMP+5,Y
           DEY
           BPL     ZIROCK0
           LDA     FRMCNT
-          ROR     A
+          ROR
           STA     RANDROCK
           LDY     #4;                     ;MAXIMUM OF 5 ROCKS.
           LDX     PLAYNUM
@@ -394,8 +394,8 @@ ZIROCK0   STA     TEMP+5,Y
           BCC     ZIROCK
           INC     REGROCK;                ;RANDOM ROCK RACK.
           BPL     DOROCKS
-ZIROCK    ASL     A
-          ASL     A
+ZIROCK    ASL
+          ASL
           CLC
           ADC     EFFRACK,X
           STA     TEMPX
@@ -631,7 +631,7 @@ LOOKDIRT  LDA     DIRTMAP,Y
           LDA     #$02;                   ;SKY CHARACTER
 ;*         LDA     #$01;                   SKY CHARACTER
 ;*         RTS
-ZNXT120   LSR     A
+ZNXT120   LSR
           RTS
 ENDLOOK   LDA     #$0F
           RTS
@@ -639,7 +639,7 @@ ENDLOOK   LDA     #$0F
 TITLCOLR  LDA     #RED
           STA     P0C0SHAD+26
           STA     P0C0SHAD+27
-          LDA     #DDC.BLUE
+          LDA     #DDBLUE
           STA     P0C0SHAD,X
           LDA     #RED
           STA     P0C0SHAD+1,X
@@ -764,16 +764,16 @@ GHSTSUB1  JSR     GETDIRT;                ;USED BY GHOSTONX AND MOVECONT
 SUB3      LDA     DDYPOS
           CLC
           ADC     #$01
-          LSR     A
-          LSR     A
+          LSR
+          LSR
           TAY
           LDA     DIV3TAB,Y
           STA     TEMP1
           CLC
           ADC     TEMP1
           ADC     TEMP1
-          ASL     A
-          ASL     A
+          ASL
+          ASL
           STA     TEMP1
           LDA     DDYPOS
           CLC

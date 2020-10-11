@@ -1,0 +1,861 @@
+------- FILE DIGDUG.ASM LEVEL 1 PASS 2
+      1  d000					      processor	6502
+      2  d000 ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      3  d000 ????
+      4  d000 ????						;*;*;*;*;*;*;*;*;*;*;*;		    3600 DIG DUG		       ;*;*;*;*;*;*;*;*;*;*;*;*;*
+      5  d000 ????
+      6  d000 ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      7  d000 ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      8  d000 ????
+      9  d000 ????
+     10  d000 ????						;	  THE NECESSARY PROLOG FOR MARIA CODE
+     11  d000 ????
+     12  d000 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     13  d000 ????						;  STELLA (TIA) REGISTER ADDRESSES
+     14  d000 ????						; NOTE THESE REGISTERS ARE SHADOWED AT 100 TO 11F
+     15  d000 ????						;	   ;				 200 TO 21F
+     16  d000 ????						;	   ;				 300 TO 31F
+     17  d000 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     18  d000 ????
+     19  d000 ????	       00 01	   VBLANK     EQU	$01
+     20  d000 ????	       00 15	   AUDC0      EQU	$15	;BITS	   3210 AUDIO CONTROL 0
+     21  d000 ????	       00 16	   AUDC1      EQU	$16	;BITS	   3210 AUDIO CONTROL 1
+     22  d000 ????	       00 17	   AUDF0      EQU	$17	;BITS	   3210 AUDIO FREQUENCY 0
+     23  d000 ????	       00 18	   AUDF1      EQU	$18	;BITS	   3210 AUDIO FREQUENCY 1
+     24  d000 ????	       00 19	   AUDV0      EQU	$19	;BITS	   3210 AUDIO VOLUME 0
+     25  d000 ????	       00 1a	   AUDV1      EQU	$1A	;BITS	   3210 AUDIO VOLUME 1
+     26  d000 ????	       00 38	   INPT0      EQU	$38
+     27  d000 ????	       00 39	   INPT1      EQU	$39
+     28  d000 ????	       00 3a	   INPT2      EQU	$3A
+     29  d000 ????	       00 3b	   INPT3      EQU	$3B
+     30  d000 ????	       00 0c	   INPT4      EQU	$0C	;PLAYER 0 BUTTON CLEAR WHEN HIT
+     31  d000 ????	       00 0d	   INPT5      EQU	$0D	;PLAYER 1 BUTTON CLEAR WHEN HIT
+     32  d000 ????
+     33  d000 ????
+     34  d000 ????
+     35  d000 ????
+     36  d000 ????
+     37  d000 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     38  d000 ????						; MARIA REGISTERS
+     39  d000 ????						; NOTE THESE REGISTERS ARE SHADOWED AT 120 TO 13F
+     40  d000 ????						;	   ;				 220 TO 23F
+     41  d000 ????						;	   ;				 320 TO 33F
+     42  d000 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     43  d000 ????	       00 20	   P0C0       EQU	$20	;		      ;BACKGROUND COLOR 		 RW
+     44  d000 ????						;	   ALL PALETTE AND COLOR ARE HIGH NIBBLE COLOR, LOW NIBBLE LUMINANCE
+     45  d000 ????	       00 21	   P0C1       EQU	$21	;		      ;PALETTE ZERO COLOR ONE		 RW
+     46  d000 ????	       00 22	   P0C2       EQU	$22	;		      ;PALETTE ZERO COLOR TWO		 RW
+     47  d000 ????	       00 23	   P0C3       EQU	$23	;		      ;PALETTE ZERO COLOR THREE 	 RW
+     48  d000 ????	       00 24	   WSYNC      EQU	$24	;		      ;FAST MARIA WSYNC STROBE
+     49  d000 ????	       00 25	   P1C1       EQU	$25	;		      ;PALETTE ONE COLOR ONE		 RW
+     50  d000 ????	       00 26	   P1C2       EQU	$26	;		      ;PALETTE ONE COLOR TWO		 RW
+     51  d000 ????	       00 27	   P1C3       EQU	$27	;		      ;PALETTE ONE COLOR THREE		 RW
+     52  d000 ????	       00 28	   CTRLRD     EQU	$28	;		      ;BIT 7 IN VBLANK, BIT 6 IN DISPLAY RO
+     53  d000 ????	       00 29	   P2C1       EQU	$29	;		      ;PALETTE TWO COLOR ONE		 RW
+     54  d000 ????	       00 2a	   P2C2       EQU	$2A	;		      ;PALETTE TWO COLOR TWO		 RW
+     55  d000 ????	       00 2b	   P2C3       EQU	$2B	;		      ;PALETTE TWO COLOR THREE		 RW
+     56  d000 ????	       00 2c	   DPPH       EQU	$2C	;		      ;DISPLAY LIST POINTER HIGH	 WO
+     57  d000 ????	       00 2d	   P3C1       EQU	$2D	;		      ;PALETTE THREE COLOR ONE		 RW
+     58  d000 ????	       00 2e	   P3C2       EQU	$2E	;		      ;PALETTE THREE COLOR TWO		 RW
+     59  d000 ????	       00 2f	   P3C3       EQU	$2F	;		      ;PALETTE THREE COLOR THREE	 RW
+     60  d000 ????	       00 30	   DPPL       EQU	$30	;		      ;DISPLAY LIST POINTER LOW 	 WO
+     61  d000 ????	       00 31	   P4C1       EQU	$31	;		      ;PALETTE FOUR COLOR ONE		 RW
+     62  d000 ????	       00 32	   P4C2       EQU	$32	;		      ;PALETTE FOUR COLOR TWO		 RW
+     63  d000 ????	       00 33	   P4C3       EQU	$33	;		      ;PALETTE FOUR COLOR THREE 	 RW
+     64  d000 ????	       00 34	   CHARBASE   EQU	$34	;		      :CHARACTER MODE HIGH POINTER	 WO
+     65  d000 ????	       00 35	   P5C1       EQU	$35	;		      ;PALETTE FIVE COLOR ONE		 RW
+     66  d000 ????	       00 36	   P5C2       EQU	$36	;		      ;PALETTE FIVE COLOR TWO		 RW
+     67  d000 ????	       00 37	   P5C3       EQU	$37	;		      ;PALETTE FIVE COLOR THREE 	 RW
+     68  d000 ????	       00 38	   OFFSET     EQU	$38	;		      ;GRAPHICS HIGH POINTER OFFSET	 RW
+     69  d000 ????	       00 39	   P6C1       EQU	$39	;		      ;PALETTE SIX COLOR ONE		 RW
+     70  d000 ????	       00 3a	   P6C2       EQU	$3A	;		      ;PALETTE SIX COLOR TWO		 RW
+     71  d000 ????	       00 3b	   P6C3       EQU	$3B	;		      ;PALETTE SIX COLOR THREE		 RW
+     72  d000 ????	       00 3c	   CTRL       EQU	$3C	;		      ;WRITE: (SEE BELOW FOR MORE INFO)
+     73  d000 ????						;				 ;   CK DM1 DM0 CWIDTH BCNTL KM RM1 RM0
+     74  d000 ????	       00 3d	   P7C1       EQU	$3D	;		      ;PALETTE SEVEN COLOR ONE		 RW
+     75  d000 ????	       00 3e	   P7C2       EQU	$3E	;		      ;PALETTE SEVEN COLOR TWO		 RW
+     76  d000 ????	       00 3f	   P7C3       EQU	$3F	;		      ;PALETTE SEVEN COLOR THREE	 RW
+     77  d000 ????
+     78  d000 ????						;*CTRL REGISTER:   CK:      COLOR KILL
+     79  d000 ????						;*		    DMn:     DMA MODE
+     80  d000 ????						;*		    CWIDTH:  CHAR MAP WIDTH
+     81  d000 ????						;*		    BCNTL:   BORDER CONTROL
+     82  d000 ????						;*		    KM:      KANGAROO MODE
+     83  d000 ????						;*		    RMn:     READ MODE
+     84  d000 ????
+     85  d000 ????						;*	    DM1     DM0      MEANING:
+     86  d000 ????						;*	    0	    0	     TEST A "EOVB"
+     87  d000 ????						;*	    0	    1	     TEST B "STARTSCAN"
+     88  d000 ????						;*	    1	    0	     RUN NORMALLY
+     89  d000 ????						;*	    1	    1	     INACTIVE
+     90  d000 ????
+     91  d000 ????
+     92  d000 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     93  d000 ????						; ZERO PAGE RAM   040 TO 07F
+     94  d000 ????						; NOTE THIS RAM IS SHADOWED AT 2040 TO 207F
+     95  d000 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     96  0040					      ORG	$0040
+     97  0040
+     98  0040		       00 40	   STMPYPOS   EQU	$40	;		      ;THESE ARE TOTLSTMP BYTES EACH: USED
+     99  0040		       00 53	   STMPXPOS   EQU	$53	;		      ;  BY GENDPL TO GENERATE DISPLAY LIST.
+    100  0040		       00 66	   STMPINDX   EQU	$66	;		      ;  ORDER OF STAMPS IS IN INCREASING
+    101  0040							;				 ;  PRIORITY.
+    102  0040		       00 40	   DDYPOS     EQU	$40	;		      ;DIGDUG.
+    103  0040		       00 53	   DDXPOS     EQU	$53
+    104  0040		       00 66	   DDINDX     EQU	$66
+    105  0040
+    106  0040		       00 41	   POOKAY     EQU	$41	;		      ;4 POOKAS.
+    107  0040		       00 54	   POOKAX     EQU	$54
+    108  0040		       00 67	   POOKAIX    EQU	$67
+    109  0040
+    110  0040		       00 45	   FYGARY     EQU	$45	;		      ;4 FYGARS.
+    111  0040		       00 58	   FYGARX     EQU	$58
+    112  0040		       00 6b	   FYGARIX    EQU	$6B
+    113  0040
+    114  0040		       00 49	   ROCKSY     EQU	$49	;		      ;5 ROCKS POSSIBLE.
+    115  0040		       00 5c	   ROCKSX     EQU	$5C
+    116  0040		       00 6f	   ROCKSIX    EQU	$6F
+    117  0040
+    118  0040		       00 4e	   FLAMEY     EQU	$4E	;		      ;1 FLAME AT A TIME.
+    119  0040		       00 61	   FLAMEX     EQU	$61
+    120  0040		       00 74	   FLAMEIX    EQU	$74
+    121  0040
+    122  0040		       00 4f	   PUMPY      EQU	$4F	;		      ;SHARED BY PUMP AND HARPOON.
+    123  0040		       00 62	   PUMPX      EQU	$62
+    124  0040		       00 75	   PUMPIX     EQU	$75
+    125  0040
+    126  0040		       00 52	   FRUITY     EQU	$52	;		      ;FRUIT (ALIAS VEGGIES...).
+    127  0040		       00 65	   FRUITX     EQU	$65
+    128  0040		       00 78	   FRUITIX    EQU	$78
+    129  0040
+    130  0040		       00 79	   SNGPTR     EQU	$79
+    131  0040		       00 7a	   SNGPTR2    EQU	$7A
+    132  0040
+    133  0040		       00 7b	   PUMPIE     EQU	$7B
+    134  0040		       00 7c	   FLAMSIZE   EQU	$7C
+    135  0040		       00 7d	   FLAMNUM    EQU	$7D
+    136  0040
+    137  0040							;* FOLLOWING 11 REGISTERS ARE INIT IN INIT. THEY MUST REMAIN ADJACENT
+    138  0040		       00 7e	   CURSONG    EQU	$7E	;		      ;CURRENT SONG.
+    139  0040		       00 7f	   SNGTEMP1   EQU	$7F	;		      ;HIGHEST PRIORITY NOISE REQUEST
+    140  0040							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    141  0040							; ZERO PAGE RAM   080 TO 0FF
+    142  0040							; NOTE THIS RAM IS SHADOWED AT 2180 TO 21FF
+    143  0040							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    144  0080					      ORG	$0080
+    145  0080		       00 80	   LASTMOVE   EQU	$80	;		      ;LAST DIGDUG MOVEMENT.
+    146  0080		       00 81	   DLSTPTR    EQU	$81	;		      ;0,$40 FOR DLIST 0,1: USE VFLAG!
+    147  0080		       00 82	   NUMPLAYR   EQU	$82	;		      ;NUMBER OF PLAYERS (0 => 1, 1 => 2).
+    148  0080		       00 83	   DEATH      EQU	$83
+    149  0080		       00 84	   DETHWISH   EQU	$84
+    150  0080		       00 85	   ENTRY      EQU	$85	;		      ;DIGDUG WALKING ONTO SCREEN.
+    151  0080		       00 86	   FRMCNT     EQU	$86
+    152  0080		       00 87	   PLAYNUM    EQU	$87	;		      ;CURRENT PLAYER NUMBER.
+    153  0080		       00 88	   BONZO      EQU	$88
+    154  0080
+    155  0080		       00 89	   PROPORT2   EQU	$89
+    156  0080		       00 8a	   PROPORT3   EQU	$8A
+    157  0080
+    158  0080		       00 8b	   LISTSIZ    EQU	$8B	;		      ;# OF BYTES USED IN DLIST FOR EACH ZONE
+    159  0080							;				 ;  (THROUGH $9A).
+    160  0080
+    161  0080
+    162  0080
+    163  0080		       00 9b	   RACKNUM    EQU	$9B	;		      ;AND $9C:ACTUAL RACK # FOR EACH PLAYER.
+    164  0080							;* +1	    EQU     $9C
+    165  0080		       00 9d	   MAXPUMP    EQU	$9D
+    166  0080		       00 9e	   NUMMEN     EQU	$9E	;		      ;AND $9F: NUMBER OF MEN LEFT.
+    167  0080							;* +1	    EQU     $9F
+    168  0080		       00 a0	   ATTRACT    EQU	$A0
+    169  0080		       00 a1	   SYNCFRAM   EQU	$A1	;		      ;IT"S BACK!!!
+    170  0080		       00 a2	   SCOREL     EQU	$A2	;		      ;AND $A3: LOW BYTES OF SCORE FOR P0,P1.
+    171  0080		       00 a4	   SCOREM     EQU	$A4	;		      ;AND $A5: MIDDLE BYTES FOR EACH PLAYER.
+    172  0080		       00 a6	   SCOREH     EQU	$A6	;		      ;AND $A7: HIGH BYTES OF SCORE.
+    173  0080		       00 a8	   NONOISE    EQU	$A8
+    174  0080		       00 a9	   ASTAGE     EQU	$A9	;		      ;STAGE FOR ATTRACT MODE SAMPLE RACK.
+    175  0080		       00 aa	   AVAROBIN   EQU	$AA
+    176  0080		       00 ab	   RNDM       EQU	$AB	;		      ;FOR 2 BYTES
+    177  0080							;*	    EQU     $AC
+    178  0080		       00 ad	   TITLETIM   EQU	$AD	;		      ;TIMER FOR TITLEPAG: GETS INCREMENTED
+    179  0080							;				 ;  EVERY FRAME ALL THE TIME!
+    180  0080		       00 ae	   SELCTIM    EQU	$AE	;		      ;TIMER FOR SELECT: COUNTS NUMBER OF 4
+    181  0080							;				 ;  SECOND INTERVALS IN KERNEL.
+    182  0080		       00 af	   PROPORT    EQU	$AF
+    183  0080		       00 b0	   DIGSPEED   EQU	$B0
+    184  0080		       00 b1	   PUMPCT     EQU	$B1	;		      ;ANIMATION COUNTER.
+    185  0080		       00 b2	   MONSTAT    EQU	$B2	;		      ;THROUGH $B9.
+    186  0080		       00 ba	   DIR	      EQU	$BA	;		      ;THROUGH $C1.
+    187  0080		       00 c2	   NOTUNNEL   EQU	$C2
+    188  0080							;*KEEP TUMBLE, FALLCNT, BRCREAT, BRTUNNL  NEXT TO EACH OTHER.
+    189  0080		       00 c3	   TUMBLE     EQU	$C3	;		      ;THROUGH $C7.
+    190  0080		       00 c8	   FALLCNT    EQU	$C8	;		      ;NUMBER OF ROCKS FALLEN THIS RACK
+    191  0080		       00 c9	   BRCREAT    EQU	$C9	;		      ;SAVE RCREATS FOR BONZO MODE.
+    192  0080		       00 ca	   BRTUNNL    EQU	$CA	;		      ;SAVE RTUNNELS FOR BONZO MODE.
+    193  0080
+    194  0080		       00 cb	   HITROCK    EQU	$CB	;		      ;ROCK WHICH DIGDUG IS DIRECTLY UNDER.
+    195  0080
+    196  0080		       00 cc	   TEMP       EQU	$CC	;		      ;THROUGH $DF.
+    197  0080		       00 cc	   TEMP1      EQU	$CC
+    198  0080		       00 cd	   TEMP2      EQU	$CD
+    199  0080		       00 ce	   TEMP3      EQU	$CE
+    200  0080		       00 cf	   TEMP4      EQU	$CF
+    201  0080		       00 d0	   TEMP5      EQU	$D0
+    202  0080
+    203  0080							;*;*;*;*;*;*;*;*;*;*;*
+    204  0080		       00 cc	   TEMP0      EQU	TEMP
+    205  0080		       00 ce	   TCOUNT     EQU	TEMP+2	;		   ;INITDIRT,INCREATS TEMPS.
+    206  0080		       00 cf	   PCOUNT     EQU	TEMP+3
+    207  0080		       00 d0	   FCOUNT     EQU	TEMP+4
+    208  0080		       00 d1	   RCREATS    EQU	TEMP+5
+    209  0080		       00 d2	   RTUNNELS   EQU	TEMP+6
+    210  0080
+    211  0080		       00 ce	   TEMPX      EQU	TEMP+2	;		   ;INITROCK TEMPS.
+    212  0080		       00 cf	   REGROCK    EQU	TEMP+3
+    213  0080		       00 d0	   RANDROCK   EQU	TEMP+4
+    214  0080
+    215  0080		       00 ce	   CURROCK    EQU	TEMP+2	;		   ;FALL TEMP
+    216  0080		       00 d0	   VICTIMX    EQU	TEMP+4	;		   ;FALL TEMP
+    217  0080		       00 d1	   VICTIMY    EQU	TEMP+5	;		   ;FALL TEMP
+    218  0080		       00 d2	   RTEMP      EQU	TEMP+6	;		   ;FALL TEMP
+    219  0080		       00 d3	   RTEMP2     EQU	TEMP+7	;		   ;FALL TEMP - MUST FOLLOW RTEMP
+    220  0080		       00 d4	   ROCKSNOW   EQU	TEMP+8	;		   ;FALL TEMP
+    221  0080
+    222  0080		       00 d8	   GHOSTTMP   EQU	TEMP+12	;		  ;MONSTER TEMP
+    223  0080		       00 d9	   MTEMP      EQU	TEMP+13	;		  ;MONSTER TEMP
+    224  0080
+    225  0080		       00 ce	   CURRBLW    EQU	TEMP+2	;		   ;BLOWUP TEMP
+    226  0080		       00 cf	   BLWTEMP    EQU	TEMP+3	;		   ;BLOWUP TEMP
+    227  0080
+    228  0080							;	   ;				   ;DDMOVE TEMPS (+0,+1)
+    229  0080		       00 cf	   DRTPTR     EQU	TEMP+3	;		   ;DDMOVE: AND TEMP+4
+    230  0080		       00 d2	   DIGTEMP    EQU	TEMP+6	;		   ;DDMOVE
+    231  0080							;	   ;				   ;DDMOVE: TEMP+7,TEMP+9,TEMP+10
+    232  0080
+    233  0080		       00 d7	   CHKTMP1    EQU	TEMP+11	;		  ;CHKSTATE TEMPS
+    234  0080		       00 d8	   CHKTMP2    EQU	TEMP+12
+    235  0080		       00 d9	   CHKTMP3    EQU	TEMP+13
+    236  0080		       00 da	   CHKTMP4    EQU	TEMP+14
+    237  0080
+    238  0080		       00 d5	   DETHTEMP   EQU	TEMP+9	;		   ;DEATH TEMP: MUST NOT OVERLAP GENDPL
+    239  0080		       00 d6	   DEATHCNT   EQU	TEMP+10	;		  ;(ACTUALLY FREEZFRM TEMP) OR CHKSTATE.
+    240  0080		       00 d6	   DTEMP2     EQU	TEMP+10
+    241  0080
+    242  0080		       00 d8	   DPLOW2     EQU	TEMP+12	;		  ;TITLEPAGE TEMPS (+0,+1,+15,+16) - 
+    243  0080		       00 d9	   DPHIGH2    EQU	TEMP+13	;		  ;  MUST NOT OVERLAP FALL (2-8),
+    244  0080		       00 d6	   TSTAGE     EQU	TEMP+10	;		  ;  CHKSTATE, LOADER (11-19), OR TCMOVE
+    245  0080		       00 ce	   TCTEMP     EQU	TEMP+2	;		   ;  TEMPS.
+    246  0080
+    247  0080		       00 d1	   FAKEJOY    EQU	TEMP+5	;		   ;SELECT MODE TEMPS... (+0,1,12-16)
+    248  0080
+    249  0080		       00 df	   SCORTEMP   EQU	TEMP+19	;		  ;ADDSCORE TEMP.
+    250  0080
+    251  0080		       00 da	   DIRTPTR    EQU	TEMP+14	;		  ;INITDIRT TEMPS: THRU TEMP+19.
+    252  0080
+    253  0080		       00 d7	   TEMPYPOS   EQU	TEMP+11	;		  ;LOADER TEMP VARIABLES...
+    254  0080		       00 d8	   HEADER0    EQU	TEMP+12
+    255  0080		       00 d9	   HEADER1    EQU	TEMP+13
+    256  0080		       00 da	   HEADER3    EQU	TEMP+14
+    257  0080		       00 db	   DPLOW      EQU	TEMP+15
+    258  0080		       00 dc	   DPHIGH     EQU	TEMP+16
+    259  0080		       00 dd	   TEMPY      EQU	TEMP+17
+    260  0080		       00 de	   LISTPTR    EQU	TEMP+18	;		  ;AND TEMP+19.
+    261  0080							;*;*;*;*;*;*;*;*;*;*;*
+    262  0080
+    263  0080							;* FOLLOWING 20 REGISTERS MUST REMAIN ADJACENT. THEY ARE SET TO 0 IN INCREATS.
+    264  0080		       00 e0	   ANIMCNT    EQU	$E0	;		      ;ANIMATION CTR
+    265  0080		       00 e1	   DIGGING    EQU	$E1
+    266  0080		       00 e2	   PUMPNUM    EQU	$E2
+    267  0080		       00 e3	   SQUASH     EQU	$E3	;		      ;DIGDUG SQUASHING
+    268  0080		       00 e4	   NOTGRID    EQU	$E4
+    269  0080		       00 e5	   NEEDDIR    EQU	$E5
+    270  0080		       00 e6	   FSCORE     EQU	$E6
+    271  0080		       00 e7	   FSCORCTR   EQU	$E7
+    272  0080		       00 e8	   GHOSTIME   EQU	$E8
+    273  0080		       00 e9	   ESCAPER    EQU	$E9
+    274  0080		       00 ea	   PUMP       EQU	$EA
+    275  0080		       00 eb	   PUMPING    EQU	$EB
+    276  0080		       00 ec	   PUMPCNT    EQU	$EC
+    277  0080		       00 ed	   WALKING    EQU	$ED
+    278  0080		       00 ee	   FREEZE     EQU	$EE
+    279  0080		       00 ef	   FLAMIE     EQU	$EF
+    280  0080		       00 f0	   FLAMTIME   EQU	$F0
+    281  0080		       00 f1	   FRUIT      EQU	$F1
+    282  0080		       00 f2	   DIGREST    EQU	$F2
+    283  0080		       00 f3	   SCNDTIM    EQU	$F3
+    284  0080
+    285  0080
+    286  0080
+    287  0080							; THE FOLLOWING 7 REGISTERS MUST REMAIN IN THEIR CURRENT POSITION
+    288  0080		       00 f4	   CURINDX0   EQU	$F4
+    289  0080		       00 f5	   CURINDX1   EQU	$F5
+    290  0080		       00 f6	   REST0      EQU	$F6
+    291  0080		       00 f7	   REST1      EQU	$F7
+    292  0080		       00 f8	   DURCTR     EQU	$F8
+    293  0080		       00 f9	   TUNINDX0   EQU	$F9
+    294  0080		       00 fa	   TUNINDX1   EQU	$FA
+    295  0080
+    296  0080		       00 fb	   ROCKSTAT   EQU	$FB	;		      ;FOR 5 BYTES
+    297  0080							;*	    EQU     $FC
+    298  0080							;*	    EQU     $FD
+    299  0080							;*	    EQU     $FE
+    300  0080							;*	    EQU     $FF
+    301  0080
+    302  0080
+    303  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    304  0080							; FIRST PAGE RAM  140 TO 17F
+    305  0080							; NOTE THIS RAM IS SHADOWED AT 2140 TO 217F
+    306  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    307  0140					      ORG	$0140
+    308  0140
+    309  0140
+    310  0140
+    311  0140
+    312  0140
+    313  0140							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    314  0140							;  PIA AND TIMER (6532) LOCATIONS   280 TO 2FF
+    315  0140							; NOTE THESE REGISTERS ARE SHADOWED AT 380 TO 3FF
+    316  0140							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    317  0140		       02 80	   SWCHA      EQU	$280	;PO, P1 JOYSTICKS
+    318  0140
+    319  0140							;	   BIT 7 PLAYER 0 EAST IF CLEAR
+    320  0140							;	   BIT 6;	   WEST
+    321  0140							;	   BIT 5;	   SOUTH
+    322  0140							;	   BIT 4;	   NORTH
+    323  0140							;	   BIT 3 PLAYER 1 EAST IF CLEAR
+    324  0140							;	   BIT 2;	   WEST
+    325  0140							;	   BIT 1;	   SOUTH
+    326  0140							;	   BIT 0;	   NORTH
+    327  0140
+    328  0140		       02 82	   SWCHB      EQU	$282	;CONSOLE SWITCHES
+    329  0140
+    330  0140							;	   BIT 7   PLAYER 1 DIFFICULTY A IF SET B IF CLEAR
+    331  0140							;	   BIT 6   PLAYER 0 DIFFICULTY A IF SET B IF CLEAR
+    332  0140							;	   BIT 3   BLACK AND WHITE/COLOR  COLOR WHEN SET
+    333  0140							;	   BIT 1   GAME SELECT	CLEAR WHEN PRESSED
+    334  0140							;	   BIT 0   GAME RESET	CLEAR WHEN PRESSED
+    335  0140
+    336  0140		       02 81	   CTLSWA     EQU	$281
+    337  0140		       02 83	   CTLSWB     EQU	$283
+    338  0140		       02 84	   INTIM      EQU	$284	;INTERVAL TIMER IN
+    339  0140		       02 95	   TIM8T      EQU	$295	;TIMER 8T WRITE OUT
+    340  0140		       02 96	   TIM64T     EQU	$296	;TIMER 64T WRITE OUT
+    341  0140		       02 9e	   TIM64TI    EQU	$29E	;INTERUPT TIMER 64T
+    342  0140
+    343  0140
+    344  0140
+    345  0140							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    346  0140							; RAM	   2000 TO 2FFF
+    347  0140							; NOTE SOME OF THIS RAM IS SHADOWED ELSEWHERE
+    348  0140							; 2040 TO 20FF IS SHADOWED AT 040 TO 0FF
+    349  0140							; 2140 TO 217F IS SHADOWED AT 140 TO 17F
+    350  0140							; 2240 TO 227F IS SHADOWED AT 240 TO 27F
+    351  0140							; 2340 TO 237F IS SHADOWED AT 340 TO 37F
+    352  0140							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    353  1800					      ORG	$1800
+    354  1800
+    355  1800							;
+    356  1800							;	   DISPLAY LIST ZERO;		   NO PAGE BOUNDARIES CROSSED!
+    357  1800		       18 00	   L0Z1       EQU	$1800
+    358  1800		       18 3f	   L0Z2       EQU	$183F
+    359  1800		       18 7e	   L0Z3       EQU	$187E
+    360  1800		       18 bd	   L0Z4       EQU	$18BD	;		    ;THRU $18FB.
+    361  1800		       19 00	   L0Z5       EQU	$1900
+    362  1800		       19 3f	   L0Z6       EQU	$193F
+    363  1800		       19 7e	   L0Z7       EQU	$197E
+    364  1800		       19 bd	   L0Z8       EQU	$19BD
+    365  1800		       1a 00	   L0Z9       EQU	$1A00
+    366  1800		       00 05	   L0Z9P5     EQU	5
+    367  1800		       1a 3f	   L0Z10      EQU	$1A3F
+    368  1800		       1a 7e	   L0Z11      EQU	$1A7E
+    369  1800		       1a bd	   L0Z12      EQU	$1ABD
+    370  1800		       00 c2	   L0Z12P5    EQU	$C2
+    371  1800		       1b 00	   L0Z13      EQU	$1B00
+    372  1800		       00 05	   L0Z13P5    EQU	5	;			;LOW BYTE OF L0Z13 PLUS 5.
+    373  1800		       1b 3f	   L0Z14      EQU	$1B3F
+    374  1800		       1b 7e	   L0Z15      EQU	$1B7E
+    375  1800		       1b bd	   L0Z0       EQU	$1BBD	;		    ;THRU $1BFF: LONGER THEN OTHER LISTS.
+    376  1800
+    377  1800							;
+    378  1800							;	   DISPLAY LIST ONE
+    379  1800							;
+    380  1800		       1c 00	   L1Z1       EQU	$1C00	;		    ;LOW BYTE OF L1 ZONES = LOW BYTE OF L0.
+    381  1800		       1c 3f	   L1Z2       EQU	$1C3F
+    382  1800		       1c 7e	   L1Z3       EQU	$1C7E
+    383  1800		       1c bd	   L1Z4       EQU	$1CBD
+    384  1800		       1d 00	   L1Z5       EQU	$1D00
+    385  1800		       1d 3f	   L1Z6       EQU	$1D3F
+    386  1800		       1d 7e	   L1Z7       EQU	$1D7E
+    387  1800		       1d bd	   L1Z8       EQU	$1DBD
+    388  1800		       1e 00	   L1Z9       EQU	$1E00
+    389  1800		       1e 3f	   L1Z10      EQU	$1E3F
+    390  1800		       1e 7e	   L1Z11      EQU	$1E7E
+    391  1800		       1e bd	   L1Z12      EQU	$1EBD
+    392  1800		       1f 00	   L1Z13      EQU	$1F00
+    393  1800		       1f 3f	   L1Z14      EQU	$1F3F
+    394  1800		       1f 7e	   L1Z15      EQU	$1F7E	;		    ;THRU $1FBC.
+    395  1800
+    396  1800		       1f bd	   DLIJMP     EQU	$1FBD
+    397  1800		       1f be	   DLIVECT    EQU	$1FBE	;		    ;AND $1FBF.
+    398  1800		       1f c0	   HSCOREX    EQU	$1FC0
+    399  1800		       1f c1	   HSCOREH    EQU	$1FC1
+    400  1800		       1f c2	   HSCOREM    EQU	$1FC2
+    401  1800		       1f c3	   HSCOREL    EQU	$1FC3
+    402  1800		       1f c4	   EFFRACK    EQU	$1FC4	;		    ;AND $1FC5
+    403  1800		       1f c6	   BACKMONS   EQU	$1FC6	;		    ;THROUGH $1FCD.
+    404  1800		       1f ce	   FRUITCST   EQU	$1FCE
+    405  1800		       1f cf	   FRUITPAL   EQU	$1FCF
+    406  1800							;*;*;*;*;*;*;*   EQU	  $1FD0
+    407  1800
+    408  1800							;*KEEP BACKXPOS NEXT TO BACKYPOS, AND BACKTMBL,BACKHROK, BACKFCNT TOGETHER.
+    409  1800		       20 00	   BACKYPOS   EQU	$2000	;		    ;STMPYPOS TEMP FOR OTHER PLAYER:THRU 12
+    410  1800		       20 13	   BACKXPOS   EQU	$2013	;		    ;STMPXPOS TEMP: THROUGH 15.
+    411  1800		       20 26	   BACKTMBL   EQU	$2026	;		    ;TUMBLE TEMP FOR OTHER PLAYER:THRU 2A.
+    412  1800		       20 2b	   BACKHROK   EQU	$202B	;		    ;HITROCK TEMP FOR OTHER PLAYER.
+    413  1800		       20 2c	   BACKFCNT   EQU	$202C	;		    ;FALLCNT TEMP.
+    414  1800		       20 2d	   BAKRCRET   EQU	$202D	;		    ;BRCREAT TEMP.
+    415  1800		       20 2e	   BAKRTUNL   EQU	$202E	;		    ;BRTUNNL TEMP.
+    416  1800		       20 2f	   STATUS     EQU	$202F	;		    ;USED IN MAIN.
+    417  1800		       20 30	   MODEH      EQU	$2030
+    418  1800		       20 38	   SPEEDL     EQU	$2038	;		    ;THRU $213F.
+    419  1800
+    420  1800							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    421  2040					      ORG	$2040
+    422  2040							; 2040 TO 20FF IS SHADOWED AT 040 TO 0FF
+    423  2040							;
+    424  2040							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    425  2100					      ORG	$2100
+    426  2100
+    427  2100		       21 00	   SPEEDH     EQU	$2100	;		    ;THRU $2107.
+    428  2100		       21 08	   CDIREC     EQU	$2108	;		    ;FOR TITLE PAGE: CREATURE DIRECTION.
+    429  2100		       21 10	   CBORDER    EQU	$2110	;		    ;TITLE PAGE: TURNING POINT. (THRU 17)
+    430  2100		       21 18	   CHARSEQL   EQU	$2118
+    431  2100		       21 20	   BLWYPOS    EQU	$2120
+    432  2100		       21 28	   CHARSEQN   EQU	$2128
+    433  2100		       21 30	   GHOST      EQU	$2130
+    434  2100		       21 38	   FACING     EQU	$2138	;		    ;THRU $213F.
+    435  2100
+    436  2100
+    437  2100							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*.;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    438  2140					      ORG	$2140
+    439  2140							; 2140 TO 21FF IS SHADOWED AT 140 TO 1FF
+    440  2140							;
+    441  2140							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    442  2200					      ORG	$2200
+    443  2200
+    444  2200		       22 00	   TUNNELS    EQU	$2200	;		    ;THRU $22C8.
+    445  2200
+    446  2200		       22 e8	   YMODC      EQU	$22E8
+    447  2200		       22 f0	   MODEL      EQU	$22F0	;		    ;THRU $22F7.
+    448  2200		       22 f8	   PREBLWIX   EQU	$22F8	;		    ;THRU $22FF
+    449  2200		       23 00	   RACKTIME   EQU	$2300
+    450  2200		       23 01	   SPEEDUP    EQU	$2301
+    451  2200		       23 02	   FLAMWAIT   EQU	$2302
+    452  2200		       23 03	   GHOSTOUT   EQU	$2303
+    453  2200		       23 04	   FLEE       EQU	$2304
+    454  2200		       23 05	   FAST       EQU	$2305	;		    ;INIT TO 0 IN INCREATS
+    455  2200		       23 06	   NXTSEC     EQU	$2306
+    456  2200		       23 07	   P0C0SHAD   EQU	$2307	;		    ;SHADOW OF PALETTES: THROUGH $231F.
+    457  2200		       23 27	   NUMSQSH    EQU	$2327	;		    ;THROUGH $232B
+    458  2200							;*;*;*;*;*;*;*   EQU	  $232C
+    459  2200							;*;*;*;*;*;*;*   EQU	  $232D
+    460  2200							;*;*;*;*;*;*;*   EQU	  $232E
+    461  2200		       23 2f	   DHORSPDL   EQU	$232F
+    462  2200		       23 30	   DHORSPDH   EQU	$2330	;		    ;MUST FOLLOW DHORSPDL
+    463  2200							;*;*;*FREE   EQU     $2331
+    464  2200							;*;*;*;*;*;*	 EQU	 $2332; 		 ;THROUGH $2336
+    465  2200		       23 37	   BLWSTAT    EQU	$2337	;		    ;THROUGH $233E
+    466  2200		       23 3f	   BLWCTR     EQU	$233F	;		    ;THROUGH $2346
+    467  2200		       23 47	   BLWLSTMV   EQU	$2347	;		    ;THROUGH $234E
+    468  2200
+    469  2200							; FOR SOUNDS
+    470  2200							;*;*;*;*;*;*	 EQU	 $234F
+    471  2200							; THE FOLLOWING 7 REGISTERS MUST REMAIN IN THEIR CURRENT POSITION
+    472  2200		       23 50	   DURINDX0   EQU	$2350
+    473  2200		       23 51	   DURINDX1   EQU	$2351
+    474  2200		       23 52	   DEST0      EQU	$2352
+    475  2200		       23 53	   DEST1      EQU	$2353
+    476  2200		       23 54	   DDURCTR    EQU	$2354
+    477  2200		       23 55	   DUNINDX0   EQU	$2355
+    478  2200		       23 56	   DUNINDX1   EQU	$2356
+    479  2200
+    480  2200		       23 57	   SNGREQ     EQU	$2357	;		    ;THROUGH $235C.
+    481  2200		       23 5d	   DPL0LIST   EQU	$235D	;		    ;THRU $23A1.
+    482  2200		       23 a2	   DPL1LIST   EQU	$23A2	;		    ;THRU $23E6.
+    483  2200		       23 e7	   DUMMYDPL   EQU	$23E7	;		    ;AND $23E8.
+    484  2200		       23 e9	   DRT1COLR   EQU	$23E9	;		    ;KEEP DRTNCOLR"S TOGETHER.
+    485  2200		       23 eb	   DRT2COLR   EQU	$23EB
+    486  2200		       23 ed	   DRT3COLR   EQU	$23ED
+    487  2200		       23 ef	   VEGCOLR    EQU	$23EF	;		    ;AND $23F0
+    488  2200		       23 f1	   IGNORE     EQU	$23F1	;		    ;FOR IGNORING JOYSTICK.
+    489  2200		       23 f2	   SAVEFRMC   EQU	$23F2
+    490  2200		       23 f3	   P2INIT     EQU	$23F3
+    491  2200
+    492  2200		       24 00	   STMPPALW   EQU	$2400
+    493  2200		       24 80	   PALWIDZ    EQU	$2480	;		    ;THROUGH $248F.
+    494  2200		       24 90	   DIV3TAB    EQU	$2490	;		    ;THROUGH $24BF.
+    495  2200		       24 c0	   STMPRIOR   EQU	$24C0	;		    ;THROUGH $24D2.
+    496  2200		       24 c1	   MONPRIOR   EQU	$24C1	;		    ;(THESE ARE JUST EQUATES...)
+    497  2200		       24 c9	   RCKPRIOR   EQU	$24C9	;		    ;(	""   "	 ""	""     )
+    498  2200		       24 cf	   PUMPRIOR   EQU	$24CF	;		    ;(	""   "	 ""	""     )
+    499  2200
+    500  2200		       25 00	   DPL2LIST   EQU	$2500	;		    ;THROUGH $2544.
+    501  2200
+    502  2200		       25 50	   ROCKNUM    EQU	$2550	;		    ;THROUGH $2557, USED BY FALL
+    503  2200
+    504  2200		       25 f0	   SCOREMAP   EQU	$25F0	;		    ;ONE SCORE MAP FOR EITHER PLAYER.
+    505  2200
+    506  2200							;*;*;*;* THE FOLLOWING RAM IS SHARED BY HSC:  IT IS RESTORED AFTER HSC RETURNS.
+    507  2200		       26 00	   DIRTMAP    EQU	$2600	;		    ;CHAR MAP FOR CURRENT PLAYER, AND OTHER
+    508  2200							;				 ;  PLAYER IF TWO PLAYER MODE.	EACH
+    509  2200		       27 00	   BACKDIRT   EQU	$2700	;		    ;  CONTAINS CHAR INDICES FOR SKY AND
+    510  2200							;				 ;  DIRT AND RUNS THROUGH $F0 INCLUSIVE.
+    511  2200		       26 00	   HSCRAM     EQU	$2600
+    512  2200		       26 02	   HSCDIFFL   EQU	$2602
+    513  2200							;*HSCDIFFN  EQU     $2606
+    514  2200		       26 0e	   HSCTIME    EQU	$260E
+    515  2200
+    516  2200
+    517  2200							;*;*;*;*      GENERAL IMMEDIATES
+    518  2200		       3f fa	   HSCATRCT   EQU	$3FFA
+    519  2200		       3f fd	   HSCENTER   EQU	$3FFD
+    520  2200		       00 41	   LCARTNUM   EQU	$41
+    521  2200		       00 42	   HCARTNUM   EQU	$42
+    522  2200		       00 ff	   STACK      EQU	$FF	;		      ;FOR NOW, GIVES 32 BYTES OF STACK.
+    523  2200		       00 60	   DDSTRTX    EQU	96
+    524  2200		       00 bf	   DDSTRTY    EQU	191
+    525  2200		       00 38	   DDMIDLX    EQU	56
+    526  2200		       00 6b	   DDMIDLY    EQU	107
+    527  2200		       00 54	   XPOS       EQU	POOKAX
+    528  2200		       00 41	   YPOS       EQU	POOKAY
+    529  2200		       00 67	   MONSI      EQU	POOKAIX
+    530  2200		       00 11	   NUMVEG     EQU	17
+    531  2200		       00 0f	   NUMZONES   EQU	15	;		       ;ZONES RUN FROM 0 (BOTTOM) TO 15 (TOP).
+    532  2200		       00 07	   NUMCREAT   EQU	7	;			;NUMBER OF POOKAS + FYGARS - 1.
+    533  2200		       00 04	   NUMROCK    EQU	4	;			;MAX NUMBER OF ROCKS-1
+    534  2200		       00 12	   TOTLSTMP   EQU	18	;		       ;TOTAL NUMBER OF STAMPS POSSIBLE ON
+    535  2200							;				 ;  SCREEN AT ANY ONE TIME - 1.
+    536  2200		       00 25	   TOTLSTX2   EQU	TOTLSTMP+TOTLSTMP+1
+    537  2200		       00 e0	   CSET1      EQU	$E0	;		      ;CHARACTER SET 1: PAGES 40 - 4B.
+    538  2200		       00 c4	   CSET2      EQU	$C4
+    539  2200		       00 60	   W1ZONE     EQU	$60
+    540  2200		       00 3d	   LISTLENG   EQU	61	;		       ;LENGTH OF DISPLAY LIST.
+    541  2200		       00 00	   NORMSCRN   EQU	0	;			;VALUES FOR KERNTYPE: NORMAL DIRT SCRN.
+    542  2200		       00 03	   BLNKSCRN   EQU	3	;			;BLANK SCREEN (BLACK).
+    543  2200		       00 13	   MAXSRACK   EQU	19	;		       ;HIGHEST RACK PLAYER CAN CHOOSE.
+    544  2200		       00 12	   MAXSR1     EQU	MAXSRACK-1
+    545  2200		       00 11	   MAXEFFR    EQU	17
+    546  2200		       00 08	   MINDDX     EQU	8	;			;MINIMUM DIGDUG X POSITION.
+    547  2200		       00 71	   MAXDDX     EQU	113	;		      ;MAX DIGDUG X POSITION.
+    548  2200		       00 17	   MINDDY     EQU	23
+    549  2200		       00 c0	   MAXDDY     EQU	192
+    550  2200		       00 02	   ONEDGE     EQU	2	;			;TUMBLE STATE - ROCK READY TO FALL
+    551  2200		       00 3c	   SECOND     EQU	60	;		       ;60 FRAMES PER SECOND.
+    552  2200		       00 09	   STRTWALK   EQU	9	;			;TITLEPAGE: AFTER 8 SECS, DD WALKS UP.
+    553  2200		       00 a7	   MAXCLIMB   EQU	167	;		      ;TITLEPAGE: HIGH POINT FOR DD CLIMB.
+    554  2200		       00 40	   DROPROCK   EQU	64	;		       ;TITLEPAGE: HORIZ DD POS WHEN ROCK
+    555  2200							;				 ;  WILL BEGIN TO FALL.
+    556  2200
+    557  2200							;*;*;*;*      SOUND IMMEDIATES
+    558  2200		       00 01	   SNGC       EQU	1	;			;CREATURE MOVEMENT
+    559  2200		       00 02	   SNGD       EQU	2	;			;SLOW DIGDUG
+    560  2200		       00 03	   SNGDF      EQU	3	;			;FAST DIGDUG
+    561  2200		       00 04	   SNGNULL    EQU	4	;			;SOUND OF SILENCE
+    562  2200		       00 05	   SNG1       EQU	5	;			;ROCK CRUSHING MONSTER
+    563  2200		       00 06	   SNG2       EQU	6	;			;ROCK HITTING GROUND/DIGDUG
+    564  2200		       00 07	   SNG3       EQU	7	;			;FLAME NOISE
+    565  2200		       00 09	   SNG4       EQU	9	;			;PUMP CREATURE
+    566  2200		       00 08	   SNG5       EQU	8	;			;DIGDUG THROWING HARPOON
+    567  2200		       00 0a	   SNG6       EQU	10	;		       ;POP
+    568  2200		       00 0b	   SNG7       EQU	11	;		       ;ROCK FALLING
+    569  2200		       00 0c	   SNG8       EQU	12	;		       ;GOTCHA
+    570  2200		       00 0d	   SNG9       EQU	13	;		       ;CREATURE ESCAPING
+    571  2200		       00 0e	   SNG10      EQU	14	;		       ;EAT VEGETABLE
+    572  2200		       00 0f	   SNG11      EQU	15	;		       ;BONUS MAN
+    573  2200		       00 10	   SNG12      EQU	16	;		       ;SPEEDUP MUSIC
+    574  2200		       00 11	   SNG13      EQU	17	;		       ;RACKEND
+    575  2200		       00 12	   SNG14      EQU	18	;		       ;DIGDUG DEATH
+    576  2200		       00 13	   SNG15      EQU	19	;		       ;ENTRANCE
+    577  2200
+    578  2200							;*;*;*;*      CHARACTER INDEX IMMEDIATES
+    579  2200		       00 24	   FULLDIRT   EQU	36	;		       ;CHARACTER INDEX FOR FILLED IN DIRT.
+    580  2200		       00 1e	   FULLSKY    EQU	30	;		       ;SKY CHARACTER (USES COLOR 10).
+    581  2200		       00 5c	   FULLSKY2   EQU	92	;		       ;SKY IN CSET2.
+    582  2200		       00 88	   RSKYHALF   EQU	136
+    583  2200		       00 8c	   LSKYHALF   EQU	140
+    584  2200		       00 00	   NODIRT     EQU	0	;			;EMPTY DIRT CHARACTER.
+    585  2200		       00 16	   DTOPEND    EQU	$16	;		      ;TOP OF A VERTICAL TUNNEL.
+    586  2200		       00 14	   DVMIDDLE   EQU	$14	;		      ;MIDDLE OF VERTICAL TUNNEL.
+    587  2200		       00 1c	   DBOTEND    EQU	$1C	;		      ;BOTTOM OF VERTICAL TUNNEL.
+    588  2200		       00 1a	   DLEFTEND   EQU	$1A	;		      ;LEFT END OF A HORIZONTAL TUNNEL.
+    589  2200		       00 0a	   DHMIDDLE   EQU	$A	;		       ;MIDDLE OF HORIZONTAL TUNNEL.
+    590  2200		       00 0e	   DRHTEND    EQU	$E	;		       ;RIGHT END OF HORIZONTAL TUNNEL.
+    591  2200		       00 20	   BIGFLOWR   EQU	32
+    592  2200		       00 22	   SMLFLOWR   EQU	34
+    593  2200		       00 32	   TEDDY      EQU	50	;		       ;LEVEL INDICATORS: TEDDY AND VEGGIES.
+    594  2200							;*TEDPALW   EQU     $3E
+    595  2200		       00 be	   VEGPALW    EQU	$BE
+    596  2200		       00 34	   CARROT     EQU	52
+    597  2200		       00 36	   RUTABAGA   EQU	54
+    598  2200		       00 38	   MUSHROOM   EQU	56
+    599  2200		       00 3a	   CUCUMBER   EQU	58
+    600  2200		       00 3c	   EGGPLANT   EQU	60
+    601  2200		       00 3e	   BELLPEPP   EQU	62
+    602  2200		       00 40	   TOMATO     EQU	64
+    603  2200		       00 42	   ONION      EQU	66
+    604  2200		       00 44	   WATERMEL   EQU	68
+    605  2200		       00 46	   GALAXIAN   EQU	70
+    606  2200		       00 48	   PINEAPPL   EQU	72
+    607  2200		       00 3e	   PINEPALW   EQU	$3E
+    608  2200		       00 00	   BLANK1     EQU	0
+    609  2200		       00 de	   BLANK2     EQU	222
+    610  2200		       00 89	   BLANK3     EQU	137
+    611  2200		       00 4a	   BLANKR     EQU	74	;		       ;RIGHT EDGE OF DIRT.
+    612  2200		       00 4c	   BLANKL     EQU	76	;		       ;LEFT EDGE OF DIRT.
+    613  2200		       00 90	   BLACKBOX   EQU	144
+    614  2200		       00 e0	   BIGSTAMP   EQU	224
+    615  2200
+    616  2200							;*;*;*;*      STAMP INDEX IMMEDIATES: CSET2 STAMPS WHOSE INDEX IS <= 106
+    617  2200							;*;*;*;*  ;		DON"T NEED ZERO PADDING.  ALL OTHER STAMPS DO.
+    618  2200		       00 96	   FULL0      EQU	150	;		      ;FULL SIZE NUMBERS IN CSET2 (8 PIX).
+    619  2200
+    620  2200							;*PUMP AND HARPOON...
+    621  2200		       00 ac	   DPUMP6     EQU	172
+    622  2200		       00 ad	   DPUMP12    EQU	173
+    623  2200		       00 ae	   DFULL6     EQU	174
+    624  2200		       00 af	   DFULL12    EQU	175
+    625  2200		       00 b0	   UPUMP6     EQU	176
+    626  2200		       00 b1	   UPUMP12    EQU	177
+    627  2200		       00 68	   UFULL6     EQU	104
+    628  2200		       00 69	   UFULL12    EQU	105
+    629  2200		       00 de	   ZBLANK     EQU	222
+    630  2200		       00 30	   RPUMP24    EQU	48
+    631  2200		       00 31	   RPUMP20    EQU	49
+    632  2200		       00 32	   RPUMP16    EQU	50
+    633  2200		       00 33	   RPUMP12    EQU	51
+    634  2200		       00 34	   RPUMP8     EQU	52
+    635  2200		       00 35	   RPUMP4     EQU	53
+    636  2200		       00 2e	   LPUMP24    EQU	46
+    637  2200		       00 37	   LPUMP20    EQU	55
+    638  2200		       00 3c	   LPUMP16    EQU	60
+    639  2200		       00 40	   LPUMP12    EQU	64
+    640  2200		       00 43	   LPUMP8     EQU	67
+    641  2200		       00 45	   LPUMP4     EQU	69
+    642  2200		       00 10	   RHARPOON   EQU	16
+    643  2200		       00 12	   LHARPOON   EQU	18
+    644  2200		       00 78	   UHARPOON   EQU	120
+    645  2200		       00 7a	   DHARPOON   EQU	122
+    646  2200
+    647  2200							;*DIGDUG...
+    648  2200		       00 94	   UDIGDUG1   EQU	148
+    649  2200		       00 96	   UDIGDUG2   EQU	150
+    650  2200		       00 98	   UDIGDUG3   EQU	152
+    651  2200		       00 9a	   DDIGDUG1   EQU	154
+    652  2200		       00 9c	   DDIGDUG2   EQU	156
+    653  2200		       00 9e	   DDIGDUG3   EQU	158
+    654  2200		       00 00	   RDIGDUG1   EQU	0
+    655  2200		       00 02	   RDIGDUG2   EQU	2
+    656  2200		       00 04	   RDIGDUG3   EQU	4
+    657  2200		       00 06	   LDIGDUG1   EQU	6
+    658  2200		       00 08	   LDIGDUG2   EQU	8
+    659  2200		       00 0a	   LDIGDUG3   EQU	10
+    660  2200		       00 a0	   SQDIGDUG   EQU	160
+    661  2200		       00 6a	   SDEATH     EQU	106	;		      ;(STAR).
+    662  2200		       00 6c	   HRDEATH1   EQU	108
+    663  2200		       00 6e	   HRDEATH2   EQU	110
+    664  2200		       00 70	   HRDEATH3   EQU	112
+    665  2200		       00 72	   HLDEATH1   EQU	114
+    666  2200		       00 74	   HLDEATH2   EQU	116
+    667  2200		       00 76	   HLDEATH3   EQU	118
+    668  2200
+    669  2200							;*MONSTERS...
+    670  2200		       00 7c	   RPOOKA1    EQU	124
+    671  2200		       00 7e	   RPOOKA2    EQU	126
+    672  2200		       00 80	   LPOOKA1    EQU	128
+    673  2200		       00 82	   LPOOKA2    EQU	130
+    674  2200		       00 e0	   RBPOOKA1   EQU	224
+    675  2200		       00 e2	   RBPOOKA2   EQU	226
+    676  2200		       00 e4	   RBPOOKA3   EQU	228
+    677  2200		       00 e6	   RBPOOKA4   EQU	230
+    678  2200		       00 e8	   LBPOOKA1   EQU	232
+    679  2200		       00 ea	   LBPOOKA2   EQU	234
+    680  2200		       00 ec	   LBPOOKA3   EQU	236
+    681  2200		       00 ee	   LBPOOKA4   EQU	238
+    682  2200		       00 8c	   GPOOKA1    EQU	140
+    683  2200		       00 8e	   GPOOKA2    EQU	142
+    684  2200		       00 a4	   SQPOOKA    EQU	164
+    685  2200		       00 84	   RFYGAR1    EQU	132
+    686  2200		       00 86	   RFYGAR2    EQU	134
+    687  2200		       00 88	   LFYGAR1    EQU	136
+    688  2200		       00 8a	   LFYGAR2    EQU	138
+    689  2200		       00 f0	   RBFYGAR1   EQU	240
+    690  2200		       00 f2	   RBFYGAR2   EQU	242
+    691  2200		       00 f4	   RBFYGAR3   EQU	244
+    692  2200		       00 f6	   RBFYGAR4   EQU	246
+    693  2200		       00 f8	   LBFYGAR1   EQU	248
+    694  2200		       00 fa	   LBFYGAR2   EQU	250
+    695  2200		       00 fc	   LBFYGAR3   EQU	252
+    696  2200		       00 fe	   LBFYGAR4   EQU	254
+    697  2200		       00 90	   GFYGAR1    EQU	144
+    698  2200		       00 92	   GFYGAR2    EQU	146
+    699  2200		       00 a2	   SQFYGAR    EQU	162
+    700  2200		       00 0c	   RFLAMFYG   EQU	12
+    701  2200		       00 0e	   LFLAMFYG   EQU	14
+    702  2200
+    703  2200							;*FLAMES ...
+    704  2200		       00 14	   RFLAME4    EQU	20
+    705  2200		       00 16	   RFLAME8    EQU	22
+    706  2200		       00 18	   RFLAME16   EQU	24
+    707  2200		       00 1c	   RFLAME24   EQU	28
+    708  2200		       00 15	   LFLAME4    EQU	21
+    709  2200		       00 22	   LFLAME8    EQU	34
+    710  2200		       00 24	   LFLAME16   EQU	36
+    711  2200		       00 28	   LFLAME24   EQU	40
+    712  2200
+    713  2200							;*ROCKS...
+    714  2200		       00 a6	   STRTROCK   EQU	166
+    715  2200		       00 a8	   SPLTROCK   EQU	168
+    716  2200		       00 aa	   CRMBROCK   EQU	170
+    717  2200		       00 56	   TOTRROCK   EQU	86
+    718  2200
+    719  2200							;*SCORES   -	CSET1	(VEGETABLES)
+    720  2200		       00 62	   VHUND4     EQU	98
+    721  2200		       00 65	   VHUND6     EQU	101
+    722  2200		       00 bb	   VHUND8     EQU	187
+    723  2200		       00 da	   VTHOUS1    EQU	218
+    724  2200		       00 46	   VTHOUS2    EQU	70
+    725  2200		       00 4a	   VTHOUS3    EQU	74
+    726  2200		       00 c2	   VTHOUS4    EQU	194
+    727  2200		       00 4e	   VTHOUS5    EQU	78
+    728  2200		       00 c6	   VTHOUS6    EQU	198
+    729  2200		       00 52	   VTHOUS7    EQU	82
+    730  2200		       00 ca	   VTHOUS8    EQU	202
+    731  2200		       00 b2	   VHUND2     EQU	178
+    732  2200
+    733  2200							;*SCORES   -	CSET2	(BLOWUP AND SQUASHING)
+    734  2200		       00 b2	   LOWSCOR    EQU	178
+    735  2200		       00 b2	   HUNDRED2   EQU	178
+    736  2200		       00 b5	   HUNDRED3   EQU	181
+    737  2200		       00 62	   HUNDRED4   EQU	98
+    738  2200		       00 b8	   HUNDRED5   EQU	184
+    739  2200		       00 bb	   HUNDRED8   EQU	187
+    740  2200		       00 da	   THOUSND1   EQU	218
+    741  2200		       00 be	   THOUS25    EQU	190
+    742  2200		       00 c2	   THOUS4     EQU	194
+    743  2200		       00 c6	   THOUS6     EQU	198
+    744  2200		       00 ca	   THOUS8     EQU	202
+    745  2200		       00 ce	   THOUS10    EQU	206
+    746  2200		       00 d2	   THOUS12    EQU	210
+    747  2200		       00 d6	   THOUS15    EQU	214
+    748  2200		       00 da	   HIGHSCOR   EQU	218
+    749  2200		       00 65	   HUNDRED6   EQU	101
+    750  2200
+    751  2200							;*TITLEPAGE STAMPS
+    752  2200		       00 5a	   LETRL      EQU	90	;		       ;CSET2...
+    753  2200		       00 5c	   LETRE      EQU	92
+    754  2200		       00 5e	   LETRV      EQU	94
+    755  2200		       00 60	   LETRP      EQU	96
+    756  2200		       00 58	   LETRO      EQU	88
+    757  2200		       00 4e	   LETRS      EQU	78	;		       ;CSET1...
+    758  2200		       00 50	   LETRA      EQU	80
+    759  2200		       00 52	   LETRY      EQU	82
+    760  2200		       00 54	   LETRG      EQU	84
+    761  2200		       00 56	   LETRM      EQU	86
+    762  2200		       00 8e	   LETRR      EQU	142
+    763  2200
+    764  2200							;*TITLE PAGE STAMPS...
+    765  2200		       00 58	   ATARICP    EQU	88
+    766  2200		       00 5e	   NAMCOCP    EQU	94
+    767  2200		       00 64	   TITLED10   EQU	100
+    768  2200		       00 68	   TITLED9    EQU	104
+    769  2200		       00 6c	   TITLEG10   EQU	108
+    770  2200		       00 70	   TITLEG9    EQU	112
+    771  2200		       00 74	   TITLEU10   EQU	116
+    772  2200		       00 78	   TITLEU9    EQU	120
+    773  2200		       00 7c	   TDDUG10    EQU	124
+    774  2200		       00 80	   TDDUG9     EQU	128
+    775  2200		       00 84	   TITLEI10   EQU	132
+    776  2200		       00 86	   TITLEI9    EQU	134
+    777  2200
+    778  2200							;*;*;*;*      COLORS
+    779  2200		       00 0e	   WHITE      EQU	$0E
+    780  2200		       00 37	   RED	      EQU	$37
+    781  2200
+    782  2200		       00 24	   PEBBLE1    EQU	$24
+    783  2200		       00 14	   PEBBLE2    EQU	$14
+    784  2200		       00 24	   PEBBLE0A   EQU	$24
+    785  2200		       00 14	   PEBBLE0B   EQU	$14
+    786  2200		       00 17	   PEBBLE0C   EQU	$17
+    787  2200		       00 26	   PEBBLE0D   EQU	$26
+    788  2200		       00 52	   PEBBLE1A   EQU	$52
+    789  2200		       00 42	   PEBBLE1B   EQU	$42
+    790  2200		       00 24	   PEBBLE1C   EQU	$24
+    791  2200		       00 10	   PEBBLE1D   EQU	$10
+    792  2200		       00 52	   PEBBLE2A   EQU	$52
+    793  2200		       00 42	   PEBBLE2B   EQU	$42
+    794  2200		       00 00	   PEBBLE2C   EQU	$00
+    795  2200		       00 52	   PEBBLE2D   EQU	$52
+    796  2200
+    797  2200		       00 1a	   YELLOW0    EQU	$1A
+    798  2200		       00 27	   GOLD0      EQU	$27
+    799  2200		       00 24	   ORANG0     EQU	$24
+    800  2200		       00 10	   DKORANG0   EQU	$10
+    801  2200		       00 0a	   PALPURP1   EQU	$0A
+    802  2200		       00 15	   PALBRWN1   EQU	$15
+    803  2200		       00 1e	   YELLOW1    EQU	$1E
+    804  2200		       00 27	   GOLD1      EQU	$27
+    805  2200		       00 0a	   PALPURP2   EQU	$0A
+    806  2200		       00 15	   PALBRWN2   EQU	$15
+    807  2200		       00 b2	   PALTURQ2   EQU	$B2
+    808  2200		       00 04	   DKPURP2    EQU	$04
+    809  2200
+    810  2200		       00 10	   DKORANGE   EQU	$10
+    811  2200		       00 24	   ORANGE     EQU	$24
+    812  2200		       00 27	   GOLD       EQU	$27
+    813  2200		       00 1a	   YELLOW     EQU	$1A
+    814  2200		       00 c8	   GREEN      EQU	$C8
+    815  2200		       00 f8	   PALETURQ   EQU	$F8
+    816  2200		       00 86	   SKYBLUE    EQU	$86
+    817  2200		       00 85	   DDBLUE     EQU	$85
+    818  2200		       00 86	   PALEPURP   EQU	$86
+    819  2200		       00 87	   DARKPURP   EQU	$87
+    820  2200		       00 25	   PALEBRWN   EQU	$25
+    821  2200		       00 23	   TAN	      EQU	$23
+    822  2200		       00 41	   BROWN      EQU	$41
+    823  2200		       00 00	   BLACK      EQU	$00
+    824  2200		       00 00	   ANYCOLR    EQU	$00
+    825  2200		       00 0e	   PL0COLR    EQU	WHITE
+    826  2200		       00 0e	   PL1COLR    EQU	WHITE
+    827  2200
+    828  2200							;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    829  2200							;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    830  2200
+    831  ff80					      ORG	$FF80
+    832  ff80		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    833  ff90		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    834  ffa0		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    835  ffb0		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    836  ffc0		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    837  ffd0		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    838  ffe0		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+    839  fff0		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0
+    840  fff8
+    841  fff8					      ORG	$FFF8
+    842  fff8		       ff		      DC.B	$FF	;		      ;COUNTRY CODE
+    843  fff9		       c7		      DC.B	$C7	;		      ;MARIA SIGNATURE AND START OF CODE
+    844  fffa							;*	   ;				    ;DLI VECTOR:  THIS LOCATION IS A
+    845  fffa							;*	   ;				    ;  JMP TO LOCATION IN RAM (DLIJMP).
+    846  fffa		       5f c1		      DC.B	<GENEJMP,>GENEJMP	;  JUMP ADDRESS IS CHANGED AS DMA
+    847  fffc							;				 ;  MOVES DOWN SCREEN.
+    848  fffc					      ORG	$FFFC
+    849  fffc		       00 d0		      DC.B	<MAIN,>MAIN	;INTERRUPT RESET VECTOR.
+    850  fffe		       d8 ee		      DC.B	<GENERTI,>GENERTI	;JUST IN CASE....
+    851  d000					      ORG	$D000
+    852  d000							;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    853  d000
+    854  d000							;*;*;*;*;*;*;*;*;*;*;*;		    3600 DIG DUG		       ;*;*;*;*;*;*;*;*;*;*;*;*;*
+    855  d000
+    856  d000							;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    857  d000							;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+    858  d000				   MAIN
+DIGDUG.ASM (859): error: Origin Reverse-indexed.
+Aborting assembly

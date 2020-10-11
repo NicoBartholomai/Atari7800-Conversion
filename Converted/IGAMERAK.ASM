@@ -21,9 +21,9 @@ INIT
           STX     SYNCFRAM;               ;WILL NEED DIFF VALUE FOR PAL/SECAM
           LDX     #$4C;                   ;SET UP JUMP INSTRUCTION FOR DLI"S.
           STX     DLIJMP
-          LDX     #<.DLISETUP
+          LDX     #<DLISETUP
           STX     DLIVECT
-          LDX     #>.DLISETUP
+          LDX     #>DLISETUP
           STX     DLIVECT+1
 
           STA     $38;                    ; A CONTAINS 0
@@ -66,10 +66,10 @@ ZPRIOR1   STA     PUMPRIOR,X
 EXPANDA   LDA     NUMBYTES,X
           STA     TEMP
           LDA     PALWBYTE,X
-EXPANDC.B   STA     STMPPALW,Y
+EXPANDB   STA     STMPPALW,Y
           DEY
           DEC     TEMP
-          BPL     EXPANDC.B
+          BPL     EXPANDB
           DEX
           BPL     EXPANDA
 
@@ -114,13 +114,13 @@ SETDPLS   LDA     DLIBITS,Y
           STA     DPL0LIST,X
           LDA     LISTTBH1+1,Y
           STA     DPL1LIST,X
-          LDA     #>.DUMMYDPL
+          LDA     #>DUMMYDPL
           STA     DPL2LIST,X
           INX
           LDA     LISTTABL+1,Y
           STA     DPL0LIST,X
           STA     DPL1LIST,X
-          LDA     #<.DUMMYDPL
+          LDA     #<DUMMYDPL
           STA     DPL2LIST,X
           INX
           CPX     #69
@@ -185,7 +185,7 @@ INITBACK  JSR     SETDPLH;                ;ADDRESS OF ZONE DISPLAY LIST.
           STA     (DPLOW),Y
           STA     L0Z0+1
           INY
-          LDA     #>.DIRTMAP;            ;INIT TO CURRENT PLAYER"S DIRT MAP.
+          LDA     #>DIRTMAP;            ;INIT TO CURRENT PLAYER"S DIRT MAP.
           STA     (DPLOW),Y
           INY
           LDA     PALWIDZ,X;              ;PALETTE/WIDTH FOR ZONE.
@@ -221,9 +221,9 @@ FILLBLNK  STA     DIRTMAP,X;              ;ZERO OUT END OF DIRTMAP FOR SELECT,
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 SCRNOFF
           JSR     WAITVBL
-          LDA     #<.DPL2LIST;           ;TURN DISPLAY OFF BY SETTING DPPL,DPPH
+          LDA     #<DPL2LIST;           ;TURN DISPLAY OFF BY SETTING DPPL,DPPH
           STA     DPPL;                   ;  TO POINT TO BLANK DISPLAY LIST.
-          LDA     #>.DPL2LIST
+          LDA     #>DPL2LIST
           STA     DPPH
           RTS
 SCRNON
@@ -234,7 +234,7 @@ SCRNON
           INX
 ZSCRNON   LDA     LDPPL,X
           STA     DPPL
-          LDA     #>.DPL0LIST
+          LDA     #>DPL0LIST
           STA     DPPH
           RTS
 

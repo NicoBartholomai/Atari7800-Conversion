@@ -11,9 +11,9 @@
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ;  STELLA (TIA) REGISTER ADDRESSES
-; NOTE THESE REGISTERS ARE SHADOWED AT 0100 TO 011F
-;         ;                             0200 TO 021F
-;         ;                             0300 TO 031F
+; NOTE THESE REGISTERS ARE SHADOWED AT 100 TO 11F
+;         ;                             200 TO 21F
+;         ;                             300 TO 31F
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 
 VBLANK    EQU     $01
@@ -36,9 +36,9 @@ INPT5     EQU     $0D   ;PLAYER 1 BUTTON CLEAR WHEN HIT
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ; MARIA REGISTERS
-; NOTE THESE REGISTERS ARE SHADOWED AT 0120 TO 013F
-;         ;                             0220 TO 023F
-;         ;                             0320 TO 033F
+; NOTE THESE REGISTERS ARE SHADOWED AT 120 TO 13F
+;         ;                             220 TO 23F
+;         ;                             320 TO 33F
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 P0C0      EQU     $20;                    ;BACKGROUND COLOR                  RW
 ;         ALL PALETTE AND COLOR ARE HIGH NIBBLE COLOR, LOW NIBBLE LUMINANCE
@@ -90,7 +90,7 @@ P7C3      EQU     $3F;                    ;PALETTE SEVEN COLOR THREE         RW
 
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-; ZERO PAGE RAM   0040 TO 007F
+; ZERO PAGE RAM   040 TO 07F
 ; NOTE THIS RAM IS SHADOWED AT 2040 TO 207F
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG       $0040
@@ -138,7 +138,7 @@ FLAMNUM   EQU     $7D
 CURSONG   EQU     $7E;                    ;CURRENT SONG.
 SNGTEMP1  EQU     $7F;                    ;HIGHEST PRIORITY NOISE REQUEST
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-; ZERO PAGE RAM   0080 TO 00FF
+; ZERO PAGE RAM   080 TO 0FF
 ; NOTE THIS RAM IS SHADOWED AT 2180 TO 21FF
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG       $0080
@@ -301,7 +301,7 @@ ROCKSTAT  EQU     $FB;                    ;FOR 5 BYTES
 
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-; FIRST PAGE RAM  0140 TO 017F
+; FIRST PAGE RAM  140 TO 17F
 ; NOTE THIS RAM IS SHADOWED AT 2140 TO 217F
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG       $0140
@@ -311,8 +311,8 @@ ROCKSTAT  EQU     $FB;                    ;FOR 5 BYTES
 
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;  PIA AND TIMER (6532) LOCATIONS   0280 TO 02FF
-; NOTE THESE REGISTERS ARE SHADOWED AT 0380 TO 03FF
+;  PIA AND TIMER (6532) LOCATIONS   280 TO 2FF
+; NOTE THESE REGISTERS ARE SHADOWED AT 380 TO 3FF
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 SWCHA     EQU     $280  ;PO, P1 JOYSTICKS
 
@@ -345,10 +345,10 @@ TIM64TI   EQU     $29E  ;INTERUPT TIMER 64T
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ; RAM     2000 TO 2FFF
 ; NOTE SOME OF THIS RAM IS SHADOWED ELSEWHERE
-; 2040 TO 20FF IS SHADOWED AT 0040 TO 00FF
-; 2140 TO 217F IS SHADOWED AT 0140 TO 017F
-; 2240 TO 227F IS SHADOWED AT 0240 TO 027F
-; 2340 TO 237F IS SHADOWED AT 0340 TO 037F
+; 2040 TO 20FF IS SHADOWED AT 040 TO 0FF
+; 2140 TO 217F IS SHADOWED AT 140 TO 17F
+; 2240 TO 227F IS SHADOWED AT 240 TO 27F
+; 2340 TO 237F IS SHADOWED AT 340 TO 37F
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG     $1800
 
@@ -384,7 +384,7 @@ L1Z4      EQU     $1CBD
 L1Z5      EQU     $1D00
 L1Z6      EQU     $1D3F
 L1Z7      EQU     $1D7E
-L1Z8      EQU     $1DC.BD
+L1Z8      EQU     $1DBD
 L1Z9      EQU     $1E00
 L1Z10     EQU     $1E3F
 L1Z11     EQU     $1E7E
@@ -419,7 +419,7 @@ SPEEDL    EQU     $2038;                  ;THRU $213F.
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG     $2040
-; 2040 TO 20FF IS SHADOWED AT 0040 TO 00FF
+; 2040 TO 20FF IS SHADOWED AT 040 TO 0FF
 ;
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG     $2100
@@ -436,7 +436,7 @@ FACING    EQU     $2138;                  ;THRU $213F.
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*.;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG     $2140
-; 2140 TO 21FF IS SHADOWED AT 0140 TO 01FF
+; 2140 TO 21FF IS SHADOWED AT 140 TO 1FF
 ;
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG     $2200
@@ -584,7 +584,7 @@ LSKYHALF  EQU     140
 NODIRT    EQU     0;                      ;EMPTY DIRT CHARACTER.
 DTOPEND   EQU     $16;                    ;TOP OF A VERTICAL TUNNEL.
 DVMIDDLE  EQU     $14;                    ;MIDDLE OF VERTICAL TUNNEL.
-DC.BOTEND   EQU     $1C;                    ;BOTTOM OF VERTICAL TUNNEL.
+DBOTEND   EQU     $1C;                    ;BOTTOM OF VERTICAL TUNNEL.
 DLEFTEND  EQU     $1A;                    ;LEFT END OF A HORIZONTAL TUNNEL.
 DHMIDDLE  EQU     $A;                     ;MIDDLE OF HORIZONTAL TUNNEL.
 DRHTEND   EQU     $E;                     ;RIGHT END OF HORIZONTAL TUNNEL.
@@ -814,7 +814,7 @@ YELLOW    EQU     $1A
 GREEN     EQU     $C8
 PALETURQ  EQU     $F8
 SKYBLUE   EQU     $86
-DDC.BLUE    EQU     $85
+DDBLUE    EQU     $85
 PALEPURP  EQU     $86
 DARKPURP  EQU     $87
 PALEBRWN  EQU     $25
@@ -843,8 +843,8 @@ PL1COLR   EQU     WHITE
           DC.B      $C7;                    ;MARIA SIGNATURE AND START OF CODE
 ;*        ;                                ;DLI VECTOR:  THIS LOCATION IS A
 ;*        ;                                ;  JMP TO LOCATION IN RAM (DLIJMP).
-          DC.B      <.GENEJMP,>.GENEJMP  ;  JUMP ADDRESS IS CHANGED AS DMA
+          DC.B      <GENEJMP,>GENEJMP  ;  JUMP ADDRESS IS CHANGED AS DMA
           ;                               ;  MOVES DOWN SCREEN.
           ORG     $FFFC
-          DC.B      <.MAIN,>.MAIN        ;INTERRUPT RESET VECTOR.
-          DC.B      <.GENERTI,>.GENERTI  ;JUST IN CASE....
+          DC.B      <MAIN,>MAIN        ;INTERRUPT RESET VECTOR.
+          DC.B      <GENERTI,>GENERTI  ;JUST IN CASE....

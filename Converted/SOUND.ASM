@@ -13,43 +13,43 @@
 ;________________LEN___C0__C1___________________________________________________
 ; 0       ;                                          NO SONG ACTIVE
 ;_______________________________________________________________________________
-; 1    SNGC       24   04  00  0  1  3  0;           CREATURE MOVEMENT
+; 1    SNGC       24   4  0  0  1  3  0;           CREATURE MOVEMENT
 ;_______________________________________________________________________________
-; 2    SNGD       63   04  0D  1  2  2  2;           SLOW DIGDUG
+; 2    SNGD       63   4  0D  1  2  2  2;           SLOW DIGDUG
 ;_______________________________________________________________________________
-; 3    SNGD       63   04  0D  1  1  2  2;           FAST DIGDUG
+; 3    SNGD       63   4  0D  1  1  2  2;           FAST DIGDUG
 ;_______________________________________________________________________________
-; 4    SNGNULL    08   00  00  0  7  0  0;           THE SOUND OF SILENCE
+; 4    SNGNULL    8   0  0  0  7  0  0;           THE SOUND OF SILENCE
 ;_______________________________________________________________________________
-; 5    SNG1       08   01  01  1  1  3  3;           ROCK CRUSHING MONSTER
+; 5    SNG1       8   1  1  1  1  3  3;           ROCK CRUSHING MONSTER
 ;_______________________________________________________________________________
-; 6    SNG2       08   0D  00  0  1  3  0;           ROCK HITTING GROUND/DIGDUG
+; 6    SNG2       8   0D  0  0  1  3  0;           ROCK HITTING GROUND/DIGDUG
 ;_______________________________________________________________________________
-; 7    SNG3       10   07  04  1  1  3  3;           FLAME NOISE
+; 7    SNG3       10   7  4  1  1  3  3;           FLAME NOISE
 ;_______________________________________________________________________________
-; 8    SNG5       09   04  00  0  2  3  0;           DIGDUG THROWING HARPOON
+; 8    SNG5       9   4  0  0  2  3  0;           DIGDUG THROWING HARPOON
 ;_______________________________________________________________________________
-; 9    SNG4       24   04  00  0  0  0  0;           PUMP CREATURE
+; 9    SNG4       24   4  0  0  0  0  0;           PUMP CREATURE
 ;_______________________________________________________________________________
-;10    SNG6       20   04  00  0  0  4  0;           POP CREATURE
+;10    SNG6       20   4  0  0  0  4  0;           POP CREATURE
 ;_______________________________________________________________________________
-;11    SNG7       08   00  00  0  2  7  0;           ROCK FALLING
+;11    SNG7       8   0  0  0  2  7  0;           ROCK FALLING
 ;_______________________________________________________________________________
-;12    SNG8       05   04  0D  1  3  4  7;           GOTCHA SOUND
+;12    SNG8       5   4  0D  1  3  4  7;           GOTCHA SOUND
 ;_______________________________________________________________________________
-;13    SNG9       31   04  0D  1  3  4  3;           CREATURE ESCAPING
+;13    SNG9       31   4  0D  1  3  4  3;           CREATURE ESCAPING
 ;_______________________________________________________________________________
-;14    SNG10      06   04  00  0  2  7  0;           EAT VEGETABLE
+;14    SNG10      6   4  0  0  2  7  0;           EAT VEGETABLE
 ;_______________________________________________________________________________
-;15    SNG11      12   04  00  0  6  5  0;           BONUS MAN
+;15    SNG11      12   4  0  0  6  5  0;           BONUS MAN
 ;_______________________________________________________________________________
 ;16    SNG12      23   0D  0D  1  3  3  3;           SPEEDUP MUSIC
 ;_______________________________________________________________________________
-;17    SNG13      21   04  0D  1  6  4  4;           RACKEND
+;17    SNG13      21   4  0D  1  6  4  4;           RACKEND
 ;_______________________________________________________________________________
 ;18    SNG14      16   0D  0D  1  3  0  0;           DIGDUG DEATH
 ;_______________________________________________________________________________
-;19    SNG15      63   04  0D  1  4  4  4;           ENTRANCE
+;19    SNG15      63   4  0D  1  4  4  4;           ENTRANCE
 ;_______________________________________________________________________________
 
 
@@ -159,11 +159,11 @@ NOTDONE   LDA     SNGLBF0,X
           STA     AUDF0;                  ;SET FREQUENCY 0
           AND     #$60
 ;*         CLC
-;*         ROL     A
-          ASL     A
-          ROL     A
-          ROL     A
-          ROL     A
+;*         ROL
+          ASL
+          ROL
+          ROL
+          ROL
           STA     CURINDX0
           LDA     (SNGPTR),Y
           AND     #$1F;                   ;FREQUENCY OF 0 MEANS VOLUME OF 0
@@ -204,28 +204,28 @@ NEWBYTF1  INC     TUNINDX1;               ;DECODE NEXT BYTE
           STA     AUDF1;                  ;SET FREQUENCY 1
           AND     #$60
 ;*         CLC
-;*         ROL     A
-          ASL     A
-          ROL     A
-          ROL     A
-          ROL     A
+;*         ROL
+          ASL
+          ROL
+          ROL
+          ROL
           STA     CURINDX1
           LDA     (SNGPTR),Y
           AND     #$1F;                   ;FREQUENCY OF 0 MEANS VOLUME OF 0
           BEQ     SETVOL1
           LDA     SNGVV0,X;               ;ABNORMAL CASE FOR VOLUME?
-          LSR     A
-          LSR     A
-          LSR     A
-          LSR     A
+          LSR
+          LSR
+          LSR
+          LSR
           BNE     SETVOL1
           LDA     SNG14V1,Y
 SETVOL1   STA     AUDV1;                  ;SET VOLUME 1
           LDA     SNGC0,X
-          LSR     A
-          LSR     A
-          LSR     A
-          LSR     A
+          LSR
+          LSR
+          LSR
+          LSR
           STA     AUDC1;                  ;SET CONTROL 1
 LVSOUND   RTS
 

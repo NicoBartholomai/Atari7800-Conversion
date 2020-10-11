@@ -83,7 +83,7 @@ RFALL0    TAY
           CPY     #6
           BCC     CRUSH
 
-          LDA     #>.SOUTH7
+          LDA     #>SOUTH7
           STA     DRTPTR+1
           LDA     ROCKSY,X
 ;*         SEC
@@ -119,17 +119,17 @@ ROCKHALF  JSR     ROCKPUSH;               ;USES TEMP+0, RETURNS DIRTMAP,X IN A
           BPL     CRUSH
 
 
-ROCKONE   LDA     #<.SOUTH1;             ;TO
+ROCKONE   LDA     #<SOUTH1;             ;TO
           STA     DRTPTR
           JSR     ROCKPUSH;               ;USES TEMP+0
           CMP     #36
           BCS     ROCKONE3
-          LDY     #<.VERTBOT
+          LDY     #<VERTBOT
           STY     DRTPTR
           JSR     BORE1
 ROCKONE3
 
-ROCKONE2  LDA     #<.VERTTOP;            ;FROM
+ROCKONE2  LDA     #<VERTTOP;            ;FROM
           STA     DRTPTR
           LDX     CURROCK
           LDA     ROCKSX,X
@@ -293,7 +293,7 @@ RFINISH   LDA     #0
           LDA     FALLCNT
           CMP     #2
           BNE     NOVEG
-          LSR     A
+          LSR
           STA     FRUIT
 NOVEG     LDA     SQUASH;                 ;DIGDUG WANTS TO DIE FROM SQUASHING?
           BEQ     ROCKDETH
@@ -309,7 +309,7 @@ SQDEAD    TXA;                            ;CURROCK
           LDA     MONSTAT,Y
           AND     #$40
           BEQ     SQDEDNXT
-          ASL     A;                      ;MARK AS DISABLED
+          ASL;                      ;MARK AS DISABLED
           STA     MONSTAT,Y
 SQDEDNXT  DEY
           BPL     SQDEAD
@@ -318,7 +318,7 @@ SQDEDNXT  DEY
           BEQ     ENDFALL2
           DEY
           TYA
-          ASL     A
+          ASL
           TAX
           LDA     FLATPTS,X
           INX

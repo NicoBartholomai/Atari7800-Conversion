@@ -25,7 +25,7 @@ DIGFAST   EQU     $F7;                    DUGDUG FAST    7 BITS
 
 
 DDMOVE
-          LDA     #>.SOUTH7;             ;ASSUME ALL ARRAYS ON SAME PAGE.
+          LDA     #>SOUTH7;             ;ASSUME ALL ARRAYS ON SAME PAGE.
           STA     DRTPTR+1
 
           LDA     DIGGING
@@ -61,7 +61,7 @@ DOATDIR   AND     #$03
 ;*         LDY     ASTAGE;                 ;WE"RE IN ATTRACT MODE: USE ATTRACT
 ;*         LDA     ATTDIREC,Y;             ;  MODE TABLE MOVEMENTS INSTEAD OF
 ;*         BPL     AHORIZ;                 ;  READING JOYSTICK.
-;*         ASL     A
+;*         ASL
 ;*         BPL     AHORIZ
 ;*         LDA     DDYPOS;                 ;UP OR DOWN: CHECK Y POSITION.
 ;*         BNE     CHKBOUND
@@ -138,10 +138,10 @@ JOYMOVE
 ;*         LDX     ALIEN;                  ;IF THERE IS ONLY ONE JOYSTICK,
 ;*         BEQ     JOYMOVE0;               ; USE PLAYER 0 INPUT FOR PLAYER 1.
 
-          ASL     A;                      ;FETCH SECOND USER"S INPUT
-          ASL     A
-          ASL     A
-          ASL     A
+          ASL;                      ;FETCH SECOND USER"S INPUT
+          ASL
+          ASL
+          ASL
 
 JOYMOVE0  ORA     #$0F
           CMP     #$FF
@@ -199,16 +199,16 @@ JOYMOVE1
 PREZJOY   INC     DIGREST;                ;GETS CLEARED IF DD TRIES TO MOVE
 ZJOY      LDX     LASTMOVE
           LDY     #0
-          ASL     A
+          ASL
           BCC     GOMDDE
 ZJOY0     INY
-          ASL     A
+          ASL
 GOMDDE    BCC     MDDE
 ZJOY1     INY
-          ASL     A
+          ASL
           BCC     MDDN
           INY
-          ASL     A
+          ASL
           BCS     NOGO
 MDDN
           LDA     DDXPOS;                 ;COLUMN BORDER?
@@ -251,7 +251,7 @@ RUBN2     LDA     #0
 RUBN3     LDX     DDYPOS
 
           TYA
-          LSR     A
+          LSR
           BCC     DIGS;                   ;DIG SOUTH
           INX
           CPX     TOPZONE+15;             ;AT UPPERMOST LIMIT?
@@ -313,7 +313,7 @@ STILLE    JSR     ANIM;                   ;UPDATE STAMP INDEX
           LDX     DDXPOS
 
           TYA
-          LSR     A
+          LSR
           BCS     DIGW;                   ;DIG WEST
 
           CPX     #112
@@ -588,7 +588,7 @@ EATVEG1   LDA     FRUIT;                  ;FRUIT PRESENT?
           LDX     #18;                    ;RACKS ABOVE 18 ARE ALL PINEAPPLES
 EATVEG2   LDA     FPOINTS,X;              ;DISPLAY POINTS
           STA     FRUITIX
-          LSR     A
+          LSR
           TAY
           LDA     STMPPALW,Y
           STA     FRUITPAL

@@ -61,9 +61,9 @@ TLOOP
           LDA     #1;                     ;MOVE CREATURES ON SCREEN.
           STA     TCTEMP
           LDA     TITLETIM;               ;ONLY UPDATE EVERY OTHER CYCLE.
-          LSR     A
+          LSR
           BCS     TCRTS
-          LSR     A
+          LSR
           BCS     TCRTS
           AND     #7
           PHA
@@ -76,7 +76,7 @@ CMOVLOOP
 ;*         BNE     NXTCMOVE
           INC     TCTEMP;                 ;WE HAVE A CREATURE...
           LDA     CDIREC,X
-          LSR     A
+          LSR
           BCS     CLIMBUP
           TAY;                            ;CREATURE IS MOVING LEFT OR RIGHT.
           LDA     POOKAX,X
@@ -89,11 +89,11 @@ CMOVLOOP
           JSR     OFFSCR2;                ;SUBR FOUND IN MONSTER FILE
 ;*         LDA     #$80;                   ;IT RETURNS A 0
 ;*         STA     MONSTAT,X
-;*         ASL     A
+;*         ASL
 ;*         STA     POOKAY,X
           BEQ     NXTCMOVE
 CSTILL    TYA
-          LSR     A
+          LSR
           PLA
           PHA
           PHP
@@ -167,16 +167,16 @@ ATITLEDO  PLA
           JSR     HSCINIT
           TXA
           BNE     TRYTEDDY
-          LDX     #<.HSCRAM
-          LDY     #>.HSCRAM
+          LDX     #<HSCRAM
+          LDY     #>HSCRAM
           JSR     HSCATRCT
           JSR     HSCDISPL;               ;DISPLAY HIGH SCORE FOR 10 SECONDS.
 TRYTEDDY  LDA     #0;                     ;PINEAPPLE MODE
           JSR     HSCINIT
           TXA
           BNE     ATTNOHSC
-;*;*;*       LDX     #<.HSCRAM;             ;X CONTAINS 0 ALREADY...
-          LDY     #>.HSCRAM
+;*;*;*       LDX     #<HSCRAM;             ;X CONTAINS 0 ALREADY...
+          LDY     #>HSCRAM
           JSR     HSCATRCT
           JSR     HSCDISPL
 HSCSTOP   LDX     #1
@@ -184,7 +184,7 @@ ATTNOHSC  JMP     NEWAGAME;               ;NEWAGAME IS A SUBR
 
 BORE      SEC;                            ;ALSO USED BY DDMOVE
           SBC     #36
-BORE1     LSR     A
+BORE1     LSR
           TAY
           LDA     (DRTPTR),Y
           STA     DIRTMAP,X
