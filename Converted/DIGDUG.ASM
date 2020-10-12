@@ -828,26 +828,940 @@ PL1COLR   EQU     WHITE
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 
-          ORG     $FF80
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-          DC.B      0,0,0,0,0,0,0,0
+          ORG     $A000
+ENDA000
 
-          ORG     $FFF8
-          DC.B      $FF;                    ;COUNTRY CODE
-          DC.B      $C7;                    ;MARIA SIGNATURE AND START OF CODE
-;*        ;                                ;DLI VECTOR:  THIS LOCATION IS A
-;*        ;                                ;  JMP TO LOCATION IN RAM (DLIJMP).
-          DC.B      <GENEJMP,>GENEJMP  ;  JUMP ADDRESS IS CHANGED AS DMA
-          ;                               ;  MOVES DOWN SCREEN.
-          ORG     $FFFC
-          DC.B      <MAIN,>MAIN        ;INTERRUPT RESET VECTOR.
-          DC.B      <GENERTI,>GENERTI  ;JUST IN CASE....
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;  ARRAYS:  PUT RANDOM ARRAYS HERE SO       ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;           THEY CAN BE OVERLAPPED TO       ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;           SAVE ROOM.                      ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+          ORG     $C000
+RANDROKS  DC.B      $29,$35,$64,$82,$8D,$9A,$A5,$C9
+
+PALWBYTE  DC.B      $1E,$7E,$5E,$3F,$3E,$3C,$3A,$3E
+          DC.B      $3C,$3A,$3C,$3E,$3B,$3C,$3D,$3E
+          DC.B      $3F,$1C,$5E,$1D,$3F,$1E,$5E,$3E
+          DC.B      $7E,$3E,$1E,$7E,$3E,$5E,$3F,$1D
+          DC.B      $1C,$3E,$7E,$B0,$F0,$D0,$F0,$D0
+          DC.B      $F0
+
+DANIMIX   DC.B      4,9,9,4
+
+CWALK     DC.B      1,$FF,1
+MESGOFST  DC.B      89,123
+MESGDPLY  DC.B      34
+;         DC.B      38
+
+; SNGLEN IS INDEXED BY SONG NUMBER.
+; IT CONTAINS THE SONG LENGTH.
+;  20 BYTES
+ASNGLEN
+SNGLEN    DC.B      38,16,26,26,1,8,8,5,9,15,20,8,5,14,6,7,12,15,14  ;,22
+
+
+
+; SNGDM  IS INDEXED BY SONG NUMBER.
+; IT CONTAINS THE DURATION. DURATION FOR 2 VOICE SONGS IS SAME BOTH VOICES.
+;  20 BYTES
+ASNGDM
+SNGDM     DC.B      22,1,2,1,7,1,1,1,2,0,0,2,3,3,2,6,3,6,3,4
+
+
+;*;*;*;*;*  FULL
+ENDC000
+
+
+          ORG     $C062
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
+          DC.B      $06,$00,$06,$00,$05,$00,$DB,$18        ;224-31  RBPOOKA1,2,3,4
+          DC.B      $00,$90,$00,$90,$00,$90,$24,$E7        ;232-39  LBPOOKA1,2,3,4
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;240-47  RBFYGAR1,2,3,4
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;248-55  LBFYGAR1,2,3,4
+
+          ORG     $C100
+ROCKS     DC.B      $35,$B4,$9B,$00,$00
+          DC.B      $23,$39,$8D,$B5,$00
+          DC.B      $23,$6C,$BD,$94,$00
+          DC.B      $43,$2B,$5C,$BD,$84
+          DC.B      $63,$29,$3D,$BB,$A6
+          DC.B      $28,$6B,$97,$B3,$00
+          DC.B      $29,$52,$6D,$AC,$00
+          DC.B      $54,$6D,$96,$B8,$00
+          DC.B      $28,$3C,$7A,$72,$B6
+          DC.B      $34,$72,$8C,$B8,$00
+          DC.B      $33,$3B,$BC,$A6,$00
+          DC.B      $39,$7B,$82,$CA,$00
+          DC.B      $32,$29,$BA,$A3,$00
+          DC.B      $32,$4B,$B9,$83,$00
+          DC.B      $52,$39,$9A,$B4,$00
+          DC.B      $53,$9B,$00,$00,$00    ;BONZO LEVEL 0
+          DC.B      $3B,$00,$00,$00,$00    ;BONZO LEVEL 1
+
+;* ADEATH: STAMP INDICES FOR DEATH ANIMATION.
+ADEATH    DC.B      ZBLANK,SDEATH,HRDEATH3,HRDEATH2,HRDEATH1
+          DC.B      ZBLANK,SDEATH,HLDEATH3,HLDEATH2,HLDEATH1
+
+
+          ORG     $C15F
+GENEJMP   DC.B      $4C,<DLIJMP,>DLIJMP
+ENDC100
+
+
+
+          ORG     $C162
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
+          DC.B      $15,$DC,$C5,$DC,$C5,$DC,$D1,$57        ;224-31  RBPOOKA1,2,3,4
+          DC.B      $37,$54,$37,$53,$37,$53,$D5,$47        ;232-39  LBPOOKA1,2,3,4
+          DC.B      $1A,$68,$5A,$50,$5A,$68,$16,$9A        ;240-47  RBFYGAR1,2,3,4
+          DC.B      $29,$A4,$05,$A5,$29,$A5,$A6,$94        ;248-255 LBFYGAR1,2,3,4
+
+          ORG     $C200
+
+ASNGLBF0
+; SNGLBF0 IS INDEXED BY SONG NUMBER.
+; IT CONTAINS THE LOW BYTE FOR FREQUENCY OF FIRST VOICE.
+;  20 BYTES
+SNGLBF0   DC.B      $00,<SNGCF0,<SNGDF0,<SNGDF0,<SNGNULLF
+          DC.B      <SNG1F0,<SNG2F0,<SNG3F0
+          DC.B      <SNG5F0,<SNG4F0,<SNG6F0,<SNG7F0
+          DC.B      <SNG8F0,<SNG9F0,<SNG10F0,<SNG11F0
+          DC.B      <SNG12F0,<SNG13F0,<SNG14F0    ;,<SNG15F0
+
+
+ASNGLBF1
+; SNGLBF1 IS INDEXED BY SONG NUMBER.
+; IT CONTAINS THE LOW BYTE FOR FREQUENCY OF SECOND VOICE, IF THERE IS ONE.
+; HIGH BYTE IS ASSUMED TO BE SNGHBF0.
+;  20 BYTES
+SNGLBF1   DC.B      <SNG15F0,0,<SNGDF1,<SNGDF1
+          DC.B      0,<SNG1F1,0,<SNG3F1
+          DC.B      0,0,0,0
+          DC.B      <SNG8F1,<SNG9F1,0,0
+          DC.B      <SNG12F1,<SNG13F1,<SNG14F1    ;,<SNG15F1
+
+
+; SNGC0 IS INDEXED BY SONG NUMBER.
+; IT CONTAINS THE VALUES FOR THE FIRST VOICE.
+; 0 VALUE MEANS SPECIAL CASE - ROCK FALLING.
+;  20 BYTES
+ASNGC0
+SNGC0     DC.B      <SNG15F1,$04,$D4,$D4,$00,$11,$0D,$47,$04,$04
+          DC.B      $04,$00,$D4,$D4,$04,$04,$DD,$D4,$DD      ;,$D4
+
+
+
+; SNGVV0 IS INDEXED BY SONG NUMBER.
+; IT CONTAINS 0 IF THERE ARE SEPARATE VOLUME TABLES, OR VOLUME ITSELF.
+;  20 BYTES
+ASNGVV0
+SNGVV0    DC.B      $D4,$03,$22,$22,$00,$33,$03,$33,$03,$00
+          DC.B      $04,$07,$74,$34,$07,$05,$33,$44,$00,$44
+
+SETDFAST  LDA     #DHFASTL
+          STA     DHORSPDL
+          LDA     #DHFASTH
+          STA     DHORSPDH
+          LDA     #DIGFAST
+          STA     DIGSPEED
+          RTS;                            ;15
+
+HARPXPL   DC.B      $02,$FE;                ;          ,$00,$00
+HARPYPL   DC.B      $00,$00,$FC,$04
+
+;*;*;*;*;* 98 BYTES FULL
+ENDC200
+
+
+
+          ORG     $C262
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
+          DC.B      $55,$57,$D5,$57,$D5,$57,$55,$55        ;224-31  RBPOOKA1,2,3,4
+          DC.B      $D5,$55,$D5,$57,$D5,$57,$55,$55        ;232-39  LBPOOKA1,2,3,4
+          DC.B      $16,$9A,$46,$9C,$56,$BA,$15,$7C        ;240-47  RBFYGAR1,2,3,4
+          DC.B      $A6,$94,$36,$91,$AE,$95,$3D,$54        ;248-255 LBFYGAR1,2,3,4
+
+          ORG     $C300
+; ROCKPUSH MUST IMMEDIATELY PRECEDE CALCINDX
+ROCKPUSH  LDA     ROCKSX,X;               ;ENTRANCE POINT FROM FALL
+          PHA
+          LDA     ROCKSY,X
+          SEC
+          SBC     #12
+          TAX
+          PLA
+;  EXPECTS X POSITION IN A, Y POSITION IN X.
+;  RETURNS DIRT CHAR IN A, INDEX INTO DIRTMAP IN X.
+;  USES TEMP.
+CALCINDX  LSR
+          LSR
+          LSR
+          STA     TEMP;                   ;COLUMN
+          TXA
+          LSR
+          LSR
+          TAX
+          LDA     DIV3TAB,X
+          TAX;                            ;ROW
+          LDA     MAPLOW,X;               ;ROW ADDRESS
+          CLC
+          ADC     TEMP
+          TAX;                            ;INDEX INTO DIRTMAP
+          LDA     DIRTMAP,X
+          RTS;                            ;34
+
+
+;  USES X,A,Y.
+;  EXPECTS DIRTMAP,X IN A.
+;  USES TEMP.
+;  ASSUMES NEVER CALLED WHEN A<36.
+DIGGER    STA     TEMP;                   ;DIRTMAP,X
+          JSR     BORE;                   ;FOUND IN FALL FILE
+          CMP     #30;                    ;NEVER GOT HERE IF ALREADY < 30.
+          BCS     DIGGER5
+          LDA     #10;                    ;ADD PTS FIRST TIME <30.
+          LDY     #0
+          JSR     ADDSCORE
+          LDX     TEMP;                   ;DON"T SLOW DOWN FOR HOURGLASS+BOWTIE
+          CPX     #46
+          BCS     DIGGER6
+DIGGER3   LDA     #1;                     ;WANT HARPOON AND SLOW SPEED
+          STA     DIGTEMP
+          RTS
+DIGGER5   CMP     TEMP;                   ;ANY CHANGE?
+          BNE     DIGGER3
+DIGGER6   RTS;                            ;32
+
+
+CHKNXTD   CLC
+          ADC     LASTMOVE
+          TAY
+          JSR     ADJUSTTO
+          JSR     CALCINDX
+          CMP     #36
+          BCS     CHKNXTD2
+          LDA     #0;                     ;DOES NOT AFFECT CARRY
+          STA     DIGTEMP;                ;DOES NOT AFFECT CARRY
+CHKNXTD2  RTS;                            ;19
+
+;  USES X AND A.
+;  RETURNS EQ IF ON ROW, NE IF NOT ON ROW.
+ROWHERE   LDX     #15
+          LDA     DDYPOS
+CHKINROW  CMP     TOPZONE,X;              ;ARE WE ON A ROW BORDER?
+          BEQ     ROWHERE2
+          DEX
+          BPL     CHKINROW
+ROWHERE2  RTS;                            ;13
+
+;*;*;* ??? BYTE LEFT...
+ENDC300
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+          ORG     $C362
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
+          DC.B      $55,$54,$15,$54,$15,$54,$55,$05        ;224-31  RBPOOKA1,2,3,4
+          DC.B      $15,$55,$15,$54,$15,$54,$50,$55        ;232-39  LBPOOKA1,2,3,4
+          DC.B      $A1,$50,$15,$7C,$17,$FF,$05,$CD        ;240-47  RBFYGAR1,2,3,4
+          DC.B      $05,$4A,$3D,$54,$FF,$D4,$73,$50        ;248-55  LBFYGAR1,2,3,4
+
+
+          ORG     $C400;                  ;BOTTOM SCAN LINE: OFFSET = 0.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $28,$28,$28,$A8,$02,$A0;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $28,$28,$2A,$28,$0A,$80;                ;6-11   DDLEFT 1,2,3
+          DC.B      $00,$00,$00,$00;                        ;12-15  R,L FLAMEFYGAR
+          DC.B      $00,$00,$00,$00;                        ;16-19  R,L HARPOON
+          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $00,$00,$00,$00,$00,$50;                ;22-27  8,16PIX RFLAME
+          DC.B      $00,$00,$00,$00,$01,$50;                ;28-33  24PIX RFLAME
+          DC.B      $00,$00,$00,$00,$00,$00;                ;34-39  8,16PIX LFLAME
+          DC.B      $00,$00,$00,$00,$00,$00;                ;40-45  24PIX LFLAME
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
+          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
+          DC.B      $2A,$A0;                                ;86-87  TOTRK
+          DC.B      $00,$00;                                ;88-89  LETRO
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
+          DC.B      $00,$0C;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $01,$00;                                ;106-07 HDEATH S
+          DC.B      $28,$28,$02,$80,$00,$00;                ;108-13 HRDEATH 1,2,3
+          DC.B      $28,$28,$02,$80,$00,$00;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$68,$0A,$60;                        ;120-23 U,D HARPOON
+          DC.B      $00,$00,$1A,$28,$00,$00,$28,$A4        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $00,$00,$00,$00,$0A,$A0,$00,$00        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $00,$00,$00,$00,$00,$00;                ;148-53 DDUP 1,2,3
+          DC.B      $24,$A2,$25,$A2,$24,$A0;                ;154-59 DDDOWN 1,2,3
+          DC.B      $28,$28,$69,$A0,$1A,$28;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $28,$A0,$28,$A0,$2A,$A8;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $04,$04,$C0,$03,$00,$0C;                ;172-77 DPMP,DFULL,U612
+          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
+          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;198-05 6000,8000
+          DC.B      $00,$00,$00,$00;                        ;206-09 10000
+          DC.B      $00,$00,$00,$00;                        ;210-13 12000
+          DC.B      $00,$00,$00,$00;                        ;214-17 15000
+          DC.B      $00,$00,$00,$00;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $AB,$55,$55,$55,$55,$55,$57,$00        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $55,$EA,$55,$55,$55,$55,$00,$D5        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $AA,$50,$15,$7C,$97,$FF,$17,$08        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $05,$AA,$3D,$54,$FF,$D6,$20,$D4        ;248-55 LBFYGAR 1,2,3,4
+
+
+
+          ORG     $C500;                  ;LINE 11: OFFSET = 1.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $2A,$A0,$2A,$A0,$2A,$80;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $0A,$A8,$0A,$A8,$02,$A8;                ;6-11   DDLEFT 1,2,3
+          DC.B      $5E,$FE,$3F,$B5;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$A8,$2A,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $00,$00,$00,$05,$41,$50;                ;22-27  8,16PIX RFLAME
+          DC.B      $00,$00,$00,$00,$55,$81;                ;28-33  24PIX RFLAME
+          DC.B      $00,$00,$01,$00,$00,$00;                ;34-39  8,16PIX LFLAME
+          DC.B      $05,$40,$00,$00,$00,$00;                ;40-45  24PIX LFLAME
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
+          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
+          DC.B      $16,$A8;                                ;86-87  TOTRK
+          DC.B      $15,$50;                                ;88-89  LETRO
+          DC.B      $55,$54,$15,$54,$01,$40,$50,$00        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
+          DC.B      $00,$3C;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $41,$04;                                ;106-07 HDEATH S
+          DC.B      $2A,$A0,$2A,$00,$50,$A8;                ;108-13 HRDEATH 1,2,3
+          DC.B      $0A,$A8,$00,$A4,$2A,$05;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$68,$29,$58;                        ;120-23 U,D HARPOON
+          DC.B      $00,$00,$08,$20,$00,$00,$08,$20        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $69,$A0,$5A,$6A,$0A,$69,$A9,$A5        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $00,$00,$00,$00,$28,$28,$80,$02        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $05,$90,$05,$90,$05,$90;                ;148-53 DDUP 1,2,3
+          DC.B      $24,$AA,$25,$AA,$24,$A4;                ;154-59 DDDOWN 1,2,3
+          DC.B      $2A,$A0,$15,$68,$08,$20;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $AA,$A8,$AA,$A8,$57,$DE;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $15,$15,$C0,$03,$00,$3C;                ;172-77 DPMP,DFULL,U612
+          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
+          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;198-05 6000,8000
+          DC.B      $00,$00,$00,$00;                        ;206-09 10000
+          DC.B      $00,$00,$00,$00;                        ;210-13 12000
+          DC.B      $00,$00,$00,$00;                        ;214-17 15000
+          DC.B      $00,$00,$00,$00;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $AF,$A5,$55,$55,$55,$55,$5C,$00        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $5A,$FA,$55,$55,$55,$55,$00,$35        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $2A,$40,$55,$7C,$57,$FF,$17,$03        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $01,$A8,$3D,$55,$FF,$D5,$C0,$D4        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $C600;                  ;LINE 10: OFFSET = 2.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $2A,$A4,$2A,$A4,$2A,$A4;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $2A,$A8,$2A,$A8,$1A,$A8;                ;6-11   DDLEFT 1,2,3
+          DC.B      $57,$D4,$16,$D5;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $00,$54,$00,$25,$55,$40;                ;22-27  8,16PIX RFLAME
+          DC.B      $00,$59,$40,$01,$51,$45;                ;28-33  24PIX RFLAME
+          DC.B      $00,$00,$01,$40,$00,$00;                ;34-39  8,16PIX LFLAME
+          DC.B      $42,$55,$00,$00,$00,$00;                ;40-45  24PIX LFLAME
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
+          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;70-77  2000,3000
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;78-85  5000,7000
+          DC.B      $55,$7A;                                ;86-87  TOTRK
+          DC.B      $AA,$A8;                                ;88-89  LETRO
+          DC.B      $AA,$A8,$AA,$A8,$2A,$A0,$A0,$00        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;98-103 400,600
+          DC.B      $00,$30;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $11,$10;                                ;106-07 HDEATH S
+          DC.B      $2A,$A4,$5A,$AA,$5A,$A0;                ;108-13 HRDEATH 1,2,3
+          DC.B      $2A,$A8,$AA,$A5,$0A,$A5;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$A8,$2A,$68;                        ;120-23 U,D HARPOON
+          DC.B      $CA,$28,$F5,$54,$28,$A3,$15,$5F        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $15,$68,$56,$94,$29,$54,$16,$95        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $28,$0A,$00,$00,$A2,$8A,$A4,$1A        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $29,$AA,$29,$6A,$29,$A4;                ;148-53 DDUP 1,2,3
+          DC.B      $26,$AA,$26,$AA,$26,$A6;                ;154-59 DDDOWN 1,2,3
+          DC.B      $2A,$A4,$A5,$5A,$F5,$54;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $96,$58,$96,$5A,$96,$75;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $0C,$0C,$C0,$03,$00,$30;                ;172-77 DPMP,DFULL,U612
+          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;178-83 200,300
+          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;184-89 500,800
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;190-97 2500,4000
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;198-05 6000,8000
+          DC.B      $3F,$FF,$FF,$FC;                        ;206-09 10000
+          DC.B      $3F,$FF,$FF,$FC;                        ;210-13 12000
+          DC.B      $3F,$FF,$FF,$FC;                        ;214-17 15000
+          DC.B      $3F,$FF,$FF,$FC;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $6C,$ED,$55,$55,$55,$55,$54,$03        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $7B,$39,$55,$55,$55,$55,$C0,$15        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $F7,$50,$55,$5C,$57,$FF,$57,$00        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $05,$DF,$35,$55,$FF,$D5,$00,$D5        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $C700;                  ;LINE 9: OFFSET = 3.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $96,$A8,$5A,$A9,$96,$A8;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $2A,$96,$6A,$A5,$2A,$96;                ;6-11   DDLEFT 1,2,3
+          DC.B      $15,$F0,$0B,$54;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $21,$54,$00,$59,$15,$40;                ;22-27  8,16PIX RFLAME
+          DC.B      $01,$A6,$55,$10,$05,$69;                ;28-33  24PIX RFLAME
+          DC.B      $00,$00,$01,$50,$54,$00;                ;34-39  8,16PIX LFLAME
+          DC.B      $51,$45,$40,$01,$65,$00;                ;40-45  24PIX LFLAME
+          DC.B      $00,$3C,$00,$3C,$00,$3C,$00,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$3C,$00,$3C,$00,$00,$3C,$00,$3C    ;55-63  LPUMP20,16
+          DC.B      $00,$3C,$00,$00,$3C,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $FD,$5F,$77,$7F,$FF,$7F,$77,$7F        ;70-77  2000,3000
+          DC.B      $FF,$7F,$77,$7F,$FD,$FF,$77,$7F        ;78-85  5000,7000
+          DC.B      $7D,$7E;                                ;86-87  TOTRK
+          DC.B      $50,$14;                                ;88-89  LETRO
+          DC.B      $50,$00,$50,$00,$14,$50,$50,$00        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $FF,$7D,$DF,$FD,$FD,$DF;                ;98-103 400,600
+          DC.B      $00,$C0;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $00,$00;                                ;106-07 HDEATH S
+          DC.B      $AA,$A9,$5A,$9A,$6A,$88;                ;108-13 HRDEATH 1,2,3
+          DC.B      $6A,$AA,$A6,$A5,$22,$A9;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$A8,$2A,$68;                        ;120-23 U,D HARPOON
+          DC.B      $D6,$9A,$D5,$55,$A6,$97,$55,$57        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $A5,$5A,$15,$A0,$A5,$5A,$0A,$54        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $2A,$2A,$A8,$A8,$88,$22,$8A,$A2        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $29,$6A,$2A,$5A,$29,$68;                ;148-53 DDUP 1,2,3
+          DC.B      $AE,$A8,$AE,$AA,$AE,$AA;                ;154-59 DDDOWN 1,2,3
+          DC.B      $25,$DD,$FF,$37,$AC,$CA;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $5D,$76,$5D,$76,$24,$96;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $0C,$0C,$30,$0C,$00,$C0;                ;172-77 DPMP,DFULL,U612
+          DC.B      $F5,$7D,$DF,$F5,$FD,$DF;                ;178-83 200,300
+          DC.B      $FD,$FD,$DF,$FD,$FD,$DF;                ;184-89 500,800
+          DC.B      $D5,$F7,$F7,$7F,$FF,$DF,$77,$7F        ;190-97 2500,4000
+          DC.B      $FF,$7F,$77,$7F,$FF,$7F,$77,$7F        ;198-05 6000,8000
+          DC.B      $FD,$F7,$77,$7F;                        ;206-09 10000
+          DC.B      $F7,$57,$DD,$DF;                        ;210-13 12000
+          DC.B      $F7,$DF,$DD,$DF;                        ;214-17 15000
+          DC.B      $FF,$7D,$DD,$FF;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $6C,$CD,$9A,$55,$55,$55,$5C,$00        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $73,$39,$55,$A6,$55,$55,$00,$35        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $FF,$34,$A9,$55,$55,$FF,$A9,$03        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $1C,$FF,$55,$6A,$FF,$55,$C0,$6A        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $C800;                  ;LINE 8: OFFSET = 4.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $5A,$A4,$6A,$A4,$5A,$A4;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $1A,$A5,$1A,$A9,$1A,$A5;                ;6-11   DDLEFT 1,2,3
+          DC.B      $3E,$50,$05,$BC;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$A6,$9A,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $14,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $15,$55,$05,$65,$41,$54;                ;22-27  8,16PIX RFLAME
+          DC.B      $1A,$FA,$89,$51,$00,$59;                ;28-33  24PIX RFLAME
+          DC.B      $00,$00,$00,$55,$56,$00;                ;34-39  8,16PIX LFLAME
+          DC.B      $69,$50,$04,$55,$9A,$40;                ;40-45  24PIX LFLAME
+          DC.B      $00,$C3,$00,$C3,$00,$C3,$00,$04        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$C3,$00,$C3,$00,$00,$C3,$00,$C3    ;55-63  LPUMP20,16
+          DC.B      $00,$C3,$00,$00,$C3,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $FD,$FD,$DD,$DF,$FD,$DD,$DD,$DF        ;70-77  2000,3000
+          DC.B      $FD,$DD,$DD,$DF,$FD,$FD,$DD,$DF        ;78-85  5000,7000
+          DC.B      $55,$75;                                ;86-87  TOTRK
+          DC.B      $A0,$28;                                ;88-89  LETRO
+          DC.B      $A0,$00,$A0,$00,$A8,$A8,$AA,$A0        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $FF,$77,$77,$F7,$77,$77;                ;98-103 400,600
+          DC.B      $00,$C0;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $00,$00;                                ;106-07 HDEATH S
+          DC.B      $6A,$A5,$6A,$A5,$6A,$AA;                ;108-13 HRDEATH 1,2,3
+          DC.B      $5A,$A9,$5A,$A9,$AA,$A9;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
+          DC.B      $F5,$96,$DA,$69,$96,$5F,$69,$A7        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $A9,$50,$2A,$50,$05,$6A,$05,$A8        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $3F,$FE,$BE,$E8,$A0,$0A,$20,$08        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $AA,$68,$AA,$98,$AA,$68;                ;148-53 DDUP 1,2,3
+          DC.B      $A6,$A8,$A6,$A8,$A6,$A8;                ;154-59 DDDOWN 1,2,3
+          DC.B      $A5,$DD,$F7,$CC,$AC,$CA;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $7D,$75,$7D,$B5,$00,$20;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $3C,$3C,$3C,$3C,$00,$C0;                ;172-77 DPMP,DFULL,U612
+          DC.B      $F7,$F7,$77,$FF,$77,$77;                ;178-83 200,300
+          DC.B      $F7,$77,$77,$F7,$77,$77;                ;184-89 500,800
+          DC.B      $DF,$DD,$DD,$DF,$FF,$DD,$DD,$DF        ;190-97 2500,4000
+          DC.B      $FD,$DD,$DD,$DF,$FD,$DD,$DD,$DF        ;198-05 6000,8000
+          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
+          DC.B      $F7,$7F,$77,$77;                        ;210-13 12000
+          DC.B      $F7,$77,$77,$77;                        ;214-17 15000
+          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $5A,$CC,$AB,$A5,$55,$55,$95,$00        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $33,$A5,$5A,$EA,$55,$55,$00,$56        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $33,$44,$A7,$57,$15,$FD,$AA,$C8        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $11,$CC,$D5,$DA,$7F,$54,$23,$AA        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $C900;                  ;LINE 7: OFFSET = 5.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $69,$54,$69,$54,$69,$54;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $15,$69,$15,$69,$15,$69;                ;6-11   DDLEFT 1,2,3
+          DC.B      $F9,$55,$55,$6F;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $6A,$55,$55,$A9;                        ;100-03 R,L HARPOON
+          DC.B      $55,$05;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $5A,$55,$17,$EA,$55,$05;                ;22-27  8,16PIX RFLAME
+          DC.B      $AA,$BA,$A5,$41,$00,$69;                ;28-33  24PIX RFLAME
+          DC.B      $15,$00,$00,$55,$19,$40;                ;34-39  8,16PIX LFLAME
+          DC.B      $65,$00,$45,$62,$AF,$A4;                ;40-45  24PIX LFLAME
+          DC.B      $10,$C3,$00,$C3,$00,$C3,$00,$F5        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $10,$C3,$00,$C3,$00,$10,$C3,$00,$C3    ;55-63  LPUMP20,16
+          DC.B      $10,$C3,$00,$10,$C3,$10;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $FF,$7D,$DD,$DF,$FF,$DD,$DD,$DF        ;70-77  2000,3000
+          DC.B      $FF,$DD,$DD,$DF,$FD,$7D,$DD,$DF        ;78-85  5000,7000
+          DC.B      $5D,$DD;                                ;86-87  TOTRK
+          DC.B      $50,$14;                                ;88-89  LETRO
+          DC.B      $50,$00,$55,$54,$50,$14,$55,$54        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $F5,$57,$77,$F7,$77,$77;                ;98-103 400,600
+          DC.B      $00,$C0;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $51,$15;                                ;106-07 HDEATH S
+          DC.B      $69,$55,$A5,$55,$6A,$A6;                ;108-13 HRDEATH 1,2,3
+          DC.B      $55,$69,$55,$5A,$9A,$A9;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
+          DC.B      $5A,$69,$6F,$BE,$69,$A5,$BE,$F9        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $2A,$50,$A9,$55,$05,$A8,$55,$6A        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $20,$C2,$B3,$28,$08,$20,$0A,$A4        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $A6,$68,$A6,$A8,$A6,$6A;                ;148-53 DDUP 1,2,3
+          DC.B      $AE,$68,$AE,$A8,$AE,$6A;                ;154-59 DDDOWN 1,2,3
+          DC.B      $AA,$AA,$73,$55,$6F,$FA;                ;160-65 SQUASH: DD,F,P
+          DC.B      $55,$DD,$56,$5D,$00,$00;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $30,$30,$0C,$30,$00,$C0;                ;172-77 DPMP,DFULL,U612
+          DC.B      $FD,$F7,$77,$FF,$77,$77;                ;178-83 200,300
+          DC.B      $FF,$77,$77,$F7,$77,$77;                ;184-89 500,800
+          DC.B      $F7,$FD,$DD,$DF,$FD,$55,$DD,$DF        ;190-97 2500,4000
+          DC.B      $FD,$DD,$DD,$DF,$FD,$DD,$DD,$DF        ;198-05 6000,8000
+          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
+          DC.B      $F7,$DF,$77,$77;                        ;210-13 12000
+          DC.B      $F7,$F7,$77,$77;                        ;214-17 15000
+          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $15,$FC,$AF,$E9,$5A,$65,$AB,$43        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $3F,$54,$6B,$FA,$59,$A5,$C1,$EA        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $1F,$C0,$FF,$33,$A9,$54,$79,$7C        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $03,$F4,$CC,$FF,$15,$6A,$3D,$6D        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $CA00;                  ;LINE 6: OFFSET = 6.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $25,$DD,$25,$DD,$25,$DD;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $77,$58,$77,$58,$77,$58;                ;6-11   DDLEFT 1,2,3
+          DC.B      $E7,$33,$CC,$DB;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$A6,$9A,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $69,$55;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $59,$94,$16,$E9,$65,$05;                ;22-27  8,16PIX RFLAME
+          DC.B      $5B,$E9,$99,$95,$01,$64;                ;28-33  24PIX RFLAME
+          DC.B      $15,$48,$05,$50,$56,$54;                ;34-39  8,16PIX LFLAME
+          DC.B      $69,$00,$41,$5A,$AE,$AA;                ;40-45  24PIX LFLAME
+          DC.B      $5F,$00,$C3,$00,$C3,$00,$C3,$04        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $5F,$00,$C3,$00,$C3,$5F,$00,$C3,$00    ;55-63  LPUMP20,16
+          DC.B      $5F,$00,$C3,$5F,$00,$5F;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $FF,$DD,$DD,$DF,$FF,$5D,$DD,$DF        ;70-77  2000,3000
+          DC.B      $FD,$7D,$DD,$DF,$FF,$7D,$DD,$DF        ;78-85  5000,7000
+          DC.B      $5D,$5D;                                ;86-87  TOTRK
+          DC.B      $50,$14;                                ;88-89  LETRO
+          DC.B      $50,$00,$55,$54,$50,$14,$50,$14        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $F7,$77,$77,$F5,$F7,$77;                ;98-103 400,600
+          DC.B      $30,$30;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $00,$00;                                ;106-07 HDEATH S
+          DC.B      $65,$DD,$97,$74,$A5,$55;                ;108-13 HRDEATH 1,2,3
+          DC.B      $77,$59,$1D,$D6,$55,$5A;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
+          DC.B      $6F,$BE,$AC,$CA,$BE,$F9,$A3,$3A        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $29,$54,$A7,$33,$15,$68,$CC,$DA        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $2C,$CE,$B3,$28,$68,$29,$90,$06        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $AE,$68,$AE,$A8,$AE,$6A;                ;148-53 DDUP 1,2,3
+          DC.B      $A6,$68,$A6,$A8,$A6,$6A;                ;154-59 DDDOWN 1,2,3
+          DC.B      $2A,$A0,$3F,$54,$5A,$A9;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $5D,$5D,$5E,$5D,$00,$00;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $00,$C0,$03,$C0,$30,$30;                ;172-77 DPMP,DFULL,U612
+          DC.B      $FF,$77,$77,$FD,$77,$77;                ;178-83 200,300
+          DC.B      $F5,$F7,$77,$FD,$F7,$77;                ;184-89 500,800
+          DC.B      $FD,$D7,$DD,$DF,$FD,$DD,$DD,$DF        ;190-97 2500,4000
+          DC.B      $FD,$7D,$DD,$DF,$FF,$7D,$DD,$DF        ;198-05 6000,8000
+          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
+          DC.B      $F7,$F7,$77,$77;                        ;210-13 12000
+          DC.B      $F7,$5F,$77,$77;                        ;214-17 15000
+          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $05,$50,$68,$B9,$AB,$E9,$AF,$F8        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $05,$50,$6E,$29,$6B,$EA,$2F,$FA        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $01,$70,$F3,$00,$A5,$54,$F5,$55        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $0D,$40,$00,$CF,$15,$5A,$55,$5F        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $CB00;                  ;LINE 5: OFFSET = 7.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $A5,$DD,$A5,$DD,$A5,$DD;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $77,$5A,$77,$5A,$77,$5A;                ;6-11   DDLEFT 1,2,3
+          DC.B      $AF,$00,$00,$FA;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $14,$1A;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $14,$40,$05,$11,$15,$54;                ;22-27  8,16PIX RFLAME
+          DC.B      $14,$84,$55,$59,$56,$54;                ;28-33  24PIX RFLAME
+          DC.B      $55,$54,$54,$15,$6A,$F5;                ;34-39  8,16PIX LFLAME
+          DC.B      $19,$40,$56,$66,$6B,$E5;                ;40-45  24PIX LFLAME
+          DC.B      $10,$00,$C3,$00,$C3,$00,$C3,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $10,$00,$C3,$00,$C3,$10,$00,$C3,$00    ;55-63  LPUMP20,16
+          DC.B      $10,$00,$C3,$10,$00,$10;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $FD,$DD,$DD,$DF,$FD,$DD,$DD,$DF        ;70-77  2000,3000
+          DC.B      $FD,$FD,$DD,$DF,$FF,$5D,$DD,$DF        ;78-85  5000,7000
+          DC.B      $BD,$5D;                                ;86-87  TOTRK
+          DC.B      $50,$14;                                ;88-89  LETRO
+          DC.B      $50,$00,$50,$00,$50,$14,$50,$14        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $FD,$77,$77,$F7,$F7,$77;                ;98-103 400,600
+          DC.B      $3C,$3C;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $00,$00;                                ;106-07 HDEATH S
+          DC.B      $65,$DD,$97,$74,$94,$44;                ;108-13 HRDEATH 1,2,3
+          DC.B      $77,$59,$1D,$D6,$11,$16;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
+          DC.B      $AC,$CA,$AC,$CA,$A3,$3A,$A3,$3A        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $FF,$37,$AF,$00,$DC,$FF,$00,$FA        ;144-49 FYGAR:R1,2,L1,2
+          DC.B      $0B,$F8,$BF,$E8,$B8,$2E,$A8,$2A        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $A6,$A8,$A6,$A8,$A6,$AA;                ;148-53 DDUP 1,2,3
+          DC.B      $AA,$68,$AA,$98,$AA,$68;                ;154-59 DDDOWN 1,2,3
+          DC.B      $0A,$A0,$07,$50,$15,$54;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $5D,$5D,$5A,$5D,$00,$00;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $00,$C0,$03,$C0,$3C,$3C;                ;172-77 DPMP,DFULL,U612
+          DC.B      $F7,$77,$77,$FF,$77,$77;                ;178-83 200,300
+          DC.B      $F7,$F7,$77,$F7,$77,$77;                ;184-89 500,800
+          DC.B      $DD,$DF,$DD,$DF,$FF,$5D,$DD,$DF        ;190-97 2500,4000
+          DC.B      $FD,$FD,$DD,$DF,$FD,$DD,$DD,$DF        ;198-05 6000,8000
+          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
+          DC.B      $F7,$77,$77,$77;                        ;210-13 12000
+          DC.B      $F7,$7F,$77,$77;                        ;214-17 15000
+          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $00,$00,$5B,$8C,$A8,$89,$68,$B9        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $00,$00,$32,$D5,$62,$2A,$6E,$29        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $00,$50,$3F,$C0,$BD,$55,$FF,$74        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $05,$00,$03,$FC,$55,$7E,$1D,$FF        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $CC00;                  ;LINE 4: OFFSET = 8.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $AA,$AA,$AA,$AA,$AA,$AA;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $AA,$AA,$AA,$AA,$AA,$AA;                ;6-11   DDLEFT 1,2,3
+          DC.B      $F7,$CC,$33,$DF;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $00,$05;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $00,$10,$00,$14,$40,$14;                ;22-27  8,16PIX RFLAME
+          DC.B      $00,$61,$01,$55,$54,$55;                ;28-33  24PIX RFLAME
+          DC.B      $55,$A5,$54,$16,$5A,$E5;                ;34-39  8,16PIX LFLAME
+          DC.B      $15,$95,$65,$55,$12,$14;                ;40-45  24PIX LFLAME
+          DC.B      $00,$00,$3C,$00,$3C,$00,$3C,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$00,$3C,$00,$3C,$00,$00,$3C,$00    ;55-63  LPUMP20,16
+          DC.B      $00,$00,$3C,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $FF,$7F,$77,$7F,$FF,$7F,$77,$7F        ;70-77  2000,3000
+          DC.B      $FD,$5F,$77,$7F,$FD,$5F,$77,$7F        ;78-85  5000,7000
+          DC.B      $29,$7D;                                ;86-87  TOTRK
+          DC.B      $50,$14;                                ;88-89  LETRO
+          DC.B      $50,$00,$50,$00,$50,$14,$50,$14        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $FF,$7D,$DF,$FD,$7D,$DF;                ;98-103 400,600
+          DC.B      $0C,$0C;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $11,$10;                                ;106-07 HDEATH S
+          DC.B      $6A,$AA,$AA,$A8,$AA,$A8;                ;108-13 HRDEATH 1,2,3
+          DC.B      $AA,$A9,$2A,$AA,$2A,$AA;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$68,$2A,$A8;                        ;120-23 U,D HARPOON
+          DC.B      $AC,$CA,$6F,$FA,$A3,$3A,$AF,$F9        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $F7,$CC,$57,$CC,$33,$DF,$33,$DF        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $02,$A0,$2A,$A0,$B8,$2E,$B8,$2E        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $AE,$A8,$AE,$AA,$AE,$AA;                ;148-53 DDUP 1,2,3
+          DC.B      $29,$6A,$2A,$5A,$29,$68;                ;154-59 DDDOWN 1,2,3
+          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $BD,$7D,$BA,$BD,$00,$00;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $00,$C0,$03,$C0,$0C,$0C;                ;172-77 DPMP,DFULL,U612
+          DC.B      $FD,$FD,$DF,$F5,$FD,$DF;                ;178-83 200,300
+          DC.B      $F5,$7D,$DF,$FD,$FD,$DF;                ;184-89 500,800
+          DC.B      $F7,$D5,$F7,$7F,$FF,$DF,$77,$7F        ;190-97 2500,4000
+          DC.B      $FF,$5F,$77,$7F,$FD,$DF,$77,$7F        ;198-05 6000,8000
+          DC.B      $FD,$F7,$77,$7F;                        ;206-09 10000
+          DC.B      $F7,$DF,$DD,$DF;                        ;210-13 12000
+          DC.B      $F7,$57,$DD,$DF;                        ;214-17 15000
+          DC.B      $FF,$7D,$DD,$FF;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $00,$00,$15,$FC,$68,$8C,$5B,$8C        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $00,$00,$3F,$54,$32,$29,$32,$E5        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $00,$00,$0F,$5C,$F7,$33,$33,$16        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $00,$00,$35,$F0,$CC,$DF,$94,$CC        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $CD00;                  ;LINE 3: OFFSET = 9.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $2A,$A0,$2A,$A0,$2A,$A0;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $0A,$A8,$0A,$A8,$0A,$A8;                ;6-11   DDLEFT 1,2,3
+          DC.B      $73,$55,$55,$CD;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $00,$00,$00,$00,$00,$41;                ;22-27  8,16PIX RFLAME
+          DC.B      $00,$15,$00,$05,$55,$45;                ;28-33  24PIX RFLAME
+          DC.B      $16,$65,$45,$55,$11,$14;                ;34-39  8,16PIX LFLAME
+          DC.B      $55,$15,$55,$40,$49,$00;                ;40-45  24PIX LFLAME
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
+          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;70-77  2000,3000
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;78-85  5000,7000
+          DC.B      $09,$56;                                ;86-87  TOTRK
+          DC.B      $55,$54;                                ;88-89  LETRO
+          DC.B      $50,$00,$55,$54,$50,$14,$55,$54        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;98-103 400,600
+          DC.B      $03,$03;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $41,$04;                                ;106-07 HDEATH S
+          DC.B      $5A,$A5,$6A,$80,$2A,$80;                ;108-13 HRDEATH 1,2,3
+          DC.B      $5A,$A5,$02,$A9,$02,$A8;                ;114-19 HLDEATH 1,2,3
+          DC.B      $2A,$68,$2A,$A8;                        ;120-23 U,D HARPOON
+          DC.B      $6F,$FA,$5A,$A9,$AF,$F9,$6A,$A5        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $73,$55,$73,$55,$55,$CD,$55,$CD        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $00,$00,$00,$00,$B8,$2E,$B8,$2E        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $26,$AA,$26,$AA,$26,$A6;                ;148-53 DDUP 1,2,3
+          DC.B      $29,$AA,$29,$6A,$29,$A4;                ;154-59 DDDOWN 1,2,3
+          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $29,$56,$20,$95,$00,$00;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $00,$30,$0C,$30,$0C,$0C;                ;172-77 DPMP,DFULL,U612
+          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;178-83 200,300
+          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;184-89 500,800
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;190-97 2500,4000
+          DC.B      $3F,$FF,$FF,$FC,$FF,$7F,$FF,$FF        ;198-05 6000,8000
+          DC.B      $3F,$FF,$FF,$FC;                        ;206-09 10000
+          DC.B      $3F,$FF,$FF,$FC;                        ;210-13 12000
+          DC.B      $3F,$FF,$FF,$FC;                        ;214-17 15000
+          DC.B      $3F,$FF,$FF,$FC;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $00,$00,$05,$50,$1A,$FC,$15,$FC        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $00,$00,$05,$50,$3F,$A4,$3F,$54        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $00,$00,$00,$54,$73,$CC,$1F,$CD        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $00,$00,$15,$00,$33,$CD,$73,$F4        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $CE00;                  ;LINE 2: OFFSET = 10.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $0A,$A0,$0A,$A0,$0A,$A0;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $0A,$A0,$0A,$A0,$0A,$A0;                ;6-11   DDLEFT 1,2,3
+          DC.B      $3F,$54,$15,$FC;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $AA,$A8,$2A,$AA;                        ;100-03 R,L HARPOON
+          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $00,$00,$00,$00,$00,$00;                ;22-27  8,16PIX RFLAME
+          DC.B      $00,$00,$40,$00,$50,$01;                ;28-33  24PIX RFLAME
+          DC.B      $01,$14,$45,$00,$45,$00;                ;34-39  8,16PIX LFLAME
+          DC.B      $51,$55,$50,$00,$54,$00;                ;40-45  24PIX LFLAME
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
+          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
+          DC.B      $01,$74;                                ;86-87  TOTRK
+          DC.B      $15,$50;                                ;88-89  LETRO
+          DC.B      $50,$00,$15,$54,$50,$14,$95,$50        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
+          DC.B      $03,$03;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $01,$00;                                ;106-07 HDEATH S
+          DC.B      $1A,$A5,$2A,$80,$2A,$80;                ;108-13 HRDEATH 1,2,3
+          DC.B      $5A,$A4,$02,$A8,$02,$A8;                ;114-19 HLDEATH 1,2,3
+          DC.B      $29,$58,$2A,$68;                        ;120-23 U,D HARPOON
+          DC.B      $5A,$A9,$15,$54,$6A,$A5,$15,$54        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $3F,$54,$3F,$54,$15,$FC,$15,$FC        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $00,$00,$00,$00,$A8,$2A,$B8,$2E        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $24,$AA,$25,$AA,$24,$A4;                ;148-53 DDUP 1,2,3
+          DC.B      $05,$90,$05,$90,$05,$90;                ;154-59 DDDOWN 1,2,3
+          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $09,$74,$00,$A5,$00,$00;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $00,$3C,$3C,$3C,$15,$15;                ;172-77 DPMP,DFULL,U612
+          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
+          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
+          DC.B      $00,$00,$00,$00,$3F,$FF,$FF,$FC        ;198-05 6000,8000
+          DC.B      $00,$00,$00,$00;                        ;206-09 10000
+          DC.B      $00,$00,$00,$00;                        ;210-13 12000
+          DC.B      $00,$00,$00,$00;                        ;214-17 15000
+          DC.B      $00,$00,$00,$00;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $00,$00,$00,$00,$05,$50,$05,$50        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $00,$00,$00,$00,$05,$50,$05,$50        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $00,$00,$00,$00,$3F,$54,$0F,$51        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $00,$00,$00,$00,$15,$FC,$45,$F0        ;248-55 LBFYGAR 1,2,3,4
+
+
+          ORG     $CF00;                  ;TOP SCAN LINE: OFFSET = 11.
+
+;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;0-5    DDRIGHT 1,2,3
+          DC.B      $00,$00,$00,$00,$00,$00;                ;6-11   DDLEFT 1,2,3
+          DC.B      $07,$50,$05,$D0;                        ;96-99  R,L FLAMEFYGAR
+          DC.B      $00,$00,$00,$00;                        ;100-03 R,L HARPOON
+          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
+          DC.B      $00,$00,$00,$00,$00,$00;                ;22-27  8,16PIX RFLAME
+          DC.B      $00,$00,$00,$00,$00,$00;                ;28-33  24PIX RFLAME
+          DC.B      $04,$00,$10,$40,$00,$00;                ;34-39  8,16PIX LFLAME
+          DC.B      $04,$05,$00,$01,$00,$00;                ;40-45  24PIX LFLAME
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
+          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
+          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
+          DC.B      $00,$F4;                                ;86-87  TOTRK
+          DC.B      $00,$00;                                ;88-89  LETRO
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;90-97  L,E,V,P
+
+;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
+          DC.B      $03,$03;                                ;104-05 UFULL,12 (PUMP)
+          DC.B      $00,$00;                                ;106-07 HDEATH S
+          DC.B      $00,$00,$00,$00,$00,$00;                ;108-13 HRDEATH 1,2,3
+          DC.B      $00,$00,$00,$00,$00,$00;                ;114-19 HLDEATH 1,2,3
+          DC.B      $0A,$60,$2A,$68;                        ;120-23 U,D HARPOON
+          DC.B      $15,$54,$00,$00,$15,$54,$00,$00        ;124-31 POOKA:R1,2,L1,2
+          DC.B      $07,$50,$07,$50,$05,$D0,$05,$D0        ;132-39 FYGAR:R1,2,L1,2
+          DC.B      $00,$00,$00,$00,$A0,$0A,$68,$29        ;140-47 GHOST:P1,2,F1,2
+          DC.B      $24,$A2,$25,$A2,$24,$A0;                ;148-53 DDUP 1,2,3
+          DC.B      $00,$00,$00,$00,$00,$00;                ;154-59 DDDOWN 1,2,3
+          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
+          DC.B      $02,$F4,$00,$24,$00,$00;                ;166-71 ROCK:STR,SP,CRM
+          DC.B      $00,$0C,$30,$0C,$04,$04;                ;172-77 DPMP,DFULL,U612
+          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
+          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;198-05 6000,8000
+          DC.B      $00,$00,$00,$00;                        ;206-09 10000
+          DC.B      $00,$00,$00,$00;                        ;210-13 12000
+          DC.B      $00,$00,$00,$00;                        ;214-17 15000
+          DC.B      $00,$00,$00,$00;                        ;218-21 1000
+          DC.B      $00,$00;                                ;222-23 ZBLANK
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;224-31 RBPOOKA 1,2,3,4
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;232-39 LBPOOKA 1,2,3,4
+          DC.B      $00,$00,$00,$00,$07,$50,$00,$54        ;240-47 RBFYGAR 1,2,3,4
+          DC.B      $00,$00,$00,$00,$05,$D0,$15,$00        ;248-55 LBFYGAR 1,2,3,4
+ENDCHARS
+          END
           ORG     $D000
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 
@@ -3638,6 +4552,1324 @@ NOTZERO2
           ADC     #FULL0
 ANDFRTS   RTS
 ENDD000
+;*         ORG     $DFC0
+;*;*;* THESE MUST BE ON SAME PAGE...
+;*PINEDIFF  DC.B      29,29,29,29,29,29,29,29,15,8,13,4,0,15,15,11,4
+;*          DC.B      29
+;*BONZDIFF  DC.B      29,29,29,29,29,29,29,29        ;THIS ROW IS OVERLAPPED.
+;*          DC.B      19,4,3,3,24,1,4,0,17
+;*GAMENAME  DC.B      29,29,29,29,29,29,29,29,29     ;THIS ROW IS OVERLAPPED.
+;*          DC.B      3,8,6,29,3,20,6,29,29,29,29,29
+;*          DC.B      29,29,29,29,29
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+
+;*;*;*;*;*;*;*;*;*;*;*;               CHARACTER AND STAMP DATA                   ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                        CSET1                             ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                    PAGES 40 - 4B                         ;*;*;*;*;*;*;*;*;*;*
+
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+
+          ORG     $E000;                  ;BOTTOM SCAN LINE: OFFSET = 0.
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;0-7    DIRT CHARACTERS
+          DC.B      $54,$54,$54,$54,$54,$5D,$54,$5D        ;8-15
+          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
+          DC.B      $54,$54,$54,$54,$55,$5D;                ;24-29
+          DC.B      $6A,$A9;                                ;30-31  SKY
+          DC.B      $A9,$5A,$A5,$6A;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$5D;                                ;36-37  FULL DIRT CHAR
+          DC.B      $55,$5D,$40,$01,$55,$5D,$55,$5D        ;38-45  HALF FULL DIRT
+          DC.B      $55,$5D,$40,$01;                        ;46-49  HALF FULL DIRT
+
+          DC.B      $0E,$B0;                                ;50-51  TEDDY HEAD
+          DC.B      $80,$00,$00,$00,$0E,$EF,$00,$00        ;52-59  VEGGIES:C,R,M,C
+          DC.B      $0A,$80,$00,$00,$00,$00,$00,$00        ;60-67  E,BP,T,O
+          DC.B      $00,$00,$00,$00,$0A,$A8;                ;68-73  W,G,P
+
+          DC.B      $50,$00,$00,$0D;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $00,$00;                                ;78-79  S
+          DC.B      $00,$00;                                ;80-81  A
+          DC.B      $00,$00;                                ;82-83  Y
+          DC.B      $00,$00,$00,$00;                        ;84-87  LETRG,LETRM
+
+          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
+          DC.B      $0C,$33,$33,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $AA,$80,$02,$AA,$2A,$AA,$AA,$80        ;100-07 TITLED10,9
+          DC.B      $AA,$80,$AA,$A8,$00,$AA,$A8,$00        ;108-15 TITLEG10,9
+          DC.B      $AA,$A8,$2A,$AA,$00,$AA,$A8,$00        ;116-23 TITLEU10,9
+          DC.B      $00,$03,$FF,$60,$00,$FF,$3F,$C0        ;124-31 TDDUG10,9
+          DC.B      $AA,$AA,$0A,$A0;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $00,$00;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $00,$00,$00,$00,$00,$00;                ;156-61 3,4,5
+          DC.B      $00,$00,$00,$00,$00,$00;                ;162-67 6,7,8
+          DC.B      $00,$00;                                ;168-69 9
+
+
+          ORG     $E0AA
+;*;*;*;*;*  FROM FALL.S FILE
+DISPTS    DC.B  THOUSND1,THOUS25,THOUS4,THOUS6
+          DC.B  THOUS8,THOUS10,THOUS12,THOUS15
+
+
+DOROCKL   DC.B      <RSLIP,<RTOTTER,<RFALL,<RBOTTOM
+          DC.B      <RSPLIT,<RCRUMBL,<RPOINTS,<RFINISH
+
+DOROCKH   DC.B      >RSLIP,>RTOTTER,>RFALL,>RBOTTOM
+          DC.B      >RSPLIT,>RCRUMBL,>RPOINTS,>RFINISH
+
+RKANIM    DC.B      SPLTROCK,CRMBROCK
+
+
+;  DON"T USE THIS SUBR UNTIL SURE DIGDUG IS GOING TO ANIMATE.
+;  USES X,A.
+;  USES TEMP.
+ANIM      LDA     ANIMCNT;                ;THERE ARE THREE STAMPS EACH DIRECTION
+          SEC
+          SBC     #1
+          BPL     ANIM2
+          LDA     #2
+ANIM2     STA     ANIMCNT
+          ASL
+          ASL
+          STY     TEMP
+;*         CLC
+          ADC     TEMP
+          TAX
+          LDA     DANIMS,X
+          STA     DDINDX
+          RTS
+
+;*;*;*;*;*  FROM DDMOVE.S FILE
+XFROMPL   DC.B      $00;                         ;      ,$08,$00,$00
+
+XTOPL     DC.B      $08,$00,$00,$00,$08,$F8,$00,$00,$03,$FD,$00,$00
+          DC.B      $10,$F8,$00,$00
+          DC.B      $07,$F9,$00;                 ;      ,$00
+
+; NOTE:  FLATPTS IS STORED AS HALF OF TRUE POINT VALUE
+FLATPTS   DC.B      $00,$05,$50,$12,$00,$20,$00,$30
+          DC.B      $00,$40,$00,$50,$00,$60,$00,$75
+
+;*;*;*;*;* PAGE 83 BYTES FULL
+ENDE0AA
+
+
+          ORG     $E100;                  ;LINE 11: OFFSET = 1.
+
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$05,$00,$05        ;8-15
+          DC.B      $40,$00,$40,$00,$40,$01,$40,$01        ;16-23
+          DC.B      $50,$00,$50,$00,$50,$05;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $A5,$56,$95,$5A;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$55;                                ;36-37  FULL DIRT
+          DC.B      $05,$55,$40,$01,$55,$50,$55,$55        ;38-45  HALF FULL DIRT
+          DC.B      $05,$50,$40,$01;                        ;46-49  HALF FULL DIRT
+
+          DC.B      $2B,$2C;                                ;50-51  TEDDY HEAD
+          DC.B      $A0,$00,$57,$00,$03,$B8,$00,$00        ;52-59  VEGGIES:C,R,M,C
+          DC.B      $2A,$A0,$00,$00,$00,$00,$33,$30        ;60-67  E,BP,T,O
+          DC.B      $00,$00,$03,$C0,$2A,$EA;                ;68-73  W,G,P
+
+          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $55,$50;                                ;78-79  S
+          DC.B      $50,$14;                                ;80-81  A
+          DC.B      $05,$40;                                ;82-83  Y
+          DC.B      $15,$50,$50,$14;                        ;84-87  LETRG,LETRM
+
+          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
+          DC.B      $0C,$33,$33,$33,$33,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $FF,$C0,$03,$FF,$FF,$FF,$FF,$F0        ;100-07 TITLED10,9
+          DC.B      $FF,$C0,$00,$00,$0F,$FF,$FF,$C0        ;108-15 TITLEG10,9
+          DC.B      $FF,$FC,$3F,$FF,$0F,$FF,$FF,$C0        ;116-23 TITLEU10,9
+          DC.B      $00,$3F,$FF,$C0,$00,$3F,$0F,$C0        ;124-31 TDDUG10,9
+          DC.B      $FF,$FF,$0F,$F0;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $50,$14;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $3F,$F0,$FF,$FC,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $3F,$F0,$03,$F0,$3F,$F0;                ;156-61 3,4,5
+          DC.B      $3F,$F0,$FF,$00,$3F,$F0;                ;162-67 6,7,8
+          DC.B      $FF,$00;                                ;168-69 9
+
+
+          ORG     $E1AA
+CTURNS    DC.B      124,47,4,71,255
+
+HALFXFM   DC.B      <EAST5,<WEST5,<SOUTH7,<NORTH7
+FROMXFM   DC.B      <HORLFT,<HORRGT,<VERTTOP,<VERTBOT
+TOXFM     DC.B      <HORRGT,<HORLFT,<VERTBOT,<VERTTOP
+ENTRXFM   DC.B      <EAST1,<WEST1,<SOUTH1,<NORTH1
+
+HARPSTMP  DC.B      RHARPOON,LHARPOON,DHARPOON,UHARPOON
+
+DANIMS    DC.B      RDIGDUG1,LDIGDUG1,DDIGDUG1,UDIGDUG1
+          DC.B      RDIGDUG2,LDIGDUG2,DDIGDUG2,UDIGDUG2
+          DC.B      RDIGDUG3,LDIGDUG3,DDIGDUG3,UDIGDUG3
+
+
+VONE      DC.B      1,7,10;               ;   ,0
+VBOUND    DC.B      0,0,11,11
+VHALF     DC.B      5,3,4;               ;   ,6
+VPRE2     DC.B      6,2,1,9;            ;MIGHT BE UNNECESSARY FOR HORIZONTAL
+VPRE1     DC.B      7,1,0,10
+
+WHNSPEED  DC.B      2,3,4,5;                ;   ,6
+
+VPRE3     DC.B      6,2,2,8;            ;UNNECESSARY FOR HORIZONTAL
+;*VPRE4     DC.B      6,2,3,7;            ;PROBABLY NOT NECESSARY
+
+;*;*;*;*;*
+; USES A,X.
+ADJUSTTO  LDA     DDYPOS;                 ;CALC DIGDUG LEADING EDGE
+          CLC
+          ADC     YTOPL,Y
+          TAX
+          LDA     DDXPOS
+          CLC
+          ADC     XTOPL,Y
+          RTS;                            ;14
+
+MOREPUMP  LDA     MAXPUMP
+          CLC
+          ADC     #$04
+          STA     MAXPUMP
+          RTS
+
+;*;*;*;*;* PAGE 86 BYTES FULL
+ENDE1AA
+
+
+          ORG     $E200;                  ;LINE 10: OFFSET = 2.
+
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;16-23
+          DC.B      $40,$00,$C0,$00,$40,$01;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $96,$66,$5B,$56;                        ;32-35  BIG,SML FLOWER
+          DC.B      $D5,$55;                                ;35-37  FULL DIRT
+          DC.B      $01,$55,$C0,$01,$D5,$40,$D5,$55        ;38-45  HALF DIRT
+          DC.B      $01,$40,$C0,$01;                        ;46-49  HALF DIRT
+
+          DC.B      $EC,$8B;                                ;50-51  TEDDY HEAD
+          DC.B      $A8,$00,$55,$40,$03,$FC,$69,$00        ;52-59  VEGGIES:C,R,M,C
+          DC.B      $96,$A0,$04,$40,$00,$00,$0F,$C0        ;60-67  E,BP,T,O
+          DC.B      $0A,$A0,$03,$C0,$2A,$AE;                ;68-73  W,G,P
+
+          DC.B      $D0,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $AA,$A8;                                ;78-79  S
+          DC.B      $A0,$28;                                ;80-81  A
+          DC.B      $0A,$80;                                ;82-83  Y
+          DC.B      $AA,$A8,$A0,$28;                        ;84-87  LETRG,LETRM
+
+
+          DC.B      $00,$FC,$CF,$CF,$0C,$00;                ;88-93  (C) 1983 ATARI
+          DC.B      $0C,$F3,$F3,$33,$03,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $AA,$80,$02,$AA,$AA,$AA,$AA,$A8        ;100-07 TITLED10,9
+          DC.B      $AA,$80,$00,$00,$0A,$AA,$AA,$A0        ;108-15 TITLEG10,9
+          DC.B      $AA,$A8,$2A,$AA,$2A,$AA,$AA,$A0        ;116-23 TITLEU10,9
+          DC.B      $00,$FF,$FF,$C0,$00,$0F,$03,$C0        ;124-31 TDDUG10,9
+          DC.B      $AA,$AA,$2A,$A8;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $A0,$28;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FF,$FC,$FF,$FC,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $FF,$FC,$03,$F0,$FF,$FC;                ;156-61 3,4,5
+          DC.B      $FF,$FC,$FF,$C0,$FF,$FC;                ;162-67 6,7,8
+          DC.B      $FF,$C0;                                ;168-69 9
+
+
+          ORG     $E2AA
+
+JOYSWCH   DC.B      $7F,$BF,$DF,$EF
+
+BAR       DC.B      $20,$40;                ; S,W      BOUND TO NEXT PAGE!!!
+          DC.B      $10,$90;                ; N,NE     BOUND TO PREVIOUS PAGE!!!
+          DC.B      $30,$C0;                ; FILTER OUT ILLEGAL COMBINATIONS
+
+FOO
+          DC.B      $7F;                    ; E
+FJOY      DC.B      $DF,$BF,$EF,$7F        ; S,W,N,E
+          DC.B      $FF,$FF;                ; END OF FOO
+REVSWCH
+          DC.B      $BF,$7F,$EF,$DF
+;*         DC.B      $BF,$7F,$EF,$DF
+;*         DC.B      $BF
+
+
+DIGSONG   CMP     #SNGD;                  ;RETURNS EQ IF DIGDUG MUSIC
+          BEQ     DIGSONG2
+          CMP     #SNGDF
+DIGSONG2
+          RTS;                            ;OVERLAPPED WITH FOLLOWING ARRAY!!!
+
+;*ATTBOUND  DC.B      $60,$28,$20,$2F,$50    ;OVERLAPPED WITH PRECEDING SUBR!!!
+;*         DC.B      $10,$28,$8F,$83
+;*         DC.B      $10;                    ;OVERLAPPED WITH FOLLOWING ARRAY!!!
+
+RKTIM     DC.B      $10,$10,$1E;            ;FROM FALL.S, OVERLAPPED!
+
+; NOTE:  ONLY TOP BYTE IS STORED SINCE BOTTOM BYTE IS ALWAYS 0
+;        INDEX OF 0 IS FOR TEDDYBEAR MODE
+VEGPTS    DC.B      $02,$04,$06,$08,$10,$10
+          DC.B      $20,$20,$30,$30,$40,$40
+          DC.B      $50,$50,$60,$60,$70,$70
+          DC.B      $80
+
+FPOINTS   DC.B      VHUND2,VHUND4,VHUND6,VHUND8,VTHOUS1,VTHOUS1
+          DC.B      VTHOUS2,VTHOUS2,VTHOUS3,VTHOUS3,VTHOUS4,VTHOUS4
+          DC.B      VTHOUS5,VTHOUS5,VTHOUS6,VTHOUS6,VTHOUS7,VTHOUS7
+          DC.B      VTHOUS8
+
+
+HCARVE    LDA     #DLEFTEND
+          STA     DIRTMAP,X;              ;CARVE OUT CENTER HORIZONTAL TUNNEL.
+          LDA     #DHMIDDLE
+          STA     DIRTMAP+1,X
+          LDA     #DRHTEND
+          STA     DIRTMAP+2,X
+          RTS
+
+;*;*;*;*;* PAGE 86 BYTES FULL
+ENDE2AA
+
+
+          ORG     $E300;                  ;LINE 9: OFFSET = 3.
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
+          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
+          DC.B      $40,$00,$40,$00,$40,$00;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $AB,$EA,$AB,$9A;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$55;                                ;36-37  FULL DIRT
+          DC.B      $01,$55,$40,$01,$55,$40,$55,$55        ;38-45  HALF DIRT
+          DC.B      $01,$40,$40,$01;                        ;46-49  HALF DIRT
+
+          DC.B      $E2,$23;                                ;50-51  TEDDY HEAD
+          DC.B      $BA,$00,$55,$70,$E3,$F0,$6E,$80        ;52-59  VEGGIES:C,R,M,C
+          DC.B      $5A,$A8,$15,$50,$15,$54,$6A,$A4        ;60-67  E,BP,T,O
+          DC.B      $29,$68,$03,$C0,$2E,$AA;                ;68-73  W,G,P
+
+          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $00,$14;                                ;78-79  S
+          DC.B      $50,$14;                                ;80-81  A
+          DC.B      $05,$40;                                ;82-83  Y
+          DC.B      $50,$14,$50,$14;                        ;84-87  LETRG,LETRM
+
+          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
+          DC.B      $0F,$F3,$33,$F3,$03,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $FF,$C0,$0F,$FF,$FF,$FF,$FF,$FC        ;100-07 TITLED10,9
+          DC.B      $FF,$F0,$0F,$F0,$3F,$FF,$FF,$FC        ;108-15 TITLEG10,9
+          DC.B      $FF,$FC,$3F,$FF,$3F,$FF,$FF,$FC        ;116-23 TITLEU10,9
+          DC.B      $00,$05,$5F,$F0,$00,$0F,$FF,$C0        ;124-31 TDDUG10,9
+          DC.B      $FF,$FF,$3F,$FC;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $50,$14;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FF,$FC,$FF,$FC,$3F,$FC;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $FC,$FC,$FF,$FC,$F0,$FC;                ;156-61 3,4,5
+          DC.B      $FC,$FC,$3F,$C0,$FC,$FC;                ;162-67 6,7,8
+          DC.B      $3F,$C0;                                ;168-69 9
+
+
+          ORG     $E3AA
+;*;*;*;*;*  FROM MONSTER.S FILE
+;-------- ROM TABLES
+
+XTABLE    DC      $00,$00,$FF,$FF,$00,$00,$FF,$FF
+          DC      $01,$01,$00,$00,$01,$01,$00;          ;     ,$00
+
+YTABLE    DC      $00,$FF,$00,$FF,$01,$00,$01,$00
+          DC      $00,$FF,$00,$FF,$01,$00,$01,$00
+
+SPEEDTAB  DC      $EE;                    POOKA SLOW     12 BITS
+          DC      $EE
+          DC      $92;                    POOKA GHOST    5 BITS
+          DC      $48
+          DC      $7F;                    POOKA FAST     15 BITS
+          DC      $FF
+          DC      $95;                    POOKA GHOST    7
+          DC      $4A
+          DC      $F7;                    FYGAR SLOW     13 BITS
+          DC      $77
+          DC      $89;                    FYGAR GHOST    5
+          DC      $24
+          DC      $FF;                    FYGAR FAST     16 BITS
+          DC      $FF
+          DC      $A9;                    FYGAR GHOST    7
+          DC      $54
+
+;* FJOY: FAKE JOYSTICK MOVEMENTS FOR ROTATING SELECT OPTIONS WITH SELECT BUTTON.
+;*FJOY      DC.B      $BF,$7F,$DF,$EF       ;USES REVSWCH INSTEAD.
+
+
+RFALLTBL  DC.B      1,2,2,2,1,2,2
+
+ANDF0     AND     #$F0
+          BNE     NOTZERO1
+          BCC     NOTZERO1
+          LDA     #BLANK1;                ;BLANK STAMP.
+;*         BEQ     ANDF0RTS
+          RTS
+NOTZERO1  LSR;                      ;GET INDEX INTO STAMP TABLE FOR THIS
+          LSR;                      ;  DIGIT OF SCORE.
+          LSR
+;*         CLC
+          ADC     #FULL0
+ANDF0RTS  RTS
+
+
+INITDIGS  LDY     #4
+          LDA     #0
+INITSNDD  STA     DURINDX0,Y;             ;TIME TO START DD MUSIC OVER
+          DEY
+          BPL     INITSNDD
+          STY     DUNINDX0
+          STY     DUNINDX1
+          RTS
+
+ENDE3AA
+
+
+          ORG     $E400;                  ;LINE 8: OFFSET = 4.
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$03        ;8-15
+          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
+          DC.B      $40,$00,$40,$00,$40,$00;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $AF,$FA,$AF,$6A;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$57;                                ;36-37  FULL DIRT
+          DC.B      $01,$57,$50,$07,$55,$40,$55,$57        ;38-45  HALF DIRT
+          DC.B      $01,$40,$50,$07;                        ;46-49  HALF DIRT
+
+          DC.B      $EA,$2B;                                ;50-51  TEDDY HEAD
+          DC.B      $2A,$00,$55,$50,$AB,$F0,$1A,$E0        ;52-59  VEGGIES:C,R,M,C
+          DC.B      $6E,$A8,$55,$54,$55,$55,$6B,$A8        ;60-67  E,BP,T,O
+          DC.B      $64,$59,$03,$C0,$2A,$EA;                ;68-73  W,G,P
+
+          DC.B      $50,$00,$00,$07;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $00,$28;                                ;78-79  S
+          DC.B      $AA,$A8;                                ;80-81  A
+          DC.B      $0A,$80;                                ;82-83  Y
+          DC.B      $A0,$28,$A0,$28;                        ;84-87  LETRG,LETRM
+
+          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
+          DC.B      $0F,$33,$33,$F3,$33,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $AA,$AA,$AA,$AA,$AA,$AA,$AA,$AA        ;100-07 TITLED10,9
+          DC.B      $AA,$A8,$2A,$A8,$2A,$AA,$AA,$A8        ;108-15 TITLEG10,9
+          DC.B      $AA,$A8,$2A,$AA,$AA,$AA,$AA,$A8        ;116-23 TITLEU10,9
+          DC.B      $00,$14,$45,$FC,$00,$1F,$FF,$D0        ;124-31 TDDUG10,9
+          DC.B      $AA,$AA,$2A,$A8;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $AA,$A0;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FC,$FC,$0F,$C0,$0F,$C0;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $00,$FC,$FF,$FC,$00,$FC;                ;156-61 3,4,5
+          DC.B      $FC,$FC,$0F,$F0,$FC,$FC;                ;162-67 6,7,8
+          DC.B      $0F,$F0;                                ;168-69 9
+
+
+          ORG     $E4AA
+FRUITAB   DC      TEDDY
+          DC      CARROT,RUTABAGA,MUSHROOM,CUCUMBER,CUCUMBER
+          DC      EGGPLANT,EGGPLANT,BELLPEPP,BELLPEPP,TOMATO
+          DC      TOMATO,ONION,ONION,WATERMEL,WATERMEL,GALAXIAN
+          DC      GALAXIAN,PINEAPPL      ;BETTY AND AVA-ROBIN WERE HERE!
+
+
+DIRTABLE  DC.B      <DIRT0,<DIRT1,<DIRT2,<DIRT3,<DIRT4,<DIRT5
+          DC.B      <DIRT6,<DIRT7,<DIRT8,<DIRT9,<DIRT10,<DIRT11
+          DC.B      <DIRT12,<DIRT13,<DIRT14,<SKY15
+
+MODETAB   DC.B      <DIGDIAG,<DIGVERT,<DIGHORIZ
+          DC.B      <DIGVERT,<DIGHORIZ,<DIGDIAG
+          DC.B      <DIGVERT,<DIGHORIZ
+
+
+PRITES0   DC.B      RPUMP4,RPUMP8,RPUMP12,RPUMP16,RPUMP20,RPUMP24
+;         ;                               ;FROM COLLISON.S
+
+DDMIDDLE
+          LDA     #DDMIDLY
+          STA     DDYPOS
+          LDA     #DDMIDLX
+          STA     DDXPOS
+          LDA     #RDIGDUG1
+          STA     DDINDX
+          RTS
+
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*       GETRXY: TURN DIRTMAP INDEX INTO X AND Y COORDINATE.;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               RETURNS X IN A, Y IN X.                    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+GETRXY
+          PHP
+          PHA;                            ;SAVE INDEX.
+          LSR;                      ;Y IN TOP NIBBLE.
+          LSR
+          LSR
+          LSR
+          EOR     #$FF
+          CLC
+          ADC     #16
+          TAX
+          LDA     TOPZONE,X
+          TAX
+          PLA
+          AND     #$0F
+          ASL;                      ;MULTIPLY BOTTOM NIBBLE BY 8 FOR X.
+          ASL
+          ASL
+          PLP
+          RTS
+
+ENDE4AA
+
+
+          ORG     $E500;                  ;LINE 7: OFFSET = 5.
+
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;16-23
+          DC.B      $00,$00,$40,$00,$00,$01;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $BD,$FE,$BF,$DA;                        ;32-35  BIG,SML FLOWER
+          DC.B      $57,$55;                                ;       FULL DIRT
+          DC.B      $03,$55,$57,$55,$57,$40,$57,$55        ;       HALF DIRT
+          DC.B      $03,$40,$57,$55;                        ;       HALF DIRT
+
+          DC.B      $EA,$AB;                                ;       TEDDY HEAD
+          DC.B      $2B,$80,$55,$50,$AA,$B0,$02,$B4        ;       VEGGIES:C,R,M,C
+          DC.B      $6F,$A8,$65,$54,$55,$55,$AE,$E8        ;       E,BP,T,O
+          DC.B      $A5,$5A,$0F,$F0,$3A,$AB;                ;       W,G,P
+
+          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $55,$54;                                ;78-79  S
+          DC.B      $55,$54;                                ;80-81  A
+          DC.B      $15,$50;                                ;82-83  Y
+          DC.B      $50,$54,$51,$14;                        ;84-87  LETRG,LETRM
+
+          DC.B      $00,$33,$F3,$03,$0C,$00;                ;88-93  (C) 1983 ATARI
+          DC.B      $0C,$30,$C3,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF        ;100-07 TITLED10,9
+          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FF        ;108-15 TITLEG10,9
+          DC.B      $FF,$FC,$3F,$FF,$FF,$FF,$FF,$FF        ;116-23 TITLEU10,9
+          DC.B      $00,$14,$45,$FC,$0A,$3F,$FF,$F0        ;124-31 TDDUG10,9
+          DC.B      $FF,$FF,$FF,$FF;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $55,$50;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FC,$FC,$0F,$C0,$03,$F0;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $3F,$FC,$FC,$FC,$00,$FC;                ;156-61 3,4,5
+          DC.B      $FC,$FC,$03,$F0,$3F,$F0;                ;162-67 6,7,8
+          DC.B      $0F,$F0;                                ;168-69 9
+
+
+          ORG     $E5AA
+;*;*;*;*;*  FROM COLLISON.S FILE
+
+;*;*;* PUMP TABLES: ARRANGED BY DIRECTION, THEN STAMP NUMBER.  STAMP 0 SHOULD
+;*;*;*    ;          BE LOCATED AT X,Y POSITION OF UPPER LEFTMOST CORNER OF
+;*;*;*    ;          PUMP.  STAMP 1 WILL BE AT X,(Y-12), AND STAMP 2 AT X,(Y-24).
+;*;*;*    ;          READING ACROSS EACH VERTICAL TABLE GIVES THE APPROPRIATE STAMP
+;*;*;*    ;          FOR PUMP LENGTHS 6,12,18,24,30,36; AND WIDTHS 4,8,12,16,20,24
+;*;*;*    ;          FOR HORIZONTAL TABLES.  HORIZONTAL TABLES DO NOT EXIST FOR
+;*;*;*    ;          STAMPS 1 AND 2 AS A HORIZONTAL PUMP IS ONLY ONE STAMP HIGH.
+;*;*;*    ;          INSTEAD, ZBLANK WILL BE LOADED INTO APPROPRIATE STMPYPOS ENTRY.
+
+PDOWNS2   DC.B      ZBLANK,ZBLANK;          ; ,ZBLANK,ZBLANK,DPUMP6,DPUMP12
+PDOWNS1   DC.B      ZBLANK,ZBLANK;          ; ,DPUMP6,DPUMP12,DFULL6,DFULL12
+PDOWNS0   DC.B      DPUMP6,DPUMP12,DFULL6,DFULL12,DFULL6,DFULL12
+
+PUPS0     DC.B      UPUMP6,UPUMP12,UPUMP12,UPUMP12,UPUMP12,UPUMP12
+PUPS2     DC.B      ZBLANK,ZBLANK;          ; ,ZBLANK,ZBLANK,UFULL6,UFULL12
+PUPS1     DC.B      ZBLANK,ZBLANK,UFULL6,UFULL12,UFULL12,UFULL12
+
+PLEFTS0   DC.B      LPUMP4,LPUMP8,LPUMP12,LPUMP16,LPUMP20,LPUMP24
+
+
+
+
+BURSTPTS  DC.B      $05,$04,$03,$02
+          DC.B      $10,$08,$06,$04
+
+BPOINTS   DC.B      HUNDRED5,HUNDRED4,HUNDRED3,HUNDRED2
+          DC.B      THOUSND1,HUNDRED8,HUNDRED6,HUNDRED4
+
+BLWSTMPS  DC.B      LBPOOKA1,LBPOOKA2,LBPOOKA3,LBPOOKA4
+          DC.B      RBPOOKA1,RBPOOKA2,RBPOOKA3,RBPOOKA4
+          DC.B      LBFYGAR1,LBFYGAR2,LBFYGAR3,LBFYGAR4
+          DC.B      RBFYGAR1,RBFYGAR2,RBFYGAR3,RBFYGAR4
+
+SETPAL3   LDX     #2
+PHAMSGC   LDA     #$84;                   ;USE PALETTE 3 FOR COLORS OF LETTERS.
+          STA     P0C0SHAD+13,X
+          DEX
+          BPL     PHAMSGC
+          RTS
+
+SAVDUN    LDY     #6;                     ;SAVES CURRENT DIGDUG MUSIC INFO
+SAVDUN2   LDA     CURINDX0,Y
+          STA     DURINDX0,Y
+          DEY
+          BPL     SAVDUN2
+          RTS
+ENDE5AA
+
+
+          ORG     $E600;                  ;LINE 6: OFFSET = 6.
+
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
+          DC.B      $40,$00,$40,$00,$40,$01,$40,$01        ;16-23
+          DC.B      $40,$00,$40,$00,$40,$01;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $BF,$DE,$BF,$DA;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$55;                                ;       FULL DIRT
+          DC.B      $01,$55,$55,$55,$55,$40,$55,$55        ;       HALF DIRT
+          DC.B      $01,$40,$55,$55;                        ;       HALF DIRT
+
+          DC.B      $28,$88;                                ;       TEDDY HEAD
+          DC.B      $0A,$80,$55,$50,$9A,$A8,$00,$A8        ;       VEGGIES:C,R,M,C
+          DC.B      $17,$AA,$75,$54,$5D,$55,$AE,$E8        ;       E,BP,T,O
+          DC.B      $95,$16,$2B,$E8,$0E,$AC;                ;       W,G,P
+
+          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $55,$54;                                ;78-79  S
+          DC.B      $50,$14;                                ;80-81  A
+          DC.B      $54,$54;                                ;82-83  Y
+          DC.B      $50,$54,$51,$14;                        ;84-87  LETRG,LETRM
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;88-93  (C) 1983 ATARI
+          DC.B      $00,$00,$00,$00,$00,$00;                ;94-99  (C) 1982 NAMCO
+          DC.B      $AA,$AA,$AA,$AA,$AA,$AA,$AA,$AA        ;100-07 TITLED10,9
+          DC.B      $2A,$AA,$AA,$A8,$AA,$AA,$AA,$AA        ;108-15 TITLEG10,9
+          DC.B      $AA,$A8,$2A,$AA,$AA,$AA,$AA,$AA        ;116-23 TITLEU10,9
+          DC.B      $00,$15,$55,$FC,$2A,$3F,$DF,$B0        ;124-31 TDDUG10,9
+          DC.B      $AA,$AA,$AA,$AA;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $50,$14;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FC,$FC,$0F,$C0,$F0,$FC;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $3F,$FC,$FC,$F0,$FF,$FC;                ;156-61 3,4,5
+          DC.B      $FF,$FC,$00,$FC,$FF,$FC;                ;162-67 6,7,8
+          DC.B      $3C,$FC;                                ;168-69 9
+
+
+          ORG     $E6AA
+;*;*;*;*;* FROM IGAMERAK.S
+;* HEADERS FOR INITIAL SCORE LINE STAMPS: 4 EXTRA MEN PER PLAYER, PLAYER POINTER.
+ISCORLIN  DC.B      <SCOREMAP,W1ZONE,>SCOREMAP,$B0,16
+          DC.B      BLANK1,$3E,CSET1,24,BLANK1,$3E,CSET1,32,BLANK1,$3E,CSET1,40
+          DC.B      BLANK1,$3E,CSET1,48,BLANK1,$3E,CSET1,56,FULL0,$3E,CSET1,64
+          DC.B      BLANK1,$3E,CSET1,88,BLANK1,$3E,CSET1,96,BLANK1,$3E,CSET1,104
+          DC.B      BLANK1,$3E,CSET1,112,BLANK1,$3E,CSET1,120,BLANK1,$3E,CSET1,128
+          DC.B      BLANK1,$9E,CSET1,76
+          DC.B      0,0
+
+
+PUTTITLE  PHA
+          JSR     SETDPLH
+          PLA
+          TAX
+;*;*;*       JMP     PUTMPLAT
+;*;*;*       RTS
+PUTMPLAT  LDA     TEMPLATE,X
+          STA     (DPLOW),Y
+          DEX
+          DEY
+          CPY     #5
+          BCS     PUTMPLAT
+          RTS
+
+
+WAITVBL   BIT     CTRLRD
+          BPL     WAITVBL
+          BIT     CTRLRD
+          BPL     WAITVBL
+          RTS
+
+;*AREVSWCH  DC.B      $40,$80,$10,$20        ;USED IN DDMOVE
+ENDE6AA
+
+
+          ORG     $E700;                  ;LINE 5: OFFSET = 7.
+
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
+          DC.B      $40,$00,$40,$00,$40,$01,$40,$01        ;16-23
+          DC.B      $40,$00,$40,$00,$40,$01;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $BF,$FE,$B3,$DA;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$55;                                ;       FULL DIRT
+          DC.B      $01,$55,$55,$55,$55,$40,$50,$05        ;       HALF DIRT
+          DC.B      $01,$40,$50,$05;                        ;       HALF DIRT
+
+          DC.B      $2A,$A8;                                ;       TEDDY HEAD
+          DC.B      $0B,$80,$D5,$50,$AA,$AA,$00,$A8        ;       VEGGIES:C,R,M,C
+          DC.B      $19,$EA,$75,$54,$5D,$55,$6E,$E4        ;       E,BP,T,O
+          DC.B      $91,$56,$AD,$7B,$05,$50;                ;       W,G,P
+
+          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $50,$00;                                ;78-79  S
+          DC.B      $50,$14;                                ;80-81  A
+          DC.B      $50,$14;                                ;82-83  Y
+          DC.B      $50,$00,$55,$54;                        ;84-87  LETRG,LETRM
+
+          DC.B      $30,$30,$30,$33,$F0,$30;                ;88-93  (C) 1983 ATARI
+          DC.B      $30,$30,$30,$33,$F3,$F0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $FF,$FF,$FF,$FC,$FF,$FF,$FF,$FF        ;100-07 TITLED10,9
+          DC.B      $3F,$FF,$FF,$FC,$FF,$F0,$3F,$FF        ;108-15 TITLEG10,9
+          DC.B      $FF,$FC,$3F,$FF,$FF,$FF,$FF,$FF        ;116-23 TITLEU10,9
+          DC.B      $03,$FF,$FF,$FC,$AA,$AA,$96,$AA        ;124-31 TDDUG10,9
+          DC.B      $FF,$FF,$FF,$FF;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $50,$14;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FC,$FC,$0F,$C0,$F0,$FC;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $00,$FC,$3C,$F0,$FF,$F0;                ;156-61 3,4,5
+          DC.B      $FF,$F0,$00,$FC,$FC,$FC;                ;162-67 6,7,8
+          DC.B      $FC,$FC;                                ;168-69 9
+
+
+          ORG     $E7AA
+;*DISPLAY LIST LISTS DLI BYTES: FIRST BYTE IS FOR ZONE 1 AT BOTTOM OF SCREEN,
+;*         LAST BYTE FOR DUMMY ZONE AT TOP OF SCREEN
+DLIBITS   DC.B      $4B,$4B,$4B,$4B,$4B,$CB,$4B,$4B,$4B,$CB,$4B,$4B,$4B,$CB
+          DC.B      $CB,$4B,$4F,$47,$CC,$4B,$4B
+
+;* LOW ADDRESSES FOR CHARACTER MAPS FOR EACH ZONE...
+MAPLOW    DC.B      $EF,$E0,$D0,$C0,$B0,$A0,$90,$80,$70,$60,$50,$40,$30,$20,$10
+;         DC.B      0
+;* INITIAL PALETTE COLORS...;              ;OVERLAPS WITH ABOVE (BLACK = 0)
+IPALETTE  DC.B      BLACK,DDBLUE,WHITE,BLACK
+          DC.B      $34,$1A,$0E;            ;RED,YELLOW,WHITE
+          DC.B      $30,$00,$44;            ;BROWN,BLACK,TAN
+          DC.B      $D6,$24,$0E;            ;GREEN, ORANGE, WHITE
+          DC.B      YELLOW,DDBLUE,$A0      ;NUMLIVES IN COL 3.
+          DC.B      SKYBLUE,SKYBLUE,PL1COLR ;SCORE,VEGGIE
+          DC.B      YELLOW,DDBLUE,PEBBLE1  ;DIRT0, DIRT2
+          DC.B      $D4,SKYBLUE,$34        ;SKY,DIRT1,DIRT3
+
+;*;*;*;*;* FROM INITDIRT.S
+CRYOFST   DC.B      0,12,24,12,0,12,24,12
+
+
+
+TITLCBOR  DC.B      124,47,4,255,124,4,255,255
+
+SEQTAB    DC      <GPOOKA,<LPOOKA,<GFYGAR,<LFYGAR
+          DC      <RPOOKA,<GPOOKA,<RFYGAR,<GFYGAR
+;*;*;*;*;* PAGE 86 BYTES FULL
+ENDE7AA
+
+
+          ORG     $E800;                  ;LINE 4: OFFSET = 8.
+
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$01        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$00,$00,$01        ;8-15
+          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
+          DC.B      $40,$00,$C0,$00,$40,$00;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $B7,$FE,$BF,$DA;                        ;32-35  BIG,SML FLOWER
+          DC.B      $D5,$55;                                ;       FULL DIRT
+          DC.B      $01,$55,$D5,$55,$D5,$40,$C0,$01        ;       HALF DIRT
+          DC.B      $01,$40,$C0,$01;                        ;       HALF DIRT
+
+          DC.B      $AA,$AA;                                ;       TEDDY HEAD
+          DC.B      $02,$A0,$D5,$40,$E6,$6A,$00,$2A        ;       VEGGIES:C,R,M,C
+          DC.B      $06,$AA,$54,$94,$55,$55,$2B,$A0        ;       E,BP,T,O
+          DC.B      $95,$16,$A5,$5A,$15,$14;                ;       W,G,P
+
+          DC.B      $D0,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $50,$00;                                ;78-79  S
+          DC.B      $54,$54;                                ;80-81  A
+          DC.B      $50,$14;                                ;82-83  Y
+          DC.B      $50,$14,$55,$54;                        ;84-87  LETRG,LETRM
+
+          DC.B      $C3,$0C,$30,$33,$30,$30;                ;88-93  (C) 1983 ATARI
+          DC.B      $C3,$0C,$30,$33,$33,$00;                ;94-99  (C) 1982 NAMCO
+          DC.B      $AA,$AA,$AA,$A8,$AA,$80,$0A,$AA        ;100-07 TITLED10,9
+          DC.B      $0A,$AA,$AA,$A0,$AA,$80,$0A,$AA        ;108-15 TITLEG10,9
+          DC.B      $AA,$A8,$2A,$AA,$AA,$A8,$2A,$AA        ;116-23 TITLEU10,9
+          DC.B      $00,$1F,$FF,$F0,$2A,$7F,$D6,$F0        ;124-31 TDDUG10,9
+          DC.B      $2A,$A8,$AA,$AA;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $50,$14;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FF,$FC,$FF,$F0,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $FC,$FC,$3F,$F0,$FC,$00;                ;156-61 3,4,5
+          DC.B      $FC,$00,$FF,$FC,$FC,$FC;                ;162-67 6,7,8
+          DC.B      $FF,$FC;                                ;168-69 9
+
+
+          ORG     $E8AA
+;* COLORS FOR VEGGIES ARE ARRANGED AS FOLLOWS:
+;*         CARROT,RUTABAGA,MUSHROOM,CUCUMBER,CUCUMBER,EGGPLANT,EGGPLANT,BELLPEPP
+;*         BELLPEPP,TOMATO,TOMATO,ONION,ONION,WATERMELON,WATERMELON,GALAXIAN
+;*         GALAXIAN,PINEAPPLE,TEDDYBEAR
+
+VEGCOL1   DC.B      $D2,$1E,$3F,$F4,$F4,$50,$50,$D4
+          DC.B      $D4,$32,$32,$26,$26,$34,$34,$74
+          DC.B      $74,$D2,$16
+VEGCOL2   DC.B      $34,$D6,$22,$D6,$D6,$52,$52,$3A
+          DC.B      $3A,$D2,$D2,$1E,$1E,$D8,$D8,$1A
+          DC.B      $1A,$1A,$1A
+VEGCOL3   DC.B      $38,$EE,$04,$FC,$FC,$58,$58,$E8
+          DC.B      $E8,$36,$36,$16,$16,$1A,$1A,$54
+          DC.B      $54,$24,$14
+
+TUNLDIR
+          DC.B      $30,$08,$18,$18,$1C,$04,$06,$0E
+          DC.B      $03,$0F,$0F,$01,$03,$07,$0F
+          DC.B      $40,$80;                ;BONZO LEVELS 0,1.
+
+RESPAL3   LDY     #2;                     ;RESTORE PALETTE 3: USE Y IN LOOP SO
+PLAMSGC   LDA     IPALETTE+10,Y;          ;  X RETURNED FROM FREEZFRM WON"T
+          STA     P0C0SHAD+13,Y;          ;  BE CLOBBERED.
+          DEY
+          BPL     PLAMSGC
+          RTS
+;*;*;*;*;* PAGE 86 BYTES FULL
+ENDE8AA
+
+
+          ORG     $E900;                  ;LINE 3: OFFSET = 9.
+
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
+          DC.B      $00,$00,$40,$00,$00,$01,$40,$01        ;16-23
+          DC.B      $00,$00,$40,$00,$00,$01;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $BF,$DE,$AF,$6A;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$5D;                                ;       FULL DIRT
+          DC.B      $01,$5D,$55,$5D,$55,$40,$40,$01        ;       HALF DIRT
+          DC.B      $01,$40,$40,$01;                        ;       HALF DIRT
+
+          DC.B      $8B,$E2;                                ;       TEDDY HEAD
+          DC.B      $00,$90,$95,$A0,$2A,$A6,$00,$0A        ;       VEGGIES:C,R,M,C
+          DC.B      $02,$6A,$11,$10,$16,$14,$0A,$80        ;       E,BP,T,O
+          DC.B      $00,$00,$A5,$5A,$51,$45;                ;       W,G,P
+
+          DC.B      $50,$00,$00,$0D;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $55,$54;                                ;78-79  S
+          DC.B      $15,$50;                                ;80-81  A
+          DC.B      $50,$14;                                ;82-83  Y
+          DC.B      $55,$54,$54,$54;                        ;84-87  LETRG,LETRM
+
+          DC.B      $CC,$0C,$33,$F3,$F3,$F0;                ;88-93  (C) 1983 ATARI
+          DC.B      $CC,$0C,$33,$F3,$F3,$F0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $FF,$FF,$FF,$F0,$FF,$C0,$03,$FF        ;100-07 TITLED10,9
+          DC.B      $03,$FF,$FF,$C0,$FF,$C0,$0F,$FF        ;108-15 TITLEG10,9
+          DC.B      $FF,$FC,$3F,$FC,$FF,$FC,$3F,$FF        ;116-23 TITLEU10,9
+          DC.B      $00,$07,$FF,$F0,$0A,$1F,$F5,$B0        ;124-31 TDDUG10,9
+          DC.B      $3F,$FC,$FF,$FF;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $55,$54;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $FF,$FC,$FF,$F0,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $FF,$FC,$3F,$F0,$FF,$FC;                ;156-61 3,4,5
+          DC.B      $FF,$FC,$FF,$FC,$FF,$FC;                ;162-67 6,7,8
+          DC.B      $FF,$FC;                                ;168-69 9
+
+
+          ORG     $E9AA
+CRXOFST   DC.B      8,16,8,0,8,16,8       ;    ,0
+
+
+ASNGHBF0
+; SNGHBF0 IS INDEXED BY SONG NUMBER.
+; IT CONTAINS THE HIGH BYTE FOR FREQUENCY OF FIRST VOICE.
+;  20 BYTES
+SNGHBF0   DC.B      $00,>SNGCF0,>SNGDF0,>SNGDF0,>SNGNULLF
+          DC.B      >SNG1F0,>SNG2F0,>SNG3F0
+          DC.B      >SNG5F0,>SNG4F0,>SNG6F0,>SNG7F0
+          DC.B      >SNG8F0,>SNG9F0,>SNG10F0,>SNG11F0
+          DC.B      >SNG12F0,>SNG13F0,>SNG14F0,>SNG15F0
+
+PEBBCOLR  DC.B      PEBBLE0A,PEBBLE0B,PEBBLE0C,PEBBLE0D
+          DC.B      PEBBLE1A,PEBBLE1B,PEBBLE1C,PEBBLE1D
+          DC.B      PEBBLE2A,PEBBLE2B,PEBBLE2C,PEBBLE2D
+
+CREATS
+          DC.B      $47,$63,$A3,$4B,$65,$3C,$A9,$A3
+          DC.B      $3C,$63,$47,$4E,$3C,$3A,$33
+          DC.B      $87,$78;                ;BONZO LEVELS 0,1.
+
+RANDCRET  DC.B      $AA,$E1,$55,$0F,$8D,$69,$2D,$96
+
+
+;*;*;*;*;* FROM SELECT.S
+
+;*;*;*;*;* FROM CHKDEATH.S
+;*HSCARGS   DC.B      LCARTNUM,HCARTNUM,0,1,<GAMENAME,>GAMENAME
+HSCARGS   DC.B      LCARTNUM,HCARTNUM,0,1,0,0
+;*         DC.B      <BONZDIFF,>BONZDIFF,<HSCOREX,>HSCOREX
+          DC.B      0,0,<HSCOREX,>HSCOREX
+;*         DC.B      <LOGODLL,>LOGODLL,<SOUND,>SOUND,0
+          DC.B      <LOGODLL,>LOGODLL,<HSCRTS,>HSCRTS,10
+
+SETRACK1  LDA     #1
+          STA     RACKNUM
+          STA     RACKNUM+1
+          RTS
+;*;*;*;*;* 86 BYTES FULL
+ENDE9AA
+
+
+          ORG     $EA00;                  ;LINE 2: OFFSET = 10.
+
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$05        ;0-7
+          DC.B      $00,$00,$00,$00,$00,$01,$00,$05        ;8-15
+          DC.B      $00,$00,$50,$00,$00,$01,$50,$05        ;16-23
+          DC.B      $00,$00,$50,$00,$00,$01;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $BD,$FE,$AA,$AA;                        ;32-35  BIG,SML FLOWER
+          DC.B      $55,$55;                                ;       FULL DIRT
+          DC.B      $05,$55,$55,$55,$55,$50,$40,$01        ;       HALF DIRT
+          DC.B      $05,$50,$40,$01;                        ;       HALF DIRT
+
+          DC.B      $AC,$2A;                                ;       TEDDY HEAD
+          DC.B      $00,$50,$02,$28,$0A,$6A,$00,$06        ;       VEGGIES:C,R,M,C
+          DC.B      $00,$AA,$01,$00,$00,$80,$06,$40        ;       E,BP,T,O
+          DC.B      $00,$00,$95,$56,$44,$41;                ;       W,G,P
+
+          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $15,$54;                                ;78-79  S
+          DC.B      $05,$40;                                ;80-81  A
+          DC.B      $50,$14;                                ;82-83  Y
+          DC.B      $15,$50,$14,$50;                        ;84-87  LETRG,LETRM
+
+          DC.B      $C3,$0C,$33,$33,$33,$30;                ;88-93  (C) 1983 ATARI
+          DC.B      $C3,$0C,$33,$33,$30,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $2A,$AA,$AA,$A0,$AA,$80,$02,$AA        ;100-07 TITLED10,9
+          DC.B      $00,$AA,$AA,$80,$AA,$80,$AA,$AA        ;108-15 TITLEG10,9
+          DC.B      $2A,$A0,$0A,$A8,$AA,$A8,$2A,$AA        ;116-23 TITLEU10,9
+          DC.B      $00,$01,$FF,$C0,$00,$1F,$FD,$60        ;124-31 TDDUG10,9
+          DC.B      $0A,$A0,$AA,$AA;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $15,$50;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $3F,$F0,$03,$F0,$3F,$F0;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $3F,$F0,$0F,$F0,$FF,$FC;                ;156-61 3,4,5
+          DC.B      $3F,$FC,$FF,$FC,$3F,$F0;                ;162-67 6,7,8
+          DC.B      $3F,$F0;                                ;168-69 9
+
+
+          ORG     $EAAA
+
+
+;*;*;*;*;* FROM GENDPL.S
+;*DISPLAY LIST POINTERS FOR TWO DISPLAY LISTS.
+LDPPL     DC.B      <DPL0LIST,<DPL1LIST
+
+;* ZONE SCAN LINE BOUNDARIES....
+TOPZONE   DC.B      11,23,35,47,59,71,83,95,107,119,131,143,155,167,179,191,191
+
+
+;*;*;*;*;* FROM TITLEPAG.S
+TLISTSIZ  DC.B      5,5,5,5,5,5,5,5,5,13,5,5,33,33,5
+;         DC.B      5;                      ;OVERLAPS
+NUMBYTES  DC.B      5,1,1,0,0,1,2,0        ;OVERLAPS
+          DC.B      1,4,0,0,2,1,0,0
+          DC.B      0,7,0,7,0,6,1,3
+          DC.B      3,1,8,0,0,2,2,5
+          DC.B      15,8,7,0,2,3,3,2
+;         DC.B      0;                      ;OVERLAPS
+;* BLACK BOX HEADER...;                    ;OVERLAPS
+BLAKBOX   DC.B      0,CSET1,$1A,BLACKBOX
+
+LFLAMSEQ  DC      LFLAME4;                LEFT FLAME SMALL
+          DC      LFLAME8;                LEFT FLAME 8 PIX
+          DC      LFLAME16;               LEFT FLAME 16 PIX
+          DC      LFLAME24;               LEFT FLAME 24 PIX (MAXIMUM)
+RFLAMSEQ  DC      RFLAME4;                RIGHT FLAME SMALL
+          DC      RFLAME8;                RIGHT FLAME 8 PIX
+          DC      RFLAME16;               RIGHT FLAME 16 PIX
+          DC      RFLAME24;               RIGHT FLAME 24 PIX (MAXIMUM)
+
+ENDEAAA
+
+
+          ORG     $EB00;                  ;TOP SCAN LINE: OFFSET = 11.
+
+          DC.B      $00,$00,$41,$C1,$00,$01,$41,$D5        ;0-7
+          DC.B      $00,$00,$41,$C1,$00,$01,$41,$55        ;8-15
+          DC.B      $40,$00,$51,$C1,$40,$01,$75,$D5        ;16-23
+          DC.B      $40,$00,$51,$C1,$40,$01;                ;24-29
+          DC.B      $AA,$AA;                                ;30-31  SKY
+          DC.B      $AF,$FA,$AA,$AA;                        ;32-35  BIG,SML FLOWER
+          DC.B      $75,$D5;                                ;36-37  FULL DIRT
+          DC.B      $75,$D5,$75,$D5,$75,$D5,$40,$01        ;38-45  HALF DIRT
+          DC.B      $75,$D5,$40,$01;                        ;46-49  HALF DIRT
+
+          DC.B      $28,$28;                                ;50-51  TEDDY HEAD
+          DC.B      $01,$14,$0A,$20,$03,$A8,$00,$00        ;52-59  VEGGIES:C,R,M,C
+          DC.B      $00,$28,$00,$00,$00,$00,$02,$00        ;60-67  E,BP,T,O
+          DC.B      $00,$00,$85,$52,$00,$00;                ;68-73  W,G,P
+
+          DC.B      $70,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
+
+          DC.B      $00,$00;                                ;78-79  S
+          DC.B      $00,$00;                                ;80-81  A
+          DC.B      $00,$00;                                ;82-83  Y
+          DC.B      $00,$00,$00,$00;                        ;84-87  LETRG,LETRM
+
+          DC.B      $30,$30,$33,$F3,$F3,$30;                ;88-93  (C) 1983 ATARI
+          DC.B      $30,$30,$33,$F3,$F3,$F0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $3F,$FF,$FF,$C0,$FF,$C0,$03,$FF        ;100-07 TITLED10,9
+          DC.B      $00,$3F,$FC,$00,$FF,$C0,$FF,$FF        ;108-15 TITLEG10,9
+          DC.B      $0F,$C0,$03,$F0,$FF,$FC,$3F,$FF        ;116-23 TITLEU10,9
+          DC.B      $00,$00,$FF,$00,$00,$07,$FF,$60        ;124-31 TDDUG10,9
+          DC.B      $03,$C0,$FF,$FF;                        ;132-35 TITLEI10,9
+
+          DC.B      $A0;                                    ;136    RSKYHALF (137)
+          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
+          DC.B      $0A;                                    ;141    LSKYHALF (140)
+          DC.B      $00,$00;                                ;142-43 R
+          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
+
+          DC.B      $00,$00,$00,$00,$00,$00;                ;150-55 NUMBERS: 0,1,2
+          DC.B      $00,$00,$00,$00,$00,$00;                ;156-61 3,4,5
+          DC.B      $00,$00,$00,$00,$00,$00;                ;162-67 6,7,8
+          DC.B      $00,$00;                                ;168-69 9
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+
+;*;*;*;*;*;*;*;*;*;*;*;               CHARACTER AND STAMP DATA                   ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                         CSET2                            ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                     PAGES 4C - 57                        ;*;*;*;*;*;*;*;*;*;*
+
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+
+          ORG     $EBAA
+;* LOW AND HIGH ADDRESSES OF DISPLAY LISTS FOR EACH ZONE.
+LISTTABL  DC.B      <L0Z0,<L0Z1,<L0Z2,<L0Z3,<L0Z4,<L0Z5,<L0Z6
+          DC.B      <L0Z7,<L0Z8,<L0Z9,<L0Z10,<L0Z11,<L0Z12
+          DC.B      <L0Z13,<L0Z14,<L0Z15,<L0Z0,<DUMMYDPL,<DUMMYDPL
+          DC.B      <DUMMYDPL,<DUMMYDPL,<DUMMYDPL
+LISTTBH0  DC.B      >L0Z0,>L0Z1,>L0Z2,>L0Z3,>L0Z4,>L0Z5,>L0Z6
+          DC.B      >L0Z7,>L0Z8,>L0Z9,>L0Z10,>L0Z11,>L0Z12
+          DC.B      >L0Z13,>L0Z14,>L0Z15,>L0Z0,>DUMMYDPL,>DUMMYDPL
+          DC.B      >DUMMYDPL,>DUMMYDPL,>DUMMYDPL
+LISTTBH1  DC.B      >L0Z0,>L1Z1,>L1Z2,>L1Z3,>L1Z4,>L1Z5,>L1Z6
+          DC.B      >L1Z7,>L1Z8,>L1Z9,>L1Z10,>L1Z11,>L1Z12
+          DC.B      >L1Z13,>L1Z14,>L1Z15,>L0Z0,>DUMMYDPL,>DUMMYDPL
+          DC.B      >DUMMYDPL,>DUMMYDPL,>DUMMYDPL
+
+
+BACKMAP
+          LDX     #NUMZONES;              ;SET UP DISPLAY LIST FOR TITLE PAGE.
+SETTBACK  JSR     SETDPLH
+          LDY     #0;                     ;ZERO OUT DIRT BACKGROUND BY SETTING
+          LDA     #$F0;                   ;  CHAR MAP TO POINT TO ZEROS.
+          STA     (DPLOW),Y
+          TYA
+          LDY     #6
+          STA     (DPLOW),Y
+          DEX
+          BNE     SETTBACK
+          RTS
+;*;*;*;*;*   86 BYTES FULL
+ENDEBAA
+
+
+          ORG     $EC00
+          ORG     $ED00
+          ORG     $EE00
+
+          DC      $10,$18;                ; BOUND TO PREVIOUS PAGE!!!
+
+;*;*;*;*;*  FROM MONSTER.S FILE
+;-------- CHARACTER SEQUENCE VALUES
+
+;  !!!! IF THESE STAMP ARRAYS ARE MOVED NEWSEQ IN MONSTER FILE MUST CHANGE !!!!
+;POOKA ARRAYS MUST STAY TOGETHER AND ON SAME PAGE WITH FYGAR ARRAYS.
+RPOOKA    DC      RPOOKA2,RPOOKA2,RPOOKA1,RPOOKA1,RPOOKA1
+          DC      RPOOKA1,RPOOKA1,RPOOKA1,0
+LPOOKA    DC      LPOOKA2,LPOOKA2,LPOOKA1,LPOOKA1,LPOOKA1
+          DC      LPOOKA1,LPOOKA1,LPOOKA1,0
+GPOOKA    DC      GPOOKA1,GPOOKA2,GPOOKA2,GPOOKA2        ;,0
+TITLXPOS  DC.B      0,4,124,34,64,64,94,4,124  ;OVERLAPPED WITH ABOVE.
+
+;FYGAR ARRAYS MUST STAY TOGETHER AND ON SAME PAGE WITH POOKA ARRAYS.
+RFYGAR    DC      RFYGAR1,RFYGAR1,RFYGAR2,RFYGAR2
+          DC      RFYGAR1,RFYGAR1,RFYGAR2,RFYGAR2,0
+LFYGAR    DC      LFYGAR1,LFYGAR1,LFYGAR2,LFYGAR2
+          DC      LFYGAR1,LFYGAR1,LFYGAR2,LFYGAR2,0
+GFYGAR    DC      GFYGAR1,GFYGAR2,GFYGAR2,GFYGAR2        ;,0
+TITLCDIR  DC.B      0,1,2,4,0,2,4,4        ;OVERLAPPED WITH ABOVE.
+LOGODLL   DC.B      $CF,>DUMMYDPL,<DUMMYDPL
+          DC.B      $4F,>DUMMYDPL,<DUMMYDPL
+          DC.B      $43,>DUMMYDPL,<DUMMYDPL
+          DC.B      $4B,>L0Z13,L0Z13P5
+          DC.B      $4B,>L0Z12,L0Z12P5
+          DC.B      $43,>DUMMYDPL,<DUMMYDPL
+          DC.B      $4B,>L0Z9,L0Z9P5
+          DC.B      $4C,>DUMMYDPL,<DUMMYDPL
+
+
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*       DLI ROUTINES:  NMI VECTOR POINTS AT A RAM;          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               LOCATION WHICH CONTAINS A JUMP TO          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               THE NEXT DLI, DEPENDING ON THE             ;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               CURRENT POSITION ON THE SCREEN.            ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               THE DLI"S ARE ARRANGED AS FOLLOWS:         ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLISETUP   -   JUST BEFORE ZONE 0:         ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              SETS ONSCREEN FLAG TO 1.    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLISCORE   -   SCORE ZONE USES PALETTE 5,  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              SO THIS DLI RESETS PAL 5    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              FOR VEGGIE COLORS.          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLISKY     -   SKY USES PALETTE 7, SO DLI  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              RESETS IT FOR DIRT LAYER 1. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT0   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 6 FOR DIRT LAYER 2. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT1   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 7 FOR DIRT LAYER 3. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT2   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 6 FOR DIRT LAYER 0. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIRESET   -   RESETS PALETTE 5 FOR SCORE. ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT3   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 7 FOR SKY.          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIBOTOM   -   RESETS ONSCREEN TO 0.       ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;               DLIVBLNK   -   WAITS FOR VBLANK TO SYNC    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              DLI"S; RESTORES ORIGINAL    ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                              PALETTES.                   ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*  NOTE: DLI ROUTINES MUST NOT BEGIN PAGE !!!!!;            ;*;*;*;*;*;*;*;*;*;*;*
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;*DLISETUP
+;*         PHA
+;*;*        LDA     #1;                     ;THIS DLI IS FOR THE DUMMY ZONE JUST
+;*;*        STA     ONSCREEN;               ;  BEFORE ZONE 0.  IT SETS ONSCREEN
+;*         LDA     #<DLISCORE;           ;  AND LOW BYTE OF ADDRESS OF NEXT DLI.
+;*         STA     DLIVECT;                ;  EVENTUALLY, WE CAN OPTIMIZE THIS SO
+;*;*        LDA     #>DLISCORE;           ;  THAT ALL DLI CODE IS ON SAME PAGE:
+;*;*        STA     DLIVECT+1;              ;  THEN ONLY LOW BYTE NEED BE UPDATED.
+;*         INC     FRMCNT
+;*         INC     TITLETIM
+;*         BNE     BYESETUP
+;*         INC     SELCTIM
+;*BYESETUP  PLA
+;*         RTI
+
+DLISETUP
+          PHA
+          TXA
+          PHA;                            ;ZONE 0 DLI: SCORE/LIVES LINE.  THIS
+          LDX     VEGCOLR;                ;  USES PALETTE 5, SO IT MUST RESET
+          LDA     VEGCOLR+1;              ;  COLORS FOR VEGETABLES WHEN DONE.
+;*         STA     WSYNC
+          STA     WSYNC
+          STX     P5C2
+          STA     P5C1
+          LDA     #<DLISKY
+          BNE     DLIEND
+;*         STA     DLIVECT
+;*         LDA     #>DLISKY
+;*         STA     DLIVECT+1
+;*         PLA
+;*         TAX
+;*         PLA
+;*         RTI
+
+DLISKY
+          PHA
+          TXA
+          PHA;                            ;SKY ZONE:  USES PALETTE 7, RESETS
+          LDX     DRT1COLR;               ;  PALETTE 7 FOR USE IN DIRT LAYER 1.
+          LDA     DRT1COLR+1
+;*         STA     WSYNC
+          STA     WSYNC
+          STX     P7C1
+          STA     P7C3
+          LDA     #<DLIDIRT0
+          BNE     DLIEND
+;*         STA     DLIVECT
+;*         LDA     #>DLIDIRT0
+;*         STA     DLIVECT+1
+;*         PLA
+;*         TAX
+;*         PLA
+;*         RTI
+
+
+DLIDIRT0
+          PHA
+          TXA
+          PHA;                            ;DIRT LAYER 0: USES PALETTE 6, RESETS
+          LDX     DRT2COLR;               ;  PALETTE 6 FOR USE IN DIRT LAYER 2.
+          LDA     DRT2COLR+1
+;*         STA     WSYNC
+          STA     WSYNC
+          STX     P6C1
+          STA     P6C3
+          LDA     #<DLIDIRT1
+DLIEND    STA     DLIVECT
+;*         LDA     #>DLIDIRT1
+;*         STA     DLIVECT+1
+          BNE     DLIEXIT
+;*         PLA
+;*         TAX
+;*         PLA
+;*         RTI
+
+
+DLIDIRT1
+          PHA
+          TXA
+          PHA;                            ;DIRT LAYER 1: USES PALETTE 7, RESETS
+          LDX     DRT3COLR;               ;  PALETTE 7 FOR USE IN DIRT LAYER 3.
+          LDA     DRT3COLR+1
+;*         STA     WSYNC
+          STA     WSYNC
+          STX     P7C1
+          STA     P7C3
+          INC     FRMCNT
+          ASL     SYNCFRAM
+          BCC     STUFF
+          INC     SYNCFRAM
+STUFF     INC     TITLETIM
+          BNE     ZYXWVU
+          INC     SELCTIM
+ZYXWVU    LDA     #<DLIVBLNK
+          BNE     DLIEND
+;*         STA     DLIVECT
+;*         LDA     #>DLIDIRT3
+;*         STA     DLIVECT+1
+;*         PLA
+;*         TAX
+;*         PLA
+;*         RTI
+
+
+;*DLIDIRT3
+;*         PHA;                            ;CLEARS ONSCREEN FLAG AND SETS DLI
+;*         LDA     #0;                     ;  POINTER TO DLI FOR TOP OF SCREEN.
+;*         STA     ONSCREEN
+;*         LDA     #<DLIVBLNK
+;*ZDLIRTI   STA     DLIVECT
+;*         LDA     #>DLIVBLNK
+;*         STA     DLIVECT+1
+;*         PLA
+;*         RTI
+
+DLIVBLNK
+          PHA
+          TXA
+          PHA
+          TYA
+          PHA
+          LDY     #4
+DLIWLOOP  STA     WSYNC
+          DEY
+          BPL     DLIWLOOP
+ZDLIVBL   LDA     CTRLRD;                 ;WAIT FOR VBLANK TO SYNC DLI"S.
+          BPL     ENDDLIV
+          LDA     CTRLRD
+          BPL     ENDDLIV
+          JSR     DOCOLORS
+          JSR     SOUND
+          LDA     #<DLISETUP
+          STA     DLIVECT
+;*         LDA     #>DLISETUP
+;*         STA     DLIVECT+1
+ENDDLIV   PLA
+          TAY
+DLIEXIT   PLA
+          TAX
+          PLA
+GENERTI   RTI
+
+DLITOP    PHA
+          LDA     #$50
+          STA     CTRL
+          LDA     #CSET1
+          STA     CHARBASE
+          INC     P0C0SHAD+27
+          LDA     P0C0SHAD+27
+          STA     WSYNC
+          STA     P0C0+27
+          LDA     #<DLIBOTM
+          BNE     ZDLIRTI
+
+DLIBOTM   PHA
+          LDA     #$4B
+          STA     CTRL
+          LDA     #$39
+          STA     CHARBASE
+          LDA     #<DLITOP
+ZDLIRTI   STA     DLIVECT
+          PLA
+          RTI
+ENDDLI
+;*;*;*;*;* THIS PAGE IS ??? BYTES FULL
+ENDEE00
           ORG     $EF00
 ;   THIS FILE IS . . .;                   MONSTER.S
 
@@ -6369,753 +8601,26 @@ COPYRGHT  DC.B      $47,$43,$43,$28,$43,$29,$31,$39,$38,$34
 
 ENDSOUND
 ENDE000
-          ORG     $A000
-ENDA000
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;  ARRAYS:  PUT RANDOM ARRAYS HERE SO       ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;           THEY CAN BE OVERLAPPED TO       ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;           SAVE ROOM.                      ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-          ORG     $E0AA
-;*;*;*;*;*  FROM FALL.S FILE
-DISPTS    DC.B  THOUSND1,THOUS25,THOUS4,THOUS6
-          DC.B  THOUS8,THOUS10,THOUS12,THOUS15
-
-
-DOROCKL   DC.B      <RSLIP,<RTOTTER,<RFALL,<RBOTTOM
-          DC.B      <RSPLIT,<RCRUMBL,<RPOINTS,<RFINISH
-
-DOROCKH   DC.B      >RSLIP,>RTOTTER,>RFALL,>RBOTTOM
-          DC.B      >RSPLIT,>RCRUMBL,>RPOINTS,>RFINISH
-
-RKANIM    DC.B      SPLTROCK,CRMBROCK
-
-
-;  DON"T USE THIS SUBR UNTIL SURE DIGDUG IS GOING TO ANIMATE.
-;  USES X,A.
-;  USES TEMP.
-ANIM      LDA     ANIMCNT;                ;THERE ARE THREE STAMPS EACH DIRECTION
-          SEC
-          SBC     #1
-          BPL     ANIM2
-          LDA     #2
-ANIM2     STA     ANIMCNT
-          ASL
-          ASL
-          STY     TEMP
-;*         CLC
-          ADC     TEMP
-          TAX
-          LDA     DANIMS,X
-          STA     DDINDX
-          RTS
-
-;*;*;*;*;*  FROM DDMOVE.S FILE
-XFROMPL   DC.B      $00;                         ;      ,$08,$00,$00
-
-XTOPL     DC.B      $08,$00,$00,$00,$08,$F8,$00,$00,$03,$FD,$00,$00
-          DC.B      $10,$F8,$00,$00
-          DC.B      $07,$F9,$00;                 ;      ,$00
-
-; NOTE:  FLATPTS IS STORED AS HALF OF TRUE POINT VALUE
-FLATPTS   DC.B      $00,$05,$50,$12,$00,$20,$00,$30
-          DC.B      $00,$40,$00,$50,$00,$60,$00,$75
-
-;*;*;*;*;* PAGE 83 BYTES FULL
-ENDE0AA
-
-
-          ORG     $E1AA
-CTURNS    DC.B      124,47,4,71,255
-
-HALFXFM   DC.B      <EAST5,<WEST5,<SOUTH7,<NORTH7
-FROMXFM   DC.B      <HORLFT,<HORRGT,<VERTTOP,<VERTBOT
-TOXFM     DC.B      <HORRGT,<HORLFT,<VERTBOT,<VERTTOP
-ENTRXFM   DC.B      <EAST1,<WEST1,<SOUTH1,<NORTH1
-
-HARPSTMP  DC.B      RHARPOON,LHARPOON,DHARPOON,UHARPOON
-
-DANIMS    DC.B      RDIGDUG1,LDIGDUG1,DDIGDUG1,UDIGDUG1
-          DC.B      RDIGDUG2,LDIGDUG2,DDIGDUG2,UDIGDUG2
-          DC.B      RDIGDUG3,LDIGDUG3,DDIGDUG3,UDIGDUG3
-
-
-VONE      DC.B      1,7,10;               ;   ,0
-VBOUND    DC.B      0,0,11,11
-VHALF     DC.B      5,3,4;               ;   ,6
-VPRE2     DC.B      6,2,1,9;            ;MIGHT BE UNNECESSARY FOR HORIZONTAL
-VPRE1     DC.B      7,1,0,10
-
-WHNSPEED  DC.B      2,3,4,5;                ;   ,6
-
-VPRE3     DC.B      6,2,2,8;            ;UNNECESSARY FOR HORIZONTAL
-;*VPRE4     DC.B      6,2,3,7;            ;PROBABLY NOT NECESSARY
-
-;*;*;*;*;*
-; USES A,X.
-ADJUSTTO  LDA     DDYPOS;                 ;CALC DIGDUG LEADING EDGE
-          CLC
-          ADC     YTOPL,Y
-          TAX
-          LDA     DDXPOS
-          CLC
-          ADC     XTOPL,Y
-          RTS;                            ;14
-
-MOREPUMP  LDA     MAXPUMP
-          CLC
-          ADC     #$04
-          STA     MAXPUMP
-          RTS
-
-;*;*;*;*;* PAGE 86 BYTES FULL
-ENDE1AA
-
-
-          ORG     $E2AA
-
-JOYSWCH   DC.B      $7F,$BF,$DF,$EF
-
-BAR       DC.B      $20,$40;                ; S,W      BOUND TO NEXT PAGE!!!
-          DC.B      $10,$90;                ; N,NE     BOUND TO PREVIOUS PAGE!!!
-          DC.B      $30,$C0;                ; FILTER OUT ILLEGAL COMBINATIONS
-
-FOO
-          DC.B      $7F;                    ; E
-FJOY      DC.B      $DF,$BF,$EF,$7F        ; S,W,N,E
-          DC.B      $FF,$FF;                ; END OF FOO
-REVSWCH
-          DC.B      $BF,$7F,$EF,$DF
-;*         DC.B      $BF,$7F,$EF,$DF
-;*         DC.B      $BF
-
-
-DIGSONG   CMP     #SNGD;                  ;RETURNS EQ IF DIGDUG MUSIC
-          BEQ     DIGSONG2
-          CMP     #SNGDF
-DIGSONG2
-          RTS;                            ;OVERLAPPED WITH FOLLOWING ARRAY!!!
-
-;*ATTBOUND  DC.B      $60,$28,$20,$2F,$50    ;OVERLAPPED WITH PRECEDING SUBR!!!
-;*         DC.B      $10,$28,$8F,$83
-;*         DC.B      $10;                    ;OVERLAPPED WITH FOLLOWING ARRAY!!!
-
-RKTIM     DC.B      $10,$10,$1E;            ;FROM FALL.S, OVERLAPPED!
-
-; NOTE:  ONLY TOP BYTE IS STORED SINCE BOTTOM BYTE IS ALWAYS 0
-;        INDEX OF 0 IS FOR TEDDYBEAR MODE
-VEGPTS    DC.B      $02,$04,$06,$08,$10,$10
-          DC.B      $20,$20,$30,$30,$40,$40
-          DC.B      $50,$50,$60,$60,$70,$70
-          DC.B      $80
-
-FPOINTS   DC.B      VHUND2,VHUND4,VHUND6,VHUND8,VTHOUS1,VTHOUS1
-          DC.B      VTHOUS2,VTHOUS2,VTHOUS3,VTHOUS3,VTHOUS4,VTHOUS4
-          DC.B      VTHOUS5,VTHOUS5,VTHOUS6,VTHOUS6,VTHOUS7,VTHOUS7
-          DC.B      VTHOUS8
-
-
-HCARVE    LDA     #DLEFTEND
-          STA     DIRTMAP,X;              ;CARVE OUT CENTER HORIZONTAL TUNNEL.
-          LDA     #DHMIDDLE
-          STA     DIRTMAP+1,X
-          LDA     #DRHTEND
-          STA     DIRTMAP+2,X
-          RTS
-
-;*;*;*;*;* PAGE 86 BYTES FULL
-ENDE2AA
-
-
-          ORG     $E3AA
-;*;*;*;*;*  FROM MONSTER.S FILE
-;-------- ROM TABLES
-
-XTABLE    DC      $00,$00,$FF,$FF,$00,$00,$FF,$FF
-          DC      $01,$01,$00,$00,$01,$01,$00;          ;     ,$00
-
-YTABLE    DC      $00,$FF,$00,$FF,$01,$00,$01,$00
-          DC      $00,$FF,$00,$FF,$01,$00,$01,$00
-
-SPEEDTAB  DC      $EE;                    POOKA SLOW     12 BITS
-          DC      $EE
-          DC      $92;                    POOKA GHOST    5 BITS
-          DC      $48
-          DC      $7F;                    POOKA FAST     15 BITS
-          DC      $FF
-          DC      $95;                    POOKA GHOST    7
-          DC      $4A
-          DC      $F7;                    FYGAR SLOW     13 BITS
-          DC      $77
-          DC      $89;                    FYGAR GHOST    5
-          DC      $24
-          DC      $FF;                    FYGAR FAST     16 BITS
-          DC      $FF
-          DC      $A9;                    FYGAR GHOST    7
-          DC      $54
-
-;* FJOY: FAKE JOYSTICK MOVEMENTS FOR ROTATING SELECT OPTIONS WITH SELECT BUTTON.
-;*FJOY      DC.B      $BF,$7F,$DF,$EF       ;USES REVSWCH INSTEAD.
-
-
-RFALLTBL  DC.B      1,2,2,2,1,2,2
-
-ANDF0     AND     #$F0
-          BNE     NOTZERO1
-          BCC     NOTZERO1
-          LDA     #BLANK1;                ;BLANK STAMP.
-;*         BEQ     ANDF0RTS
-          RTS
-NOTZERO1  LSR;                      ;GET INDEX INTO STAMP TABLE FOR THIS
-          LSR;                      ;  DIGIT OF SCORE.
-          LSR
-;*         CLC
-          ADC     #FULL0
-ANDF0RTS  RTS
-
-
-INITDIGS  LDY     #4
-          LDA     #0
-INITSNDD  STA     DURINDX0,Y;             ;TIME TO START DD MUSIC OVER
-          DEY
-          BPL     INITSNDD
-          STY     DUNINDX0
-          STY     DUNINDX1
-          RTS
-
-ENDE3AA
-
-
-          ORG     $E4AA
-FRUITAB   DC      TEDDY
-          DC      CARROT,RUTABAGA,MUSHROOM,CUCUMBER,CUCUMBER
-          DC      EGGPLANT,EGGPLANT,BELLPEPP,BELLPEPP,TOMATO
-          DC      TOMATO,ONION,ONION,WATERMEL,WATERMEL,GALAXIAN
-          DC      GALAXIAN,PINEAPPL      ;BETTY AND AVA-ROBIN WERE HERE!
-
-
-DIRTABLE  DC.B      <DIRT0,<DIRT1,<DIRT2,<DIRT3,<DIRT4,<DIRT5
-          DC.B      <DIRT6,<DIRT7,<DIRT8,<DIRT9,<DIRT10,<DIRT11
-          DC.B      <DIRT12,<DIRT13,<DIRT14,<SKY15
-
-MODETAB   DC.B      <DIGDIAG,<DIGVERT,<DIGHORIZ
-          DC.B      <DIGVERT,<DIGHORIZ,<DIGDIAG
-          DC.B      <DIGVERT,<DIGHORIZ
-
-
-PRITES0   DC.B      RPUMP4,RPUMP8,RPUMP12,RPUMP16,RPUMP20,RPUMP24
-;         ;                               ;FROM COLLISON.S
-
-DDMIDDLE
-          LDA     #DDMIDLY
-          STA     DDYPOS
-          LDA     #DDMIDLX
-          STA     DDXPOS
-          LDA     #RDIGDUG1
-          STA     DDINDX
-          RTS
-
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*       GETRXY: TURN DIRTMAP INDEX INTO X AND Y COORDINATE.;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               RETURNS X IN A, Y IN X.                    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-GETRXY
-          PHP
-          PHA;                            ;SAVE INDEX.
-          LSR;                      ;Y IN TOP NIBBLE.
-          LSR
-          LSR
-          LSR
-          EOR     #$FF
-          CLC
-          ADC     #16
-          TAX
-          LDA     TOPZONE,X
-          TAX
-          PLA
-          AND     #$0F
-          ASL;                      ;MULTIPLY BOTTOM NIBBLE BY 8 FOR X.
-          ASL
-          ASL
-          PLP
-          RTS
-
-ENDE4AA
-
-
-          ORG     $E5AA
-;*;*;*;*;*  FROM COLLISON.S FILE
-
-;*;*;* PUMP TABLES: ARRANGED BY DIRECTION, THEN STAMP NUMBER.  STAMP 0 SHOULD
-;*;*;*    ;          BE LOCATED AT X,Y POSITION OF UPPER LEFTMOST CORNER OF
-;*;*;*    ;          PUMP.  STAMP 1 WILL BE AT X,(Y-12), AND STAMP 2 AT X,(Y-24).
-;*;*;*    ;          READING ACROSS EACH VERTICAL TABLE GIVES THE APPROPRIATE STAMP
-;*;*;*    ;          FOR PUMP LENGTHS 6,12,18,24,30,36; AND WIDTHS 4,8,12,16,20,24
-;*;*;*    ;          FOR HORIZONTAL TABLES.  HORIZONTAL TABLES DO NOT EXIST FOR
-;*;*;*    ;          STAMPS 1 AND 2 AS A HORIZONTAL PUMP IS ONLY ONE STAMP HIGH.
-;*;*;*    ;          INSTEAD, ZBLANK WILL BE LOADED INTO APPROPRIATE STMPYPOS ENTRY.
-
-PDOWNS2   DC.B      ZBLANK,ZBLANK;          ; ,ZBLANK,ZBLANK,DPUMP6,DPUMP12
-PDOWNS1   DC.B      ZBLANK,ZBLANK;          ; ,DPUMP6,DPUMP12,DFULL6,DFULL12
-PDOWNS0   DC.B      DPUMP6,DPUMP12,DFULL6,DFULL12,DFULL6,DFULL12
-
-PUPS0     DC.B      UPUMP6,UPUMP12,UPUMP12,UPUMP12,UPUMP12,UPUMP12
-PUPS2     DC.B      ZBLANK,ZBLANK;          ; ,ZBLANK,ZBLANK,UFULL6,UFULL12
-PUPS1     DC.B      ZBLANK,ZBLANK,UFULL6,UFULL12,UFULL12,UFULL12
-
-PLEFTS0   DC.B      LPUMP4,LPUMP8,LPUMP12,LPUMP16,LPUMP20,LPUMP24
-
-
-
-
-BURSTPTS  DC.B      $05,$04,$03,$02
-          DC.B      $10,$08,$06,$04
-
-BPOINTS   DC.B      HUNDRED5,HUNDRED4,HUNDRED3,HUNDRED2
-          DC.B      THOUSND1,HUNDRED8,HUNDRED6,HUNDRED4
-
-BLWSTMPS  DC.B      LBPOOKA1,LBPOOKA2,LBPOOKA3,LBPOOKA4
-          DC.B      RBPOOKA1,RBPOOKA2,RBPOOKA3,RBPOOKA4
-          DC.B      LBFYGAR1,LBFYGAR2,LBFYGAR3,LBFYGAR4
-          DC.B      RBFYGAR1,RBFYGAR2,RBFYGAR3,RBFYGAR4
-
-SETPAL3   LDX     #2
-PHAMSGC   LDA     #$84;                   ;USE PALETTE 3 FOR COLORS OF LETTERS.
-          STA     P0C0SHAD+13,X
-          DEX
-          BPL     PHAMSGC
-          RTS
-
-SAVDUN    LDY     #6;                     ;SAVES CURRENT DIGDUG MUSIC INFO
-SAVDUN2   LDA     CURINDX0,Y
-          STA     DURINDX0,Y
-          DEY
-          BPL     SAVDUN2
-          RTS
-ENDE5AA
-
-
-          ORG     $E6AA
-;*;*;*;*;* FROM IGAMERAK.S
-;* HEADERS FOR INITIAL SCORE LINE STAMPS: 4 EXTRA MEN PER PLAYER, PLAYER POINTER.
-ISCORLIN  DC.B      <SCOREMAP,W1ZONE,>SCOREMAP,$B0,16
-          DC.B      BLANK1,$3E,CSET1,24,BLANK1,$3E,CSET1,32,BLANK1,$3E,CSET1,40
-          DC.B      BLANK1,$3E,CSET1,48,BLANK1,$3E,CSET1,56,FULL0,$3E,CSET1,64
-          DC.B      BLANK1,$3E,CSET1,88,BLANK1,$3E,CSET1,96,BLANK1,$3E,CSET1,104
-          DC.B      BLANK1,$3E,CSET1,112,BLANK1,$3E,CSET1,120,BLANK1,$3E,CSET1,128
-          DC.B      BLANK1,$9E,CSET1,76
-          DC.B      0,0
-
-
-PUTTITLE  PHA
-          JSR     SETDPLH
-          PLA
-          TAX
-;*;*;*       JMP     PUTMPLAT
-;*;*;*       RTS
-PUTMPLAT  LDA     TEMPLATE,X
-          STA     (DPLOW),Y
-          DEX
-          DEY
-          CPY     #5
-          BCS     PUTMPLAT
-          RTS
-
-
-WAITVBL   BIT     CTRLRD
-          BPL     WAITVBL
-          BIT     CTRLRD
-          BPL     WAITVBL
-          RTS
-
-;*AREVSWCH  DC.B      $40,$80,$10,$20        ;USED IN DDMOVE
-ENDE6AA
-
-
-          ORG     $E7AA
-;*DISPLAY LIST LISTS DLI BYTES: FIRST BYTE IS FOR ZONE 1 AT BOTTOM OF SCREEN,
-;*         LAST BYTE FOR DUMMY ZONE AT TOP OF SCREEN
-DLIBITS   DC.B      $4B,$4B,$4B,$4B,$4B,$CB,$4B,$4B,$4B,$CB,$4B,$4B,$4B,$CB
-          DC.B      $CB,$4B,$4F,$47,$CC,$4B,$4B
-
-;* LOW ADDRESSES FOR CHARACTER MAPS FOR EACH ZONE...
-MAPLOW    DC.B      $EF,$E0,$D0,$C0,$B0,$A0,$90,$80,$70,$60,$50,$40,$30,$20,$10
-;         DC.B      0
-;* INITIAL PALETTE COLORS...;              ;OVERLAPS WITH ABOVE (BLACK = 0)
-IPALETTE  DC.B      BLACK,DDBLUE,WHITE,BLACK
-          DC.B      $34,$1A,$0E;            ;RED,YELLOW,WHITE
-          DC.B      $30,$00,$44;            ;BROWN,BLACK,TAN
-          DC.B      $D6,$24,$0E;            ;GREEN, ORANGE, WHITE
-          DC.B      YELLOW,DDBLUE,$A0      ;NUMLIVES IN COL 3.
-          DC.B      SKYBLUE,SKYBLUE,PL1COLR ;SCORE,VEGGIE
-          DC.B      YELLOW,DDBLUE,PEBBLE1  ;DIRT0, DIRT2
-          DC.B      $D4,SKYBLUE,$34        ;SKY,DIRT1,DIRT3
-
-;*;*;*;*;* FROM INITDIRT.S
-CRYOFST   DC.B      0,12,24,12,0,12,24,12
-
-
-
-TITLCBOR  DC.B      124,47,4,255,124,4,255,255
-
-SEQTAB    DC      <GPOOKA,<LPOOKA,<GFYGAR,<LFYGAR
-          DC      <RPOOKA,<GPOOKA,<RFYGAR,<GFYGAR
-;*;*;*;*;* PAGE 86 BYTES FULL
-ENDE7AA
-
-
-          ORG     $E8AA
-;* COLORS FOR VEGGIES ARE ARRANGED AS FOLLOWS:
-;*         CARROT,RUTABAGA,MUSHROOM,CUCUMBER,CUCUMBER,EGGPLANT,EGGPLANT,BELLPEPP
-;*         BELLPEPP,TOMATO,TOMATO,ONION,ONION,WATERMELON,WATERMELON,GALAXIAN
-;*         GALAXIAN,PINEAPPLE,TEDDYBEAR
-
-VEGCOL1   DC.B      $D2,$1E,$3F,$F4,$F4,$50,$50,$D4
-          DC.B      $D4,$32,$32,$26,$26,$34,$34,$74
-          DC.B      $74,$D2,$16
-VEGCOL2   DC.B      $34,$D6,$22,$D6,$D6,$52,$52,$3A
-          DC.B      $3A,$D2,$D2,$1E,$1E,$D8,$D8,$1A
-          DC.B      $1A,$1A,$1A
-VEGCOL3   DC.B      $38,$EE,$04,$FC,$FC,$58,$58,$E8
-          DC.B      $E8,$36,$36,$16,$16,$1A,$1A,$54
-          DC.B      $54,$24,$14
-
-TUNLDIR
-          DC.B      $30,$08,$18,$18,$1C,$04,$06,$0E
-          DC.B      $03,$0F,$0F,$01,$03,$07,$0F
-          DC.B      $40,$80;                ;BONZO LEVELS 0,1.
-
-RESPAL3   LDY     #2;                     ;RESTORE PALETTE 3: USE Y IN LOOP SO
-PLAMSGC   LDA     IPALETTE+10,Y;          ;  X RETURNED FROM FREEZFRM WON"T
-          STA     P0C0SHAD+13,Y;          ;  BE CLOBBERED.
-          DEY
-          BPL     PLAMSGC
-          RTS
-;*;*;*;*;* PAGE 86 BYTES FULL
-ENDE8AA
-
-
-          ORG     $E9AA
-CRXOFST   DC.B      8,16,8,0,8,16,8       ;    ,0
-
-
-ASNGHBF0
-; SNGHBF0 IS INDEXED BY SONG NUMBER.
-; IT CONTAINS THE HIGH BYTE FOR FREQUENCY OF FIRST VOICE.
-;  20 BYTES
-SNGHBF0   DC.B      $00,>SNGCF0,>SNGDF0,>SNGDF0,>SNGNULLF
-          DC.B      >SNG1F0,>SNG2F0,>SNG3F0
-          DC.B      >SNG5F0,>SNG4F0,>SNG6F0,>SNG7F0
-          DC.B      >SNG8F0,>SNG9F0,>SNG10F0,>SNG11F0
-          DC.B      >SNG12F0,>SNG13F0,>SNG14F0,>SNG15F0
-
-PEBBCOLR  DC.B      PEBBLE0A,PEBBLE0B,PEBBLE0C,PEBBLE0D
-          DC.B      PEBBLE1A,PEBBLE1B,PEBBLE1C,PEBBLE1D
-          DC.B      PEBBLE2A,PEBBLE2B,PEBBLE2C,PEBBLE2D
-
-CREATS
-          DC.B      $47,$63,$A3,$4B,$65,$3C,$A9,$A3
-          DC.B      $3C,$63,$47,$4E,$3C,$3A,$33
-          DC.B      $87,$78;                ;BONZO LEVELS 0,1.
-
-RANDCRET  DC.B      $AA,$E1,$55,$0F,$8D,$69,$2D,$96
-
-
-;*;*;*;*;* FROM SELECT.S
-
-;*;*;*;*;* FROM CHKDEATH.S
-;*HSCARGS   DC.B      LCARTNUM,HCARTNUM,0,1,<GAMENAME,>GAMENAME
-HSCARGS   DC.B      LCARTNUM,HCARTNUM,0,1,0,0
-;*         DC.B      <BONZDIFF,>BONZDIFF,<HSCOREX,>HSCOREX
-          DC.B      0,0,<HSCOREX,>HSCOREX
-;*         DC.B      <LOGODLL,>LOGODLL,<SOUND,>SOUND,0
-          DC.B      <LOGODLL,>LOGODLL,<HSCRTS,>HSCRTS,10
-
-SETRACK1  LDA     #1
-          STA     RACKNUM
-          STA     RACKNUM+1
-          RTS
-;*;*;*;*;* 86 BYTES FULL
-ENDE9AA
-
-
-          ORG     $EAAA
-
-
-;*;*;*;*;* FROM GENDPL.S
-;*DISPLAY LIST POINTERS FOR TWO DISPLAY LISTS.
-LDPPL     DC.B      <DPL0LIST,<DPL1LIST
-
-;* ZONE SCAN LINE BOUNDARIES....
-TOPZONE   DC.B      11,23,35,47,59,71,83,95,107,119,131,143,155,167,179,191,191
-
-
-;*;*;*;*;* FROM TITLEPAG.S
-TLISTSIZ  DC.B      5,5,5,5,5,5,5,5,5,13,5,5,33,33,5
-;         DC.B      5;                      ;OVERLAPS
-NUMBYTES  DC.B      5,1,1,0,0,1,2,0        ;OVERLAPS
-          DC.B      1,4,0,0,2,1,0,0
-          DC.B      0,7,0,7,0,6,1,3
-          DC.B      3,1,8,0,0,2,2,5
-          DC.B      15,8,7,0,2,3,3,2
-;         DC.B      0;                      ;OVERLAPS
-;* BLACK BOX HEADER...;                    ;OVERLAPS
-BLAKBOX   DC.B      0,CSET1,$1A,BLACKBOX
-
-LFLAMSEQ  DC      LFLAME4;                LEFT FLAME SMALL
-          DC      LFLAME8;                LEFT FLAME 8 PIX
-          DC      LFLAME16;               LEFT FLAME 16 PIX
-          DC      LFLAME24;               LEFT FLAME 24 PIX (MAXIMUM)
-RFLAMSEQ  DC      RFLAME4;                RIGHT FLAME SMALL
-          DC      RFLAME8;                RIGHT FLAME 8 PIX
-          DC      RFLAME16;               RIGHT FLAME 16 PIX
-          DC      RFLAME24;               RIGHT FLAME 24 PIX (MAXIMUM)
-
-ENDEAAA
-
-
-          ORG     $EBAA
-;* LOW AND HIGH ADDRESSES OF DISPLAY LISTS FOR EACH ZONE.
-LISTTABL  DC.B      <L0Z0,<L0Z1,<L0Z2,<L0Z3,<L0Z4,<L0Z5,<L0Z6
-          DC.B      <L0Z7,<L0Z8,<L0Z9,<L0Z10,<L0Z11,<L0Z12
-          DC.B      <L0Z13,<L0Z14,<L0Z15,<L0Z0,<DUMMYDPL,<DUMMYDPL
-          DC.B      <DUMMYDPL,<DUMMYDPL,<DUMMYDPL
-LISTTBH0  DC.B      >L0Z0,>L0Z1,>L0Z2,>L0Z3,>L0Z4,>L0Z5,>L0Z6
-          DC.B      >L0Z7,>L0Z8,>L0Z9,>L0Z10,>L0Z11,>L0Z12
-          DC.B      >L0Z13,>L0Z14,>L0Z15,>L0Z0,>DUMMYDPL,>DUMMYDPL
-          DC.B      >DUMMYDPL,>DUMMYDPL,>DUMMYDPL
-LISTTBH1  DC.B      >L0Z0,>L1Z1,>L1Z2,>L1Z3,>L1Z4,>L1Z5,>L1Z6
-          DC.B      >L1Z7,>L1Z8,>L1Z9,>L1Z10,>L1Z11,>L1Z12
-          DC.B      >L1Z13,>L1Z14,>L1Z15,>L0Z0,>DUMMYDPL,>DUMMYDPL
-          DC.B      >DUMMYDPL,>DUMMYDPL,>DUMMYDPL
-
-
-BACKMAP
-          LDX     #NUMZONES;              ;SET UP DISPLAY LIST FOR TITLE PAGE.
-SETTBACK  JSR     SETDPLH
-          LDY     #0;                     ;ZERO OUT DIRT BACKGROUND BY SETTING
-          LDA     #$F0;                   ;  CHAR MAP TO POINT TO ZEROS.
-          STA     (DPLOW),Y
-          TYA
-          LDY     #6
-          STA     (DPLOW),Y
-          DEX
-          BNE     SETTBACK
-          RTS
-;*;*;*;*;*   86 BYTES FULL
-ENDEBAA
-
-
-          ORG     $C000
-RANDROKS  DC.B      $29,$35,$64,$82,$8D,$9A,$A5,$C9
-
-PALWBYTE  DC.B      $1E,$7E,$5E,$3F,$3E,$3C,$3A,$3E
-          DC.B      $3C,$3A,$3C,$3E,$3B,$3C,$3D,$3E
-          DC.B      $3F,$1C,$5E,$1D,$3F,$1E,$5E,$3E
-          DC.B      $7E,$3E,$1E,$7E,$3E,$5E,$3F,$1D
-          DC.B      $1C,$3E,$7E,$B0,$F0,$D0,$F0,$D0
-          DC.B      $F0
-
-DANIMIX   DC.B      4,9,9,4
-
-CWALK     DC.B      1,$FF,1
-MESGOFST  DC.B      89,123
-MESGDPLY  DC.B      34
-;         DC.B      38
-
-; SNGLEN IS INDEXED BY SONG NUMBER.
-; IT CONTAINS THE SONG LENGTH.
-;  20 BYTES
-ASNGLEN
-SNGLEN    DC.B      38,16,26,26,1,8,8,5,9,15,20,8,5,14,6,7,12,15,14  ;,22
-
-
-
-; SNGDM  IS INDEXED BY SONG NUMBER.
-; IT CONTAINS THE DURATION. DURATION FOR 2 VOICE SONGS IS SAME BOTH VOICES.
-;  20 BYTES
-ASNGDM
-SNGDM     DC.B      22,1,2,1,7,1,1,1,2,0,0,2,3,3,2,6,3,6,3,4
-
-
-;*;*;*;*;*  FULL
-ENDC000
-
-
-          ORG     $C100
-ROCKS     DC.B      $35,$B4,$9B,$00,$00
-          DC.B      $23,$39,$8D,$B5,$00
-          DC.B      $23,$6C,$BD,$94,$00
-          DC.B      $43,$2B,$5C,$BD,$84
-          DC.B      $63,$29,$3D,$BB,$A6
-          DC.B      $28,$6B,$97,$B3,$00
-          DC.B      $29,$52,$6D,$AC,$00
-          DC.B      $54,$6D,$96,$B8,$00
-          DC.B      $28,$3C,$7A,$72,$B6
-          DC.B      $34,$72,$8C,$B8,$00
-          DC.B      $33,$3B,$BC,$A6,$00
-          DC.B      $39,$7B,$82,$CA,$00
-          DC.B      $32,$29,$BA,$A3,$00
-          DC.B      $32,$4B,$B9,$83,$00
-          DC.B      $52,$39,$9A,$B4,$00
-          DC.B      $53,$9B,$00,$00,$00    ;BONZO LEVEL 0
-          DC.B      $3B,$00,$00,$00,$00    ;BONZO LEVEL 1
-
-;* ADEATH: STAMP INDICES FOR DEATH ANIMATION.
-ADEATH    DC.B      ZBLANK,SDEATH,HRDEATH3,HRDEATH2,HRDEATH1
-          DC.B      ZBLANK,SDEATH,HLDEATH3,HLDEATH2,HLDEATH1
-
-
-          ORG     $C15F
-GENEJMP   DC.B      $4C,<DLIJMP,>DLIJMP
-ENDC100
-
-
-
-          ORG     $C200
-
-ASNGLBF0
-; SNGLBF0 IS INDEXED BY SONG NUMBER.
-; IT CONTAINS THE LOW BYTE FOR FREQUENCY OF FIRST VOICE.
-;  20 BYTES
-SNGLBF0   DC.B      $00,<SNGCF0,<SNGDF0,<SNGDF0,<SNGNULLF
-          DC.B      <SNG1F0,<SNG2F0,<SNG3F0
-          DC.B      <SNG5F0,<SNG4F0,<SNG6F0,<SNG7F0
-          DC.B      <SNG8F0,<SNG9F0,<SNG10F0,<SNG11F0
-          DC.B      <SNG12F0,<SNG13F0,<SNG14F0    ;,<SNG15F0
-
-
-ASNGLBF1
-; SNGLBF1 IS INDEXED BY SONG NUMBER.
-; IT CONTAINS THE LOW BYTE FOR FREQUENCY OF SECOND VOICE, IF THERE IS ONE.
-; HIGH BYTE IS ASSUMED TO BE SNGHBF0.
-;  20 BYTES
-SNGLBF1   DC.B      <SNG15F0,0,<SNGDF1,<SNGDF1
-          DC.B      0,<SNG1F1,0,<SNG3F1
-          DC.B      0,0,0,0
-          DC.B      <SNG8F1,<SNG9F1,0,0
-          DC.B      <SNG12F1,<SNG13F1,<SNG14F1    ;,<SNG15F1
-
-
-; SNGC0 IS INDEXED BY SONG NUMBER.
-; IT CONTAINS THE VALUES FOR THE FIRST VOICE.
-; 0 VALUE MEANS SPECIAL CASE - ROCK FALLING.
-;  20 BYTES
-ASNGC0
-SNGC0     DC.B      <SNG15F1,$04,$D4,$D4,$00,$11,$0D,$47,$04,$04
-          DC.B      $04,$00,$D4,$D4,$04,$04,$DD,$D4,$DD      ;,$D4
-
-
-
-; SNGVV0 IS INDEXED BY SONG NUMBER.
-; IT CONTAINS 0 IF THERE ARE SEPARATE VOLUME TABLES, OR VOLUME ITSELF.
-;  20 BYTES
-ASNGVV0
-SNGVV0    DC.B      $D4,$03,$22,$22,$00,$33,$03,$33,$03,$00
-          DC.B      $04,$07,$74,$34,$07,$05,$33,$44,$00,$44
-
-SETDFAST  LDA     #DHFASTL
-          STA     DHORSPDL
-          LDA     #DHFASTH
-          STA     DHORSPDH
-          LDA     #DIGFAST
-          STA     DIGSPEED
-          RTS;                            ;15
-
-HARPXPL   DC.B      $02,$FE;                ;          ,$00,$00
-HARPYPL   DC.B      $00,$00,$FC,$04
-
-;*;*;*;*;* 98 BYTES FULL
-ENDC200
-
-
-
-          ORG     $C300
-; ROCKPUSH MUST IMMEDIATELY PRECEDE CALCINDX
-ROCKPUSH  LDA     ROCKSX,X;               ;ENTRANCE POINT FROM FALL
-          PHA
-          LDA     ROCKSY,X
-          SEC
-          SBC     #12
-          TAX
-          PLA
-;  EXPECTS X POSITION IN A, Y POSITION IN X.
-;  RETURNS DIRT CHAR IN A, INDEX INTO DIRTMAP IN X.
-;  USES TEMP.
-CALCINDX  LSR
-          LSR
-          LSR
-          STA     TEMP;                   ;COLUMN
-          TXA
-          LSR
-          LSR
-          TAX
-          LDA     DIV3TAB,X
-          TAX;                            ;ROW
-          LDA     MAPLOW,X;               ;ROW ADDRESS
-          CLC
-          ADC     TEMP
-          TAX;                            ;INDEX INTO DIRTMAP
-          LDA     DIRTMAP,X
-          RTS;                            ;34
-
-
-;  USES X,A,Y.
-;  EXPECTS DIRTMAP,X IN A.
-;  USES TEMP.
-;  ASSUMES NEVER CALLED WHEN A<36.
-DIGGER    STA     TEMP;                   ;DIRTMAP,X
-          JSR     BORE;                   ;FOUND IN FALL FILE
-          CMP     #30;                    ;NEVER GOT HERE IF ALREADY < 30.
-          BCS     DIGGER5
-          LDA     #10;                    ;ADD PTS FIRST TIME <30.
-          LDY     #0
-          JSR     ADDSCORE
-          LDX     TEMP;                   ;DON"T SLOW DOWN FOR HOURGLASS+BOWTIE
-          CPX     #46
-          BCS     DIGGER6
-DIGGER3   LDA     #1;                     ;WANT HARPOON AND SLOW SPEED
-          STA     DIGTEMP
-          RTS
-DIGGER5   CMP     TEMP;                   ;ANY CHANGE?
-          BNE     DIGGER3
-DIGGER6   RTS;                            ;32
-
-
-CHKNXTD   CLC
-          ADC     LASTMOVE
-          TAY
-          JSR     ADJUSTTO
-          JSR     CALCINDX
-          CMP     #36
-          BCS     CHKNXTD2
-          LDA     #0;                     ;DOES NOT AFFECT CARRY
-          STA     DIGTEMP;                ;DOES NOT AFFECT CARRY
-CHKNXTD2  RTS;                            ;19
-
-;  USES X AND A.
-;  RETURNS EQ IF ON ROW, NE IF NOT ON ROW.
-ROWHERE   LDX     #15
-          LDA     DDYPOS
-CHKINROW  CMP     TOPZONE,X;              ;ARE WE ON A ROW BORDER?
-          BEQ     ROWHERE2
-          DEX
-          BPL     CHKINROW
-ROWHERE2  RTS;                            ;13
-
-;*;*;* ??? BYTE LEFT...
-ENDC300
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+          ORG     $FF80
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+          DC.B      0,0,0,0,0,0,0,0
+
+          ORG     $FFF8
+          DC.B      $FF;                    ;COUNTRY CODE
+          DC.B      $C7;                    ;MARIA SIGNATURE AND START OF CODE
+;*        ;                                ;DLI VECTOR:  THIS LOCATION IS A
+;*        ;                                ;  JMP TO LOCATION IN RAM (DLIJMP).
+          DC.B      <GENEJMP,>GENEJMP  ;  JUMP ADDRESS IS CHANGED AS DMA
+          ;                               ;  MOVES DOWN SCREEN.
+          ORG     $FFFC
+          DC.B      <MAIN,>MAIN        ;INTERRUPT RESET VECTOR.
+          DC.B      <GENERTI,>GENERTI  ;JUST IN CASE....
 ;;;;;;;;;;;;;;;;;  ORG: PUT STUFF HERE WHICH IS PAGE      ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;       BOUNDARY DEPENDENT.;               ;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
@@ -7125,7 +8630,96 @@ ENDC300
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-          ORG     $EC00
+; PUT AN ORG HERE!!!
+; WARNING!!! - DON"T BEGIN PAGE WITH F1 ARRAY.
+;  THESE SOUND ARRAYS NEED 109 BYTES
+
+ASNGDF0
+SNGDF0    DC.B      $8F,$8F,$CF;                          ;26 BYTES
+          DC.B      $8F,$8F,$8F,$8F
+          DC.B      $8F,$8F,$CF
+          DC.B      $8F,$8F,$8F,$32
+          DC.B      $D1,$D1
+          DC.B      $31,$32,$31,$2F
+          DC.B      $D1,$D1
+          DC.B      $31,$32,$31,$10
+
+
+ASNGDF1
+SNGDF1    DC.B      $CF,$CF;                              ;16 BYTES
+          DC.B      $D0,$D0
+          DC.B      $D1,$D1
+          DC.B      $D2,$D2
+          DC.B      $D3,$D3
+          DC.B      $D3,$D3
+          DC.B      $D4,$D4
+          DC.B      $D2,$50
+
+
+
+
+ASNG10F0
+SNG10F0   DC.B      $12,$11,$10,$0F,$0D,$0F;              ;6 BYTES
+
+
+ASNG11F0
+SNG11F0   DC.B      $17,$14,$12,$17,$9F,$8D;               ;7 BYTES
+          DC.B      $6F
+
+
+
+ASNG15F0
+SNG15F0   DC.B      $8F,$8F,$8F,$6F;                      ;22 BYTES
+          DC.B      $72,$2F
+          DC.B      $72,$2F,$2D
+          DC.B      $92,$92,$72
+          DC.B      $34,$77,$76
+          DC.B      $7F,$36
+          DC.B      $7F,$76
+          DC.B      $94,$94,$54
+
+
+ASNG15F1
+SNG15F1   DC.B      $34,$32,$30,$2F;                      ;32 BYTES
+          DC.B      $34,$2F,$34,$2F
+          DC.B      $34,$2F,$34,$2F
+          DC.B      $34,$2F,$34,$2F
+          DC.B      $34,$2F,$34,$31
+          DC.B      $94,$94,$94,$31
+          DC.B      $34,$31,$34,$30
+          DC.B      $34,$30,$34,$10
+
+
+;*;*;*;*;*  THIS PAGE IS 109 BYTES FULL
+
+
+;  FOLLOWING TWELVE  ARRAYS MUST OCCUR ON SAME PAGE - NEED 128 BYTES
+
+SOUTH7    DC.B      36,38,40,42,28,46,20;          ;$FF,$FF,$FF,$FF,28,$FF,20
+SOUTH1    DC.B      44,12,48,24,44,8,48
+
+NORTH7    DC.B      36,38,22,42,44,46,20;          ;$FF,$FF,22,$FF,$FF,$FF,20
+NORTH1    DC.B      40,6,40,18,48,2,48
+
+WEST5     DC.B      36,38,40,26,44,10,48;          ;$FF,$FF,$FF,26,$FF,10,$FF
+WEST1     DC.B      42,46,18,42,24,46,16
+
+EAST5     DC.B      36,14,40,42,44,10,48;          ;$FF,14,$FF,$FF,$FF,10,$FF
+EAST1     DC.B      38,38,6,46,12,46,4
+
+VERTTOP   DC.B      0,2,4,6,0,2,4,6,16,18,20,22,16,18,20,30,32,34
+TITLYPOS  DC.B      0,23,23,47,71,23,47,71,71,0,0,0,0,0,0,0,0
+;         DC.B      0,0
+VERTBOT   DC.B      0,0,4,4,8,8,12,12,16,16,20,20,24,24,28,30,32,34
+
+HORRGT    DC.B      0,2,4,6,8,10,12,14,0,2,4,6,8,10,12,30,32,34
+HORLFT    DC.B      0,2,0,2,8,10,8,10,16,18,16,18,24,26,24,30,32,34
+
+FLAMPOS   DC      $04,$08;                PIXEL X-POS OFFSETS FOR FLAME
+;  FROM MONSTER.S;                         BOUND TO NEXT PAGE!!!
+
+ENDED00
+
 ;  PUT IN AN ORG HERE!!! - THIS PAGE IS 256 BYTES FULL.
 ;  WARNING!!! - DON"T BEGIN PAGE WITH F1 ARRAY.
 ASNG7F0
@@ -7267,1597 +8861,3 @@ FLAMTABL  DC      RFYGAR2,LFYGAR2
 
 ENDEC00
 
-          ORG     $ED00
-; PUT AN ORG HERE!!!
-; WARNING!!! - DON"T BEGIN PAGE WITH F1 ARRAY.
-;  THESE SOUND ARRAYS NEED 109 BYTES
-
-ASNGDF0
-SNGDF0    DC.B      $8F,$8F,$CF;                          ;26 BYTES
-          DC.B      $8F,$8F,$8F,$8F
-          DC.B      $8F,$8F,$CF
-          DC.B      $8F,$8F,$8F,$32
-          DC.B      $D1,$D1
-          DC.B      $31,$32,$31,$2F
-          DC.B      $D1,$D1
-          DC.B      $31,$32,$31,$10
-
-
-ASNGDF1
-SNGDF1    DC.B      $CF,$CF;                              ;16 BYTES
-          DC.B      $D0,$D0
-          DC.B      $D1,$D1
-          DC.B      $D2,$D2
-          DC.B      $D3,$D3
-          DC.B      $D3,$D3
-          DC.B      $D4,$D4
-          DC.B      $D2,$50
-
-
-
-
-ASNG10F0
-SNG10F0   DC.B      $12,$11,$10,$0F,$0D,$0F;              ;6 BYTES
-
-
-ASNG11F0
-SNG11F0   DC.B      $17,$14,$12,$17,$9F,$8D;               ;7 BYTES
-          DC.B      $6F
-
-
-
-ASNG15F0
-SNG15F0   DC.B      $8F,$8F,$8F,$6F;                      ;22 BYTES
-          DC.B      $72,$2F
-          DC.B      $72,$2F,$2D
-          DC.B      $92,$92,$72
-          DC.B      $34,$77,$76
-          DC.B      $7F,$36
-          DC.B      $7F,$76
-          DC.B      $94,$94,$54
-
-
-ASNG15F1
-SNG15F1   DC.B      $34,$32,$30,$2F;                      ;32 BYTES
-          DC.B      $34,$2F,$34,$2F
-          DC.B      $34,$2F,$34,$2F
-          DC.B      $34,$2F,$34,$2F
-          DC.B      $34,$2F,$34,$31
-          DC.B      $94,$94,$94,$31
-          DC.B      $34,$31,$34,$30
-          DC.B      $34,$30,$34,$10
-
-
-;*;*;*;*;*  THIS PAGE IS 109 BYTES FULL
-
-
-;  FOLLOWING TWELVE  ARRAYS MUST OCCUR ON SAME PAGE - NEED 128 BYTES
-
-SOUTH7    DC.B      36,38,40,42,28,46,20;          ;$FF,$FF,$FF,$FF,28,$FF,20
-SOUTH1    DC.B      44,12,48,24,44,8,48
-
-NORTH7    DC.B      36,38,22,42,44,46,20;          ;$FF,$FF,22,$FF,$FF,$FF,20
-NORTH1    DC.B      40,6,40,18,48,2,48
-
-WEST5     DC.B      36,38,40,26,44,10,48;          ;$FF,$FF,$FF,26,$FF,10,$FF
-WEST1     DC.B      42,46,18,42,24,46,16
-
-EAST5     DC.B      36,14,40,42,44,10,48;          ;$FF,14,$FF,$FF,$FF,10,$FF
-EAST1     DC.B      38,38,6,46,12,46,4
-
-VERTTOP   DC.B      0,2,4,6,0,2,4,6,16,18,20,22,16,18,20,30,32,34
-TITLYPOS  DC.B      0,23,23,47,71,23,47,71,71,0,0,0,0,0,0,0,0
-;         DC.B      0,0
-VERTBOT   DC.B      0,0,4,4,8,8,12,12,16,16,20,20,24,24,28,30,32,34
-
-HORRGT    DC.B      0,2,4,6,8,10,12,14,0,2,4,6,8,10,12,30,32,34
-HORLFT    DC.B      0,2,0,2,8,10,8,10,16,18,16,18,24,26,24,30,32,34
-
-FLAMPOS   DC      $04,$08;                PIXEL X-POS OFFSETS FOR FLAME
-;  FROM MONSTER.S;                         BOUND TO NEXT PAGE!!!
-
-ENDED00
-
-          ORG     $EE00
-
-          DC      $10,$18;                ; BOUND TO PREVIOUS PAGE!!!
-
-;*;*;*;*;*  FROM MONSTER.S FILE
-;-------- CHARACTER SEQUENCE VALUES
-
-;  !!!! IF THESE STAMP ARRAYS ARE MOVED NEWSEQ IN MONSTER FILE MUST CHANGE !!!!
-;POOKA ARRAYS MUST STAY TOGETHER AND ON SAME PAGE WITH FYGAR ARRAYS.
-RPOOKA    DC      RPOOKA2,RPOOKA2,RPOOKA1,RPOOKA1,RPOOKA1
-          DC      RPOOKA1,RPOOKA1,RPOOKA1,0
-LPOOKA    DC      LPOOKA2,LPOOKA2,LPOOKA1,LPOOKA1,LPOOKA1
-          DC      LPOOKA1,LPOOKA1,LPOOKA1,0
-GPOOKA    DC      GPOOKA1,GPOOKA2,GPOOKA2,GPOOKA2        ;,0
-TITLXPOS  DC.B      0,4,124,34,64,64,94,4,124  ;OVERLAPPED WITH ABOVE.
-
-;FYGAR ARRAYS MUST STAY TOGETHER AND ON SAME PAGE WITH POOKA ARRAYS.
-RFYGAR    DC      RFYGAR1,RFYGAR1,RFYGAR2,RFYGAR2
-          DC      RFYGAR1,RFYGAR1,RFYGAR2,RFYGAR2,0
-LFYGAR    DC      LFYGAR1,LFYGAR1,LFYGAR2,LFYGAR2
-          DC      LFYGAR1,LFYGAR1,LFYGAR2,LFYGAR2,0
-GFYGAR    DC      GFYGAR1,GFYGAR2,GFYGAR2,GFYGAR2        ;,0
-TITLCDIR  DC.B      0,1,2,4,0,2,4,4        ;OVERLAPPED WITH ABOVE.
-LOGODLL   DC.B      $CF,>DUMMYDPL,<DUMMYDPL
-          DC.B      $4F,>DUMMYDPL,<DUMMYDPL
-          DC.B      $43,>DUMMYDPL,<DUMMYDPL
-          DC.B      $4B,>L0Z13,L0Z13P5
-          DC.B      $4B,>L0Z12,L0Z12P5
-          DC.B      $43,>DUMMYDPL,<DUMMYDPL
-          DC.B      $4B,>L0Z9,L0Z9P5
-          DC.B      $4C,>DUMMYDPL,<DUMMYDPL
-
-
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*       DLI ROUTINES:  NMI VECTOR POINTS AT A RAM;          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               LOCATION WHICH CONTAINS A JUMP TO          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               THE NEXT DLI, DEPENDING ON THE             ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               CURRENT POSITION ON THE SCREEN.            ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               THE DLI"S ARE ARRANGED AS FOLLOWS:         ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLISETUP   -   JUST BEFORE ZONE 0:         ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              SETS ONSCREEN FLAG TO 1.    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLISCORE   -   SCORE ZONE USES PALETTE 5,  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              SO THIS DLI RESETS PAL 5    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              FOR VEGGIE COLORS.          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLISKY     -   SKY USES PALETTE 7, SO DLI  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              RESETS IT FOR DIRT LAYER 1. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT0   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 6 FOR DIRT LAYER 2. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT1   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 7 FOR DIRT LAYER 3. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT2   -   USES PALETTE 6; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 6 FOR DIRT LAYER 0. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLIRESET   -   RESETS PALETTE 5 FOR SCORE. ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLIDIRT3   -   USES PALETTE 7; DLI RESETS  ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              PALETTE 7 FOR SKY.          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLIBOTOM   -   RESETS ONSCREEN TO 0.       ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;               DLIVBLNK   -   WAITS FOR VBLANK TO SYNC    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              DLI"S; RESTORES ORIGINAL    ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                              PALETTES.                   ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                                                          ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*  NOTE: DLI ROUTINES MUST NOT BEGIN PAGE !!!!!;            ;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*DLISETUP
-;*         PHA
-;*;*        LDA     #1;                     ;THIS DLI IS FOR THE DUMMY ZONE JUST
-;*;*        STA     ONSCREEN;               ;  BEFORE ZONE 0.  IT SETS ONSCREEN
-;*         LDA     #<DLISCORE;           ;  AND LOW BYTE OF ADDRESS OF NEXT DLI.
-;*         STA     DLIVECT;                ;  EVENTUALLY, WE CAN OPTIMIZE THIS SO
-;*;*        LDA     #>DLISCORE;           ;  THAT ALL DLI CODE IS ON SAME PAGE:
-;*;*        STA     DLIVECT+1;              ;  THEN ONLY LOW BYTE NEED BE UPDATED.
-;*         INC     FRMCNT
-;*         INC     TITLETIM
-;*         BNE     BYESETUP
-;*         INC     SELCTIM
-;*BYESETUP  PLA
-;*         RTI
-
-DLISETUP
-          PHA
-          TXA
-          PHA;                            ;ZONE 0 DLI: SCORE/LIVES LINE.  THIS
-          LDX     VEGCOLR;                ;  USES PALETTE 5, SO IT MUST RESET
-          LDA     VEGCOLR+1;              ;  COLORS FOR VEGETABLES WHEN DONE.
-;*         STA     WSYNC
-          STA     WSYNC
-          STX     P5C2
-          STA     P5C1
-          LDA     #<DLISKY
-          BNE     DLIEND
-;*         STA     DLIVECT
-;*         LDA     #>DLISKY
-;*         STA     DLIVECT+1
-;*         PLA
-;*         TAX
-;*         PLA
-;*         RTI
-
-DLISKY
-          PHA
-          TXA
-          PHA;                            ;SKY ZONE:  USES PALETTE 7, RESETS
-          LDX     DRT1COLR;               ;  PALETTE 7 FOR USE IN DIRT LAYER 1.
-          LDA     DRT1COLR+1
-;*         STA     WSYNC
-          STA     WSYNC
-          STX     P7C1
-          STA     P7C3
-          LDA     #<DLIDIRT0
-          BNE     DLIEND
-;*         STA     DLIVECT
-;*         LDA     #>DLIDIRT0
-;*         STA     DLIVECT+1
-;*         PLA
-;*         TAX
-;*         PLA
-;*         RTI
-
-
-DLIDIRT0
-          PHA
-          TXA
-          PHA;                            ;DIRT LAYER 0: USES PALETTE 6, RESETS
-          LDX     DRT2COLR;               ;  PALETTE 6 FOR USE IN DIRT LAYER 2.
-          LDA     DRT2COLR+1
-;*         STA     WSYNC
-          STA     WSYNC
-          STX     P6C1
-          STA     P6C3
-          LDA     #<DLIDIRT1
-DLIEND    STA     DLIVECT
-;*         LDA     #>DLIDIRT1
-;*         STA     DLIVECT+1
-          BNE     DLIEXIT
-;*         PLA
-;*         TAX
-;*         PLA
-;*         RTI
-
-
-DLIDIRT1
-          PHA
-          TXA
-          PHA;                            ;DIRT LAYER 1: USES PALETTE 7, RESETS
-          LDX     DRT3COLR;               ;  PALETTE 7 FOR USE IN DIRT LAYER 3.
-          LDA     DRT3COLR+1
-;*         STA     WSYNC
-          STA     WSYNC
-          STX     P7C1
-          STA     P7C3
-          INC     FRMCNT
-          ASL     SYNCFRAM
-          BCC     STUFF
-          INC     SYNCFRAM
-STUFF     INC     TITLETIM
-          BNE     ZYXWVU
-          INC     SELCTIM
-ZYXWVU    LDA     #<DLIVBLNK
-          BNE     DLIEND
-;*         STA     DLIVECT
-;*         LDA     #>DLIDIRT3
-;*         STA     DLIVECT+1
-;*         PLA
-;*         TAX
-;*         PLA
-;*         RTI
-
-
-;*DLIDIRT3
-;*         PHA;                            ;CLEARS ONSCREEN FLAG AND SETS DLI
-;*         LDA     #0;                     ;  POINTER TO DLI FOR TOP OF SCREEN.
-;*         STA     ONSCREEN
-;*         LDA     #<DLIVBLNK
-;*ZDLIRTI   STA     DLIVECT
-;*         LDA     #>DLIVBLNK
-;*         STA     DLIVECT+1
-;*         PLA
-;*         RTI
-
-DLIVBLNK
-          PHA
-          TXA
-          PHA
-          TYA
-          PHA
-          LDY     #4
-DLIWLOOP  STA     WSYNC
-          DEY
-          BPL     DLIWLOOP
-ZDLIVBL   LDA     CTRLRD;                 ;WAIT FOR VBLANK TO SYNC DLI"S.
-          BPL     ENDDLIV
-          LDA     CTRLRD
-          BPL     ENDDLIV
-          JSR     DOCOLORS
-          JSR     SOUND
-          LDA     #<DLISETUP
-          STA     DLIVECT
-;*         LDA     #>DLISETUP
-;*         STA     DLIVECT+1
-ENDDLIV   PLA
-          TAY
-DLIEXIT   PLA
-          TAX
-          PLA
-GENERTI   RTI
-
-DLITOP    PHA
-          LDA     #$50
-          STA     CTRL
-          LDA     #CSET1
-          STA     CHARBASE
-          INC     P0C0SHAD+27
-          LDA     P0C0SHAD+27
-          STA     WSYNC
-          STA     P0C0+27
-          LDA     #<DLIBOTM
-          BNE     ZDLIRTI
-
-DLIBOTM   PHA
-          LDA     #$4B
-          STA     CTRL
-          LDA     #$39
-          STA     CHARBASE
-          LDA     #<DLITOP
-ZDLIRTI   STA     DLIVECT
-          PLA
-          RTI
-ENDDLI
-;*;*;*;*;* THIS PAGE IS ??? BYTES FULL
-ENDEE00
-;*         ORG     $DFC0
-;*;*;* THESE MUST BE ON SAME PAGE...
-;*PINEDIFF  DC.B      29,29,29,29,29,29,29,29,15,8,13,4,0,15,15,11,4
-;*          DC.B      29
-;*BONZDIFF  DC.B      29,29,29,29,29,29,29,29        ;THIS ROW IS OVERLAPPED.
-;*          DC.B      19,4,3,3,24,1,4,0,17
-;*GAMENAME  DC.B      29,29,29,29,29,29,29,29,29     ;THIS ROW IS OVERLAPPED.
-;*          DC.B      3,8,6,29,3,20,6,29,29,29,29,29
-;*          DC.B      29,29,29,29,29
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-
-;*;*;*;*;*;*;*;*;*;*;*;               CHARACTER AND STAMP DATA                   ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                        CSET1                             ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                    PAGES 40 - 4B                         ;*;*;*;*;*;*;*;*;*;*
-
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-
-          ORG     $E000;                  ;BOTTOM SCAN LINE: OFFSET = 0.
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;0-7    DIRT CHARACTERS
-          DC.B      $54,$54,$54,$54,$54,$5D,$54,$5D        ;8-15
-          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
-          DC.B      $54,$54,$54,$54,$55,$5D;                ;24-29
-          DC.B      $6A,$A9;                                ;30-31  SKY
-          DC.B      $A9,$5A,$A5,$6A;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$5D;                                ;36-37  FULL DIRT CHAR
-          DC.B      $55,$5D,$40,$01,$55,$5D,$55,$5D        ;38-45  HALF FULL DIRT
-          DC.B      $55,$5D,$40,$01;                        ;46-49  HALF FULL DIRT
-
-          DC.B      $0E,$B0;                                ;50-51  TEDDY HEAD
-          DC.B      $80,$00,$00,$00,$0E,$EF,$00,$00        ;52-59  VEGGIES:C,R,M,C
-          DC.B      $0A,$80,$00,$00,$00,$00,$00,$00        ;60-67  E,BP,T,O
-          DC.B      $00,$00,$00,$00,$0A,$A8;                ;68-73  W,G,P
-
-          DC.B      $50,$00,$00,$0D;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $00,$00;                                ;78-79  S
-          DC.B      $00,$00;                                ;80-81  A
-          DC.B      $00,$00;                                ;82-83  Y
-          DC.B      $00,$00,$00,$00;                        ;84-87  LETRG,LETRM
-
-          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$33,$33,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
-          DC.B      $AA,$80,$02,$AA,$2A,$AA,$AA,$80        ;100-07 TITLED10,9
-          DC.B      $AA,$80,$AA,$A8,$00,$AA,$A8,$00        ;108-15 TITLEG10,9
-          DC.B      $AA,$A8,$2A,$AA,$00,$AA,$A8,$00        ;116-23 TITLEU10,9
-          DC.B      $00,$03,$FF,$60,$00,$FF,$3F,$C0        ;124-31 TDDUG10,9
-          DC.B      $AA,$AA,$0A,$A0;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $00,$00;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $00,$00,$00,$00,$00,$00;                ;156-61 3,4,5
-          DC.B      $00,$00,$00,$00,$00,$00;                ;162-67 6,7,8
-          DC.B      $00,$00;                                ;168-69 9
-
-
-          ORG     $E100;                  ;LINE 11: OFFSET = 1.
-
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$05,$00,$05        ;8-15
-          DC.B      $40,$00,$40,$00,$40,$01,$40,$01        ;16-23
-          DC.B      $50,$00,$50,$00,$50,$05;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $A5,$56,$95,$5A;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$55;                                ;36-37  FULL DIRT
-          DC.B      $05,$55,$40,$01,$55,$50,$55,$55        ;38-45  HALF FULL DIRT
-          DC.B      $05,$50,$40,$01;                        ;46-49  HALF FULL DIRT
-
-          DC.B      $2B,$2C;                                ;50-51  TEDDY HEAD
-          DC.B      $A0,$00,$57,$00,$03,$B8,$00,$00        ;52-59  VEGGIES:C,R,M,C
-          DC.B      $2A,$A0,$00,$00,$00,$00,$33,$30        ;60-67  E,BP,T,O
-          DC.B      $00,$00,$03,$C0,$2A,$EA;                ;68-73  W,G,P
-
-          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $55,$50;                                ;78-79  S
-          DC.B      $50,$14;                                ;80-81  A
-          DC.B      $05,$40;                                ;82-83  Y
-          DC.B      $15,$50,$50,$14;                        ;84-87  LETRG,LETRM
-
-          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$33,$33,$33,$33,$30;                ;94-99  (C) 1982 NAMCO
-          DC.B      $FF,$C0,$03,$FF,$FF,$FF,$FF,$F0        ;100-07 TITLED10,9
-          DC.B      $FF,$C0,$00,$00,$0F,$FF,$FF,$C0        ;108-15 TITLEG10,9
-          DC.B      $FF,$FC,$3F,$FF,$0F,$FF,$FF,$C0        ;116-23 TITLEU10,9
-          DC.B      $00,$3F,$FF,$C0,$00,$3F,$0F,$C0        ;124-31 TDDUG10,9
-          DC.B      $FF,$FF,$0F,$F0;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $50,$14;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $3F,$F0,$FF,$FC,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $3F,$F0,$03,$F0,$3F,$F0;                ;156-61 3,4,5
-          DC.B      $3F,$F0,$FF,$00,$3F,$F0;                ;162-67 6,7,8
-          DC.B      $FF,$00;                                ;168-69 9
-
-
-          ORG     $E200;                  ;LINE 10: OFFSET = 2.
-
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;16-23
-          DC.B      $40,$00,$C0,$00,$40,$01;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $96,$66,$5B,$56;                        ;32-35  BIG,SML FLOWER
-          DC.B      $D5,$55;                                ;35-37  FULL DIRT
-          DC.B      $01,$55,$C0,$01,$D5,$40,$D5,$55        ;38-45  HALF DIRT
-          DC.B      $01,$40,$C0,$01;                        ;46-49  HALF DIRT
-
-          DC.B      $EC,$8B;                                ;50-51  TEDDY HEAD
-          DC.B      $A8,$00,$55,$40,$03,$FC,$69,$00        ;52-59  VEGGIES:C,R,M,C
-          DC.B      $96,$A0,$04,$40,$00,$00,$0F,$C0        ;60-67  E,BP,T,O
-          DC.B      $0A,$A0,$03,$C0,$2A,$AE;                ;68-73  W,G,P
-
-          DC.B      $D0,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $AA,$A8;                                ;78-79  S
-          DC.B      $A0,$28;                                ;80-81  A
-          DC.B      $0A,$80;                                ;82-83  Y
-          DC.B      $AA,$A8,$A0,$28;                        ;84-87  LETRG,LETRM
-
-
-          DC.B      $00,$FC,$CF,$CF,$0C,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$F3,$F3,$33,$03,$30;                ;94-99  (C) 1982 NAMCO
-          DC.B      $AA,$80,$02,$AA,$AA,$AA,$AA,$A8        ;100-07 TITLED10,9
-          DC.B      $AA,$80,$00,$00,$0A,$AA,$AA,$A0        ;108-15 TITLEG10,9
-          DC.B      $AA,$A8,$2A,$AA,$2A,$AA,$AA,$A0        ;116-23 TITLEU10,9
-          DC.B      $00,$FF,$FF,$C0,$00,$0F,$03,$C0        ;124-31 TDDUG10,9
-          DC.B      $AA,$AA,$2A,$A8;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $A0,$28;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FF,$FC,$FF,$FC,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $FF,$FC,$03,$F0,$FF,$FC;                ;156-61 3,4,5
-          DC.B      $FF,$FC,$FF,$C0,$FF,$FC;                ;162-67 6,7,8
-          DC.B      $FF,$C0;                                ;168-69 9
-
-
-          ORG     $E300;                  ;LINE 9: OFFSET = 3.
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
-          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
-          DC.B      $40,$00,$40,$00,$40,$00;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $AB,$EA,$AB,$9A;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$55;                                ;36-37  FULL DIRT
-          DC.B      $01,$55,$40,$01,$55,$40,$55,$55        ;38-45  HALF DIRT
-          DC.B      $01,$40,$40,$01;                        ;46-49  HALF DIRT
-
-          DC.B      $E2,$23;                                ;50-51  TEDDY HEAD
-          DC.B      $BA,$00,$55,$70,$E3,$F0,$6E,$80        ;52-59  VEGGIES:C,R,M,C
-          DC.B      $5A,$A8,$15,$50,$15,$54,$6A,$A4        ;60-67  E,BP,T,O
-          DC.B      $29,$68,$03,$C0,$2E,$AA;                ;68-73  W,G,P
-
-          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $00,$14;                                ;78-79  S
-          DC.B      $50,$14;                                ;80-81  A
-          DC.B      $05,$40;                                ;82-83  Y
-          DC.B      $50,$14,$50,$14;                        ;84-87  LETRG,LETRM
-
-          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0F,$F3,$33,$F3,$03,$30;                ;94-99  (C) 1982 NAMCO
-          DC.B      $FF,$C0,$0F,$FF,$FF,$FF,$FF,$FC        ;100-07 TITLED10,9
-          DC.B      $FF,$F0,$0F,$F0,$3F,$FF,$FF,$FC        ;108-15 TITLEG10,9
-          DC.B      $FF,$FC,$3F,$FF,$3F,$FF,$FF,$FC        ;116-23 TITLEU10,9
-          DC.B      $00,$05,$5F,$F0,$00,$0F,$FF,$C0        ;124-31 TDDUG10,9
-          DC.B      $FF,$FF,$3F,$FC;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $50,$14;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FF,$FC,$FF,$FC,$3F,$FC;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $FC,$FC,$FF,$FC,$F0,$FC;                ;156-61 3,4,5
-          DC.B      $FC,$FC,$3F,$C0,$FC,$FC;                ;162-67 6,7,8
-          DC.B      $3F,$C0;                                ;168-69 9
-
-
-          ORG     $E400;                  ;LINE 8: OFFSET = 4.
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$03        ;8-15
-          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
-          DC.B      $40,$00,$40,$00,$40,$00;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $AF,$FA,$AF,$6A;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$57;                                ;36-37  FULL DIRT
-          DC.B      $01,$57,$50,$07,$55,$40,$55,$57        ;38-45  HALF DIRT
-          DC.B      $01,$40,$50,$07;                        ;46-49  HALF DIRT
-
-          DC.B      $EA,$2B;                                ;50-51  TEDDY HEAD
-          DC.B      $2A,$00,$55,$50,$AB,$F0,$1A,$E0        ;52-59  VEGGIES:C,R,M,C
-          DC.B      $6E,$A8,$55,$54,$55,$55,$6B,$A8        ;60-67  E,BP,T,O
-          DC.B      $64,$59,$03,$C0,$2A,$EA;                ;68-73  W,G,P
-
-          DC.B      $50,$00,$00,$07;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $00,$28;                                ;78-79  S
-          DC.B      $AA,$A8;                                ;80-81  A
-          DC.B      $0A,$80;                                ;82-83  Y
-          DC.B      $A0,$28,$A0,$28;                        ;84-87  LETRG,LETRM
-
-          DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0F,$33,$33,$F3,$33,$30;                ;94-99  (C) 1982 NAMCO
-          DC.B      $AA,$AA,$AA,$AA,$AA,$AA,$AA,$AA        ;100-07 TITLED10,9
-          DC.B      $AA,$A8,$2A,$A8,$2A,$AA,$AA,$A8        ;108-15 TITLEG10,9
-          DC.B      $AA,$A8,$2A,$AA,$AA,$AA,$AA,$A8        ;116-23 TITLEU10,9
-          DC.B      $00,$14,$45,$FC,$00,$1F,$FF,$D0        ;124-31 TDDUG10,9
-          DC.B      $AA,$AA,$2A,$A8;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $AA,$A0;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FC,$FC,$0F,$C0,$0F,$C0;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $00,$FC,$FF,$FC,$00,$FC;                ;156-61 3,4,5
-          DC.B      $FC,$FC,$0F,$F0,$FC,$FC;                ;162-67 6,7,8
-          DC.B      $0F,$F0;                                ;168-69 9
-
-
-          ORG     $E500;                  ;LINE 7: OFFSET = 5.
-
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;16-23
-          DC.B      $00,$00,$40,$00,$00,$01;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $BD,$FE,$BF,$DA;                        ;32-35  BIG,SML FLOWER
-          DC.B      $57,$55;                                ;       FULL DIRT
-          DC.B      $03,$55,$57,$55,$57,$40,$57,$55        ;       HALF DIRT
-          DC.B      $03,$40,$57,$55;                        ;       HALF DIRT
-
-          DC.B      $EA,$AB;                                ;       TEDDY HEAD
-          DC.B      $2B,$80,$55,$50,$AA,$B0,$02,$B4        ;       VEGGIES:C,R,M,C
-          DC.B      $6F,$A8,$65,$54,$55,$55,$AE,$E8        ;       E,BP,T,O
-          DC.B      $A5,$5A,$0F,$F0,$3A,$AB;                ;       W,G,P
-
-          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $55,$54;                                ;78-79  S
-          DC.B      $55,$54;                                ;80-81  A
-          DC.B      $15,$50;                                ;82-83  Y
-          DC.B      $50,$54,$51,$14;                        ;84-87  LETRG,LETRM
-
-          DC.B      $00,$33,$F3,$03,$0C,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$30,$C3,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
-          DC.B      $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF        ;100-07 TITLED10,9
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FF        ;108-15 TITLEG10,9
-          DC.B      $FF,$FC,$3F,$FF,$FF,$FF,$FF,$FF        ;116-23 TITLEU10,9
-          DC.B      $00,$14,$45,$FC,$0A,$3F,$FF,$F0        ;124-31 TDDUG10,9
-          DC.B      $FF,$FF,$FF,$FF;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $55,$50;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FC,$FC,$0F,$C0,$03,$F0;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $3F,$FC,$FC,$FC,$00,$FC;                ;156-61 3,4,5
-          DC.B      $FC,$FC,$03,$F0,$3F,$F0;                ;162-67 6,7,8
-          DC.B      $0F,$F0;                                ;168-69 9
-
-
-          ORG     $E600;                  ;LINE 6: OFFSET = 6.
-
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
-          DC.B      $40,$00,$40,$00,$40,$01,$40,$01        ;16-23
-          DC.B      $40,$00,$40,$00,$40,$01;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $BF,$DE,$BF,$DA;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$55;                                ;       FULL DIRT
-          DC.B      $01,$55,$55,$55,$55,$40,$55,$55        ;       HALF DIRT
-          DC.B      $01,$40,$55,$55;                        ;       HALF DIRT
-
-          DC.B      $28,$88;                                ;       TEDDY HEAD
-          DC.B      $0A,$80,$55,$50,$9A,$A8,$00,$A8        ;       VEGGIES:C,R,M,C
-          DC.B      $17,$AA,$75,$54,$5D,$55,$AE,$E8        ;       E,BP,T,O
-          DC.B      $95,$16,$2B,$E8,$0E,$AC;                ;       W,G,P
-
-          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $55,$54;                                ;78-79  S
-          DC.B      $50,$14;                                ;80-81  A
-          DC.B      $54,$54;                                ;82-83  Y
-          DC.B      $50,$54,$51,$14;                        ;84-87  LETRG,LETRM
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $00,$00,$00,$00,$00,$00;                ;94-99  (C) 1982 NAMCO
-          DC.B      $AA,$AA,$AA,$AA,$AA,$AA,$AA,$AA        ;100-07 TITLED10,9
-          DC.B      $2A,$AA,$AA,$A8,$AA,$AA,$AA,$AA        ;108-15 TITLEG10,9
-          DC.B      $AA,$A8,$2A,$AA,$AA,$AA,$AA,$AA        ;116-23 TITLEU10,9
-          DC.B      $00,$15,$55,$FC,$2A,$3F,$DF,$B0        ;124-31 TDDUG10,9
-          DC.B      $AA,$AA,$AA,$AA;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $50,$14;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FC,$FC,$0F,$C0,$F0,$FC;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $3F,$FC,$FC,$F0,$FF,$FC;                ;156-61 3,4,5
-          DC.B      $FF,$FC,$00,$FC,$FF,$FC;                ;162-67 6,7,8
-          DC.B      $3C,$FC;                                ;168-69 9
-
-
-          ORG     $E700;                  ;LINE 5: OFFSET = 7.
-
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
-          DC.B      $40,$00,$40,$00,$40,$01,$40,$01        ;16-23
-          DC.B      $40,$00,$40,$00,$40,$01;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $BF,$FE,$B3,$DA;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$55;                                ;       FULL DIRT
-          DC.B      $01,$55,$55,$55,$55,$40,$50,$05        ;       HALF DIRT
-          DC.B      $01,$40,$50,$05;                        ;       HALF DIRT
-
-          DC.B      $2A,$A8;                                ;       TEDDY HEAD
-          DC.B      $0B,$80,$D5,$50,$AA,$AA,$00,$A8        ;       VEGGIES:C,R,M,C
-          DC.B      $19,$EA,$75,$54,$5D,$55,$6E,$E4        ;       E,BP,T,O
-          DC.B      $91,$56,$AD,$7B,$05,$50;                ;       W,G,P
-
-          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $50,$00;                                ;78-79  S
-          DC.B      $50,$14;                                ;80-81  A
-          DC.B      $50,$14;                                ;82-83  Y
-          DC.B      $50,$00,$55,$54;                        ;84-87  LETRG,LETRM
-
-          DC.B      $30,$30,$30,$33,$F0,$30;                ;88-93  (C) 1983 ATARI
-          DC.B      $30,$30,$30,$33,$F3,$F0;                ;94-99  (C) 1982 NAMCO
-          DC.B      $FF,$FF,$FF,$FC,$FF,$FF,$FF,$FF        ;100-07 TITLED10,9
-          DC.B      $3F,$FF,$FF,$FC,$FF,$F0,$3F,$FF        ;108-15 TITLEG10,9
-          DC.B      $FF,$FC,$3F,$FF,$FF,$FF,$FF,$FF        ;116-23 TITLEU10,9
-          DC.B      $03,$FF,$FF,$FC,$AA,$AA,$96,$AA        ;124-31 TDDUG10,9
-          DC.B      $FF,$FF,$FF,$FF;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $50,$14;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FC,$FC,$0F,$C0,$F0,$FC;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $00,$FC,$3C,$F0,$FF,$F0;                ;156-61 3,4,5
-          DC.B      $FF,$F0,$00,$FC,$FC,$FC;                ;162-67 6,7,8
-          DC.B      $FC,$FC;                                ;168-69 9
-
-
-          ORG     $E800;                  ;LINE 4: OFFSET = 8.
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$01        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$01        ;8-15
-          DC.B      $40,$00,$40,$00,$40,$00,$40,$00        ;16-23
-          DC.B      $40,$00,$C0,$00,$40,$00;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $B7,$FE,$BF,$DA;                        ;32-35  BIG,SML FLOWER
-          DC.B      $D5,$55;                                ;       FULL DIRT
-          DC.B      $01,$55,$D5,$55,$D5,$40,$C0,$01        ;       HALF DIRT
-          DC.B      $01,$40,$C0,$01;                        ;       HALF DIRT
-
-          DC.B      $AA,$AA;                                ;       TEDDY HEAD
-          DC.B      $02,$A0,$D5,$40,$E6,$6A,$00,$2A        ;       VEGGIES:C,R,M,C
-          DC.B      $06,$AA,$54,$94,$55,$55,$2B,$A0        ;       E,BP,T,O
-          DC.B      $95,$16,$A5,$5A,$15,$14;                ;       W,G,P
-
-          DC.B      $D0,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $50,$00;                                ;78-79  S
-          DC.B      $54,$54;                                ;80-81  A
-          DC.B      $50,$14;                                ;82-83  Y
-          DC.B      $50,$14,$55,$54;                        ;84-87  LETRG,LETRM
-
-          DC.B      $C3,$0C,$30,$33,$30,$30;                ;88-93  (C) 1983 ATARI
-          DC.B      $C3,$0C,$30,$33,$33,$00;                ;94-99  (C) 1982 NAMCO
-          DC.B      $AA,$AA,$AA,$A8,$AA,$80,$0A,$AA        ;100-07 TITLED10,9
-          DC.B      $0A,$AA,$AA,$A0,$AA,$80,$0A,$AA        ;108-15 TITLEG10,9
-          DC.B      $AA,$A8,$2A,$AA,$AA,$A8,$2A,$AA        ;116-23 TITLEU10,9
-          DC.B      $00,$1F,$FF,$F0,$2A,$7F,$D6,$F0        ;124-31 TDDUG10,9
-          DC.B      $2A,$A8,$AA,$AA;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $50,$14;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FF,$FC,$FF,$F0,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $FC,$FC,$3F,$F0,$FC,$00;                ;156-61 3,4,5
-          DC.B      $FC,$00,$FF,$FC,$FC,$FC;                ;162-67 6,7,8
-          DC.B      $FF,$FC;                                ;168-69 9
-
-
-          ORG     $E900;                  ;LINE 3: OFFSET = 9.
-
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$01        ;8-15
-          DC.B      $00,$00,$40,$00,$00,$01,$40,$01        ;16-23
-          DC.B      $00,$00,$40,$00,$00,$01;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $BF,$DE,$AF,$6A;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$5D;                                ;       FULL DIRT
-          DC.B      $01,$5D,$55,$5D,$55,$40,$40,$01        ;       HALF DIRT
-          DC.B      $01,$40,$40,$01;                        ;       HALF DIRT
-
-          DC.B      $8B,$E2;                                ;       TEDDY HEAD
-          DC.B      $00,$90,$95,$A0,$2A,$A6,$00,$0A        ;       VEGGIES:C,R,M,C
-          DC.B      $02,$6A,$11,$10,$16,$14,$0A,$80        ;       E,BP,T,O
-          DC.B      $00,$00,$A5,$5A,$51,$45;                ;       W,G,P
-
-          DC.B      $50,$00,$00,$0D;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $55,$54;                                ;78-79  S
-          DC.B      $15,$50;                                ;80-81  A
-          DC.B      $50,$14;                                ;82-83  Y
-          DC.B      $55,$54,$54,$54;                        ;84-87  LETRG,LETRM
-
-          DC.B      $CC,$0C,$33,$F3,$F3,$F0;                ;88-93  (C) 1983 ATARI
-          DC.B      $CC,$0C,$33,$F3,$F3,$F0;                ;94-99  (C) 1982 NAMCO
-          DC.B      $FF,$FF,$FF,$F0,$FF,$C0,$03,$FF        ;100-07 TITLED10,9
-          DC.B      $03,$FF,$FF,$C0,$FF,$C0,$0F,$FF        ;108-15 TITLEG10,9
-          DC.B      $FF,$FC,$3F,$FC,$FF,$FC,$3F,$FF        ;116-23 TITLEU10,9
-          DC.B      $00,$07,$FF,$F0,$0A,$1F,$F5,$B0        ;124-31 TDDUG10,9
-          DC.B      $3F,$FC,$FF,$FF;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $55,$54;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $FF,$FC,$FF,$F0,$FF,$FC;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $FF,$FC,$3F,$F0,$FF,$FC;                ;156-61 3,4,5
-          DC.B      $FF,$FC,$FF,$FC,$FF,$FC;                ;162-67 6,7,8
-          DC.B      $FF,$FC;                                ;168-69 9
-
-
-          ORG     $EA00;                  ;LINE 2: OFFSET = 10.
-
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$05        ;0-7
-          DC.B      $00,$00,$00,$00,$00,$01,$00,$05        ;8-15
-          DC.B      $00,$00,$50,$00,$00,$01,$50,$05        ;16-23
-          DC.B      $00,$00,$50,$00,$00,$01;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $BD,$FE,$AA,$AA;                        ;32-35  BIG,SML FLOWER
-          DC.B      $55,$55;                                ;       FULL DIRT
-          DC.B      $05,$55,$55,$55,$55,$50,$40,$01        ;       HALF DIRT
-          DC.B      $05,$50,$40,$01;                        ;       HALF DIRT
-
-          DC.B      $AC,$2A;                                ;       TEDDY HEAD
-          DC.B      $00,$50,$02,$28,$0A,$6A,$00,$06        ;       VEGGIES:C,R,M,C
-          DC.B      $00,$AA,$01,$00,$00,$80,$06,$40        ;       E,BP,T,O
-          DC.B      $00,$00,$95,$56,$44,$41;                ;       W,G,P
-
-          DC.B      $50,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $15,$54;                                ;78-79  S
-          DC.B      $05,$40;                                ;80-81  A
-          DC.B      $50,$14;                                ;82-83  Y
-          DC.B      $15,$50,$14,$50;                        ;84-87  LETRG,LETRM
-
-          DC.B      $C3,$0C,$33,$33,$33,$30;                ;88-93  (C) 1983 ATARI
-          DC.B      $C3,$0C,$33,$33,$30,$30;                ;94-99  (C) 1982 NAMCO
-          DC.B      $2A,$AA,$AA,$A0,$AA,$80,$02,$AA        ;100-07 TITLED10,9
-          DC.B      $00,$AA,$AA,$80,$AA,$80,$AA,$AA        ;108-15 TITLEG10,9
-          DC.B      $2A,$A0,$0A,$A8,$AA,$A8,$2A,$AA        ;116-23 TITLEU10,9
-          DC.B      $00,$01,$FF,$C0,$00,$1F,$FD,$60        ;124-31 TDDUG10,9
-          DC.B      $0A,$A0,$AA,$AA;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $15,$50;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $3F,$F0,$03,$F0,$3F,$F0;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $3F,$F0,$0F,$F0,$FF,$FC;                ;156-61 3,4,5
-          DC.B      $3F,$FC,$FF,$FC,$3F,$F0;                ;162-67 6,7,8
-          DC.B      $3F,$F0;                                ;168-69 9
-
-
-          ORG     $EB00;                  ;TOP SCAN LINE: OFFSET = 11.
-
-          DC.B      $00,$00,$41,$C1,$00,$01,$41,$D5        ;0-7
-          DC.B      $00,$00,$41,$C1,$00,$01,$41,$55        ;8-15
-          DC.B      $40,$00,$51,$C1,$40,$01,$75,$D5        ;16-23
-          DC.B      $40,$00,$51,$C1,$40,$01;                ;24-29
-          DC.B      $AA,$AA;                                ;30-31  SKY
-          DC.B      $AF,$FA,$AA,$AA;                        ;32-35  BIG,SML FLOWER
-          DC.B      $75,$D5;                                ;36-37  FULL DIRT
-          DC.B      $75,$D5,$75,$D5,$75,$D5,$40,$01        ;38-45  HALF DIRT
-          DC.B      $75,$D5,$40,$01;                        ;46-49  HALF DIRT
-
-          DC.B      $28,$28;                                ;50-51  TEDDY HEAD
-          DC.B      $01,$14,$0A,$20,$03,$A8,$00,$00        ;52-59  VEGGIES:C,R,M,C
-          DC.B      $00,$28,$00,$00,$00,$00,$02,$00        ;60-67  E,BP,T,O
-          DC.B      $00,$00,$85,$52,$00,$00;                ;68-73  W,G,P
-
-          DC.B      $70,$00,$00,$05;                        ;74-77  R,L DIRT EDGE
-
-          DC.B      $00,$00;                                ;78-79  S
-          DC.B      $00,$00;                                ;80-81  A
-          DC.B      $00,$00;                                ;82-83  Y
-          DC.B      $00,$00,$00,$00;                        ;84-87  LETRG,LETRM
-
-          DC.B      $30,$30,$33,$F3,$F3,$30;                ;88-93  (C) 1983 ATARI
-          DC.B      $30,$30,$33,$F3,$F3,$F0;                ;94-99  (C) 1982 NAMCO
-          DC.B      $3F,$FF,$FF,$C0,$FF,$C0,$03,$FF        ;100-07 TITLED10,9
-          DC.B      $00,$3F,$FC,$00,$FF,$C0,$FF,$FF        ;108-15 TITLEG10,9
-          DC.B      $0F,$C0,$03,$F0,$FF,$FC,$3F,$FF        ;116-23 TITLEU10,9
-          DC.B      $00,$00,$FF,$00,$00,$07,$FF,$60        ;124-31 TDDUG10,9
-          DC.B      $03,$C0,$FF,$FF;                        ;132-35 TITLEI10,9
-
-          DC.B      $A0;                                    ;136    RSKYHALF (137)
-          DC.B      $00,$00,$00,$00;                        ;137-40 16 PIX BLANK3.
-          DC.B      $0A;                                    ;141    LSKYHALF (140)
-          DC.B      $00,$00;                                ;142-43 R
-          DC.B      $FF,$FF,$FF,$FF,$FF,$F0;                ;144-49 BLACKBOX
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;150-55 NUMBERS: 0,1,2
-          DC.B      $00,$00,$00,$00,$00,$00;                ;156-61 3,4,5
-          DC.B      $00,$00,$00,$00,$00,$00;                ;162-67 6,7,8
-          DC.B      $00,$00;                                ;168-69 9
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-
-;*;*;*;*;*;*;*;*;*;*;*;               CHARACTER AND STAMP DATA                   ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                         CSET2                            ;*;*;*;*;*;*;*;*;*;*
-;*;*;*;*;*;*;*;*;*;*;*;                     PAGES 4C - 57                        ;*;*;*;*;*;*;*;*;*;*
-
-;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
-
-          ORG     $C062
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
-          DC.B      $06,$00,$06,$00,$05,$00,$DB,$18        ;224-31  RBPOOKA1,2,3,4
-          DC.B      $00,$90,$00,$90,$00,$90,$24,$E7        ;232-39  LBPOOKA1,2,3,4
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;240-47  RBFYGAR1,2,3,4
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;248-55  LBFYGAR1,2,3,4
-
-          ORG     $C162
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
-          DC.B      $15,$DC,$C5,$DC,$C5,$DC,$D1,$57        ;224-31  RBPOOKA1,2,3,4
-          DC.B      $37,$54,$37,$53,$37,$53,$D5,$47        ;232-39  LBPOOKA1,2,3,4
-          DC.B      $1A,$68,$5A,$50,$5A,$68,$16,$9A        ;240-47  RBFYGAR1,2,3,4
-          DC.B      $29,$A4,$05,$A5,$29,$A5,$A6,$94        ;248-255 LBFYGAR1,2,3,4
-
-          ORG     $C262
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
-          DC.B      $55,$57,$D5,$57,$D5,$57,$55,$55        ;224-31  RBPOOKA1,2,3,4
-          DC.B      $D5,$55,$D5,$57,$D5,$57,$55,$55        ;232-39  LBPOOKA1,2,3,4
-          DC.B      $16,$9A,$46,$9C,$56,$BA,$15,$7C        ;240-47  RBFYGAR1,2,3,4
-          DC.B      $A6,$94,$36,$91,$AE,$95,$3D,$54        ;248-255 LBFYGAR1,2,3,4
-
-          ORG     $C362
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;128
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;144
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;160
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;176
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;192
-          DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;208
-          DC.B      $55,$54,$15,$54,$15,$54,$55,$05        ;224-31  RBPOOKA1,2,3,4
-          DC.B      $15,$55,$15,$54,$15,$54,$50,$55        ;232-39  LBPOOKA1,2,3,4
-          DC.B      $A1,$50,$15,$7C,$17,$FF,$05,$CD        ;240-47  RBFYGAR1,2,3,4
-          DC.B      $05,$4A,$3D,$54,$FF,$D4,$73,$50        ;248-55  LBFYGAR1,2,3,4
-
-
-          ORG     $C400;                  ;BOTTOM SCAN LINE: OFFSET = 0.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $28,$28,$28,$A8,$02,$A0;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $28,$28,$2A,$28,$0A,$80;                ;6-11   DDLEFT 1,2,3
-          DC.B      $00,$00,$00,$00;                        ;12-15  R,L FLAMEFYGAR
-          DC.B      $00,$00,$00,$00;                        ;16-19  R,L HARPOON
-          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $00,$00,$00,$00,$00,$50;                ;22-27  8,16PIX RFLAME
-          DC.B      $00,$00,$00,$00,$01,$50;                ;28-33  24PIX RFLAME
-          DC.B      $00,$00,$00,$00,$00,$00;                ;34-39  8,16PIX LFLAME
-          DC.B      $00,$00,$00,$00,$00,$00;                ;40-45  24PIX LFLAME
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
-          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
-          DC.B      $2A,$A0;                                ;86-87  TOTRK
-          DC.B      $00,$00;                                ;88-89  LETRO
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
-          DC.B      $00,$0C;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $01,$00;                                ;106-07 HDEATH S
-          DC.B      $28,$28,$02,$80,$00,$00;                ;108-13 HRDEATH 1,2,3
-          DC.B      $28,$28,$02,$80,$00,$00;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$68,$0A,$60;                        ;120-23 U,D HARPOON
-          DC.B      $00,$00,$1A,$28,$00,$00,$28,$A4        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $00,$00,$00,$00,$0A,$A0,$00,$00        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $00,$00,$00,$00,$00,$00;                ;148-53 DDUP 1,2,3
-          DC.B      $24,$A2,$25,$A2,$24,$A0;                ;154-59 DDDOWN 1,2,3
-          DC.B      $28,$28,$69,$A0,$1A,$28;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $28,$A0,$28,$A0,$2A,$A8;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $04,$04,$C0,$03,$00,$0C;                ;172-77 DPMP,DFULL,U612
-          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
-          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;198-05 6000,8000
-          DC.B      $00,$00,$00,$00;                        ;206-09 10000
-          DC.B      $00,$00,$00,$00;                        ;210-13 12000
-          DC.B      $00,$00,$00,$00;                        ;214-17 15000
-          DC.B      $00,$00,$00,$00;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $AB,$55,$55,$55,$55,$55,$57,$00        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $55,$EA,$55,$55,$55,$55,$00,$D5        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $AA,$50,$15,$7C,$97,$FF,$17,$08        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $05,$AA,$3D,$54,$FF,$D6,$20,$D4        ;248-55 LBFYGAR 1,2,3,4
-
-
-
-          ORG     $C500;                  ;LINE 11: OFFSET = 1.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $2A,$A0,$2A,$A0,$2A,$80;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $0A,$A8,$0A,$A8,$02,$A8;                ;6-11   DDLEFT 1,2,3
-          DC.B      $5E,$FE,$3F,$B5;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$A8,$2A,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $00,$00,$00,$05,$41,$50;                ;22-27  8,16PIX RFLAME
-          DC.B      $00,$00,$00,$00,$55,$81;                ;28-33  24PIX RFLAME
-          DC.B      $00,$00,$01,$00,$00,$00;                ;34-39  8,16PIX LFLAME
-          DC.B      $05,$40,$00,$00,$00,$00;                ;40-45  24PIX LFLAME
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
-          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
-          DC.B      $16,$A8;                                ;86-87  TOTRK
-          DC.B      $15,$50;                                ;88-89  LETRO
-          DC.B      $55,$54,$15,$54,$01,$40,$50,$00        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
-          DC.B      $00,$3C;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $41,$04;                                ;106-07 HDEATH S
-          DC.B      $2A,$A0,$2A,$00,$50,$A8;                ;108-13 HRDEATH 1,2,3
-          DC.B      $0A,$A8,$00,$A4,$2A,$05;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$68,$29,$58;                        ;120-23 U,D HARPOON
-          DC.B      $00,$00,$08,$20,$00,$00,$08,$20        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $69,$A0,$5A,$6A,$0A,$69,$A9,$A5        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $00,$00,$00,$00,$28,$28,$80,$02        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $05,$90,$05,$90,$05,$90;                ;148-53 DDUP 1,2,3
-          DC.B      $24,$AA,$25,$AA,$24,$A4;                ;154-59 DDDOWN 1,2,3
-          DC.B      $2A,$A0,$15,$68,$08,$20;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $AA,$A8,$AA,$A8,$57,$DE;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $15,$15,$C0,$03,$00,$3C;                ;172-77 DPMP,DFULL,U612
-          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
-          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;198-05 6000,8000
-          DC.B      $00,$00,$00,$00;                        ;206-09 10000
-          DC.B      $00,$00,$00,$00;                        ;210-13 12000
-          DC.B      $00,$00,$00,$00;                        ;214-17 15000
-          DC.B      $00,$00,$00,$00;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $AF,$A5,$55,$55,$55,$55,$5C,$00        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $5A,$FA,$55,$55,$55,$55,$00,$35        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $2A,$40,$55,$7C,$57,$FF,$17,$03        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $01,$A8,$3D,$55,$FF,$D5,$C0,$D4        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $C600;                  ;LINE 10: OFFSET = 2.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $2A,$A4,$2A,$A4,$2A,$A4;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $2A,$A8,$2A,$A8,$1A,$A8;                ;6-11   DDLEFT 1,2,3
-          DC.B      $57,$D4,$16,$D5;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $00,$54,$00,$25,$55,$40;                ;22-27  8,16PIX RFLAME
-          DC.B      $00,$59,$40,$01,$51,$45;                ;28-33  24PIX RFLAME
-          DC.B      $00,$00,$01,$40,$00,$00;                ;34-39  8,16PIX LFLAME
-          DC.B      $42,$55,$00,$00,$00,$00;                ;40-45  24PIX LFLAME
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
-          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;70-77  2000,3000
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;78-85  5000,7000
-          DC.B      $55,$7A;                                ;86-87  TOTRK
-          DC.B      $AA,$A8;                                ;88-89  LETRO
-          DC.B      $AA,$A8,$AA,$A8,$2A,$A0,$A0,$00        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;98-103 400,600
-          DC.B      $00,$30;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $11,$10;                                ;106-07 HDEATH S
-          DC.B      $2A,$A4,$5A,$AA,$5A,$A0;                ;108-13 HRDEATH 1,2,3
-          DC.B      $2A,$A8,$AA,$A5,$0A,$A5;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$A8,$2A,$68;                        ;120-23 U,D HARPOON
-          DC.B      $CA,$28,$F5,$54,$28,$A3,$15,$5F        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $15,$68,$56,$94,$29,$54,$16,$95        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $28,$0A,$00,$00,$A2,$8A,$A4,$1A        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $29,$AA,$29,$6A,$29,$A4;                ;148-53 DDUP 1,2,3
-          DC.B      $26,$AA,$26,$AA,$26,$A6;                ;154-59 DDDOWN 1,2,3
-          DC.B      $2A,$A4,$A5,$5A,$F5,$54;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $96,$58,$96,$5A,$96,$75;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $0C,$0C,$C0,$03,$00,$30;                ;172-77 DPMP,DFULL,U612
-          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;178-83 200,300
-          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;184-89 500,800
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;190-97 2500,4000
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;198-05 6000,8000
-          DC.B      $3F,$FF,$FF,$FC;                        ;206-09 10000
-          DC.B      $3F,$FF,$FF,$FC;                        ;210-13 12000
-          DC.B      $3F,$FF,$FF,$FC;                        ;214-17 15000
-          DC.B      $3F,$FF,$FF,$FC;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $6C,$ED,$55,$55,$55,$55,$54,$03        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $7B,$39,$55,$55,$55,$55,$C0,$15        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $F7,$50,$55,$5C,$57,$FF,$57,$00        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $05,$DF,$35,$55,$FF,$D5,$00,$D5        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $C700;                  ;LINE 9: OFFSET = 3.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $96,$A8,$5A,$A9,$96,$A8;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $2A,$96,$6A,$A5,$2A,$96;                ;6-11   DDLEFT 1,2,3
-          DC.B      $15,$F0,$0B,$54;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $21,$54,$00,$59,$15,$40;                ;22-27  8,16PIX RFLAME
-          DC.B      $01,$A6,$55,$10,$05,$69;                ;28-33  24PIX RFLAME
-          DC.B      $00,$00,$01,$50,$54,$00;                ;34-39  8,16PIX LFLAME
-          DC.B      $51,$45,$40,$01,$65,$00;                ;40-45  24PIX LFLAME
-          DC.B      $00,$3C,$00,$3C,$00,$3C,$00,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$3C,$00,$3C,$00,$00,$3C,$00,$3C    ;55-63  LPUMP20,16
-          DC.B      $00,$3C,$00,$00,$3C,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $FD,$5F,$77,$7F,$FF,$7F,$77,$7F        ;70-77  2000,3000
-          DC.B      $FF,$7F,$77,$7F,$FD,$FF,$77,$7F        ;78-85  5000,7000
-          DC.B      $7D,$7E;                                ;86-87  TOTRK
-          DC.B      $50,$14;                                ;88-89  LETRO
-          DC.B      $50,$00,$50,$00,$14,$50,$50,$00        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $FF,$7D,$DF,$FD,$FD,$DF;                ;98-103 400,600
-          DC.B      $00,$C0;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $00,$00;                                ;106-07 HDEATH S
-          DC.B      $AA,$A9,$5A,$9A,$6A,$88;                ;108-13 HRDEATH 1,2,3
-          DC.B      $6A,$AA,$A6,$A5,$22,$A9;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$A8,$2A,$68;                        ;120-23 U,D HARPOON
-          DC.B      $D6,$9A,$D5,$55,$A6,$97,$55,$57        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $A5,$5A,$15,$A0,$A5,$5A,$0A,$54        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $2A,$2A,$A8,$A8,$88,$22,$8A,$A2        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $29,$6A,$2A,$5A,$29,$68;                ;148-53 DDUP 1,2,3
-          DC.B      $AE,$A8,$AE,$AA,$AE,$AA;                ;154-59 DDDOWN 1,2,3
-          DC.B      $25,$DD,$FF,$37,$AC,$CA;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $5D,$76,$5D,$76,$24,$96;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $0C,$0C,$30,$0C,$00,$C0;                ;172-77 DPMP,DFULL,U612
-          DC.B      $F5,$7D,$DF,$F5,$FD,$DF;                ;178-83 200,300
-          DC.B      $FD,$FD,$DF,$FD,$FD,$DF;                ;184-89 500,800
-          DC.B      $D5,$F7,$F7,$7F,$FF,$DF,$77,$7F        ;190-97 2500,4000
-          DC.B      $FF,$7F,$77,$7F,$FF,$7F,$77,$7F        ;198-05 6000,8000
-          DC.B      $FD,$F7,$77,$7F;                        ;206-09 10000
-          DC.B      $F7,$57,$DD,$DF;                        ;210-13 12000
-          DC.B      $F7,$DF,$DD,$DF;                        ;214-17 15000
-          DC.B      $FF,$7D,$DD,$FF;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $6C,$CD,$9A,$55,$55,$55,$5C,$00        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $73,$39,$55,$A6,$55,$55,$00,$35        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $FF,$34,$A9,$55,$55,$FF,$A9,$03        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $1C,$FF,$55,$6A,$FF,$55,$C0,$6A        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $C800;                  ;LINE 8: OFFSET = 4.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $5A,$A4,$6A,$A4,$5A,$A4;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $1A,$A5,$1A,$A9,$1A,$A5;                ;6-11   DDLEFT 1,2,3
-          DC.B      $3E,$50,$05,$BC;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$A6,$9A,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $14,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $15,$55,$05,$65,$41,$54;                ;22-27  8,16PIX RFLAME
-          DC.B      $1A,$FA,$89,$51,$00,$59;                ;28-33  24PIX RFLAME
-          DC.B      $00,$00,$00,$55,$56,$00;                ;34-39  8,16PIX LFLAME
-          DC.B      $69,$50,$04,$55,$9A,$40;                ;40-45  24PIX LFLAME
-          DC.B      $00,$C3,$00,$C3,$00,$C3,$00,$04        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$C3,$00,$C3,$00,$00,$C3,$00,$C3    ;55-63  LPUMP20,16
-          DC.B      $00,$C3,$00,$00,$C3,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $FD,$FD,$DD,$DF,$FD,$DD,$DD,$DF        ;70-77  2000,3000
-          DC.B      $FD,$DD,$DD,$DF,$FD,$FD,$DD,$DF        ;78-85  5000,7000
-          DC.B      $55,$75;                                ;86-87  TOTRK
-          DC.B      $A0,$28;                                ;88-89  LETRO
-          DC.B      $A0,$00,$A0,$00,$A8,$A8,$AA,$A0        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $FF,$77,$77,$F7,$77,$77;                ;98-103 400,600
-          DC.B      $00,$C0;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $00,$00;                                ;106-07 HDEATH S
-          DC.B      $6A,$A5,$6A,$A5,$6A,$AA;                ;108-13 HRDEATH 1,2,3
-          DC.B      $5A,$A9,$5A,$A9,$AA,$A9;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
-          DC.B      $F5,$96,$DA,$69,$96,$5F,$69,$A7        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $A9,$50,$2A,$50,$05,$6A,$05,$A8        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $3F,$FE,$BE,$E8,$A0,$0A,$20,$08        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $AA,$68,$AA,$98,$AA,$68;                ;148-53 DDUP 1,2,3
-          DC.B      $A6,$A8,$A6,$A8,$A6,$A8;                ;154-59 DDDOWN 1,2,3
-          DC.B      $A5,$DD,$F7,$CC,$AC,$CA;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $7D,$75,$7D,$B5,$00,$20;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $3C,$3C,$3C,$3C,$00,$C0;                ;172-77 DPMP,DFULL,U612
-          DC.B      $F7,$F7,$77,$FF,$77,$77;                ;178-83 200,300
-          DC.B      $F7,$77,$77,$F7,$77,$77;                ;184-89 500,800
-          DC.B      $DF,$DD,$DD,$DF,$FF,$DD,$DD,$DF        ;190-97 2500,4000
-          DC.B      $FD,$DD,$DD,$DF,$FD,$DD,$DD,$DF        ;198-05 6000,8000
-          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
-          DC.B      $F7,$7F,$77,$77;                        ;210-13 12000
-          DC.B      $F7,$77,$77,$77;                        ;214-17 15000
-          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $5A,$CC,$AB,$A5,$55,$55,$95,$00        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $33,$A5,$5A,$EA,$55,$55,$00,$56        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $33,$44,$A7,$57,$15,$FD,$AA,$C8        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $11,$CC,$D5,$DA,$7F,$54,$23,$AA        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $C900;                  ;LINE 7: OFFSET = 5.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $69,$54,$69,$54,$69,$54;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $15,$69,$15,$69,$15,$69;                ;6-11   DDLEFT 1,2,3
-          DC.B      $F9,$55,$55,$6F;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $6A,$55,$55,$A9;                        ;100-03 R,L HARPOON
-          DC.B      $55,$05;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $5A,$55,$17,$EA,$55,$05;                ;22-27  8,16PIX RFLAME
-          DC.B      $AA,$BA,$A5,$41,$00,$69;                ;28-33  24PIX RFLAME
-          DC.B      $15,$00,$00,$55,$19,$40;                ;34-39  8,16PIX LFLAME
-          DC.B      $65,$00,$45,$62,$AF,$A4;                ;40-45  24PIX LFLAME
-          DC.B      $10,$C3,$00,$C3,$00,$C3,$00,$F5        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $10,$C3,$00,$C3,$00,$10,$C3,$00,$C3    ;55-63  LPUMP20,16
-          DC.B      $10,$C3,$00,$10,$C3,$10;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $FF,$7D,$DD,$DF,$FF,$DD,$DD,$DF        ;70-77  2000,3000
-          DC.B      $FF,$DD,$DD,$DF,$FD,$7D,$DD,$DF        ;78-85  5000,7000
-          DC.B      $5D,$DD;                                ;86-87  TOTRK
-          DC.B      $50,$14;                                ;88-89  LETRO
-          DC.B      $50,$00,$55,$54,$50,$14,$55,$54        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $F5,$57,$77,$F7,$77,$77;                ;98-103 400,600
-          DC.B      $00,$C0;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $51,$15;                                ;106-07 HDEATH S
-          DC.B      $69,$55,$A5,$55,$6A,$A6;                ;108-13 HRDEATH 1,2,3
-          DC.B      $55,$69,$55,$5A,$9A,$A9;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
-          DC.B      $5A,$69,$6F,$BE,$69,$A5,$BE,$F9        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $2A,$50,$A9,$55,$05,$A8,$55,$6A        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $20,$C2,$B3,$28,$08,$20,$0A,$A4        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $A6,$68,$A6,$A8,$A6,$6A;                ;148-53 DDUP 1,2,3
-          DC.B      $AE,$68,$AE,$A8,$AE,$6A;                ;154-59 DDDOWN 1,2,3
-          DC.B      $AA,$AA,$73,$55,$6F,$FA;                ;160-65 SQUASH: DD,F,P
-          DC.B      $55,$DD,$56,$5D,$00,$00;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $30,$30,$0C,$30,$00,$C0;                ;172-77 DPMP,DFULL,U612
-          DC.B      $FD,$F7,$77,$FF,$77,$77;                ;178-83 200,300
-          DC.B      $FF,$77,$77,$F7,$77,$77;                ;184-89 500,800
-          DC.B      $F7,$FD,$DD,$DF,$FD,$55,$DD,$DF        ;190-97 2500,4000
-          DC.B      $FD,$DD,$DD,$DF,$FD,$DD,$DD,$DF        ;198-05 6000,8000
-          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
-          DC.B      $F7,$DF,$77,$77;                        ;210-13 12000
-          DC.B      $F7,$F7,$77,$77;                        ;214-17 15000
-          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $15,$FC,$AF,$E9,$5A,$65,$AB,$43        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $3F,$54,$6B,$FA,$59,$A5,$C1,$EA        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $1F,$C0,$FF,$33,$A9,$54,$79,$7C        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $03,$F4,$CC,$FF,$15,$6A,$3D,$6D        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $CA00;                  ;LINE 6: OFFSET = 6.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $25,$DD,$25,$DD,$25,$DD;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $77,$58,$77,$58,$77,$58;                ;6-11   DDLEFT 1,2,3
-          DC.B      $E7,$33,$CC,$DB;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$A6,$9A,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $69,$55;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $59,$94,$16,$E9,$65,$05;                ;22-27  8,16PIX RFLAME
-          DC.B      $5B,$E9,$99,$95,$01,$64;                ;28-33  24PIX RFLAME
-          DC.B      $15,$48,$05,$50,$56,$54;                ;34-39  8,16PIX LFLAME
-          DC.B      $69,$00,$41,$5A,$AE,$AA;                ;40-45  24PIX LFLAME
-          DC.B      $5F,$00,$C3,$00,$C3,$00,$C3,$04        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $5F,$00,$C3,$00,$C3,$5F,$00,$C3,$00    ;55-63  LPUMP20,16
-          DC.B      $5F,$00,$C3,$5F,$00,$5F;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $FF,$DD,$DD,$DF,$FF,$5D,$DD,$DF        ;70-77  2000,3000
-          DC.B      $FD,$7D,$DD,$DF,$FF,$7D,$DD,$DF        ;78-85  5000,7000
-          DC.B      $5D,$5D;                                ;86-87  TOTRK
-          DC.B      $50,$14;                                ;88-89  LETRO
-          DC.B      $50,$00,$55,$54,$50,$14,$50,$14        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $F7,$77,$77,$F5,$F7,$77;                ;98-103 400,600
-          DC.B      $30,$30;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $00,$00;                                ;106-07 HDEATH S
-          DC.B      $65,$DD,$97,$74,$A5,$55;                ;108-13 HRDEATH 1,2,3
-          DC.B      $77,$59,$1D,$D6,$55,$5A;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
-          DC.B      $6F,$BE,$AC,$CA,$BE,$F9,$A3,$3A        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $29,$54,$A7,$33,$15,$68,$CC,$DA        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $2C,$CE,$B3,$28,$68,$29,$90,$06        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $AE,$68,$AE,$A8,$AE,$6A;                ;148-53 DDUP 1,2,3
-          DC.B      $A6,$68,$A6,$A8,$A6,$6A;                ;154-59 DDDOWN 1,2,3
-          DC.B      $2A,$A0,$3F,$54,$5A,$A9;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $5D,$5D,$5E,$5D,$00,$00;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $00,$C0,$03,$C0,$30,$30;                ;172-77 DPMP,DFULL,U612
-          DC.B      $FF,$77,$77,$FD,$77,$77;                ;178-83 200,300
-          DC.B      $F5,$F7,$77,$FD,$F7,$77;                ;184-89 500,800
-          DC.B      $FD,$D7,$DD,$DF,$FD,$DD,$DD,$DF        ;190-97 2500,4000
-          DC.B      $FD,$7D,$DD,$DF,$FF,$7D,$DD,$DF        ;198-05 6000,8000
-          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
-          DC.B      $F7,$F7,$77,$77;                        ;210-13 12000
-          DC.B      $F7,$5F,$77,$77;                        ;214-17 15000
-          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $05,$50,$68,$B9,$AB,$E9,$AF,$F8        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $05,$50,$6E,$29,$6B,$EA,$2F,$FA        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $01,$70,$F3,$00,$A5,$54,$F5,$55        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $0D,$40,$00,$CF,$15,$5A,$55,$5F        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $CB00;                  ;LINE 5: OFFSET = 7.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $A5,$DD,$A5,$DD,$A5,$DD;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $77,$5A,$77,$5A,$77,$5A;                ;6-11   DDLEFT 1,2,3
-          DC.B      $AF,$00,$00,$FA;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $14,$1A;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $14,$40,$05,$11,$15,$54;                ;22-27  8,16PIX RFLAME
-          DC.B      $14,$84,$55,$59,$56,$54;                ;28-33  24PIX RFLAME
-          DC.B      $55,$54,$54,$15,$6A,$F5;                ;34-39  8,16PIX LFLAME
-          DC.B      $19,$40,$56,$66,$6B,$E5;                ;40-45  24PIX LFLAME
-          DC.B      $10,$00,$C3,$00,$C3,$00,$C3,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $10,$00,$C3,$00,$C3,$10,$00,$C3,$00    ;55-63  LPUMP20,16
-          DC.B      $10,$00,$C3,$10,$00,$10;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $FD,$DD,$DD,$DF,$FD,$DD,$DD,$DF        ;70-77  2000,3000
-          DC.B      $FD,$FD,$DD,$DF,$FF,$5D,$DD,$DF        ;78-85  5000,7000
-          DC.B      $BD,$5D;                                ;86-87  TOTRK
-          DC.B      $50,$14;                                ;88-89  LETRO
-          DC.B      $50,$00,$50,$00,$50,$14,$50,$14        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $FD,$77,$77,$F7,$F7,$77;                ;98-103 400,600
-          DC.B      $3C,$3C;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $00,$00;                                ;106-07 HDEATH S
-          DC.B      $65,$DD,$97,$74,$94,$44;                ;108-13 HRDEATH 1,2,3
-          DC.B      $77,$59,$1D,$D6,$11,$16;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$A8,$2A,$A8;                        ;120-23 U,D HARPOON
-          DC.B      $AC,$CA,$AC,$CA,$A3,$3A,$A3,$3A        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $FF,$37,$AF,$00,$DC,$FF,$00,$FA        ;144-49 FYGAR:R1,2,L1,2
-          DC.B      $0B,$F8,$BF,$E8,$B8,$2E,$A8,$2A        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $A6,$A8,$A6,$A8,$A6,$AA;                ;148-53 DDUP 1,2,3
-          DC.B      $AA,$68,$AA,$98,$AA,$68;                ;154-59 DDDOWN 1,2,3
-          DC.B      $0A,$A0,$07,$50,$15,$54;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $5D,$5D,$5A,$5D,$00,$00;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $00,$C0,$03,$C0,$3C,$3C;                ;172-77 DPMP,DFULL,U612
-          DC.B      $F7,$77,$77,$FF,$77,$77;                ;178-83 200,300
-          DC.B      $F7,$F7,$77,$F7,$77,$77;                ;184-89 500,800
-          DC.B      $DD,$DF,$DD,$DF,$FF,$5D,$DD,$DF        ;190-97 2500,4000
-          DC.B      $FD,$FD,$DD,$DF,$FD,$DD,$DD,$DF        ;198-05 6000,8000
-          DC.B      $FD,$DD,$DD,$DF;                        ;206-09 10000
-          DC.B      $F7,$77,$77,$77;                        ;210-13 12000
-          DC.B      $F7,$7F,$77,$77;                        ;214-17 15000
-          DC.B      $FF,$77,$77,$7F;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $00,$00,$5B,$8C,$A8,$89,$68,$B9        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $00,$00,$32,$D5,$62,$2A,$6E,$29        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $00,$50,$3F,$C0,$BD,$55,$FF,$74        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $05,$00,$03,$FC,$55,$7E,$1D,$FF        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $CC00;                  ;LINE 4: OFFSET = 8.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $AA,$AA,$AA,$AA,$AA,$AA;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $AA,$AA,$AA,$AA,$AA,$AA;                ;6-11   DDLEFT 1,2,3
-          DC.B      $F7,$CC,$33,$DF;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $00,$05;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $00,$10,$00,$14,$40,$14;                ;22-27  8,16PIX RFLAME
-          DC.B      $00,$61,$01,$55,$54,$55;                ;28-33  24PIX RFLAME
-          DC.B      $55,$A5,$54,$16,$5A,$E5;                ;34-39  8,16PIX LFLAME
-          DC.B      $15,$95,$65,$55,$12,$14;                ;40-45  24PIX LFLAME
-          DC.B      $00,$00,$3C,$00,$3C,$00,$3C,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$00,$3C,$00,$3C,$00,$00,$3C,$00    ;55-63  LPUMP20,16
-          DC.B      $00,$00,$3C,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $FF,$7F,$77,$7F,$FF,$7F,$77,$7F        ;70-77  2000,3000
-          DC.B      $FD,$5F,$77,$7F,$FD,$5F,$77,$7F        ;78-85  5000,7000
-          DC.B      $29,$7D;                                ;86-87  TOTRK
-          DC.B      $50,$14;                                ;88-89  LETRO
-          DC.B      $50,$00,$50,$00,$50,$14,$50,$14        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $FF,$7D,$DF,$FD,$7D,$DF;                ;98-103 400,600
-          DC.B      $0C,$0C;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $11,$10;                                ;106-07 HDEATH S
-          DC.B      $6A,$AA,$AA,$A8,$AA,$A8;                ;108-13 HRDEATH 1,2,3
-          DC.B      $AA,$A9,$2A,$AA,$2A,$AA;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$68,$2A,$A8;                        ;120-23 U,D HARPOON
-          DC.B      $AC,$CA,$6F,$FA,$A3,$3A,$AF,$F9        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $F7,$CC,$57,$CC,$33,$DF,$33,$DF        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $02,$A0,$2A,$A0,$B8,$2E,$B8,$2E        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $AE,$A8,$AE,$AA,$AE,$AA;                ;148-53 DDUP 1,2,3
-          DC.B      $29,$6A,$2A,$5A,$29,$68;                ;154-59 DDDOWN 1,2,3
-          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $BD,$7D,$BA,$BD,$00,$00;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $00,$C0,$03,$C0,$0C,$0C;                ;172-77 DPMP,DFULL,U612
-          DC.B      $FD,$FD,$DF,$F5,$FD,$DF;                ;178-83 200,300
-          DC.B      $F5,$7D,$DF,$FD,$FD,$DF;                ;184-89 500,800
-          DC.B      $F7,$D5,$F7,$7F,$FF,$DF,$77,$7F        ;190-97 2500,4000
-          DC.B      $FF,$5F,$77,$7F,$FD,$DF,$77,$7F        ;198-05 6000,8000
-          DC.B      $FD,$F7,$77,$7F;                        ;206-09 10000
-          DC.B      $F7,$DF,$DD,$DF;                        ;210-13 12000
-          DC.B      $F7,$57,$DD,$DF;                        ;214-17 15000
-          DC.B      $FF,$7D,$DD,$FF;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $00,$00,$15,$FC,$68,$8C,$5B,$8C        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $00,$00,$3F,$54,$32,$29,$32,$E5        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $00,$00,$0F,$5C,$F7,$33,$33,$16        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $00,$00,$35,$F0,$CC,$DF,$94,$CC        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $CD00;                  ;LINE 3: OFFSET = 9.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $2A,$A0,$2A,$A0,$2A,$A0;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $0A,$A8,$0A,$A8,$0A,$A8;                ;6-11   DDLEFT 1,2,3
-          DC.B      $73,$55,$55,$CD;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$AA,$AA,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $00,$00,$00,$00,$00,$41;                ;22-27  8,16PIX RFLAME
-          DC.B      $00,$15,$00,$05,$55,$45;                ;28-33  24PIX RFLAME
-          DC.B      $16,$65,$45,$55,$11,$14;                ;34-39  8,16PIX LFLAME
-          DC.B      $55,$15,$55,$40,$49,$00;                ;40-45  24PIX LFLAME
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
-          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;70-77  2000,3000
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;78-85  5000,7000
-          DC.B      $09,$56;                                ;86-87  TOTRK
-          DC.B      $55,$54;                                ;88-89  LETRO
-          DC.B      $50,$00,$55,$54,$50,$14,$55,$54        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;98-103 400,600
-          DC.B      $03,$03;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $41,$04;                                ;106-07 HDEATH S
-          DC.B      $5A,$A5,$6A,$80,$2A,$80;                ;108-13 HRDEATH 1,2,3
-          DC.B      $5A,$A5,$02,$A9,$02,$A8;                ;114-19 HLDEATH 1,2,3
-          DC.B      $2A,$68,$2A,$A8;                        ;120-23 U,D HARPOON
-          DC.B      $6F,$FA,$5A,$A9,$AF,$F9,$6A,$A5        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $73,$55,$73,$55,$55,$CD,$55,$CD        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $00,$00,$00,$00,$B8,$2E,$B8,$2E        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $26,$AA,$26,$AA,$26,$A6;                ;148-53 DDUP 1,2,3
-          DC.B      $29,$AA,$29,$6A,$29,$A4;                ;154-59 DDDOWN 1,2,3
-          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $29,$56,$20,$95,$00,$00;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $00,$30,$0C,$30,$0C,$0C;                ;172-77 DPMP,DFULL,U612
-          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;178-83 200,300
-          DC.B      $3F,$FF,$FC,$3F,$FF,$FC;                ;184-89 500,800
-          DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FC        ;190-97 2500,4000
-          DC.B      $3F,$FF,$FF,$FC,$FF,$7F,$FF,$FF        ;198-05 6000,8000
-          DC.B      $3F,$FF,$FF,$FC;                        ;206-09 10000
-          DC.B      $3F,$FF,$FF,$FC;                        ;210-13 12000
-          DC.B      $3F,$FF,$FF,$FC;                        ;214-17 15000
-          DC.B      $3F,$FF,$FF,$FC;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $00,$00,$05,$50,$1A,$FC,$15,$FC        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $00,$00,$05,$50,$3F,$A4,$3F,$54        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $00,$00,$00,$54,$73,$CC,$1F,$CD        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $00,$00,$15,$00,$33,$CD,$73,$F4        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $CE00;                  ;LINE 2: OFFSET = 10.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $0A,$A0,$0A,$A0,$0A,$A0;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $0A,$A0,$0A,$A0,$0A,$A0;                ;6-11   DDLEFT 1,2,3
-          DC.B      $3F,$54,$15,$FC;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $AA,$A8,$2A,$AA;                        ;100-03 R,L HARPOON
-          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $00,$00,$00,$00,$00,$00;                ;22-27  8,16PIX RFLAME
-          DC.B      $00,$00,$40,$00,$50,$01;                ;28-33  24PIX RFLAME
-          DC.B      $01,$14,$45,$00,$45,$00;                ;34-39  8,16PIX LFLAME
-          DC.B      $51,$55,$50,$00,$54,$00;                ;40-45  24PIX LFLAME
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
-          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
-          DC.B      $01,$74;                                ;86-87  TOTRK
-          DC.B      $15,$50;                                ;88-89  LETRO
-          DC.B      $50,$00,$15,$54,$50,$14,$95,$50        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
-          DC.B      $03,$03;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $01,$00;                                ;106-07 HDEATH S
-          DC.B      $1A,$A5,$2A,$80,$2A,$80;                ;108-13 HRDEATH 1,2,3
-          DC.B      $5A,$A4,$02,$A8,$02,$A8;                ;114-19 HLDEATH 1,2,3
-          DC.B      $29,$58,$2A,$68;                        ;120-23 U,D HARPOON
-          DC.B      $5A,$A9,$15,$54,$6A,$A5,$15,$54        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $3F,$54,$3F,$54,$15,$FC,$15,$FC        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $00,$00,$00,$00,$A8,$2A,$B8,$2E        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $24,$AA,$25,$AA,$24,$A4;                ;148-53 DDUP 1,2,3
-          DC.B      $05,$90,$05,$90,$05,$90;                ;154-59 DDDOWN 1,2,3
-          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $09,$74,$00,$A5,$00,$00;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $00,$3C,$3C,$3C,$15,$15;                ;172-77 DPMP,DFULL,U612
-          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
-          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
-          DC.B      $00,$00,$00,$00,$3F,$FF,$FF,$FC        ;198-05 6000,8000
-          DC.B      $00,$00,$00,$00;                        ;206-09 10000
-          DC.B      $00,$00,$00,$00;                        ;210-13 12000
-          DC.B      $00,$00,$00,$00;                        ;214-17 15000
-          DC.B      $00,$00,$00,$00;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $00,$00,$00,$00,$05,$50,$05,$50        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $00,$00,$00,$00,$05,$50,$05,$50        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $00,$00,$00,$00,$3F,$54,$0F,$51        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $00,$00,$00,$00,$15,$FC,$45,$F0        ;248-55 LBFYGAR 1,2,3,4
-
-
-          ORG     $CF00;                  ;TOP SCAN LINE: OFFSET = 11.
-
-;*;*;*;*;*;*;*;*;*;*;*       STAMPS WITHOUT ZERO PADDING
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;0-5    DDRIGHT 1,2,3
-          DC.B      $00,$00,$00,$00,$00,$00;                ;6-11   DDLEFT 1,2,3
-          DC.B      $07,$50,$05,$D0;                        ;96-99  R,L FLAMEFYGAR
-          DC.B      $00,$00,$00,$00;                        ;100-03 R,L HARPOON
-          DC.B      $00,$00;                                ;20-21  R,L 4PIX FLAME
-          DC.B      $00,$00,$00,$00,$00,$00;                ;22-27  8,16PIX RFLAME
-          DC.B      $00,$00,$00,$00,$00,$00;                ;28-33  24PIX RFLAME
-          DC.B      $04,$00,$10,$40,$00,$00;                ;34-39  8,16PIX LFLAME
-          DC.B      $04,$05,$00,$01,$00,$00;                ;40-45  24PIX LFLAME
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;46-53  LPUMP24,R24->4
-          DC.B      $00;                                    ;54     (WIDTH OVERLAP)
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00    ;55-63  LPUMP20,16
-          DC.B      $00,$00,$00,$00,$00,$00;                ;64-69  LPUMP12,8,4,OVR
-
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;70-77  2000,3000
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;78-85  5000,7000
-          DC.B      $00,$F4;                                ;86-87  TOTRK
-          DC.B      $00,$00;                                ;88-89  LETRO
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;90-97  L,E,V,P
-
-;*;*;*;*;*;*;*;*;*;*;*       ZERO PADDED STAMPS
-
-          DC.B      $00,$00,$00,$00,$00,$00;                ;98-103 400,600
-          DC.B      $03,$03;                                ;104-05 UFULL,12 (PUMP)
-          DC.B      $00,$00;                                ;106-07 HDEATH S
-          DC.B      $00,$00,$00,$00,$00,$00;                ;108-13 HRDEATH 1,2,3
-          DC.B      $00,$00,$00,$00,$00,$00;                ;114-19 HLDEATH 1,2,3
-          DC.B      $0A,$60,$2A,$68;                        ;120-23 U,D HARPOON
-          DC.B      $15,$54,$00,$00,$15,$54,$00,$00        ;124-31 POOKA:R1,2,L1,2
-          DC.B      $07,$50,$07,$50,$05,$D0,$05,$D0        ;132-39 FYGAR:R1,2,L1,2
-          DC.B      $00,$00,$00,$00,$A0,$0A,$68,$29        ;140-47 GHOST:P1,2,F1,2
-          DC.B      $24,$A2,$25,$A2,$24,$A0;                ;148-53 DDUP 1,2,3
-          DC.B      $00,$00,$00,$00,$00,$00;                ;154-59 DDDOWN 1,2,3
-          DC.B      $00,$00,$00,$00,$00,$00;                ;160-65 SQUASH1: DD,F,P
-          DC.B      $02,$F4,$00,$24,$00,$00;                ;166-71 ROCK:STR,SP,CRM
-          DC.B      $00,$0C,$30,$0C,$04,$04;                ;172-77 DPMP,DFULL,U612
-          DC.B      $00,$00,$00,$00,$00,$00;                ;178-83 200,300
-          DC.B      $00,$00,$00,$00,$00,$00;                ;184-89 500,800
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;190-97 2500,4000
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;198-05 6000,8000
-          DC.B      $00,$00,$00,$00;                        ;206-09 10000
-          DC.B      $00,$00,$00,$00;                        ;210-13 12000
-          DC.B      $00,$00,$00,$00;                        ;214-17 15000
-          DC.B      $00,$00,$00,$00;                        ;218-21 1000
-          DC.B      $00,$00;                                ;222-23 ZBLANK
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;224-31 RBPOOKA 1,2,3,4
-          DC.B      $00,$00,$00,$00,$00,$00,$00,$00        ;232-39 LBPOOKA 1,2,3,4
-          DC.B      $00,$00,$00,$00,$07,$50,$00,$54        ;240-47 RBFYGAR 1,2,3,4
-          DC.B      $00,$00,$00,$00,$05,$D0,$15,$00        ;248-55 LBFYGAR 1,2,3,4
-ENDCHARS
-          END

@@ -9,6 +9,9 @@ def convert(input, output):
 
     for root, dirs, files in os.walk(input_path):
         for file in files:
+            org_index = {}
+            cur_index = 'heading'
+
             # Adds all files from input to output and changes extension
             copyfile(root + "\\" + file, output_path + "\\" + file[:-2] + ".ASM")
 
@@ -16,11 +19,16 @@ def convert(input, output):
             file_out = open(output_path + "\\" + file[:-2] + ".ASM", 'w')
 
             # Adds compilation setting
-            file_out.write("\t" + "processor 6502 \n")
+            org_index[cur_index] = "\t" + "processor 6502 \n"
 
             for line in file_in:
-
+                
                 out = line
+
+                x = re.search('ORG', out)
+                if x is not None:
+                    cur_index = out[x.start() + 3:].strip()
+                    org_index[cur_index] = ''
 
                 # Change single quote to double
                 if "\'" in out:
@@ -81,8 +89,14 @@ def convert(input, output):
                         if paren_count == 0:
                             out = out[:index] + out[index + 1:]
                         index += 1
+                
+                org_index[cur_index] += out
 
-                file_out.write(out)
+            file_out.write(org_index['heading'])
+
+            for key in sorted(org_index.keys()):
+                if key != "heading":
+                    file_out.write(org_index[key])
 
             file_in.close()
             file_out.close()
