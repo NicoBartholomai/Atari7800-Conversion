@@ -25,11 +25,6 @@ def convert(input, output):
                 
                 out = line
 
-                x = re.search('ORG', out)
-                if x is not None:
-                    cur_index = out[x.start() + 3:].strip()
-                    org_index[cur_index] = ''
-
                 # Change single quote to double
                 if "\'" in out:
                     out = out.replace("\'", "\"")
@@ -89,7 +84,13 @@ def convert(input, output):
                         if paren_count == 0:
                             out = out[:index] + out[index + 1:]
                         index += 1
-                
+
+                x = re.search('ORG(\s)+(\$)*(\d|[A-F])+', out)
+                if x is not None:
+                    print(x)
+                    cur_index = out[x.start() + 3:].strip()
+                    org_index[cur_index] = ''
+
                 org_index[cur_index] += out
 
             file_out.write(org_index['heading'])
