@@ -334,3 +334,4 @@ SQDEDNXT  DEY
 DOGMODE   JMP     GETMODE;                ;CREATURES REDO STRATEGY
           ;                               ;GETMODE IS A SUBR
 
+END

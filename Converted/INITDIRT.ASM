@@ -783,3 +783,4 @@ SUB3      LDA     DDYPOS
           RTS
 
 CVTDIR    DC.B      $02,$01,$04,$03
+END

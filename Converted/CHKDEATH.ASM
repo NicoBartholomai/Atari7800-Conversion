@@ -694,3 +694,4 @@ NOTZERO2
           CLC
           ADC     #FULL0
 ANDFRTS   RTS
+END

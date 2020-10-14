@@ -1086,6 +1086,15 @@ ENDC300
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;  ORG: PUT STUFF HERE WHICH IS PAGE      ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;       BOUNDARY DEPENDENT.;               ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
           ORG     $C362
           DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0;            ;98
           DC.B      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0        ;112
@@ -1761,7 +1770,6 @@ ENDC300
           DC.B      $00,$00,$00,$00,$07,$50,$00,$54        ;240-47 RBFYGAR 1,2,3,4
           DC.B      $00,$00,$00,$00,$05,$D0,$15,$00        ;248-55 LBFYGAR 1,2,3,4
 ENDCHARS
-          END
           ORG     $D000
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 
@@ -5638,7 +5646,238 @@ ENDEBAA
 
 
           ORG     $EC00
+;  PUT IN AN ORG HERE!!! - THIS PAGE IS 256 BYTES FULL.
+;  WARNING!!! - DON"T BEGIN PAGE WITH F1 ARRAY.
+ASNG7F0
+
+SNG7F0    DC.B      $1E,$1C,$1E,$1C,$14,$15,$13    ;,$14      ;8 BYTES-1
+
+
+ASNG2F0
+SNG2F0    DC.B      $14,$12,$14,$13    ;,$0F,$0E,$0F,$0E      ;8 BYTES-4
+
+
+;NOTE: IN 2600 THERE IS ALSO 0F,0E,0F,0E.....1F,1E,1F,1E
+;      FOR A TOTAL OF 24 BYTES
+ASNGCF0
+SNGCF0    DC.B      $0F,$0E,$0F,$0E;                      ;16 BYTES-8
+          DC.B      $0F,$0E,$0F,$0E
+;         ;                     DC.B      $1F,$1E,$1F,$1E
+;         ;                     DC.B      $1F,$1E,$1F,$1E
+
+ASNG6F0
+SNG6F0    DC.B      $1F,$1E,$1F,$1E,$1F,$1E,$1F,$1E      ;20 BYTES-5
+          DC.B      $0F,$0E,$0F,$10,$11,$10,$0E     ;,$0D
+          ;           ;          DC.B      $0E,$0F,$0E,$0F
+
+
+ASNG14F0
+SNG14F0   DC.B      $0D,$0E,$0F,$0E,$0F,$10,$0F,$10      ;14 BYTES
+          DC.B      $11,$10,$11,$12,$33,$2C
+
+
+ASNG5F0
+SNG5F0    DC.B      $0B,$08,$06,$0B,$08,$06,$0B,$08  ;,$06  ;9 BYTES-1
+
+
+ASNG14V0
+SNG14V0   DC.B      $06,$06,$06,$05,$05,$05,$04,$04      ;14 BYTES
+          DC.B      $04,$03,$03,$03,$02,$08
+
+
+ASNG14F1
+SNG14F1   DC.B      $0E,$0F,$10,$0F,$10,$11,$10,$11      ;14 BYTES
+          DC.B      $12,$11,$12,$13,$34,$2D
+
+
+
+ASNG14V1
+SNG14V1   DC.B      $05,$05,$05,$04,$04,$04,$03,$03      ;14 BYTES
+          DC.B      $03,$02,$02,$02,$01,$08
+
+
+
+ASNG1F0
+SNG1F0    DC.B      $1B,$18,$15,$14,$12,$10,$0E   ;,$0D      ;8 BYTES-1
+
+
+ASNG7C0
+SNG7C0    DC.B      $0D,$0D,$0D,$0D,$04,$04,$04,$04      ;8 BYTES
+
+
+ASNG4V0
+SNG4V0    DC.B      $0A,$0A,$0A,$0A;                      ;15 BYTES
+          DC.B      $0A,$0A,$0A,$0A
+          DC.B      $04,$04,$04,$04,$04,$04,$04
+
+
+ASNG4F0
+SNG4F0    DC.B      $9A,$99,$98,$97;                      ;15 BYTES-1
+          DC.B      $96,$95,$94,$93
+          DC.B      $32,$17,$18,$19,$1A,$1B     ;,$1C
+
+
+ASNG1F1
+SNG1F1    DC.B      $1C,$19,$16,$15,$13,$11,$0F    ;,$0E      ;8 BYTES-1
+
+
+ASNG8F1
+SNG8F1    DC.B      $0E,$11,$14,$18,$0E;                  ;5 BYTES
+
+
+ASNG12F1
+SNG12F1   DC.B      $20,$93,$93,$93;                       ;12 BYTES
+          DC.B      $20,$93,$93,$93
+          DC.B      $20,$93,$93,$13
+
+
+ASNG12F0
+SNG12F0   DC.B      $8F,$92,$91,$92;                       ;12 BYTES-1
+          DC.B      $8E,$92,$91,$92
+          DC.B      $8D,$92,$91       ;,$12
+
+
+ASNG13F0
+SNG13F0   DC.B      $12,$11,$10,$8F,$12,$91;               ;15 BYTES
+          DC.B      $14,$92,$17,$94,$18,$17
+          DC.B      $97,$2B,$17
+
+
+ASNG9F1
+SNG9F1    DC.B      $8B,$8F,$20,$8F;                      ;16 BYTES
+          DC.B      $8B,$8F,$20,$8F
+          DC.B      $8B,$8F,$20,$8F
+          DC.B      $20,$8F,$8F,$0F
+
+ASNG9F0
+SNG9F0    DC.B      $97,$97,$9C,$97;                      ;14 BYTES-1
+          DC.B      $94,$92,$91,$8F
+          DC.B      $8D,$8D,$8D,$8D
+          DC.B      $60      ;,$40
+
+
+
+ASNG13F1
+SNG13F1   DC.B      $40,$94,$00,$93;                       ;12 BYTES-1
+          DC.B      $00,$92,$00,$90,$00,$8F
+          DC.B      $40       ;,$0F
+
+
+
+ASNG8F0
+SNG8F0    DC.B      $0F,$12,$15,$19,$0F;                  ;5 BYTES
+
+
+ASNG3F0
+SNG3F0    DC.B      $30,$2F,$2E,$2D;                      ;5 BYTES
+          DC.B      $2E
+
+
+ASNG3F1
+SNG3F1    DC.B      $8A,$8A,$8A,$8A;                      ;5 BYTES
+          DC.B      $8A
+
+
+SNGNULLF  DC.B      $60;                    ; 1 BYTE
+
+FLAMTABL  DC      RFYGAR2,LFYGAR2
+          DC      RFLAMFYG,LFLAMFYG
+          DC      RFYGAR2,LFYGAR2
+          DC      RFLAMFYG,LFLAMFYG
+
+ENDEC00
+
           ORG     $ED00
+; PUT AN ORG HERE!!!
+; WARNING!!! - DON"T BEGIN PAGE WITH F1 ARRAY.
+;  THESE SOUND ARRAYS NEED 109 BYTES
+
+ASNGDF0
+SNGDF0    DC.B      $8F,$8F,$CF;                          ;26 BYTES
+          DC.B      $8F,$8F,$8F,$8F
+          DC.B      $8F,$8F,$CF
+          DC.B      $8F,$8F,$8F,$32
+          DC.B      $D1,$D1
+          DC.B      $31,$32,$31,$2F
+          DC.B      $D1,$D1
+          DC.B      $31,$32,$31,$10
+
+
+ASNGDF1
+SNGDF1    DC.B      $CF,$CF;                              ;16 BYTES
+          DC.B      $D0,$D0
+          DC.B      $D1,$D1
+          DC.B      $D2,$D2
+          DC.B      $D3,$D3
+          DC.B      $D3,$D3
+          DC.B      $D4,$D4
+          DC.B      $D2,$50
+
+
+
+
+ASNG10F0
+SNG10F0   DC.B      $12,$11,$10,$0F,$0D,$0F;              ;6 BYTES
+
+
+ASNG11F0
+SNG11F0   DC.B      $17,$14,$12,$17,$9F,$8D;               ;7 BYTES
+          DC.B      $6F
+
+
+
+ASNG15F0
+SNG15F0   DC.B      $8F,$8F,$8F,$6F;                      ;22 BYTES
+          DC.B      $72,$2F
+          DC.B      $72,$2F,$2D
+          DC.B      $92,$92,$72
+          DC.B      $34,$77,$76
+          DC.B      $7F,$36
+          DC.B      $7F,$76
+          DC.B      $94,$94,$54
+
+
+ASNG15F1
+SNG15F1   DC.B      $34,$32,$30,$2F;                      ;32 BYTES
+          DC.B      $34,$2F,$34,$2F
+          DC.B      $34,$2F,$34,$2F
+          DC.B      $34,$2F,$34,$2F
+          DC.B      $34,$2F,$34,$31
+          DC.B      $94,$94,$94,$31
+          DC.B      $34,$31,$34,$30
+          DC.B      $34,$30,$34,$10
+
+
+;*;*;*;*;*  THIS PAGE IS 109 BYTES FULL
+
+
+;  FOLLOWING TWELVE  ARRAYS MUST OCCUR ON SAME PAGE - NEED 128 BYTES
+
+SOUTH7    DC.B      36,38,40,42,28,46,20;          ;$FF,$FF,$FF,$FF,28,$FF,20
+SOUTH1    DC.B      44,12,48,24,44,8,48
+
+NORTH7    DC.B      36,38,22,42,44,46,20;          ;$FF,$FF,22,$FF,$FF,$FF,20
+NORTH1    DC.B      40,6,40,18,48,2,48
+
+WEST5     DC.B      36,38,40,26,44,10,48;          ;$FF,$FF,$FF,26,$FF,10,$FF
+WEST1     DC.B      42,46,18,42,24,46,16
+
+EAST5     DC.B      36,14,40,42,44,10,48;          ;$FF,14,$FF,$FF,$FF,10,$FF
+EAST1     DC.B      38,38,6,46,12,46,4
+
+VERTTOP   DC.B      0,2,4,6,0,2,4,6,16,18,20,22,16,18,20,30,32,34
+TITLYPOS  DC.B      0,23,23,47,71,23,47,71,71,0,0,0,0,0,0,0,0
+;         DC.B      0,0
+VERTBOT   DC.B      0,0,4,4,8,8,12,12,16,16,20,20,24,24,28,30,32,34
+
+HORRGT    DC.B      0,2,4,6,8,10,12,14,0,2,4,6,8,10,12,30,32,34
+HORLFT    DC.B      0,2,0,2,8,10,8,10,16,18,16,18,24,26,24,30,32,34
+
+FLAMPOS   DC      $04,$08;                PIXEL X-POS OFFSETS FOR FLAME
+;  FROM MONSTER.S;                         BOUND TO NEXT PAGE!!!
+
+ENDED00
+
           ORG     $EE00
 
           DC      $10,$18;                ; BOUND TO PREVIOUS PAGE!!!
@@ -8621,243 +8860,4 @@ ENDE000
           ORG     $FFFC
           DC.B      <MAIN,>MAIN        ;INTERRUPT RESET VECTOR.
           DC.B      <GENERTI,>GENERTI  ;JUST IN CASE....
-;;;;;;;;;;;;;;;;;  ORG: PUT STUFF HERE WHICH IS PAGE      ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;       BOUNDARY DEPENDENT.;               ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;                                         ;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-; PUT AN ORG HERE!!!
-; WARNING!!! - DON"T BEGIN PAGE WITH F1 ARRAY.
-;  THESE SOUND ARRAYS NEED 109 BYTES
-
-ASNGDF0
-SNGDF0    DC.B      $8F,$8F,$CF;                          ;26 BYTES
-          DC.B      $8F,$8F,$8F,$8F
-          DC.B      $8F,$8F,$CF
-          DC.B      $8F,$8F,$8F,$32
-          DC.B      $D1,$D1
-          DC.B      $31,$32,$31,$2F
-          DC.B      $D1,$D1
-          DC.B      $31,$32,$31,$10
-
-
-ASNGDF1
-SNGDF1    DC.B      $CF,$CF;                              ;16 BYTES
-          DC.B      $D0,$D0
-          DC.B      $D1,$D1
-          DC.B      $D2,$D2
-          DC.B      $D3,$D3
-          DC.B      $D3,$D3
-          DC.B      $D4,$D4
-          DC.B      $D2,$50
-
-
-
-
-ASNG10F0
-SNG10F0   DC.B      $12,$11,$10,$0F,$0D,$0F;              ;6 BYTES
-
-
-ASNG11F0
-SNG11F0   DC.B      $17,$14,$12,$17,$9F,$8D;               ;7 BYTES
-          DC.B      $6F
-
-
-
-ASNG15F0
-SNG15F0   DC.B      $8F,$8F,$8F,$6F;                      ;22 BYTES
-          DC.B      $72,$2F
-          DC.B      $72,$2F,$2D
-          DC.B      $92,$92,$72
-          DC.B      $34,$77,$76
-          DC.B      $7F,$36
-          DC.B      $7F,$76
-          DC.B      $94,$94,$54
-
-
-ASNG15F1
-SNG15F1   DC.B      $34,$32,$30,$2F;                      ;32 BYTES
-          DC.B      $34,$2F,$34,$2F
-          DC.B      $34,$2F,$34,$2F
-          DC.B      $34,$2F,$34,$2F
-          DC.B      $34,$2F,$34,$31
-          DC.B      $94,$94,$94,$31
-          DC.B      $34,$31,$34,$30
-          DC.B      $34,$30,$34,$10
-
-
-;*;*;*;*;*  THIS PAGE IS 109 BYTES FULL
-
-
-;  FOLLOWING TWELVE  ARRAYS MUST OCCUR ON SAME PAGE - NEED 128 BYTES
-
-SOUTH7    DC.B      36,38,40,42,28,46,20;          ;$FF,$FF,$FF,$FF,28,$FF,20
-SOUTH1    DC.B      44,12,48,24,44,8,48
-
-NORTH7    DC.B      36,38,22,42,44,46,20;          ;$FF,$FF,22,$FF,$FF,$FF,20
-NORTH1    DC.B      40,6,40,18,48,2,48
-
-WEST5     DC.B      36,38,40,26,44,10,48;          ;$FF,$FF,$FF,26,$FF,10,$FF
-WEST1     DC.B      42,46,18,42,24,46,16
-
-EAST5     DC.B      36,14,40,42,44,10,48;          ;$FF,14,$FF,$FF,$FF,10,$FF
-EAST1     DC.B      38,38,6,46,12,46,4
-
-VERTTOP   DC.B      0,2,4,6,0,2,4,6,16,18,20,22,16,18,20,30,32,34
-TITLYPOS  DC.B      0,23,23,47,71,23,47,71,71,0,0,0,0,0,0,0,0
-;         DC.B      0,0
-VERTBOT   DC.B      0,0,4,4,8,8,12,12,16,16,20,20,24,24,28,30,32,34
-
-HORRGT    DC.B      0,2,4,6,8,10,12,14,0,2,4,6,8,10,12,30,32,34
-HORLFT    DC.B      0,2,0,2,8,10,8,10,16,18,16,18,24,26,24,30,32,34
-
-FLAMPOS   DC      $04,$08;                PIXEL X-POS OFFSETS FOR FLAME
-;  FROM MONSTER.S;                         BOUND TO NEXT PAGE!!!
-
-ENDED00
-
-;  PUT IN AN ORG HERE!!! - THIS PAGE IS 256 BYTES FULL.
-;  WARNING!!! - DON"T BEGIN PAGE WITH F1 ARRAY.
-ASNG7F0
-
-SNG7F0    DC.B      $1E,$1C,$1E,$1C,$14,$15,$13    ;,$14      ;8 BYTES-1
-
-
-ASNG2F0
-SNG2F0    DC.B      $14,$12,$14,$13    ;,$0F,$0E,$0F,$0E      ;8 BYTES-4
-
-
-;NOTE: IN 2600 THERE IS ALSO 0F,0E,0F,0E.....1F,1E,1F,1E
-;      FOR A TOTAL OF 24 BYTES
-ASNGCF0
-SNGCF0    DC.B      $0F,$0E,$0F,$0E;                      ;16 BYTES-8
-          DC.B      $0F,$0E,$0F,$0E
-;         ;                     DC.B      $1F,$1E,$1F,$1E
-;         ;                     DC.B      $1F,$1E,$1F,$1E
-
-ASNG6F0
-SNG6F0    DC.B      $1F,$1E,$1F,$1E,$1F,$1E,$1F,$1E      ;20 BYTES-5
-          DC.B      $0F,$0E,$0F,$10,$11,$10,$0E     ;,$0D
-          ;           ;          DC.B      $0E,$0F,$0E,$0F
-
-
-ASNG14F0
-SNG14F0   DC.B      $0D,$0E,$0F,$0E,$0F,$10,$0F,$10      ;14 BYTES
-          DC.B      $11,$10,$11,$12,$33,$2C
-
-
-ASNG5F0
-SNG5F0    DC.B      $0B,$08,$06,$0B,$08,$06,$0B,$08  ;,$06  ;9 BYTES-1
-
-
-ASNG14V0
-SNG14V0   DC.B      $06,$06,$06,$05,$05,$05,$04,$04      ;14 BYTES
-          DC.B      $04,$03,$03,$03,$02,$08
-
-
-ASNG14F1
-SNG14F1   DC.B      $0E,$0F,$10,$0F,$10,$11,$10,$11      ;14 BYTES
-          DC.B      $12,$11,$12,$13,$34,$2D
-
-
-
-ASNG14V1
-SNG14V1   DC.B      $05,$05,$05,$04,$04,$04,$03,$03      ;14 BYTES
-          DC.B      $03,$02,$02,$02,$01,$08
-
-
-
-ASNG1F0
-SNG1F0    DC.B      $1B,$18,$15,$14,$12,$10,$0E   ;,$0D      ;8 BYTES-1
-
-
-ASNG7C0
-SNG7C0    DC.B      $0D,$0D,$0D,$0D,$04,$04,$04,$04      ;8 BYTES
-
-
-ASNG4V0
-SNG4V0    DC.B      $0A,$0A,$0A,$0A;                      ;15 BYTES
-          DC.B      $0A,$0A,$0A,$0A
-          DC.B      $04,$04,$04,$04,$04,$04,$04
-
-
-ASNG4F0
-SNG4F0    DC.B      $9A,$99,$98,$97;                      ;15 BYTES-1
-          DC.B      $96,$95,$94,$93
-          DC.B      $32,$17,$18,$19,$1A,$1B     ;,$1C
-
-
-ASNG1F1
-SNG1F1    DC.B      $1C,$19,$16,$15,$13,$11,$0F    ;,$0E      ;8 BYTES-1
-
-
-ASNG8F1
-SNG8F1    DC.B      $0E,$11,$14,$18,$0E;                  ;5 BYTES
-
-
-ASNG12F1
-SNG12F1   DC.B      $20,$93,$93,$93;                       ;12 BYTES
-          DC.B      $20,$93,$93,$93
-          DC.B      $20,$93,$93,$13
-
-
-ASNG12F0
-SNG12F0   DC.B      $8F,$92,$91,$92;                       ;12 BYTES-1
-          DC.B      $8E,$92,$91,$92
-          DC.B      $8D,$92,$91       ;,$12
-
-
-ASNG13F0
-SNG13F0   DC.B      $12,$11,$10,$8F,$12,$91;               ;15 BYTES
-          DC.B      $14,$92,$17,$94,$18,$17
-          DC.B      $97,$2B,$17
-
-
-ASNG9F1
-SNG9F1    DC.B      $8B,$8F,$20,$8F;                      ;16 BYTES
-          DC.B      $8B,$8F,$20,$8F
-          DC.B      $8B,$8F,$20,$8F
-          DC.B      $20,$8F,$8F,$0F
-
-ASNG9F0
-SNG9F0    DC.B      $97,$97,$9C,$97;                      ;14 BYTES-1
-          DC.B      $94,$92,$91,$8F
-          DC.B      $8D,$8D,$8D,$8D
-          DC.B      $60      ;,$40
-
-
-
-ASNG13F1
-SNG13F1   DC.B      $40,$94,$00,$93;                       ;12 BYTES-1
-          DC.B      $00,$92,$00,$90,$00,$8F
-          DC.B      $40       ;,$0F
-
-
-
-ASNG8F0
-SNG8F0    DC.B      $0F,$12,$15,$19,$0F;                  ;5 BYTES
-
-
-ASNG3F0
-SNG3F0    DC.B      $30,$2F,$2E,$2D;                      ;5 BYTES
-          DC.B      $2E
-
-
-ASNG3F1
-SNG3F1    DC.B      $8A,$8A,$8A,$8A;                      ;5 BYTES
-          DC.B      $8A
-
-
-SNGNULLF  DC.B      $60;                    ; 1 BYTE
-
-FLAMTABL  DC      RFYGAR2,LFYGAR2
-          DC      RFLAMFYG,LFLAMFYG
-          DC      RFYGAR2,LFYGAR2
-          DC      RFLAMFYG,LFLAMFYG
-
-ENDEC00
-
+END

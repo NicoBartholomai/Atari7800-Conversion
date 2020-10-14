@@ -681,3 +681,4 @@ LOWPTSA   LDA     BLWYPOS,X
           STA     BLWCTR,X
           INC     BLWSTAT,X;              ;ADVANCE TO POINT DISPLAY STAGE
           RTS
+END

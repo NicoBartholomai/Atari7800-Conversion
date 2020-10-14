@@ -848,3 +848,4 @@ PL1COLR   EQU     WHITE
           ORG     $FFFC
           DC.B      <MAIN,>MAIN        ;INTERRUPT RESET VECTOR.
           DC.B      <GENERTI,>GENERTI  ;JUST IN CASE....
+END

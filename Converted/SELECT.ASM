@@ -208,3 +208,4 @@ BONZCOLR  LDA     VEGCOL1+18
           STA     VEGCOLR
           STA     P0C0SHAD+22
 ZDRTS     RTS;                            ;BRANCHED TO FROM CHKDEATH FILE
+END

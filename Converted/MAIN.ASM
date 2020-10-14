@@ -93,3 +93,4 @@ WAIT1FRM  CMP     FRMCNT;                 ;WE TOOK LESS THAN OR EQUAL TO ONE
 ;*WAITARC   CMP     FRMCNT
 ;*         BEQ     WAITARC
 ;*         BNE     PLAYGAME
+END

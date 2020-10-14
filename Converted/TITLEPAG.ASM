@@ -216,3 +216,4 @@ TEMPLATE
           DC.B      0,0
           DC.B      ATARICP,$3A,CSET1,36,NAMCOCP,$3A,CSET1,95,0,0
 
+END

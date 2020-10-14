@@ -604,3 +604,4 @@ EATVEG2   LDA     FPOINTS,X;              ;DISPLAY POINTS
 
 
 
+END
