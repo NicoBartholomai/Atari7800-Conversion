@@ -1,0 +1,83 @@
+Line 1: added processor 6502 heading
+Line 2: changed * to ; for comments
+Line 3: changed * to ; for comments
+Line 4: changed * to ; for comments
+Line 5: changed * to ; for comments
+Line 5: commented out non-executable string
+Line 6: changed * to ; for comments
+Line 6: commented out non-executable string
+Line 7: changed * to ; for comments
+Line 7: commented out non-executable string
+Line 8: changed * to ; for comments
+Line 8: commented out non-executable string
+Line 9: changed * to ; for comments
+Line 9: commented out non-executable string
+Line 10: changed * to ; for comments
+Line 11: changed * to ; for comments
+Line 13: commented out non-executable string
+Line 14: commented out non-executable string
+Line 22: commented out non-executable string
+Line 28: commented out non-executable string
+Line 39: commented out non-executable string
+Line 41: commented out non-executable string
+Line 42: commented out non-executable string
+Line 44: commented out non-executable string
+Line 45: removed accumulator 'A' reference
+Line 46: removed accumulator 'A' reference
+Line 50: changed * to ; for comments
+Line 51: changed * to ; for comments
+Line 52: commented out non-executable string
+Line 54: commented out non-executable string
+Line 59: commented out non-executable string
+Line 61: commented out non-executable string
+Line 62: removed accumulator 'A' reference
+Line 64: commented out non-executable string
+Line 66: commented out non-executable string
+Line 70: commented out non-executable string
+Line 76: removed accumulator 'A' reference
+Line 77: commented out non-executable string
+Line 85: commented out non-executable string
+Line 87: removed accumulator 'A' reference
+Line 87: commented out non-executable string
+Line 88: commented out non-executable string
+Line 89: removed accumulator 'A' reference
+Line 91: removed accumulator 'A' reference
+Line 93: changed * to ; for comments
+Line 93: removed accumulator 'A' reference
+Line 94: changed * to ; for comments
+Line 100: commented out non-executable string
+Line 101: commented out non-executable string
+Line 103: commented out non-executable string
+Line 107: commented out non-executable string
+Line 108: changed * to ; for comments
+Line 108: commented out non-executable string
+Line 112: commented out non-executable string
+Line 120: changed * to ; for comments
+Line 120: commented out non-executable string
+Line 121: changed * to ; for comments
+Line 122: changed * to ; for comments
+Line 123: changed * to ; for comments
+Line 124: changed * to ; for comments
+Line 126: commented out non-executable string
+Line 128: converted quote ' to "
+Line 128: changed * to ; for comments
+Line 128: commented out non-executable string
+Line 130: converted quote ' to "
+Line 130: commented out non-executable string
+Line 134: commented out non-executable string
+Line 135: changed * to ; for comments
+Line 136: changed * to ; for comments
+Line 137: changed * to ; for comments
+Line 138: changed * to ; for comments
+Line 138: commented out non-executable string
+Line 157: changed * to ; for comments
+Line 159: removed accumulator 'A' reference
+Line 159: commented out non-executable string
+Line 160: changed * to ; for comments
+Line 173: changed * to ; for comments
+Line 174: changed * to ; for comments
+Line 175: changed * to ; for comments
+Line 176: changed * to ; for comments
+Line 177: changed * to ; for comments
+Line 194: commented out non-executable string
+Line 210: commented out non-executable string

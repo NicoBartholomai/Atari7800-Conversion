@@ -1,0 +1,141 @@
+Line 1: added processor 6502 heading
+Line 3: commented out non-executable string
+Line 4: commented out non-executable string
+Line 5: commented out non-executable string
+Line 6: commented out non-executable string
+Line 7: commented out non-executable string
+Line 8: commented out non-executable string
+Line 14: commented out non-executable string
+Line 16: removed octal prefix
+Line 16: removed octal prefix
+Line 16: commented out non-executable string
+Line 18: removed octal prefix
+Line 18: commented out non-executable string
+Line 20: removed octal prefix
+Line 20: commented out non-executable string
+Line 22: removed octal prefix
+Line 22: removed octal prefix
+Line 22: removed octal prefix
+Line 22: commented out non-executable string
+Line 24: removed octal prefix
+Line 24: removed octal prefix
+Line 24: removed octal prefix
+Line 24: commented out non-executable string
+Line 26: removed octal prefix
+Line 26: removed octal prefix
+Line 26: commented out non-executable string
+Line 28: removed octal prefix
+Line 28: removed octal prefix
+Line 28: commented out non-executable string
+Line 30: removed octal prefix
+Line 30: removed octal prefix
+Line 30: removed octal prefix
+Line 30: commented out non-executable string
+Line 32: removed octal prefix
+Line 32: removed octal prefix
+Line 32: commented out non-executable string
+Line 34: removed octal prefix
+Line 34: removed octal prefix
+Line 34: commented out non-executable string
+Line 36: removed octal prefix
+Line 36: removed octal prefix
+Line 36: removed octal prefix
+Line 36: commented out non-executable string
+Line 38: removed octal prefix
+Line 38: removed octal prefix
+Line 38: commented out non-executable string
+Line 40: removed octal prefix
+Line 40: commented out non-executable string
+Line 42: removed octal prefix
+Line 42: removed octal prefix
+Line 42: removed octal prefix
+Line 42: commented out non-executable string
+Line 44: removed octal prefix
+Line 44: removed octal prefix
+Line 44: commented out non-executable string
+Line 46: commented out non-executable string
+Line 48: removed octal prefix
+Line 48: commented out non-executable string
+Line 50: commented out non-executable string
+Line 52: removed octal prefix
+Line 52: commented out non-executable string
+Line 58: commented out non-executable string
+Line 60: commented out non-executable string
+Line 62: changed * to ; for comments
+Line 62: commented out non-executable string
+Line 65: commented out non-executable string
+Line 68: changed * to ; for comments
+Line 68: commented out non-executable string
+Line 69: changed * to ; for comments
+Line 73: changed * to ; for comments
+Line 73: commented out non-executable string
+Line 74: commented out non-executable string
+Line 84: commented out non-executable string
+Line 86: commented out non-executable string
+Line 93: commented out non-executable string
+Line 94: converted quote ' to "
+Line 94: commented out non-executable string
+Line 96: commented out non-executable string
+Line 97: commented out non-executable string
+Line 98: commented out non-executable string
+Line 99: commented out non-executable string
+Line 102: commented out non-executable string
+Line 104: commented out non-executable string
+Line 105: commented out non-executable string
+Line 109: commented out non-executable string
+Line 111: commented out non-executable string
+Line 113: commented out non-executable string
+Line 122: commented out non-executable string
+Line 131: commented out non-executable string
+Line 133: commented out non-executable string
+Line 136: commented out non-executable string
+Line 138: commented out non-executable string
+Line 145: commented out non-executable string
+Line 148: commented out non-executable string
+Line 151: commented out non-executable string
+Line 159: commented out non-executable string
+Line 161: changed * to ; for comments
+Line 162: changed * to ; for comments
+Line 162: removed accumulator 'A' reference
+Line 163: removed accumulator 'A' reference
+Line 164: removed accumulator 'A' reference
+Line 165: removed accumulator 'A' reference
+Line 166: removed accumulator 'A' reference
+Line 169: commented out non-executable string
+Line 171: commented out non-executable string
+Line 175: commented out non-executable string
+Line 178: commented out non-executable string
+Line 179: commented out non-executable string
+Line 183: commented out non-executable string
+Line 184: commented out non-executable string
+Line 188: commented out non-executable string
+Line 191: commented out non-executable string
+Line 193: commented out non-executable string
+Line 200: commented out non-executable string
+Line 204: commented out non-executable string
+Line 206: changed * to ; for comments
+Line 207: changed * to ; for comments
+Line 207: removed accumulator 'A' reference
+Line 208: removed accumulator 'A' reference
+Line 209: removed accumulator 'A' reference
+Line 210: removed accumulator 'A' reference
+Line 211: removed accumulator 'A' reference
+Line 214: commented out non-executable string
+Line 216: commented out non-executable string
+Line 217: removed accumulator 'A' reference
+Line 218: removed accumulator 'A' reference
+Line 219: removed accumulator 'A' reference
+Line 220: removed accumulator 'A' reference
+Line 223: commented out non-executable string
+Line 225: removed accumulator 'A' reference
+Line 226: removed accumulator 'A' reference
+Line 227: removed accumulator 'A' reference
+Line 228: removed accumulator 'A' reference
+Line 229: commented out non-executable string
+Line 240: commented out non-executable string
+Line 254: commented out non-executable string
+Line 255: commented out non-executable string
+Line 257: commented out non-executable string
+Line 259: commented out non-executable string
+Line 261: commented out non-executable string
+Line 274: converted DB opcode to DC.B
