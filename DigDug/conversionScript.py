@@ -26,11 +26,14 @@ num_spaces_check = 10
 # Conversion Variable - Remove Octal
 remove_octal = True
 
+# Conversion Variable - Remove Label Colons
+remove_colons = False
+
 
 def convert():
 
     global input_path, output_path, heading_path, log, input_extension, output_extension, \
-        input_byte_set_opcode, output_byte_set_opcode, line_start_check, num_spaces_check, remove_octal
+        input_byte_set_opcode, output_byte_set_opcode, line_start_check, num_spaces_check, remove_octal, remove_colons
 
     input_path = os.getcwd() + "\\" + input_path
     output_path = os.getcwd() + "\\" + output_path
@@ -147,6 +150,13 @@ def convert():
                             cur_index = out[x.start() + 3:].strip().split()[0]
                             org_index[cur_index] = ''
 
+                        # Remove Colons after labels
+                        if remove_colons:
+                            if out[0] != ' ' and out[0] != '\t' and out[0] != ';':
+                                label_end = out.find(' ')
+                                if out[label_end - 1] == ':':
+                                    out = out[:label_end - 1] + out[label_end:]
+
                         org_index[cur_index] += out
 
                 file_out.write(org_index['heading'])
@@ -168,7 +178,7 @@ def convert():
 class Settings(tk.Frame):
     def start(self):
         global input_path, output_path, heading_path, log, input_extension, output_extension, \
-            input_byte_set_opcode, output_byte_set_opcode, line_start_check, num_spaces_check, remove_octal
+            input_byte_set_opcode, output_byte_set_opcode, line_start_check, num_spaces_check, remove_octal, remove_colons
 
         input_path = self.input.get()
         output_path = self.output.get()
@@ -181,6 +191,7 @@ class Settings(tk.Frame):
         line_start_check = int(self.line_start.get())
         num_spaces_check = int(self.num_space.get())
         remove_octal = self.is_octal_checked.get()
+        remove_colons = self.is_colon_checked.get()
         root.destroy()
 
     def __init__(self, master):
@@ -278,9 +289,17 @@ class Settings(tk.Frame):
         self.octal_check.grid(row = 10, column = 1)
         self.octal_check.select()
 
+        # Colons
+        self.colon_label = tk.Label(text="Remove Subroutine Label Colons")
+        self.colon_label.grid(row=11, column=0, sticky='W')
+        self.is_colon_checked = tk.BooleanVar()
+        self.colon_check = tk.Checkbutton(variable=self.is_colon_checked)
+        self.colon_check.grid(row=11, column=1)
+        self.colon_check.select()
+
         # Start
         self.start_button = tk.Button(text = "Start!", command = self.start)
-        self.start_button.grid(row = 11, column = 0, columnspan = 2, sticky='WE')
+        self.start_button.grid(row = 12, column = 0, columnspan = 2, sticky='WE')
 
 root = tk.Tk()
 settings = Settings(root)
