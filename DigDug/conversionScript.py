@@ -81,8 +81,9 @@ def convert():
                                 log_out.write('Line ' + str(line_count) + ': changed * to ; for comments\n')
 
                         # Change DB command to DC.B
-                        if " " + input_byte_set_opcode + " " in out:
-                            out = out.replace(" " + input_byte_set_opcode + " ", " " + output_byte_set_opcode + " ")
+                        x = re.search(rf'(\s|\t)({input_byte_set_opcode})(\s|\t)', out)
+                        if x:
+                            out = out[:x.start() + 1] + output_byte_set_opcode + out[x.start() + 1 + len(input_byte_set_opcode):]
                             if log:
                                 log_out.write('Line ' + str(line_count) + ': converted set byte opcode\n')
 
@@ -152,10 +153,10 @@ def convert():
 
                         # Remove Colons after labels
                         if remove_colons:
-                            if out[0] != ' ' and out[0] != '\t' and out[0] != ';':
-                                label_end = out.find(' ')
-                                if out[label_end - 1] == ':':
-                                    out = out[:label_end - 1] + out[label_end:]
+                            if out[0] != ' ' and out[0] != '\n' and out[0] != '\t' and out[0] != ';':
+                                x = re.search(':(\s|\t|\n)', out)
+                                if x:
+                                    out = out[:x.start()] + out[x.start() + 1:]
 
                         org_index[cur_index] += out
 
@@ -295,7 +296,6 @@ class Settings(tk.Frame):
         self.is_colon_checked = tk.BooleanVar()
         self.colon_check = tk.Checkbutton(variable=self.is_colon_checked)
         self.colon_check.grid(row=11, column=1)
-        self.colon_check.select()
 
         # Start
         self.start_button = tk.Button(text = "Start!", command = self.start)
