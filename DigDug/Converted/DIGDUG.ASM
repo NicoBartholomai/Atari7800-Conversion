@@ -93,47 +93,7 @@ P7C3      EQU     $3F;                    ;PALETTE SEVEN COLOR THREE         RW
 ; ZERO PAGE RAM   040 TO 07F
 ; NOTE THIS RAM IS SHADOWED AT 2040 TO 207F
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
- 	    SEG     ROM
-HEADER  ORG     $0000
-        DC.B    1  ; 0   Header version     - 1 byte
-        DC.B    "ATARI7800"     ; 1..16  "ATARI7800   "  - 16 bytes
-        DS      7,32
-        DC.B    "Your Name Here"; 17..48 Cart title      - 32 bytes
-        DS      HEADER+49-.,0
-		; Hack of changing the 256->code line to the $00,$00,$80,$00 code line
-		; added by Aaron Lanterman, 9/4/2020, to stop assembler from complaining...
-		; Basically, I'm telling it you have a 32K cartridge, but that doesn't
-		; seem to break the emulator (at least)
-		DC.B    $00,$00,$80,$00;
-        ;DC.B    $00,$00,256->code,$00; 49..52 data length      - 4 bytes
-        DC.B    $00,$00  ; 53..54 cart type      - 2 bytes
-    ;    bit 0 - pokey at $4000
-    ;    bit 1 - supergame bank switched
-    ;    bit 2 - supergame ram at $4000
-    ;    bit 3 - rom at $4000
-    ;    bit 4 - bank 6 at $4000
-    ;    bit 5 - supergame banked ram
-    ;    bit 6 - pokey at $450
-    ;    bit 7 - mirror ram at $4000
-    ;    bit 8-15 - Special
-    ;   0 = Normal cart
-        DC.B    1  ; 55   controller 1 type  - 1 byte
-        DC.B    1  ; 56   controller 2 type  - 1 byte
-    ;    0 = None
-    ;    1 = Joystick
-    ;    2 = Light Gun
-        DC.B    0  ; 57 0 = NTSC 1 = PA
-        DC.B    0  ; 58   Save data peripheral - 1 byte (version 2)
-    ;    0 = None / unknown (default)
-    ;    1 = High Score Cart (HSC)
-    ;    2 = SaveKey
-        ORG     HEADER+63
-        DC.B    0  ; 63   Expansion module
-    ;    0 = No expansion module (default on all currently released games)
-    ;    1 = Expansion module required
-        ORG     HEADER+100      ; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
-        DC.B    "ACTUAL CART DATA STARTS HERE"
-; end of header code for the simulator added by Aaron Lanterman          ORG       $0040
+          ORG       $0040
 
 STMPYPOS  EQU     $40;                    ;THESE ARE TOTLSTMP BYTES EACH: USED
 STMPXPOS  EQU     $53;                    ;  BY GENDPL TO GENERATE DISPLAY LIST.
@@ -882,7 +842,55 @@ ENDA000
 ;;;;;;;;;;;;;;;;;                                           ;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-          ORG     $C000
+;**********************************************************
+; Aaron Lanterman (1/30/2020) replaced this original line:
+; SEG code
+; With this big chunk of header code for the simulator:
+;**********************************************************
+ 	    SEG     ROM
+      ; ORG     RANDROKS-128
+        ORG $BF80
+HEADER DC.B    1  ; 0   Header version     - 1 byte
+        DC.B    "ATARI7800"     ; 1..16  "ATARI7800   "  - 16 bytes
+        DS      7,32
+        DC.B    "Your Name Here"; 17..48 Cart title      - 32 bytes
+        DS      HEADER+49-.,0
+		; Hack of changing the 256->code line to the $00,$00,$80,$00 code line
+		; added by Aaron Lanterman, 9/4/2020, to stop assembler from complaining...
+		; Basically, I'm telling it you have a 32K cartridge, but that doesn't
+		; seem to break the emulator (at least)
+		DC.B    $00,$00,$80,$00;
+        ;DC.B    $00,$00,256->code,$00; 49..52 data length      - 4 bytes
+        DC.B    $00,$00  ; 53..54 cart type      - 2 bytes
+    ;    bit 0 - pokey at $4000
+    ;    bit 1 - supergame bank switched
+    ;    bit 2 - supergame ram at $4000
+    ;    bit 3 - rom at $4000
+    ;    bit 4 - bank 6 at $4000
+    ;    bit 5 - supergame banked ram
+    ;    bit 6 - pokey at $450
+    ;    bit 7 - mirror ram at $4000
+    ;    bit 8-15 - Special
+    ;   0 = Normal cart
+        DC.B    1  ; 55   controller 1 type  - 1 byte
+        DC.B    1  ; 56   controller 2 type  - 1 byte
+    ;    0 = None
+    ;    1 = Joystick
+    ;    2 = Light Gun
+        DC.B    0  ; 57 0 = NTSC 1 = PA
+        DC.B    0  ; 58   Save data peripheral - 1 byte (version 2)
+    ;    0 = None / unknown (default)
+    ;    1 = High Score Cart (HSC)
+    ;    2 = SaveKey
+        ORG     HEADER+63
+        DC.B    0  ; 63   Expansion module
+    ;    0 = No expansion module (default on all currently released games)
+    ;    1 = Expansion module required
+        ORG     HEADER+100      ; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
+        DC.B    "ACTUAL CART DATA STARTS HERE"
+; end of header code for the simulator added by Aaron Lanterman
+
+code      ORG     $C000
 RANDROKS  DC.B      $29,$35,$64,$82,$8D,$9A,$A5,$C9
 
 PALWBYTE  DC.B      $1E,$7E,$5E,$3F,$3E,$3C,$3A,$3E
@@ -4643,7 +4651,8 @@ ENDD000
           DC.B      $00,$00,$00,$00;                        ;84-87  LETRG,LETRM
 
           DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$33,$33,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
+         ;DC.B      $0C,$33,$33,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $C0,$C0,$30,$33,$33,$0C                ;94-99  (C) 1982 NAMCO
           DC.B      $AA,$80,$02,$AA,$2A,$AA,$AA,$80        ;100-07 TITLED10,9
           DC.B      $AA,$80,$AA,$A8,$00,$AA,$A8,$00        ;108-15 TITLEG10,9
           DC.B      $AA,$A8,$2A,$AA,$00,$AA,$A8,$00        ;116-23 TITLEU10,9
@@ -4736,7 +4745,8 @@ ENDE0AA
           DC.B      $15,$50,$50,$14;                        ;84-87  LETRG,LETRM
 
           DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$33,$33,$33,$33,$30;                ;94-99  (C) 1982 NAMCO
+         ; DC.B      $0C,$33,$33,$33,$33,$30;                ;94-99  (C) 1982 NAMCO
+         DC.B      $30,$33,$33,$33,$33,$0C;                ;94-99  (C) 1982 NAMCO
           DC.B      $FF,$C0,$03,$FF,$FF,$FF,$FF,$F0        ;100-07 TITLED10,9
           DC.B      $FF,$C0,$00,$00,$0F,$FF,$FF,$C0        ;108-15 TITLEG10,9
           DC.B      $FF,$FC,$3F,$FF,$0F,$FF,$FF,$C0        ;116-23 TITLEU10,9
@@ -4828,7 +4838,8 @@ ENDE1AA
 
 
           DC.B      $00,$FC,$CF,$CF,$0C,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$F3,$F3,$33,$03,$30;                ;94-99  (C) 1982 NAMCO
+         ;DC.B      $0C,$F3,$F3,$33,$03,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $30,$03,$33,$F3,$F3,$0C;                ;94-99  (C) 1982 NAMCO
           DC.B      $AA,$80,$02,$AA,$AA,$AA,$AA,$A8        ;100-07 TITLED10,9
           DC.B      $AA,$80,$00,$00,$0A,$AA,$AA,$A0        ;108-15 TITLEG10,9
           DC.B      $AA,$A8,$2A,$AA,$2A,$AA,$AA,$A0        ;116-23 TITLEU10,9
@@ -4927,7 +4938,8 @@ ENDE2AA
           DC.B      $50,$14,$50,$14;                        ;84-87  LETRG,LETRM
 
           DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0F,$F3,$33,$F3,$03,$30;                ;94-99  (C) 1982 NAMCO
+         ; DC.B      $0F,$F3,$33,$F3,$03,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $30,$03,$F3,$33,$F3,$0F                ;94-99  (C) 1982 NAMCO
           DC.B      $FF,$C0,$0F,$FF,$FF,$FF,$FF,$FC        ;100-07 TITLED10,9
           DC.B      $FF,$F0,$0F,$F0,$3F,$FF,$FF,$FC        ;108-15 TITLEG10,9
           DC.B      $FF,$FC,$3F,$FF,$3F,$FF,$FF,$FC        ;116-23 TITLEU10,9
@@ -5030,7 +5042,8 @@ ENDE3AA
           DC.B      $A0,$28,$A0,$28;                        ;84-87  LETRG,LETRM
 
           DC.B      $00,$CC,$CC,$CC,$CC,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0F,$33,$33,$F3,$33,$30;                ;94-99  (C) 1982 NAMCO
+         ; DC.B      $0F,$33,$33,$F3,$33,$30;                ;94-99  (C) 1982 NAMCO
+         DC.B       $30,$33,$F3,$33,$33,$0F            ;94-99  (C) 1982 NAMCO
           DC.B      $AA,$AA,$AA,$AA,$AA,$AA,$AA,$AA        ;100-07 TITLED10,9
           DC.B      $AA,$A8,$2A,$A8,$2A,$AA,$AA,$A8        ;108-15 TITLEG10,9
           DC.B      $AA,$A8,$2A,$AA,$AA,$AA,$AA,$A8        ;116-23 TITLEU10,9
@@ -5132,7 +5145,8 @@ ENDE4AA
           DC.B      $50,$54,$51,$14;                        ;84-87  LETRG,LETRM
 
           DC.B      $00,$33,$F3,$03,$0C,$00;                ;88-93  (C) 1983 ATARI
-          DC.B      $0C,$30,$C3,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $C0,$C0,$30,$C3,$30,$0C;                ;94-99  (C) 1982 NAMCO
+       ;  DC.B      $0C,$30,$C3,$30,$C0,$C0;                ;94-99  (C) 1982 NAMCO
           DC.B      $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF        ;100-07 TITLED10,9
           DC.B      $3F,$FF,$FF,$FC,$3F,$FF,$FF,$FF        ;108-15 TITLEG10,9
           DC.B      $FF,$FC,$3F,$FF,$FF,$FF,$FF,$FF        ;116-23 TITLEU10,9
@@ -5309,7 +5323,8 @@ ENDE6AA
           DC.B      $50,$00,$55,$54;                        ;84-87  LETRG,LETRM
 
           DC.B      $30,$30,$30,$33,$F0,$30;                ;88-93  (C) 1983 ATARI
-          DC.B      $30,$30,$30,$33,$F3,$F0;                ;94-99  (C) 1982 NAMCO
+          ;DC.B      $30,$30,$30,$33,$F3,$F0;                ;94-99  (C) 1982 NAMCO
+         DC.B      $F0,$F3,$33,$30,$30,$30                ;94-99  (C) 1982 NAMCO
           DC.B      $FF,$FF,$FF,$FC,$FF,$FF,$FF,$FF        ;100-07 TITLED10,9
           DC.B      $3F,$FF,$FF,$FC,$FF,$F0,$3F,$FF        ;108-15 TITLEG10,9
           DC.B      $FF,$FC,$3F,$FF,$FF,$FF,$FF,$FF        ;116-23 TITLEU10,9
@@ -5385,7 +5400,8 @@ ENDE7AA
           DC.B      $50,$14,$55,$54;                        ;84-87  LETRG,LETRM
 
           DC.B      $C3,$0C,$30,$33,$30,$30;                ;88-93  (C) 1983 ATARI
-          DC.B      $C3,$0C,$30,$33,$33,$00;                ;94-99  (C) 1982 NAMCO
+          ;DC.B      $C3,$0C,$30,$33,$33,$00;                ;94-99  (C) 1982 NAMCO
+          DC.B      $00,$33,$33,$30,$0C,$C3                ;94-99  (C) 1982 NAMCO
           DC.B      $AA,$AA,$AA,$A8,$AA,$80,$0A,$AA        ;100-07 TITLED10,9
           DC.B      $0A,$AA,$AA,$A0,$AA,$80,$0A,$AA        ;108-15 TITLEG10,9
           DC.B      $AA,$A8,$2A,$AA,$AA,$A8,$2A,$AA        ;116-23 TITLEU10,9
@@ -5460,7 +5476,8 @@ ENDE8AA
           DC.B      $55,$54,$54,$54;                        ;84-87  LETRG,LETRM
 
           DC.B      $CC,$0C,$33,$F3,$F3,$F0;                ;88-93  (C) 1983 ATARI
-          DC.B      $CC,$0C,$33,$F3,$F3,$F0;                ;94-99  (C) 1982 NAMCO
+      ;  DC.B      $CC,$0C,$33,$F3,$F3,$F0;                ;94-99  (C) 1982 NAMCO
+          DC.B      $F0,$F3,$F3,$33,$0C,$CC                ;94-99  (C) 1982 NAMCO
           DC.B      $FF,$FF,$FF,$F0,$FF,$C0,$03,$FF        ;100-07 TITLED10,9
           DC.B      $03,$FF,$FF,$C0,$FF,$C0,$0F,$FF        ;108-15 TITLEG10,9
           DC.B      $FF,$FC,$3F,$FC,$FF,$FC,$3F,$FF        ;116-23 TITLEU10,9
@@ -5548,7 +5565,8 @@ ENDE9AA
           DC.B      $15,$50,$14,$50;                        ;84-87  LETRG,LETRM
 
           DC.B      $C3,$0C,$33,$33,$33,$30;                ;88-93  (C) 1983 ATARI
-          DC.B      $C3,$0C,$33,$33,$30,$30;                ;94-99  (C) 1982 NAMCO
+          ;DC.B      $C3,$0C,$33,$33,$30,$30;                ;94-99  (C) 1982 NAMCO
+          DC.B      $30,$30,$33,$33,$0C,$C3               ;94-99  (C) 1982 NAMCO
           DC.B      $2A,$AA,$AA,$A0,$AA,$80,$02,$AA        ;100-07 TITLED10,9
           DC.B      $00,$AA,$AA,$80,$AA,$80,$AA,$AA        ;108-15 TITLEG10,9
           DC.B      $2A,$A0,$0A,$A8,$AA,$A8,$2A,$AA        ;116-23 TITLEU10,9
