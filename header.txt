@@ -1,3 +1,4 @@
+;Comment added Aaron Lanterman, Oct. 26, 2021
 ;Note that you need to manually add the ROMTOP symbol to your main code
 ;at where the actual ROM should start 
 
