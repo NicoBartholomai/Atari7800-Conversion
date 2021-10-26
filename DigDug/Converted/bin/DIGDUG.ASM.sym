@@ -160,6 +160,7 @@ CHKTMP4                  00da
 CHKUP                    f3a3                  
 CLIMBUP                  fcd0              (R )
 CMOVLOOP                 fc8f              (R )
+code                     c000                  
 COLBORDN                 d816              (R )
 COLLISON                 f71c              (R )
 CONTPAUS                 deb4              (R )
@@ -576,7 +577,7 @@ HARPXPL                  c25c              (R )
 HARPYPL                  c25e              (R )
 HCARTNUM                 0042              (R )
 HCARVE                   e2ef              (R )
-HEADER                   0000              (R )
+HEADER                   bf80              (R )
 HEADER0                  00d8              (R )
 HEADER1                  00d9              (R )
 HEADER3                  00da              (R )
