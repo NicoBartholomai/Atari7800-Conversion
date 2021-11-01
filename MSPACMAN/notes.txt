@@ -1,0 +1,54 @@
+animate.s -> mrs pacman ANIMATIONS
+end.s -> ending statement for the code
+fruits.s -> fruit routine 
+getjoy.s -> read all of the joystick DATA
+high.s -> handle all of the highscore stuff
+init.s -> initialization routines 
+intersect.s -> hanlde intersection btwn pacman and monsters / fruit
+kernal.s -> kernel and loader for MARIA
+loadmap.s -> maze drawing routine 
+macro.s -> handy macros for moving around DATA
+main.s -> the main routine
+mariaos.s -> just a bunch of equates for maria
+mdoit.s -> mystery linking file it seems
+mget.s -> another mystery file idk what it does
+monster.s -> monster code 
+mschar.s -> character set and graphics
+msdef.s -> bunch of equates for symbol defs
+msmove.s -> moving ms pacman around
+mup.s -> another mystery file
+path.s -> path taking routines
+putchar.s -> routine to draw characters to the SCREEN
+speed.s -> handle pac and monster speeds
+title.s -> init state and show title
+tunes.s -> music stuff
+util.s -> generat utility routines
+
+
+
+
+ordering for mdot.s 
+
+mariaos
+msdef
+mschar
+main
+init
+msmove
+fruit
+monster
+path
+speed
+intersect
+animate
+title
+high
+util
+tunes
+kernel
+getjoy
+putchar
+loadmap
+end
+
+So they didnt use macro, mget, mup. 

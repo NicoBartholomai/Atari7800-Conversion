@@ -1,0 +1,73 @@
+GDAC1.S <- ORG $CC00 at line 1226
+GDAC2.S <- no ORG
+GDAC3.S <- no ORG
+GDAC4.S <- ORG $DF76 at line 173, and weird named ORGs (ORG END4, END01)
+GLOAD.S <- weird text file below
+GLOADER.S <- ORG $B000 (“org after graphics”, startup code), ORG $DFF8, DF73, FF73 (vectors for startup)
+GMAIN.S <- ORG $8000 
+GMIV.S <- no ORG
+GRAPHA.S <- ORGs for variable allocation in RAM, followed by ORG $A000, $A100, $A200… $AF00
+GRAPHB.S <- ORG $C000, $C100, $C200… $CB00
+GSAVE.S <- weird text file below
+GSCORE.S <- no ORG
+PALDAC.S
+PALGLDR.S
+PALGRPHA.S
+
+Putting in order of GLOAD listing:
+GRAPHA.S <- ORGs for variable allocation in RAM, followed by ORG $A000, $A100, $A200… $AF00
+GRAPHB.S <- ORG $C000, $C100, $C200… $CB00
+GLOADER.S <- ORG $B000 (“org after graphics”, startup code), ORG $DFF8, DF73, FF73 (vectors for startup)
+GMAIN.S <- ORG $8000 
+GMIV.S <- no ORG
+GSCORE.S <- no ORG
+GDAC1.S <- ORG $CC00 at line 1226
+GDAC2.S <- no ORG
+GDAC3.S <- no ORG
+GDAC4.S <- ORG $DF76 at line 173, and weird named ORGs (ORG END4, END01)
+
+GDAC4.S has this comment before ORG END01 line:
+
+;THIS NEXT SECTION GOES AFTER GLOADER.S
+      	 ORG     END01
+
+And the ORG END four line is followed by a common about “the motion table which causes an attacking blue ship”
+
+Ah! And in GLOADER.S, here’s line 1222: 
+
+END01     DB    0
+
+And in GDAC1.S, there’s this line:
+END4      DB      $00                    NEXT CODE SECTION GOES HERE
+
+Ugh that is convoluted… I think the DB 0 are placeholders and get *overwritten.* This is sooooo kludgey. 
+
+GLOAD.S is:
+JU
+MGG;GRAPHA.S,R:M1:$
+MGG;GRAPHB.S,R:M1:$
+MGG;GLOADER.S,R:$
+MGG;GMAIN.S,R:$
+MGG;GMIV.S,R:$
+MGG;GSCORE.S,R:$
+MGG;GDAC1.S,R:$
+MGG;GDAC2.S,R:$
+MGG;GDAC3.S,R:$
+MGG;GDAC4.S,R:$
+MGG;DOALL,R:M1:$
+MGG;SET,R:M1:$
+MGG;GAME.Z,R:$
+
+GSAVE.S is:
+JU
+MM1:GRAPHA.S,R:GG;$
+MM1:GRAPHB.S,R:GG;$
+MGLOADER.S,R:GG;$
+MGMAIN.S,R:GG;$
+MGMIV.S,R:GG;$
+MGSCORE.S,R:GG;$
+MGDAC1.S,R:GG;$
+MGDAC2.S,R:GG;$
+MGDAC3.S,R:GG;$
+MGDAC4.S,R:GG;$
+MGAME.Z,R:GG;$

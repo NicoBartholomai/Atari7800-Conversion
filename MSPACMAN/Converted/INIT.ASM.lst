@@ -1,0 +1,644 @@
+------- FILE INIT.ASM LEVEL 1 PASS 2
+      1  053d ????				      processor	6502
+      2  053d ????
+      3  053d ????						;*  INIT	    INITIALIZATION ROUTINES FOR MS PAC MAN
+      4  053d ????
+      5  053d ????						;*  DO THE INITIALIZATION NEEDED AT THE VERY MINIMUM.
+      6  053d ????	       20 63 02    STRTINIT   JSR	ZERORAM	;		  ;ZERO RAM, TURN OFF DISPLAY
+      7  0540 ????	       00 40 00 00*	      DC.S	$40,#0,#$60	;	      ;NULL OUT LOWER PART OF PAGE ZERO
+      8  0546 ????	       20 79 02 	      JSR	ZEROSCOR
+      9  0549 ????
+     10  0549 ????	       a2 1f		      LDX	#$1F	;		     ;RANDOMIZE SEED
+     11  054b ????	       55 00	   SIRRLOOP   EOR	$00,X
+     12  054d ????	       ca		      DEX
+     13  054e ????	       10 00		      BPL	SIRRLOOP
+     14  0550 ????	       8d 00 00 	      STA	NEWRAND
+     15  0553 ????
+     16  0553 ????	       a2 00		      LDX	#$00	;		     ;GET JOYSTICK STATE SET UP
+     17  0555 ????	       8e 00 00 	      STX	INPTCTRL
+     18  0558 ????	       ad 00 39 	      LDA	$3900	;		    ;SEE IF HI SCORE CART IS THERE
+     19  055b ????	       c9 c6		      CMP	#$C6
+     20  055d ????	       d0 c6		      BNE	NOHSC
+     21  055f ????	       ad 04 39 	      LDA	$3904
+     22  0562 ????	       c9 fe		      CMP	#$FE
+     23  0564 ????	       d0 fe		      BNE	NOHSC
+     24  0566 ????	       e8		      INX
+     25  0567 ????	       8e 00 00    NOHSC      STX	HSCHERE
+     26  056a ????
+     27  056a ????	       a9 00		      LDA	#$00
+     28  056c ????	       8d 00 00 	      STA	CTLSWA	;		   ;INITIALIZE JOYSTICKS AND SWITCHES
+     29  056f ????	       8d 00 00 	      STA	CTLSWB
+     30  0572 ????	       20 3e 00 	      JSR	OURINIT	;		  ;INIT IT OUR WAY
+     31  0575 ????
+     32  0575 ????	       a9 01		      LDA	#$01
+     33  0577 ????	       8d 00 00 	      STA	STLEVEL	;		  ;START DEFAULT AT CHERRY LEVEL
+     34  057a ????
+     35  057a ????	       60		      RTS
+     36  057b ????
+     37  057b ????
+     38  057b ????						;*  INITIALIZE STATE OUR WAY - USED ALSO AFTER HSC STUFF
+     39  057b ????	       20 39 01    OURINIT    JSR	SCREENNO	;		 ;TURN SCREEN OFF
+     40  057e ????
+     41  057e ????	       a9 00		      LDA	#BLACK
+     42  0580 ????	       8d 00 00 	      STA	BACKGRND	;		 ;PUT BACKGROUND TO BLACK
+     43  0583 ????	       20 00 02 	      JSR	LOADDLST	;		 ;INITIALIZE DISPLAY LISTS
+     44  0586 ????
+     45  0586 ????	       20 cd 02 	      JSR	LOADFONT	;		 ;LOAD FONT
+     46  0589 ????	       a9 00		      LDA	#>STAMPS
+     47  058b ????	       8d 00 00 	      STA	CHARBASE	;		 ;INSTALL THE MS PAC MAN CHARACTERS
+     48  058e ????	       a9 00		      LDA	#<DLL
+     49  0590 ????	       8d 00 00 	      STA	DPPL	;		     ;SET DPPL AND DPPH TO DLLIST
+     50  0593 ????	       a9 00		      LDA	#>DLL
+     51  0595 ????	       8d 00 00 	      STA	DPPH
+     52  0598 ????
+     53  0598 ????	       4c 45 01 	      JMP	SCREENON	;		 ;TURN SCREEN DISPLAY ON
+     54  059b ????
+     55  059b ????
+     56  059b ????						;*  INITIALIZE THE ENTIRE GAME.  ZERO DATA AREAS AND SET CONTROL REGISTERS.
+     57  059b ????	       20 63 02    GAMEINIT   JSR	ZERORAM	;		  ;ZERO RAM, TURN OFF SCREEN
+     58  059e ????	       20 45 01 	      JSR	SCREENON	;		 ;SCREEN BACK ON AGAIN
+     59  05a1 ????	       ad 00 00 	      LDA	AUTOPLAY
+     60  05a4 ????	       d0 00		      BNE	GIJMP0
+     61  05a6 ????	       20 79 02 	      JSR	ZEROSCOR	;		 ;ZERO SCORE IF NOT IN AUTO-PLAY
+     62  05a9 ????
+     63  05a9 ????	       a9 01	   GIJMP0     LDA	#$01	;		     ;SET UP PLAYER 2
+     64  05ab ????	       8d 00 00 	      STA	PLAYER
+     65  05ae ????	       ad 00 00 	      LDA	STLEVEL	;		  ;SET STARTING LEVEL
+     66  05b1 ????	       8d 00 00 	      STA	LEVEL
+     67  05b4 ????	       8d 00 00 	      STA	ADJLEVEL
+     68  05b7 ????	       20 f6 01 	      JSR	SETRACK
+     69  05ba ????	       20 00 00 	      JSR	INITLIV	;		  ;INITIALIZE NUMBER OF LIVES
+     70  05bd ????	       20 9b 00 	      JSR	SCRNINIT	;		 ;INITIALIZE SCREEN AND TIMERS
+     71  05c0 ????
+     72  05c0 ????	       20 9d 02 	      JSR	SWITCHPL	;		 ;SET UP PLAYER 1
+     73  05c3 ????	       ad 00 00 	      LDA	STLEVEL	;		  ;SET STARTING LEVEL
+     74  05c6 ????	       8d 00 00 	      STA	LEVEL
+     75  05c9 ????	       8d 00 00 	      STA	ADJLEVEL
+     76  05cc ????	       20 f6 01 	      JSR	SETRACK
+     77  05cf ????	       20 00 00 	      JSR	INITLIV	;		  ;INITIALIZE NUMBER OF LIVES
+     78  05d2 ????
+     79  05d2 ????
+     80  05d2 ????						;*  THIS ROUTINE INITIALIZES THE STATE FOR A RACK
+     81  05d2 ????	       20 9b 00    RACKINIT   JSR	SCRNINIT
+     82  05d5 ????	       4c cb 00 	      JMP	COMNINIT
+     83  05d8 ????
+     84  05d8 ????
+     85  05d8 ????						;*  THIS ROUTINE INITIALIZES THE SCREEN FOR A RACK
+     86  05d8 ????	       20 00 00    SCRNINIT   JSR	LOADDOTS	;		 ;SET UP DOTS
+     87  05db ????	       a9 38		      LDA	#$38	;		     ;SET NUMBER OF DOTS BEFORE FRUIT APPEAR
+     88  05dd ????	       8d 00 00 	      STA	FDOTS
+     89  05e0 ????
+     90  05e0 ????	       a9 00		      LDA	#0
+     91  05e2 ????	       8d 00 00 	      STA	DOTSEATN
+     92  05e5 ????	       8d 00 00 	      STA	PINKDOTS
+     93  05e8 ????	       8d 00 00 	      STA	BLUEDOTS
+     94  05eb ????	       8d 00 00 	      STA	GOLDDOTS
+     95  05ee ????	       8d 00 00 	      STA	DEATHFLG
+     96  05f1 ????	       8d 00 00 	      STA	EATNDOTS
+     97  05f4 ????	       8d 00 00 	      STA	TRELEASE
+     98  05f7 ????
+     99  05f7 ????	       20 00 00    SCRRAND    JSR	RAND	;		     ;GET A RANDOM NUMBER 0..3 FOR AUTOPLAY
+    100  05fa ????	       29 03		      AND	#$03
+    101  05fc ????	       f0 03		      BEQ	SCRRAND	;		  ;DO NOT ALLOW 0 (SHE DIES TOO MUCH)
+    102  05fe ????	       8d 00 00 	      STA	RACKRAND
+    103  0601 ????	       60		      RTS
+    104  0602 ????
+    105  0602 ????
+    106  0602 ????						;*  THIS ROUTINE INITIALIZES BETWEEN PLAYERS
+    107  0602 ????	       20 00 00    OTHRINIT   JSR	SAVEDOTS	;		 ;UPDATE DOT ARRAY
+    108  0605 ????	       20 9d 02 	      JSR	SWITCHPL	;		 ;SWITCH PLAYERS
+    109  0608 ????
+    110  0608 ????
+    111  0608 ????						;*  THIS ROUTINE IS USED IN COMMON BY RACKINIT AND OTHRINIT
+    112  0608 ????	       a9 00	   COMNINIT   LDA	#$00	;		     ;ZERO OUR LOCAL CLOCKS
+    113  060a ????	       8d 00 00 	      STA	RTLOCAL
+    114  060d ????	       8d 01 00 	      STA	RTLOCAL+1
+    115  0610 ????	       8d 00 00 	      STA	NORMTIME
+    116  0613 ????	       8d 01 00 	      STA	NORMTIME+1
+    117  0616 ????	       20 6c 01 	      JSR	CLRSCRN	;		  ;TURN OFF THE SCREEN
+    118  0619 ????
+    119  0619 ????	       ae 00 00 	      LDX	RACK
+    120  061c ????	       bd 03 05 	      LDA	DOTCOLOR,X	;	       ;SET COLORS
+    121  061f ????	       8d 00 00 	      STA	P0C1
+    122  0622 ????	       bd fb 04 	      LDA	BARCOLOR,X
+    123  0625 ????	       8d 00 00 	      STA	P0C2
+    124  0628 ????	       bd ff 04 	      LDA	OUTCOLOR,X
+    125  062b ????	       8d 00 00 	      STA	P0C3
+    126  062e ????	       20 00 02 	      JSR	LOADDLST	;		 ;RESTORE THE DISPLAY LISTS
+    127  0631 ????	       20 00 00 	      JSR	LOADMAP	;		  ;SET UP SCREEN
+    128  0634 ????	       20 8d 01 	      JSR	WRTINDS	;		  ;WRITE INDICATORS - GO TO LIFEINIT
+    129  0637 ????
+    130  0637 ????
+    131  0637 ????						;*  THIS ROUTIINE INITIALIZES A NEW LIFE (OTHRINIT FALLS THROUGH TO HERE)
+    132  0637 ????	       20 00 00    LIFEINIT   JSR	CLEARFRT	;		 ;SET UP FOR STARTING LIFE
+    133  063a ????	       20 00 00 	      JSR	INITPAC
+    134  063d ????	       20 00 00 	      JSR	INITMON
+    135  0640 ????	       20 00 00 	      JSR	INITSPED
+    136  0643 ????	       20 00 00 	      JSR	CLEARTUN
+    137  0646 ????	       20 00 00 	      JSR	SETPAC
+    138  0649 ????	       20 00 00 	      JSR	SETFRT
+    139  064c ????	       4c 00 00 	      JMP	SETFLSH
+    140  064f ????
+    141  064f ????
+    142  064f ????						;*  TURN THE SCREEN OFF
+    143  064f ????	       20 61 01    SCREENOF   JSR	WAITVBL	;		  ;WAIT TILL VBLANK STARTED
+    144  0652 ????	       a9 7f		      LDA	#$7F	;		     ;TURN GRAPHICS OFF
+    145  0654 ????	       8d 00 00 	      STA	CTRL
+    146  0657 ????
+    147  0657 ????	       20 6c 01 	      JSR	CLRSCRN	;		  ;CLEAR OFF LIVES, FRUITS, AND MONSTERS
+    148  065a ????
+    149  065a ????	       a2 00		      LDX	#$00	;		     ;CLEAR CHARACTER MAP, $1800-$1BFF
+    150  065c ????	       8a		      TXA
+    151  065d ????	       9d 00 18    SOLOOP     STA	$1800,X
+    152  0660 ????	       9d 00 19 	      STA	$1900,X
+    153  0663 ????	       9d 00 1a 	      STA	$1A00,X
+    154  0666 ????	       9d 00 1b 	      STA	$1B00,X
+    155  0669 ????	       ca		      DEX
+    156  066a ????	       d0 00		      BNE	SOLOOP
+    157  066c ????
+    158  066c ????	       8d 00 00    SOEND      STA	SCRNSTAT	;		 ;ZERO SOME STATE
+    159  066f ????	       8d 00 00 	      STA	KNLTEMP0
+    160  0672 ????	       8d 00 00 	      STA	KNLTEMP1
+    161  0675 ????	       60		      RTS
+    162  0676 ????
+    163  0676 ????
+    164  0676 ????						;*  TURN THE SCREEN OFF WITHOUT ZEROING THE SCREEN
+    165  0676 ????	       20 61 01    SCREENNO   JSR	WAITVBL	;		  ;WAIT TILL VBLANK STARTED
+    166  0679 ????	       a9 7f		      LDA	#$7F	;		     ;TURN GRAPHICS OFF
+    167  067b ????	       8d 00 00 	      STA	CTRL
+    168  067e ????	       a9 00		      LDA	#$00
+    169  0680 ????	       f0 00		      BEQ	SOEND
+    170  0682 ????
+    171  0682 ????
+    172  0682 ????						;*  TURN THE SCREEN ON
+    173  0682 ????	       ad 00 00    SCREENON   LDA	SCRNSTAT	;		 ;SEE IF SCREEN WAS EVEN OFF
+    174  0685 ????	       d0 00		      BNE	SOOUT
+    175  0687 ????
+    176  0687 ????	       20 00 00 	      JSR	LOADER	;		   ;INITIALIZE KERNAL STATE
+    177  068a ????	       20 00 00 	      JSR	GETCOLOR	;		 ;GET OUR COLORS
+    178  068d ????
+    179  068d ????	       20 61 01 	      JSR	WAITVBL
+    180  0690 ????	       a9 ff		      LDA	#$FF	;		     ;SET THE KERNAL STATE
+    181  0692 ????	       8d 00 00 	      STA	KNLTEMP0
+    182  0695 ????	       ee 00 00 	      INC	SCRNSTAT	;		 ;SAY THE SCREEN IS ON
+    183  0698 ????	       a9 00		      LDA	#GRAPHON
+    184  069a ????	       8d 00 00 	      STA	CTRL	;		     ;TURN GRAPHICS ON
+    185  069d ????	       60	   SOOUT      RTS
+    186  069e ????
+    187  069e ????
+    188  069e ????						;*  A ROUTINE TO WATI TILL VBLANK
+    189  069e ????	       2c 00 00    WAITVBL    BIT	MSTAT	;		    ;IS VBLANK STARTED YET?
+    190  06a1 ????	       10 00		      BPL	WAITVBL
+    191  06a3 ????	       2c 00 00 	      BIT	MSTAT	;		    ;IS VBLANK STILL STARTED?
+    192  06a6 ????	       10 00		      BPL	WAITVBL
+    193  06a8 ????	       60		      RTS
+    194  06a9 ????
+    195  06a9 ????
+    196  06a9 ????						;*  TURN MISCELLANEOUS GRAPHICS OFF.  THE MOVING OBJECTS AND INDICATORS ARE
+    197  06a9 ????						;*  TURNED OFF.
+    198  06a9 ????	       a9 00	   CLRSCRN    LDA	#OFFSCRN	;		 ;TURN OFF MOVING OBJECTS
+    199  06ab ????	       a2 05		      LDX	#$05
+    200  06ad ????	       9d 00 00    CSMLOOP    STA	HPLIST,X
+    201  06b0 ????	       9d 00 00 	      STA	DOLIST,X
+    202  06b3 ????	       ca		      DEX
+    203  06b4 ????	       10 00		      BPL	CSMLOOP
+    204  06b6 ????
+    205  06b6 ????	       a0 0b		      LDY	#$0B	;		     ;PUT BONUS LIFE AND FRUIT INDICATORS
+    206  06b8 ????	       a2 03		      LDX	#$03	;		     ;	OFF SCREEN
+    207  06ba ????	       a9 00		      LDA	#OFFSCRN
+    208  06bc ????	       9d 00 00    CSBLOOP    STA	BDLIST0,X
+    209  06bf ????	       9d 00 00 	      STA	BDLIST1,X
+    210  06c2 ????	       e8		      INX
+    211  06c3 ????	       e8		      INX
+    212  06c4 ????	       e8		      INX
+    213  06c5 ????	       e8		      INX
+    214  06c6 ????	       88		      DEY
+    215  06c7 ????	       10 00		      BPL	CSBLOOP
+    216  06c9 ????
+    217  06c9 ????	       60		      RTS		;			      ;ALL DONE
+    218  06ca ????
+    219  06ca ????
+    220  06ca ????						;*  THIS ROUTINE WRITES ALL THE INDICATORS ON THE SCREEN
+    221  06ca ????	       ae 00 00    WRTINDS    LDX	LEVEL	;		    ;SET TYPE OF FRUIT AT BOTTOM
+    222  06cd ????	       e0 07		      CPX	#$07
+    223  06cf ????	       30 07		      BMI	WISETFRT
+    224  06d1 ????	       a2 07		      LDX	#$07
+    225  06d3 ????	       e8	   WISETFRT   INX
+    226  06d4 ????	       8e 00 00 	      STX	RACKFRT
+    227  06d7 ????	       20 6a 03 	      JSR	LOADINDS	;		 ;SET UP THE INDICATORS
+    228  06da ????	       20 00 00 	      JSR	WRTSCORE	;		 ;WRITE THE SCORE
+    229  06dd ????	       4c 00 00 	      JMP	WRTLIVES	;		 ;FALL THROUGH TO LIFEINIT
+    230  06e0 ????
+    231  06e0 ????
+    232  06e0 ????						;*  THIS ROUTINE ADVANCES THE RACK
+    233  06e0 ????	       20 00 00    NEXTRACK   JSR	CLEARTUN
+    234  06e3 ????	       20 34 02 	      JSR	FLASHBAR
+    235  06e6 ????	       ad 00 00 	      LDA	AUTOPLAY	;		 ;SEE IF IN AUTO-PLAY MODE
+    236  06e9 ????	       d0 00		      BNE	NRAUTO
+    237  06eb ????	       ae 00 00 	      LDX	ADJLEVEL
+    238  06ee ????	       bd 15 05 	      LDA	ANIMTAB,X	;		;SEE IF ANIMATION DUE
+    239  06f1 ????	       30 15		      BMI	NRCONT
+    240  06f3 ????	       20 00 00 	      JSR	ANIMATE	;		  ;ANIMATE
+    241  06f6 ????	       ee 00 00    NRCONT     INC	LEVEL	;		    ;INCREMENT LEVEL
+    242  06f9 ????	       ee 00 00 	      INC	ADJLEVEL	;		 ;AND ADJUSTED LEVEL
+    243  06fc ????	       ad 00 00 	      LDA	ADJLEVEL	;		 ;SEE IF OUT OF RANGE
+    244  06ff ????	       c9 0e		      CMP	#$0E
+    245  0701 ????	       30 0e		      BMI	NRJMP0
+    246  0703 ????	       a9 06		      LDA	#$06	;		     ;SET BACK TO LEVEL 6
+    247  0705 ????	       8d 00 00 	      STA	ADJLEVEL
+    248  0708 ????	       20 f6 01    NRJMP0     JSR	SETRACK
+    249  070b ????	       20 d2 05 	      JSR	RACKINIT	;		 ;INIT THE NEW RACK
+    250  070e ????	       20 00 00 	      JSR	READY	;		    ;PUT PLAYER READY UP
+    251  0711 ????	       20 88 02 	      JSR	WAIT
+    252  0714 ????	       4c 00 00 	      JMP	WCLEAR
+    253  0717 ????
+    254  0717 ????	       ee 00 00    NRAUTO     INC	RACK	;		     ;AUTO-PLAY NEXT RACK
+    255  071a ????	       ae 00 00 	      LDX	RACK
+    256  071d ????	       e0 00		      CPX	#NUMRACKS
+    257  071f ????	       10 00		      BPL	NROVER
+    258  0721 ????	       bd 23 05 	      LDA	RACKLVL,X
+    259  0724 ????	       8d 00 00 	      STA	LEVEL
+    260  0727 ????	       8d 00 00 	      STA	ADJLEVEL
+    261  072a ????	       4c d2 05 	      JMP	RACKINIT
+    262  072d ????	       a2 00	   NROVER     LDX	#STACKPTR	;		;ALL OVER - GO BACK TO TITLE PAGE
+    263  072f ????	       9a		      TXS
+    264  0730 ????	       4c 00 00 	      JMP	ATTRACT
+    265  0733 ????
+    266  0733 ????	       ae 00 00    SETRACK    LDX	ADJLEVEL
+    267  0736 ????	       bd 07 05 	      LDA	RACKTAB,X	;		;GET THE RACK
+    268  0739 ????	       8d 00 00 	      STA	RACK
+    269  073c ????	       60		      RTS
+    270  073d ????
+    271  073d ????
+    272  073d ????						;*  THIS ROUTINE INITIALIZES THE DISPLAY LISTS
+    273  073d ????	       a2 58	   LOADDLST   LDX	#$58
+    274  073f ????	       bd 2c 04    LDLLOOP0   LDA	DLISTS,X	;		 ;INITIALIZE SCREEN AND INDICATOR LISTS
+    275  0742 ????	       9d 00 00 	      STA	DLIST0,X
+    276  0745 ????	       9d 00 00 	      STA	DLIST1,X
+    277  0748 ????	       ca		      DEX
+    278  0749 ????	       10 00		      BPL	LDLLOOP0
+    279  074b ????
+    280  074b ????	       a2 06		      LDX	#$06
+    281  074d ????	       bd 85 04    LDLLOOP1   LDA	TDLIST,X	;		 ;INITIALIZE TOP DISPLAY LIST
+    282  0750 ????	       9d 00 00 	      STA	TOPDLIST,X
+    283  0753 ????	       ca		      DEX
+    284  0754 ????	       10 00		      BPL	LDLLOOP1
+    285  0756 ????
+    286  0756 ????	       a2 6e		      LDX	#$6E
+    287  0758 ????	       bd 8c 04    LDLLOOP2   LDA	DLLIST,X
+    288  075b ????	       9d 00 00 	      STA	DLL,X
+    289  075e ????	       ca		      DEX
+    290  075f ????	       10 00		      BPL	LDLLOOP2
+    291  0761 ????
+    292  0761 ????	       60		      RTS
+    293  0762 ????
+    294  0762 ????
+    295  0762 ????						;*  THIS ROUTINE MOVES THE BLACK BARS OFF THE SCREEN
+    296  0762 ????	       a9 00	   BARSOFF    LDA	#OFFSCRN
+    297  0764 ????	       8d 20 00 	      STA	DLIST0+$20
+    298  0767 ????	       8d 24 00 	      STA	DLIST0+$24
+    299  076a ????	       8d 20 00 	      STA	DLIST1+$20
+    300  076d ????	       8d 24 00 	      STA	DLIST1+$24
+    301  0770 ????	       60		      RTS
+    302  0771 ????
+    303  0771 ????
+    304  0771 ????						;*  THIS ROUTINE FLASHES THE BAR COLOR
+    305  0771 ????	       a0 02	   FLASHBAR   LDY	#$02
+    306  0773 ????	       ae 00 00 	      LDX	RACK	;		     ;GET BAR COLOR
+    307  0776 ????	       a9 00	   FBLOOP     LDA	#BLACK	;		   ;TURN BAR OFF
+    308  0778 ????	       8d 00 00 	      STA	P0C2
+    309  077b ????	       20 4e 02 	      JSR	FBWAIT	;		   ;PAUSE
+    310  077e ????	       bd fb 04 	      LDA	BARCOLOR,X	;	       ;TURN BAR ON
+    311  0781 ????	       8d 00 00 	      STA	P0C2
+    312  0784 ????	       20 4e 02 	      JSR	FBWAIT	;		   ;PAUSE
+    313  0787 ????	       88		      DEY
+    314  0788 ????	       10 4e		      BPL	FBLOOP
+    315  078a ????	       60		      RTS
+    316  078b ????
+    317  078b ????	       ad 01 00    FBWAIT     LDA	RTLOCAL+1	;		;WAIT A BIT FOR THE BAR FLASHING
+    318  078e ????	       18		      CLC
+    319  078f ????	       69 0e		      ADC	#$0E
+    320  0791 ????	       8d 00 00 	      STA	TEMP16
+    321  0794 ????	       20 00 00    FBWLOOP    JSR	SEEBNORM
+    322  0797 ????	       ad 00 00 	      LDA	TEMP16
+    323  079a ????	       cd 01 00 	      CMP	RTLOCAL+1
+    324  079d ????	       10 01		      BPL	FBWLOOP
+    325  079f ????	       60		      RTS
+    326  07a0 ????
+    327  07a0 ????
+    328  07a0 ????						;*  THIS ROUTINE ZEROS OUT THE RAM
+    329  07a0 ????	       20 4f 06    ZERORAM    JSR	SCREENOF	;		 ;TURN SCREEN OFF FIRST, ZERO $1800-1BFF
+    330  07a3 ????
+    331  07a3 ????	       a9 00		      LDA	#$00
+    332  07a5 ????	       a2 60		      LDX	#$60	;		     ;ZERO OUT $A0-$FF
+    333  07a7 ????	       95 9f	   ZRLOOP0    STA	$9F,X
+    334  07a9 ????	       ca		      DEX
+    335  07aa ????	       d0 9f		      BNE	ZRLOOP0
+    336  07ac ????	       9d 00 1c    ZRLOOP     STA	$1C00,X	;		  ;ZERO OUT PAGES $1C00 AND $1D00
+    337  07af ????	       9d 00 1d 	      STA	$1D00,X
+    338  07b2 ????	       ca		      DEX
+    339  07b3 ????	       d0 00		      BNE	ZRLOOP
+    340  07b5 ????	       60		      RTS
+    341  07b6 ????
+    342  07b6 ????
+    343  07b6 ????						;*  THIS ROUTINE ZEROS OUT THE SCORE
+    344  07b6 ????	       a2 05	   ZEROSCOR   LDX	#$05
+    345  07b8 ????	       bd 27 05    ZSCLOOP    LDA	INITSCOR,X
+    346  07bb ????	       9d 00 00 	      STA	P1SCORE,X
+    347  07be ????	       9d 00 00 	      STA	P2SCORE,X
+    348  07c1 ????	       ca		      DEX
+    349  07c2 ????	       10 00		      BPL	ZSCLOOP
+    350  07c4 ????	       60		      RTS
+    351  07c5 ????
+    352  07c5 ????
+    353  07c5 ????						;*  THIS ROUTINE SIMPLY DOES A BUSY-WAIT.  THIS IS USED TO HALT ACTION TEMPORARIL
+    354  07c5 ????	       ad 01 00    WAIT       LDA	RTLOCAL+1
+    355  07c8 ????	       18		      CLC
+    356  07c9 ????	       69 40		      ADC	#$40
+    357  07cb ????	       8d 00 00 	      STA	TEMP16
+    358  07ce ????	       20 00 00    WLOOP      JSR	SEEBNORM
+    359  07d1 ????	       ad 00 00 	      LDA	TEMP16
+    360  07d4 ????	       cd 01 00 	      CMP	RTLOCAL+1
+    361  07d7 ????	       10 01		      BPL	WLOOP
+    362  07d9 ????	       60		      RTS
+    363  07da ????
+    364  07da ????
+    365  07da ????						;*  SWITCH DATA BETWEEN PLAYERS
+    366  07da ????	       a2 0b	   SWITCHPL   LDX	#$0B	;		     ;SWITCH PLAYER DEPENDANT DATA
+    367  07dc ????	       bd 00 00    SPLLOOP    LDA	LIVES,X
+    368  07df ????	       bc 00 00 	      LDY	BAKLIVES,X
+    369  07e2 ????	       94 00		      STY	LIVES,X
+    370  07e4 ????	       9d 00 00 	      STA	BAKLIVES,X
+    371  07e7 ????	       ca		      DEX
+    372  07e8 ????	       10 00		      BPL	SPLLOOP
+    373  07ea ????
+    374  07ea ????	       a2 7f		      LDX	#$7F	;		     ;SWITCH DOT ARRAYS
+    375  07ec ????	       bd 00 00    SDTLOOP    LDA	DOTARRAY,X
+    376  07ef ????	       bc 00 00 	      LDY	BAKDOTS,X
+    377  07f2 ????	       9d 00 00 	      STA	BAKDOTS,X
+    378  07f5 ????	       98		      TYA
+    379  07f6 ????	       9d 00 00 	      STA	DOTARRAY,X
+    380  07f9 ????	       ca		      DEX
+    381  07fa ????	       10 00		      BPL	SDTLOOP
+    382  07fc ????
+    383  07fc ????	       ad 00 00 	      LDA	PLAYER	;		   ;SWITCH PLAYER
+    384  07ff ????	       49 01		      EOR	#$01
+    385  0801 ????	       8d 00 00 	      STA	PLAYER
+    386  0804 ????
+    387  0804 ????	       ad 00 00 	      LDA	LIVES	;		    ;SWITCH BACK IF NO LIVES LEFT
+    388  0807 ????	       30 00		      BMI	SWITCHPL
+    389  0809 ????	       60		      RTS
+    390  080a ????
+    391  080a ????
+    392  080a ????						;*  ROUTINE TO LOAD MS PAC MAN FONT - ALSO INITIALIZES BLACK CHARACTERS
+    393  080a ????	       a9 00	   LOADFONT   LDA	#<MSFONT	;	       ;SET UP TEMP0 FOR READS FROM FONT
+    394  080c ????	       8d 00 00 	      STA	TEMP0
+    395  080f ????	       a9 00		      LDA	#>MSFONT
+    396  0811 ????	       8d 00 00 	      STA	TEMP1
+    397  0814 ????	       a9 30		      LDA	#$30	;		     ;SET UP TEMP2 FOR WRITES TO STAMP AREA
+    398  0816 ????	       8d 00 00 	      STA	TEMP2	;		    ;  FONT STARTS AT $30
+    399  0819 ????	       a9 90		      LDA	#$90	;		     ;INDEX FOR OUTER LOOP - HOW MANY CHARS
+    400  081b ????	       8d 00 00 	      STA	TEMP4	;		    ;  GET $60 CHARACTERS FROM FONT
+    401  081e ????	       a0 00		      LDY	#$00
+    402  0820 ????
+    403  0820 ????	       a9 00	   LFLOOP     LDA	#>STAMPS+$500	;SET HI BYTE OF WRITE
+    404  0822 ????	       8d 00 00 	      STA	TEMP3
+    405  0825 ????	       a2 05		      LDX	#$05	;		     ;INNER LOOP IS SIX BIG (SIZE OF CHAR)
+    406  0827 ????	       b1 00	   LFLOOP0    LDA	(TEMP0),Y	;		;READ FROM FONT
+    407  0829 ????	       91 00		      STA	(TEMP2),Y	;		;WRITE TO STAMPS
+    408  082b ????	       ee 00 00 	      INC	TEMP0	;		    ;INCREMENT READ
+    409  082e ????	       d0 00		      BNE	LFLJMP0
+    410  0830 ????	       ee 00 00 	      INC	TEMP1
+    411  0833 ????	       ce 00 00    LFLJMP0    DEC	TEMP3	;		    ;DECREMENT HI BYTE OF WRITE
+    412  0836 ????	       ca		      DEX
+    413  0837 ????	       10 00		      BPL	LFLOOP0
+    414  0839 ????	       ee 00 00 	      INC	TEMP2	;		    ;INCREMENT TO NEXT RAM CHARACTER
+    415  083c ????	       ce 00 00 	      DEC	TEMP4
+    416  083f ????	       d0 00		      BNE	LFLOOP
+    417  0841 ????
+    418  0841 ????	       a9 ff		      LDA	#$FF	;		     ;SET UP THE STAMP FOR BLACK BARS
+    419  0843 ????	       8d 02 00 	      STA	STAMPS+2	;		 ;  CHARACTERS 2 AND 3
+    420  0846 ????	       8d 03 00 	      STA	STAMPS+3
+    421  0849 ????	       8d 02 01 	      STA	STAMPS+$102
+    422  084c ????	       8d 03 01 	      STA	STAMPS+$103
+    423  084f ????	       8d 02 02 	      STA	STAMPS+$202
+    424  0852 ????	       8d 03 02 	      STA	STAMPS+$203
+    425  0855 ????	       8d 02 03 	      STA	STAMPS+$302
+    426  0858 ????	       8d 03 03 	      STA	STAMPS+$303
+    427  085b ????	       8d 02 04 	      STA	STAMPS+$402
+    428  085e ????	       8d 03 04 	      STA	STAMPS+$403
+    429  0861 ????	       8d 02 05 	      STA	STAMPS+$502
+    430  0864 ????	       8d 03 05 	      STA	STAMPS+$503
+    431  0867 ????
+    432  0867 ????	       a9 00		      LDA	#$00	;		     ;SET UP THE STAMP FOR BLANK AREA
+    433  0869 ????	       8d 00 00 	      STA	STAMPS+0	;		 ;  CHARACTERS 2 AND 3
+    434  086c ????	       8d 01 00 	      STA	STAMPS+1
+    435  086f ????	       8d 00 01 	      STA	STAMPS+$100
+    436  0872 ????	       8d 01 01 	      STA	STAMPS+$101
+    437  0875 ????	       8d 00 02 	      STA	STAMPS+$200
+    438  0878 ????	       8d 01 02 	      STA	STAMPS+$201
+    439  087b ????	       8d 00 03 	      STA	STAMPS+$300
+    440  087e ????	       8d 01 03 	      STA	STAMPS+$301
+    441  0881 ????	       8d 00 04 	      STA	STAMPS+$400
+    442  0884 ????	       8d 01 04 	      STA	STAMPS+$401
+    443  0887 ????	       8d 00 05 	      STA	STAMPS+$500
+    444  088a ????	       8d 01 05 	      STA	STAMPS+$501
+    445  088d ????
+    446  088d ????	       a2 1d		      LDX	#$1D	;		     ;ZERO OUT KERNAL LISTS
+    447  088f ????	       a9 00		      LDA	#$00
+    448  0891 ????	       9d 00 00    LFLOOP1    STA	MSADDR,X
+    449  0894 ????	       9d 00 00 	      STA	FRTADDR,X
+    450  0897 ????	       9d 00 00 	      STA	M0ADDR,X
+    451  089a ????	       9d 00 00 	      STA	M1ADDR,X
+    452  089d ????	       9d 00 00 	      STA	M2ADDR,X
+    453  08a0 ????	       9d 00 00 	      STA	M3ADDR,X
+    454  08a3 ????	       ca		      DEX
+    455  08a4 ????	       10 00		      BPL	LFLOOP1
+    456  08a6 ????
+    457  08a6 ????	       60		      RTS
+    458  08a7 ????
+    459  08a7 ????
+    460  08a7 ????						;*  THIS ROUTINE LOADS THE BITMAPS FOR THE INDICATORS AND SETS UP FRUIT INDS
+    461  08a7 ????	       a9 30	   LOADINDS   LDA	#<MSCHAR+48	;	    ;TEMP0 IS START OF MS PAC
+    462  08a9 ????	       8d 00 00 	      STA	TEMP0
+    463  08ac ????	       a9 30		      LDA	#>MSCHAR+48
+    464  08ae ????	       8d 00 00 	      STA	TEMP1
+    465  08b1 ????	       a9 28		      LDA	#$28
+    466  08b3 ????	       8d 00 00 	      STA	TEMP4
+    467  08b6 ????	       20 e1 03 	      JSR	LIBODY	;		   ;DO IT - WRITE THE MS PAC INDICATOR
+    468  08b9 ????
+    469  08b9 ????	       a9 00		      LDA	#<FRUITCHR	;	     ;TEMP0 IS START OF FRUIT
+    470  08bb ????	       8d 00 00 	      STA	TEMP0	;		    ;  ENTRY POINT FOR CHANGING FRUIT
+    471  08be ????	       a9 00		      LDA	#>FRUITCHR
+    472  08c0 ????	       8d 00 00 	      STA	TEMP1
+    473  08c3 ????
+    474  08c3 ????	       a2 00		      LDX	#$00	;		     ;WRITE THE FRUITS
+    475  08c5 ????	       bd 35 05    NFLOOP     LDA	FRTSTMP,X	;		;WHERE IT"S GOING TO
+    476  08c8 ????	       8d 00 00 	      STA	TEMP4
+    477  08cb ????	       8e 00 00 	      STX	TEMP15
+    478  08ce ????	       20 e1 03 	      JSR	LIBODY	;		   ;DO IT
+    479  08d1 ????	       ae 00 00 	      LDX	TEMP15
+    480  08d4 ????	       ad 00 00 	      LDA	TEMP0	;		    ;MOVE TO NEXT FRUIT STAMP
+    481  08d7 ????	       18		      CLC
+    482  08d8 ????	       69 18		      ADC	#24
+    483  08da ????	       8d 00 00 	      STA	TEMP0
+    484  08dd ????	       ad 00 00 	      LDA	TEMP1
+    485  08e0 ????	       69 00		      ADC	#$00
+    486  08e2 ????	       8d 00 00 	      STA	TEMP1
+    487  08e5 ????	       e8		      INX
+    488  08e6 ????	       e0 08		      CPX	#$08
+    489  08e8 ????	       30 08		      BMI	NFLOOP
+    490  08ea ????
+    491  08ea ????	       ae 00 00 	      LDX	STLEVEL	;		  ;NOW - SET UP FRUIT INDS
+    492  08ed ????	       d0 00		      BNE	LIFLOAD
+    493  08ef ????	       ad 00 00 	      LDA	RACKFRT	;		  ;IF STARTING AT TDY BEAR AND GOING TO
+    494  08f2 ????	       c9 07		      CMP	#$07	;		     ;	BANANA, THEN DON"T DISPLAY TDY BEAR
+    495  08f4 ????	       30 07		      BMI	LIFLOAD
+    496  08f6 ????	       e8		      INX
+    497  08f7 ????	       a0 2d	   LIFLOAD    LDY	#$2D	;		     ;INDEX INTO DISPLAY LISTS
+    498  08f9 ????	       b9 00 00    LIFLOOP    LDA	BDLIST0,Y	;		;CHANGE PALETTE
+    499  08fc ????	       29 1f		      AND	#$1F
+    500  08fe ????	       1d 2d 05 	      ORA	FRTPAL,X
+    501  0901 ????	       99 00 00 	      STA	BDLIST0,Y
+    502  0904 ????	       99 00 00 	      STA	BDLIST1,Y
+    503  0907 ????	       88		      DEY
+    504  0908 ????	       bd 35 05 	      LDA	FRTSTMP,X	;		;SET STAMP
+    505  090b ????	       99 00 00 	      STA	BDLIST0,Y
+    506  090e ????	       18		      CLC
+    507  090f ????	       69 02		      ADC	#$02
+    508  0911 ????	       99 00 00 	      STA	BDLIST1,Y
+    509  0914 ????	       88		      DEY
+    510  0915 ????	       88		      DEY
+    511  0916 ????	       88		      DEY
+    512  0917 ????	       e8		      INX
+    513  0918 ????	       ec 00 00 	      CPX	RACKFRT
+    514  091b ????	       30 00		      BMI	LIFLOOP
+    515  091d ????
+    516  091d ????	       60	   LIFOUT     RTS
+    517  091e ????
+    518  091e ????
+    519  091e ????						;*  THIS ROUTINE DOES THE WORK FOR THE FRUIT AND PAC WRITING ROUTINES
+    520  091e ????	       a9 00	   LIBODY     LDA	#>STAMPS+$500	;SET TEMP8 TO DESTINATION
+    521  0920 ????	       8d 00 00 	      STA	TEMP9
+    522  0923 ????	       ad 00 00 	      LDA	TEMP0	;		    ;SET (TEMP2) TO POINT TO SECOND PART
+    523  0926 ????	       18		      CLC
+    524  0927 ????	       69 0c		      ADC	#$0C
+    525  0929 ????	       8d 00 00 	      STA	TEMP2
+    526  092c ????	       ad 00 00 	      LDA	TEMP1
+    527  092f ????	       69 00		      ADC	#$00
+    528  0931 ????	       8d 00 00 	      STA	TEMP3
+    529  0934 ????
+    530  0934 ????	       a2 00		      LDX	#$00	;		     ;AND DO IT
+    531  0936 ????	       a0 00		      LDY	#$00
+    532  0938 ????	       ad 00 00    LILOOP     LDA	TEMP4	;		    ;MOVING INTO STAMPS STARTING AT TEMP4
+    533  093b ????	       8d 00 00 	      STA	TEMP8
+    534  093e ????	       b1 00		      LDA	(TEMP0),Y	;		;UPPER STAMP FIRST BYTE
+    535  0940 ????	       81 00		      STA	(TEMP8,X)
+    536  0942 ????	       ee 00 00 	      INC	TEMP8
+    537  0945 ????	       c8		      INY
+    538  0946 ????	       b1 00		      LDA	(TEMP0),Y	;		;UPPER STAMP SECOND BYTE
+    539  0948 ????	       81 00		      STA	(TEMP8,X)
+    540  094a ????	       ee 00 00 	      INC	TEMP8
+    541  094d ????	       88		      DEY
+    542  094e ????	       b1 00		      LDA	(TEMP2),Y	;		;LOWER STAMP FIRST BYTE
+    543  0950 ????	       81 00		      STA	(TEMP8,X)
+    544  0952 ????	       ee 00 00 	      INC	TEMP8
+    545  0955 ????	       c8		      INY
+    546  0956 ????	       b1 00		      LDA	(TEMP2),Y	;		;LOWER STAMP SECOND BYTE
+    547  0958 ????	       81 00		      STA	(TEMP8,X)
+    548  095a ????	       ee 00 00 	      INC	TEMP8
+    549  095d ????
+    550  095d ????	       c8		      INY		;			      ;GET SET FOR NEXT
+    551  095e ????	       ce 00 00 	      DEC	TEMP9	;		    ;MOVE TO NEXT OUTPUT PAGE
+    552  0961 ????	       ad 00 00 	      LDA	TEMP9
+    553  0964 ????	       c9 00		      CMP	#>STAMPS
+    554  0966 ????	       10 00		      BPL	LILOOP
+    555  0968 ????
+    556  0968 ????	       60		      RTS
+    557  0969 ????
+    558  0969 ????
+    559  0969 ????						;*  DEFAULT TEMPLATE FOR DISPLAY LIST
+    560  0969 ????	       00 60 00 04*DLISTS     DC.B	<SCREEN,$60,>SCREEN,$00+$04,$18	;SCREEN - PLAY FIELD
+    561  096e ????	       00 3e 00 00	      DC.B	0,$20+$1E,>STAMPS,OFFSCRN	;		;MS PAC
+    562  0972 ????	       00 5e 00 00	      DC.B	0,$40+$1E,>STAMPS,OFFSCRN	;		;FRUIT
+    563  0976 ????	       00 7e 00 00	      DC.B	0,$60+$1E,>STAMPS,OFFSCRN	;		;MONSTER 0
+    564  097a ????	       00 9e 00 00	      DC.B	0,$80+$1E,>STAMPS,OFFSCRN	;		;MONSTER 1
+    565  097e ????	       00 be 00 00	      DC.B	0,$A0+$1E,>STAMPS,OFFSCRN	;		;MONSTER 2
+    566  0982 ????	       00 de 00 00	      DC.B	0,$C0+$1E,>STAMPS,OFFSCRN	;		;MONSTER 3
+    567  0986 ????	       02 3e 00 10	      DC.B	$02,$20+$1E,>STAMPS,$10	;		  ;BLACK BAR
+    568  098a ????	       02 3e 00 88	      DC.B	$02,$20+$1E,>STAMPS,$88	;		  ;BLACK BAR
+    569  098e ????	       00 00		      DC.B	$00,$00
+    570  0990 ????	       00 3e 00 ff	      DC.B	$00,$20+$1E,>STAMPS,LEFTSIDE-$01	;INDICATOR ZONE
+    571  0994 ????	       00 3e 00 08	      DC.B	$00,$20+$1E,>STAMPS,LEFTSIDE+$08	; 5 INDS WITH PAC PLT
+    572  0998 ????	       00 3e 00 11	      DC.B	$00,$20+$1E,>STAMPS,LEFTSIDE+$11
+    573  099c ????	       00 3e 00 1a	      DC.B	$00,$20+$1E,>STAMPS,LEFTSIDE+$1A
+    574  09a0 ????	       00 3e 00 23	      DC.B	$00,$20+$1E,>STAMPS,LEFTSIDE+$23
+    575  09a4 ????	       00 1e 00 bc	      DC.B	$00,$00+$1E,>STAMPS,RGHTSIDE-$44	;FRUIT INDICATORS
+    576  09a8 ????	       00 1e 00 c6	      DC.B	$00,$00+$1E,>STAMPS,RGHTSIDE-$3A	;  STAMP AND PALETTES
+    577  09ac ????	       00 1e 00 d0	      DC.B	$00,$00+$1E,>STAMPS,RGHTSIDE-$30	;  MUST BE SET
+    578  09b0 ????	       00 1e 00 da	      DC.B	$00,$00+$1E,>STAMPS,RGHTSIDE-$26
+    579  09b4 ????	       00 1e 00 e4	      DC.B	$00,$00+$1E,>STAMPS,RGHTSIDE-$1C
+    580  09b8 ????	       00 1e 00 ee	      DC.B	$00,$00+$1E,>STAMPS,RGHTSIDE-$12
+    581  09bc ????	       00 1e 00 f8	      DC.B	$00,$00+$1E,>STAMPS,RGHTSIDE-$08
+    582  09c0 ????	       00 00		      DC.B	$00,$00
+    583  09c2 ????	       00 60 00 04*TDLIST     DC.B	<SCORE,$60,>SCORE,$00+$04,$18	;SCORE DLIST
+    584  09c7 ????	       00 00		      DC.B	$00,$00
+    585  09c9 ????
+    586  09c9 ????						;*  THIS IS THE DISPLAY LIST LIST.  THIS WILL BE DROPPED INTO RAM.
+    587  09c9 ????	       0f 00 00    DLLIST     DC.B	$0F,>NULDLIST,<NULDLIST	;	      ;16 BLANK LINES
+    588  09cc ????	       08 00 00 	      DC.B	$08,>NULDLIST,<NULDLIST	;	      ;9 BLANK LINES
+    589  09cf ????	       85 00 00 	      DC.B	$85,>TOPDLIST,<TOPDLIST	;	      ;SCORE ZONE
+    590  09d2 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    591  09d5 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    592  09d8 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    593  09db ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    594  09de ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    595  09e1 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    596  09e4 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    597  09e7 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    598  09ea ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    599  09ed ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    600  09f0 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    601  09f3 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    602  09f6 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    603  09f9 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    604  09fc ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    605  09ff ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    606  0a02 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    607  0a05 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    608  0a08 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    609  0a0b ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    610  0a0e ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    611  0a11 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    612  0a14 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    613  0a17 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    614  0a1a ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    615  0a1d ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    616  0a20 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    617  0a23 ????	       85 00 00 	      DC.B	$85,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    618  0a26 ????	       85 00 00 	      DC.B	$85,>DLIST0,<DLIST0	;		  ;PF ZONE - 0
+    619  0a29 ????	       05 00 00 	      DC.B	$05,>DLIST1,<DLIST1	;		  ;PF ZONE - 1
+    620  0a2c ????	       85 00 00 	      DC.B	$85,>BDLIST0,<BDLIST0	;		;INDICATOR ZONE - 0
+    621  0a2f ????	       85 00 00 	      DC.B	$85,>BDLIST1,<BDLIST1	;		;INDICATOR ZONE - 1
+    622  0a32 ????	       0f 00 00 	      DC.B	$0F,>NULDLIST,<NULDLIST	;	      ;16 BLANK LINES
+    623  0a35 ????	       0f 00 00 	      DC.B	$0F,>NULDLIST,<NULDLIST	;	      ;16 BLANK LINES
+    624  0a38 ????
+    625  0a38 ????						;*  COLORS FOR THE RACKS
+    626  0a38 ????	       00 00 00 00 BARCOLOR   DC.B	PINK,BLUE,BROWN,DKBLUE
+    627  0a3c ????	       00 00 00 00 OUTCOLOR   DC.B	LTPINK,LTBLUE,LTBROWN,LTGREEN
+    628  0a40 ????	       00 00 00 00 DOTCOLOR   DC.B	BLUE,YELLOW,PINK,LTBLUE
+    629  0a44 ????
+    630  0a44 ????						;*  MAPPING FROM LEVEL TO RACK
+    631  0a44 ????	       00 00 00 01*RACKTAB    DC.B	0,0,0,1,1,1,2,2,2,2,3,3,3,3
+    632  0a52 ????	       ff ff 00 ff*ANIMTAB    DC.B	-1,-1,0,-1,-1,1,-1,-1,-1,2,-1,-1,-1,2
+    633  0a60 ????
+    634  0a60 ????						;*  MAPPING FROM RACK TO LEVEL FOR AUTO-PLAY
+    635  0a60 ????	       01 03 06 0a RACKLVL    DC.B	$01,$03,$06,$0A
+    636  0a64 ????
+    637  0a64 ????						;*  TABLES TO INITIALIZE SCORES AND BONUSES
+    638  0a64 ????	       00 00 00 00*INITSCOR   DC.B	$00,$00,$00,$00,$09,$99
+    639  0a6a ????
+    640  0a6a ????						;*  MAPPING OF FRUIT TO PALETTE AND STAMP
+    641  0a6a ????	       60 60 80 a0*FRTPAL     DC.B	$60,$60,$80,$A0,$60,$60,$C0,$20
+    642  0a72 ????	       fc f8 f4 f0*FRTSTMP    DC.B	$FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0
+    643  0a7a ????						; END

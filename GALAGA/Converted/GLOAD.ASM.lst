@@ -1,0 +1,145 @@
+------- FILE GLOAD.ASM LEVEL 1 PASS 1
+      1  0000					      processor	6502
+      2  0000 ????						; JU
+      3  0000 ????						; MGG;GRAPHA.S,R:M1:$
+      4  0000 ????						; MGG;GRAPHB.S,R:M1:$
+      5  0000 ????						; MGG;GLOADER.S,R:$
+      6  0000 ????						; MGG;GMAIN.S,R:$
+      7  0000 ????						; MGG;GMIV.S,R:$
+      8  0000 ????						; MGG;GSCORE.S,R:$
+      9  0000 ????						; MGG;GDAC1.S,R:$
+     10  0000 ????						; MGG;GDAC2.S,R:$
+     11  0000 ????						; MGG;GDAC3.S,R:$
+     12  0000 ????						; MGG;GDAC4.S,R:$
+     13  0000 ????						; MGG;DOALL,R:M1:$
+     14  0000 ????						; MGG;SET,R:M1:$
+     15  0000 ????						; MGG;GAME.Z,R:$
+     16  0000 ????				      SEG	ROM
+     17  0000				   HEADER     ORG	$0000
+     18  0000		       01		      DC.B	1	; 0   Header version	  - 1 byte
+     19  0001		       41 54 41 52*	      DC.B	"ATARI7800"	; 1..16  "ATARI7800   "  - 16 bytes
+     20  000a		       20 20 20 20*	      DS	7,32
+     21  0011		       59 6f 75 72*	      DC.B	"Your Name Here"	; 17..48 Cart title	  - 32 bytes
+     22  001f		       00 00 00 00*	      DS	HEADER+49-.,0
+     23  0031							; Hack of changing the 256->code line to the $00,$00,$80,$00 code line
+     24  0031							; added by Aaron Lanterman, 9/4/2020, to stop assembler from complaining...
+     25  0031							; Basically, I'm telling it you have a 32K cartridge, but that doesn't
+     26  0031							; seem to break the emulator (at least)
+     27  0031		       00 00 80 00	      DC.B	$00,$00,$80,$00	;
+     28  0035							;DC.B	  $00,$00,256->code,$00; 49..52 data length	 - 4 bytes
+     29  0035		       00 00		      DC.B	$00,$00	; 53..54 cart type	 - 2 bytes
+     30  0037							;    bit 0 - pokey at $4000
+     31  0037							;    bit 1 - supergame bank switched
+     32  0037							;    bit 2 - supergame ram at $4000
+     33  0037							;    bit 3 - rom at $4000
+     34  0037							;    bit 4 - bank 6 at $4000
+     35  0037							;    bit 5 - supergame banked ram
+     36  0037							;    bit 6 - pokey at $450
+     37  0037							;    bit 7 - mirror ram at $4000
+     38  0037							;    bit 8-15 - Special
+     39  0037							;   0 = Normal cart
+     40  0037		       01		      DC.B	1	; 55	controller 1 type  - 1 byte
+     41  0038		       01		      DC.B	1	; 56	controller 2 type  - 1 byte
+     42  0039							;    0 = None
+     43  0039							;    1 = Joystick
+     44  0039							;    2 = Light Gun
+     45  0039		       00		      DC.B	0	; 57 0 = NTSC 1 = PA
+     46  003a		       00		      DC.B	0	; 58	Save data peripheral - 1 byte (version 2)
+     47  003b							;    0 = None / unknown (default)
+     48  003b							;    1 = High Score Cart (HSC)
+     49  003b							;    2 = SaveKey
+     50  003f					      ORG	HEADER+63
+     51  003f		       00		      DC.B	0	; 63	Expansion module
+     52  0040							;    0 = No expansion module (default on all currently released games)
+     53  0040							;    1 = Expansion module required
+     54  0064					      ORG	HEADER+100	; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
+     55  0064		       41 43 54 55*	      DC.B	"ACTUAL CART DATA STARTS HERE"
+     56  0080							; end of header code for the simulator added by Aaron Lanterman
+     57  0080
+------- FILE GRAPHA1.ASM LEVEL 2 PASS 1
+      0  0080					      include	GRAPHA1.ASM
+      1  0080							;GRAPHA.S
+      2  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      3  0080
+      4  0080							;	  THE NECESSARY PROLOG FOR MARIA CODE
+      5  0080
+      6  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      7  0080							;  STELLA (TIA) REGISTER ADDRESSES
+      8  0080							; NOTE THESE REGISTERS ARE SHADOWED AT 100 TO 11F
+      9  0080							;	   ;				 200 TO 21F
+     10  0080							;	   ;				 300 TO 31F
+     11  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     12  0080
+     13  0080		       00 15	   AUDC0      EQU	$15	;BITS	   3210 AUDIO CONTROL 0
+     14  0080		       00 16	   AUDC1      EQU	$16	;BITS	   3210 AUDIO CONTROL 1
+     15  0080		       00 17	   AUDF0      EQU	$17	;BITS	   3210 AUDIO FREQUENCY 0
+     16  0080		       00 18	   AUDF1      EQU	$18	;BITS	   3210 AUDIO FREQUENCY 1
+     17  0080		       00 19	   AUDV0      EQU	$19	;BITS	   3210 AUDIO VOLUME 0
+     18  0080		       00 1a	   AUDV1      EQU	$1A	;BITS	   3210 AUDIO VOLUME 1
+     19  0080		       00 08	   INPT0      EQU	$08
+     20  0080		       00 09	   INPT1      EQU	$09
+     21  0080		       00 0a	   INPT2      EQU	$0A
+     22  0080		       00 0b	   INPT3      EQU	$0B
+     23  0080		       00 0c	   INPT4      EQU	$0C	;PLAYER 0 BUTTON CLEAR WHEN HIT
+     24  0080		       00 0d	   INPT5      EQU	$0D	;PLAYER 1 BUTTON CLEAR WHEN HIT
+     25  0080
+     26  0080
+     27  0080
+     28  0080
+     29  0080
+     30  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     31  0080							; MARIA REGISTERS
+     32  0080							; NOTE THESE REGISTERS ARE SHADOWED AT 120 TO 13F
+     33  0080							;	   ;				 220 TO 23F
+     34  0080							;	   ;				 320 TO 33F
+     35  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     36  0080		       00 20	   P0C0       EQU	$20	;		      ;BACKGROUND COLOR 		 RW
+     37  0080							;	   ALL PALETTE AND COLOR ARE HIGH NIBBLE COLOR, LOW NIBBLE LUMINANCE
+     38  0080		       00 21	   P0C1       EQU	$21	;		      ;PALETTE ZERO COLOR ONE		 RW
+     39  0080		       00 22	   P0C2       EQU	$22	;		      ;PALETTE ZERO COLOR TWO		 RW
+     40  0080		       00 23	   P0C3       EQU	$23	;		      ;PALETTE ZERO COLOR THREE 	 RW
+     41  0080		       00 24	   WSYNCM     EQU	$24	;		      ;FAST MARIA WSYNC STROBE
+     42  0080		       00 25	   P1C1       EQU	$25	;		      ;PALETTE ONE COLOR ONE		 RW
+     43  0080		       00 26	   P1C2       EQU	$26	;		      ;PALETTE ONE COLOR TWO		 RW
+     44  0080		       00 27	   P1C3       EQU	$27	;		      ;PALETTE ONE COLOR THREE		 RW
+     45  0080		       00 28	   CTRLRD     EQU	$28	;		      ;BIT 7 IN VBLANK, BIT 6 IN DISPLAY RO
+     46  0080		       00 29	   P2C1       EQU	$29	;		      ;PALETTE TWO COLOR ONE		 RW
+     47  0080		       00 2a	   P2C2       EQU	$2A	;		      ;PALETTE TWO COLOR TWO		 RW
+     48  0080		       00 2b	   P2C3       EQU	$2B	;		      ;PALETTE TWO COLOR THREE		 RW
+     49  0080		       00 2c	   DPPH       EQU	$2C	;		      ;DISPLAY LIST POINTER HIGH	 WO
+     50  0080		       00 2d	   P3C1       EQU	$2D	;		      ;PALETTE THREE COLOR ONE		 RW
+     51  0080		       00 2e	   P3C2       EQU	$2E	;		      ;PALETTE THREE COLOR TWO		 RW
+     52  0080		       00 2f	   P3C3       EQU	$2F	;		      ;PALETTE THREE COLOR THREE	 RW
+     53  0080		       00 30	   DPPL       EQU	$30	;		      ;DISPLAY LIST POINTER LOW 	 WO
+     54  0080		       00 31	   P4C1       EQU	$31	;		      ;PALETTE FOUR COLOR ONE		 RW
+     55  0080		       00 32	   P4C2       EQU	$32	;		      ;PALETTE FOUR COLOR TWO		 RW
+     56  0080		       00 33	   P4C3       EQU	$33	;		      ;PALETTE FOUR COLOR THREE 	 RW
+     57  0080		       00 34	   CHARBASE   EQU	$34	;		      :CHARACTER MODE HIGH POINTER	 WO
+     58  0080		       00 35	   P5C1       EQU	$35	;		      ;PALETTE FIVE COLOR ONE		 RW
+     59  0080		       00 36	   P5C2       EQU	$36	;		      ;PALETTE FIVE COLOR TWO		 RW
+     60  0080		       00 37	   P5C3       EQU	$37	;		      ;PALETTE FIVE COLOR THREE 	 RW
+     61  0080		       00 38	   OFFSET     EQU	$38	;		      ;GRAPHICS HIGH POINTER OFFSET	 RW
+     62  0080		       00 39	   P6C1       EQU	$39	;		      ;PALETTE SIX COLOR ONE		 RW
+     63  0080		       00 3a	   P6C2       EQU	$3A	;		      ;PALETTE SIX COLOR TWO		 RW
+     64  0080		       00 3b	   P6C3       EQU	$3B	;		      ;PALETTE SIX COLOR THREE		 RW
+     65  0080		       00 3c	   CTRLWT     EQU	$3C	;		      ;BIT 7  CHARACTER WIDTH,BIT 6 BCNT WO
+     66  0080		       00 3d	   P7C1       EQU	$3D	;		      ;PALETTE SEVEN COLOR ONE		 RW
+     67  0080		       00 3e	   P7C2       EQU	$3E	;		      ;PALETTE SEVEN COLOR TWO		 RW
+     68  0080		       00 3f	   P7C3       EQU	$3F	;		      ;PALETTE SEVEN COLOR THREE	 RW
+     69  0080
+     70  0080		       00 07	   MISTYPE    EQU	$7
+     71  0080		       00 05	   YSHIP      EQU	$5
+     72  0080		       00 30	   BONUSPT    EQU	$30	;		      ;SET TO EVERY 30,00 POINTS
+     73  0080		       00 ff	   NOTFOSH    EQU	$FF
+     74  0080		       00 0e	   TIBTNBIR   EQU	$0E
+     75  0080		       00 f0	   TIBTNWAV   EQU	$F0
+     76  0080		       00 80	   TIBTNFWV   EQU	$80
+     77  0080
+     78  0080
+     79  0080
+     80  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     81  0080							; ZERO PAGE RAM   040 TO 0FF
+     82  0080							;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     83  0040					      ORG	$0040
+GRAPHA1.ASM (84): error: Origin Reverse-indexed.
+Aborting assembly

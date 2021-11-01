@@ -1,0 +1,14 @@
+	processor 6502 
+
+;*  END.S          CONTAINS THE END STATEMENT
+
+END       DC.B      "GCC(C)1984";           ;LABEL TO SEE WHERE END OF ROM IS
+
+          ORG     $FFF8
+          DC.B      $FF,$C7;                ;START AT $C000, + MARIA SIGNATURE
+          DC.B      DLI;                    ;INTERRUPT VECTOR
+          DC.B      MAIN;                   ;START VECTOR
+          DC.B      NULLRTI;                ;UNUSED VECTOR
+
+
+; END
