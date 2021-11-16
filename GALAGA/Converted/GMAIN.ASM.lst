@@ -1,0 +1,1074 @@
+------- FILE GMAIN.ASM LEVEL 1 PASS 3
+      1  89f4					      processor	6502
+      2  89f5 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      3  89f5 ????						;GMAIN.S
+      4  8000					      ORG	$8000
+      5  8000				   BEGIN
+      6  8000		       a2 47		      LDX	#71	;		       ;ZERO OUT ENMYLIST (TYPE)
+      7  8002		       a9 00	   XZERO      LDA	#0
+      8  8004		       9d 00 00 	      STA	TYPE,X
+      9  8007		       a9 01		      LDA	#1
+     10  8009		       9d 00 00 	      STA	ANGLE,X
+     11  800c		       ca		      DEX
+     12  800d		       10 f3		      BPL	XZERO
+     13  800f		       a2 28		      LDX	#40
+     14  8011		       a9 00	   XAVIDSUX   LDA	#0
+     15  8013		       9d 00 00 	      STA	NEWTYPE,X
+     16  8016		       ca		      DEX
+     17  8017		       10 f8		      BPL	XAVIDSUX
+     18  8019		       ad 00 00 	      LDA	RSTRTREG	;		 ;SEE IF A RESTART HAS OCCURED
+     19  801c		       f0 08		      BEQ	LOGO
+     20  801e		       a9 00		      LDA	#0
+     21  8020		       8d 00 00 	      STA	RSTRTREG	;		 ;CLEAR FLAG
+     22  8023		       4c 8f 82 	      JMP	GOTORES
+     23  8026		       20 2f 80    LOGO       JSR	SETLOGO
+     24  8029		       20 00 00 	      JSR	SCRAPALL
+     25  802c		       4c 96 80 	      JMP	TITLPPP
+     26  802f		       a9 01	   SETLOGO    LDA	#1
+     27  8031		       8d 00 00 	      STA	TEMP1
+     28  8034		       a9 f0		      LDA	#$F0
+     29  8036		       8d 00 00 	      STA	TEMP2
+     30  8039		       a2 12		      LDX	#18
+     31  803b		       a0 41		      LDY	#65	;		      ;START WITH 2ND PAGE GRAPHICS
+     32  803d		       8a	   LLOGO      TXA
+     33  803e		       99 00 00 	      STA	TYPE,Y
+     34  8041		       e8		      INX
+     35  8042		       c8		      INY
+     36  8043		       e0 18		      CPX	#24
+     37  8045		       d0 f6		      BNE	LLOGO
+     38  8047		       a9 1e		      LDA	#30
+     39  8049		       8d 41 00 	      STA	XCORD+65
+     40  804c		       8d 42 00 	      STA	XCORD+66
+     41  804f		       a9 52		      LDA	#82
+     42  8051		       8d 43 00 	      STA	XCORD+67
+     43  8054		       8d 44 00 	      STA	XCORD+68
+     44  8057		       a9 46		      LDA	#70
+     45  8059		       8d 45 00 	      STA	XCORD+69
+     46  805c		       8d 46 00 	      STA	XCORD+70
+     47  805f		       a9 48		      LDA	#72
+     48  8061		       8d 41 00 	      STA	YCORD+65
+     49  8064		       8d 43 00 	      STA	YCORD+67
+     50  8067		       a9 54		      LDA	#84
+     51  8069		       8d 42 00 	      STA	YCORD+66
+     52  806c		       8d 44 00 	      STA	YCORD+68
+     53  806f		       a9 60		      LDA	#96
+     54  8071		       8d 45 00 	      STA	YCORD+69
+     55  8074		       a9 6c		      LDA	#108
+     56  8076		       8d 46 00 	      STA	YCORD+70
+     57  8079		       a9 00		      LDA	#0
+     58  807b		       8d 00 00 	      STA	ANGLE
+     59  807e		       8d 00 00 	      STA	TEMP3	;		    ;INITIALLY POSITIVE
+     60  8081		       a9 48		      LDA	#$48
+     61  8083		       8d 00 00 	      STA	YCORD
+     62  8086		       a9 50		      LDA	#$50
+     63  8088		       8d 00 00 	      STA	XCORD
+     64  808b							;THIS SECTION SETS UP THE TWINKLE
+     65  808b		       a9 23		      LDA	#35
+     66  808d		       8d 00 00 	      STA	TYPE
+     67  8090		       a9 07		      LDA	#7	;		       ;USE Y AS A LOCATION VARIABLE
+     68  8092		       8d 00 00 	      STA	BOZO0	;		    ;THIS SAVES THE Y VALUE
+     69  8095		       60		      RTS		;			      ;END OF LOGO SETUP SUBROUTINE
+     70  8096
+     71  8096		       a9 00	   TITLPPP    LDA	#0
+     72  8098		       8d 00 00 	      STA	FRAME	;		    ;SET UP FRAME
+     73  809b		       ce 00 00    TITLOOP    DEC	FRAME
+     74  809e		       ad 00 00    TITLP1     LDA	FRAME
+     75  80a1		       30 fb		      BMI	TITLP1
+     76  80a3		       20 a8 89 	      JSR	TWINKEL	;		  ;TWINKLE SUBROUTINE
+     77  80a6		       ad 00 00 	      LDA	SELECT	;		   ;SEE IF IN SELECT MODE
+     78  80a9		       f0 03		      BEQ	NOTOSEL
+     79  80ab		       4c 76 81 	      JMP	GOTOSEL
+     80  80ae		       ad 00 00    NOTOSEL    LDA	TEMP2
+     81  80b1		       f0 2b		      BEQ	DOHSC	;		    ;DO HSC AFTER TITLE PAGE
+     82  80b3
+     83  80b3		       ad 00 00    ATIT       LDA	SWCHB	;		    ;GET LOCAL INPUTS
+     84  80b6		       4a		      LSR
+     85  80b7		       b0 03		      BCS	ATIT2
+     86  80b9		       4c 8f 82 	      JMP	GOTORES
+     87  80bc		       4a	   ATIT2      LSR
+     88  80bd		       b0 03		      BCS	ATIT3
+     89  80bf		       4c 76 81 	      JMP	GOTOSEL
+     90  80c2		       ad 00 00    ATIT3      LDA	SWCHA	;		    ;LOOK AT JOYSTICK INPUT
+     91  80c5		       09 0f		      ORA	#$0F	;		     ;BOOT PLAYER 2 INPUT
+     92  80c7		       c9 ff		      CMP	#$FF	;		     ;SEE IF ANY INPUT
+     93  80c9		       f0 03		      BEQ	FUCKYOU
+     94  80cb		       4c 76 81 	      JMP	GOTOSEL	;		  ;GO TO SELECT MODE
+     95  80ce		       2c 00 00    FUCKYOU    BIT	INPT4	;		    ;LOOK AT FIRE BUTTON INPUT
+     96  80d1		       30 03		      BMI	ATIT4
+     97  80d3		       4c 8f 82 	      JMP	GOTORES
+     98  80d6		       a9 00	   ATIT4      LDA	#0
+     99  80d8		       8d 00 00 	      STA	FLAP	;		     ;PREVENT FLAPPING IN LOADER
+    100  80db		       4c 9b 80 	      JMP	TITLOOP
+    101  80de
+    102  80de		       a9 00	   DOHSC      LDA	#0
+    103  80e0		       8d 00 00 	      STA	DIFCULTY	;		 ;SET DIFFICULTY FOR NOVICE
+    104  80e3		       20 2f 80 	      JSR	SETLOGO	;		  ;SETS UP THE LOGO DISPLAY
+    105  80e6		       a9 01		      LDA	#1
+    106  80e8		       8d 00 00 	      STA	INHSC	;		    ;INDICATE IN HSC MODE
+    107  80eb		       20 00 00 	      JSR	HSCTEST	;		  SEE IF THERE IS A DISPLAY FOR THIS
+    108  80ee		       30 0d		      BMI	NONOVICE
+    109  80f0		       a9 01		      LDA	#1
+    110  80f2		       8d 00 00 	      STA	INHSC
+    111  80f5		       20 00 00 	      JSR	HSCDSPLY	;		 ;DISPLAY HISCORECART
+    112  80f8		       20 00 00 	      JSR	GAMEPOLL	;		 SEE IF ANY INPUT
+    113  80fb		       b0 25		      BCS	NOEXPERT
+    114  80fd		       ee 00 00    NONOVICE   INC	DIFCULTY
+    115  8100		       20 00 00 	      JSR	HSCTEST	;		  SEE IF ADVANCED TABLE
+    116  8103		       30 0d		      BMI	NOADVNCD
+    117  8105		       a9 01		      LDA	#1
+    118  8107		       8d 00 00 	      STA	INHSC
+    119  810a		       20 00 00 	      JSR	HSCDSPLY
+    120  810d		       20 00 00 	      JSR	GAMEPOLL	;		 SEE IF ANY INPUT
+    121  8110		       b0 10		      BCS	NOEXPERT
+    122  8112		       ee 00 00    NOADVNCD   INC	DIFCULTY
+    123  8115		       20 00 00 	      JSR	HSCTEST	;		  SEE IF EXPERT TABLE
+    124  8118		       30 08		      BMI	NOEXPERT
+    125  811a		       a9 01		      LDA	#1
+    126  811c		       8d 00 00 	      STA	INHSC
+    127  811f		       20 00 00 	      JSR	HSCDSPLY
+    128  8122		       a9 40	   NOEXPERT   LDA	#$40
+    129  8124		       8d 00 00 	      STA	CTRLWT	;		   RESET THE CORRECT CONTROL WORD
+    130  8127		       20 2d 81 	      JSR	CLEARDL1
+    131  812a		       4c 56 81 	      JMP	ENDCLEAR
+    132  812d
+    133  812d				   CLEARDL1		;				 ;THIS SUBROUTINE CLEARS THE FIRST DLIST
+    134  812d		       a9 18		      LDA	#$18
+    135  812f		       8d 01 00 	      STA	TEMP1+1	;		  TEMP1 NOW HAS THE ADDRESS 1801
+    136  8132		       a2 0f		      LDX	#15	;		      LOOP 16 TIMES
+    137  8134		       a9 00		      LDA	#0
+    138  8136		       8d 00 00 	      STA	TEMP1
+    139  8139		       a0 00	   DLST1CLR   LDY	#0
+    140  813b		       98		      TYA
+    141  813c		       91 00		      STA	(TEMP1),Y
+    142  813e		       c8		      INY
+    143  813f		       91 00		      STA	(TEMP1),Y
+    144  8141		       ad 00 00 	      LDA	TEMP1
+    145  8144		       18		      CLC
+    146  8145		       69 52		      ADC	#82	;		      INC TO NEXT DLST
+    147  8147		       8d 00 00 	      STA	TEMP1
+    148  814a		       ad 01 00 	      LDA	TEMP1+1
+    149  814d		       69 00		      ADC	#0
+    150  814f		       8d 01 00 	      STA	TEMP1+1
+    151  8152		       ca		      DEX
+    152  8153		       10 e4		      BPL	DLST1CLR
+    153  8155		       60		      RTS
+    154  8156
+    155  8156		       a9 00	   ENDCLEAR   LDA	#<DLSTLST1
+    156  8158		       8d 00 00 	      STA	DPPL
+    157  815b		       a9 00		      LDA	#>DLSTLST1
+    158  815d		       8d 00 00 	      STA	DPPH
+    159  8160		       a9 00		      LDA	#0
+    160  8162		       8d 00 00 	      STA	DLSPTR	;		   ;NEXT DLI WILL BUILD DISPLAY LIST 2
+    161  8165							;	   STA	   TWOPLAYR;		   ;SET TO ONE PLAYER MODE FOR AUTOPLAY
+    162  8165		       8d 00 00 	      STA	INHSC
+    163  8168		       8d 00 00 	      STA	AUTOPLAY	;		 ;THIS JUST SETS UP AUTOPLAY NOW
+    164  816b		       a9 09		      LDA	#9
+    165  816d		       8d 00 00 	      STA	AUTOPLAZ	;		 ;ADDITIONAL COUNTER
+    166  8170		       8d 00 00 	      STA	AUTOPLAY	;		 ;NEEDS A NON-ZERO VALUE
+    167  8173		       4c c1 82 	      JMP	ATITOUT	;		  ;GO INTO GAME LOOP
+    168  8176				   GOTOSEL
+    169  8176		       a9 20		      LDA	#$20
+    170  8178		       8d 00 00 	      STA	MISTIMER	;		 ;DONT ALLOW SHOT TO BE FIRED
+    171  817b		       8d 00 00 	      STA	TEMP2	;		    ;KEEP STAR TWINKLING
+    172  817e		       8d 00 00 	      STA	SELECT	;		   ;INDICATE IN SELECT MODE
+    173  8181		       a9 00		      LDA	#0
+    174  8183		       8d 00 00 	      STA	AUTOPLAY	;		 ;CLEAR AUTOPLAY MODE
+    175  8186		       8d 00 00 	      STA	AUTOPLAZ
+    176  8189		       8d 00 00 	      STA	FLAP	;		     ;PREVENT FLAPPING IN LOADER
+    177  818c		       2c 00 00 	      BIT	INPT4	;		    ;SEE IF FIRE BUTTON HIT
+    178  818f		       30 03		      BMI	CONTSEL	;		  ;IF HIT, START GAME
+    179  8191		       4c 8f 82    SELRES     JMP	GOTORES
+    180  8194		       ad 00 00    CONTSEL    LDA	SWCHB
+    181  8197		       4a		      LSR
+    182  8198		       90 f7		      BCC	SELRES	;		   ;SEE IF RESET HIT DURING SELECT
+    183  819a							;*THIS SECTION KEEPS UP THE SELECTION DISPLAY
+    184  819a		       a9 2f		      LDA	#47	;		      ;PLAYERS TYPE
+    185  819c		       8d 47 00 	      STA	TYPE+71	;		  ;STORE IN TYPE LIST
+    186  819f		       a9 28		      LDA	#40
+    187  81a1		       8d 47 00 	      STA	XCORD+71
+    188  81a4		       a9 84		      LDA	#132
+    189  81a6		       8d 47 00 	      STA	YCORD+71
+    190  81a9		       8d 01 00 	      STA	YCORD+1
+    191  81ac		       a9 01		      LDA	#1
+    192  81ae		       8d 47 00 	      STA	ANGLE+71
+    193  81b1		       8d 01 00 	      STA	ANGLE+1
+    194  81b4		       a0 30		      LDY	#48
+    195  81b6		       ad 00 00 	      LDA	TWOPLAYR	;		 ;GET TWOPLAYER REGISTER
+    196  81b9		       f0 01		      BEQ	SHOWONE
+    197  81bb		       c8		      INY
+    198  81bc				   SHOWONE		;				 ;"1" TYPE
+    199  81bc		       8c 01 00 	      STY	TYPE+1
+    200  81bf		       a9 5a		      LDA	#90
+    201  81c1		       8d 01 00 	      STA	XCORD+1
+    202  81c4							;THIS SECTION PUTS UP THE PLAY LEVEL
+    203  81c4		       a9 2e		      LDA	#46	;		      ;"LEVEL" TYPE
+    204  81c6		       8d 02 00 	      STA	TYPE+2
+    205  81c9		       a9 28		      LDA	#40
+    206  81cb		       8d 02 00 	      STA	XCORD+2
+    207  81ce		       a9 90		      LDA	#144
+    208  81d0		       8d 02 00 	      STA	YCORD+2
+    209  81d3		       8d 03 00 	      STA	YCORD+3
+    210  81d6		       a9 01		      LDA	#1
+    211  81d8		       8d 02 00 	      STA	ANGLE+2
+    212  81db		       8d 03 00 	      STA	ANGLE+3
+    213  81de		       a0 2c		      LDY	#44
+    214  81e0		       ad 00 00 	      LDA	LEVELSEL	;		 ;GET LEVEL SELECTION REGISTER
+    215  81e3		       30 04		      BMI	DONOVICE	;		 ;$FF IS NOVICE
+    216  81e5		       d0 03		      BNE	FINLEVEL	;		 ;1 IS EXPERT, 0 IS ADVANCED
+    217  81e7		       88		      DEY
+    218  81e8		       88		      DEY		;			      ;43 IS ADVANCED
+    219  81e9		       c8	   DONOVICE   INY		;			      ;45 IS NOVICE
+    220  81ea		       8c 03 00    FINLEVEL   STY	TYPE+3	;		   ;44 IS EXPERT
+    221  81ed		       a9 50		      LDA	#80
+    222  81ef		       8d 03 00 	      STA	XCORD+3
+    223  81f2							;THIS SECTION DOES THE SELECTION ADVANCE
+    224  81f2		       ce 00 00 	      DEC	SELTIMER	;		 ;SEE IF TIME TO LOOK AT JOYSTICK
+    225  81f5		       d0 3a		      BNE	ENDSEL
+    226  81f7		       a9 14		      LDA	#20
+    227  81f9		       8d 00 00 	      STA	SELTIMER	;		 ;RESET SELTIMER
+    228  81fc		       ad 00 00 	      LDA	SWCHA	;		    ;GET JOYSTICK INPUT
+    229  81ff		       09 0f		      ORA	#$0F	;		     ;BOOT PLAYER 2 INPUT
+    230  8201		       c9 ff		      CMP	#$FF
+    231  8203		       f0 3e		      BEQ	CHKSWB	;		   ;LOOK AT LOCAL INPUT
+    232  8205		       0a		      ASL
+    233  8206		       90 14		      BCC	INCDIFF	;		  ;INC DIFFICULTY
+    234  8208		       0a		      ASL
+    235  8209		       90 1e		      BCC	DECDIFF	;		  ;DEC DIFFICULTY
+    236  820b		       0a		      ASL
+    237  820c		       b0 07		      BCS	INCPLYR
+    238  820e		       a9 00		      LDA	#0
+    239  8210		       8d 00 00 	      STA	TWOPLAYR	;		 ;SET PLAYERS TO 1
+    240  8213		       f0 1c		      BEQ	ENDSEL
+    241  8215		       a9 01	   INCPLYR    LDA	#1
+    242  8217		       8d 00 00 	      STA	TWOPLAYR	;		 ;SET PLAYERS TO 2
+    243  821a		       d0 15		      BNE	ENDSEL
+    244  821c		       ad 00 00    INCDIFF    LDA	LEVELSEL	;		 ;GET LEVEL SELECTION REG
+    245  821f		       c9 01		      CMP	#1
+    246  8221		       f0 0e		      BEQ	ENDSEL
+    247  8223		       ee 00 00 	      INC	LEVELSEL
+    248  8226		       4c 9b 80 	      JMP	TITLOOP
+    249  8229		       ad 00 00    DECDIFF    LDA	LEVELSEL
+    250  822c		       30 03		      BMI	ENDSEL
+    251  822e		       ce 00 00 	      DEC	LEVELSEL
+    252  8231				   ENDSEL
+    253  8231		       ce 00 00 	      DEC	BOZO2
+    254  8234		       d0 0a		      BNE	ENDSELL
+    255  8236		       ce 00 00 	      DEC	BOZO3
+    256  8239		       d0 05		      BNE	ENDSELL
+    257  823b		       a9 00		      LDA	#0
+    258  823d		       8d 00 00 	      STA	SELECT	;		   GO BACK TO GAME LOOP
+    259  8240		       4c 9b 80    ENDSELL    JMP	TITLOOP
+    260  8243		       ad 00 00    CHKSWB     LDA	SWCHB
+    261  8246		       4a		      LSR
+    262  8247		       4a		      LSR		;			;LOOK AT SELECT INPUT
+    263  8248		       b0 10		      BCS	NOSEL
+    264  824a							;SELECT ACTIVE, NEED TO SEE IF WAS ACTIVE BEFORE
+    265  824a		       ad 00 00 	      LDA	SELTGL
+    266  824d		       d0 12		      BNE	CHKTIMER	;		 ;WAS ON, CHECK IF TIME TO INC OPTIONS
+    267  824f		       ee 00 00 	      INC	SELTGL	;		   ;SET TOGGLE TO ON
+    268  8252		       a9 05		      LDA	#5
+    269  8254		       8d 00 00 	      STA	SELDELAY	;		 ;INITIALIZE SELECT DELAY
+    270  8257		       4c 6b 82 	      JMP	INCOPTNS	;		 ;WASN"T ON, MUST INC OPTIONS
+    271  825a		       a9 00	   NOSEL      LDA	#0
+    272  825c		       8d 00 00 	      STA	SELTGL	;		   ;SET SELECT TOGGLE TO OFF
+    273  825f		       f0 d0		      BEQ	ENDSEL
+    274  8261		       ce 00 00    CHKTIMER   DEC	SELDELAY
+    275  8264		       10 cb		      BPL	ENDSEL	;		   ;NOT LONG ENOUGH BETWEEN OPTION CHNG
+    276  8266		       a9 05		      LDA	#05
+    277  8268		       8d 00 00 	      STA	SELDELAY
+    278  826b		       ad 00 00    INCOPTNS   LDA	LEVELSEL
+    279  826e		       c9 01		      CMP	#1	;		       ;SEE IF HIGHEST LEVEL
+    280  8270		       f0 06		      BEQ	CHPLYER	;		  ;IF HIGHEST LEVEL, CHANGE PLAYER #
+    281  8272		       ee 00 00 	      INC	LEVELSEL
+    282  8275		       4c 31 82 	      JMP	ENDSEL
+    283  8278		       a9 ff	   CHPLYER    LDA	#$FF
+    284  827a		       8d 00 00 	      STA	LEVELSEL	;		 ;RESET LEVEL TO LOWEST SETTING
+    285  827d		       ad 00 00 	      LDA	TWOPLAYR
+    286  8280		       f0 07		      BEQ	CHPLYER1
+    287  8282		       a9 00		      LDA	#0
+    288  8284		       8d 00 00 	      STA	TWOPLAYR	;		 ;SET TO ONE PLAYER
+    289  8287		       f0 a8		      BEQ	ENDSEL
+    290  8289		       ee 00 00    CHPLYER1   INC	TWOPLAYR	;		 ;SET TO TWO PLAYERS
+    291  828c		       4c 31 82 	      JMP	ENDSEL
+    292  828f				   GOTORES
+    293  828f							;CALL GALAGA TUNE HERE
+    294  828f		       20 00 00 	      JSR	SCRAPALL
+    295  8292		       a9 00		      LDA	#0
+    296  8294		       20 00 00 	      JSR	TUNIN
+    297  8297		       a9 01		      LDA	#1
+    298  8299		       20 00 00 	      JSR	TUNIN
+    299  829c		       a9 20		      LDA	#$20	;		     ;PREVENT SHOT FIRE
+    300  829e		       8d 00 00 	      STA	MISTIMER
+    301  82a1		       a9 00		      LDA	#0
+    302  82a3		       8d 00 00 	      STA	AUTOPLAY	;		 ;CLEAR AUTOPLAY MODE
+    303  82a6		       8d 00 00 	      STA	SELECT	;		   ;CLEAR SELECT MODE
+    304  82a9		       20 ae 82 	      JSR	CLRSCORE
+    305  82ac		       30 13		      BMI	ATITOUT	;		  ;CLRSCORE RETURNS MINUS
+    306  82ae		       a2 05	   CLRSCORE   LDX	#5
+    307  82b0		       9d 00 00    ZZLOP      STA	P1SCORE,X	;		;ZERO OUT THE SCORES
+    308  82b3		       ca		      DEX
+    309  82b4		       10 fa		      BPL	ZZLOP
+    310  82b6		       a9 0a		      LDA	#$A
+    311  82b8		       a2 0f		      LDX	#15
+    312  82ba		       9d 00 00    ZZZLOP     STA	SCORE,X	;		  ;BLANK OUT THE SCORE DISPLAY
+    313  82bd		       ca		      DEX
+    314  82be		       10 fa		      BPL	ZZZLOP
+    315  82c0		       60		      RTS
+    316  82c1		       a9 04	   ATITOUT    LDA	#4
+    317  82c3		       8d 00 00 	      STA	LIVES
+    318  82c6		       ae 00 00 	      LDX	TWOPLAYR
+    319  82c9		       f0 03		      BEQ	ZILOUT
+    320  82cb		       8d 01 00 	      STA	LIVES+1
+    321  82ce		       ad 00 00    ZILOUT     LDA	LEVELSEL
+    322  82d1		       30 18		      BMI	LOWRACK
+    323  82d3		       f0 16		      BEQ	LOWRACK
+    324  82d5		       a9 02		      LDA	#2
+    325  82d7		       8d 00 00 	      STA	CHALNUM	;		  ;START W/ CHAL STG NUMBER 3
+    326  82da		       a9 05		      LDA	#5
+    327  82dc		       8d 00 00 	      STA	WAVEREG	;		  ;INIT WAVEREG TO RACK 10
+    328  82df		       a9 10		      LDA	#$10
+    329  82e1		       8d 00 00 	      STA	GASTONHK	;		 ;STORE BCD RECORD OF RACK
+    330  82e4		       a9 0a		      LDA	#10
+    331  82e6		       8d 00 00 	      STA	CHALINDX	;		 ;INIT CHALINDX TO RACK 10
+    332  82e9		       d0 05		      BNE	LOWRACK1
+    333  82eb		       a9 01	   LOWRACK    LDA	#1
+    334  82ed		       8d 00 00 	      STA	GASTONHK	;		 ;STORE BCD RECORD OF RACK
+    335  82f0		       8d 00 00    LOWRACK1   STA	RACK
+    336  82f3		       8d 00 00 	      STA	RLOGO
+    337  82f6		       a9 00		      LDA	#0
+    338  82f8		       a2 47		      LDX	#71
+    339  82fa		       9d 00 00    XXERO      STA	TYPE,X
+    340  82fd		       9d 00 00 	      STA	ANGLE,X
+    341  8300		       9d 00 00 	      STA	MODE,X	;		   ;ZERO OUT MODE AS WELL
+    342  8303		       ca		      DEX
+    343  8304		       10 f4		      BPL	XXERO
+    344  8306		       a9 05		      LDA	#5
+    345  8308		       8d 3f 00 	      STA	TYPE+63
+    346  830b		       a9 80		      LDA	#$80
+    347  830d		       8d 00 00 	      STA	RACKREG
+    348  8310		       8d 3f 00 	      STA	ANGLE+63
+    349  8313		       8d 3e 00 	      STA	ANGLE+62
+    350  8316		       a9 ab		      LDA	#171
+    351  8318		       8d 3f 00 	      STA	YCORD+63
+    352  831b		       a9 00		      LDA	#0
+    353  831d		       8d 28 00 	      STA	MODE+40
+    354  8320		       8d 3e 00 	      STA	TYPE+62
+    355  8323		       8d 3f 00 	      STA	MODE+63
+    356  8326		       a0 23		      LDY	#35
+    357  8328				   ZCOPY		;				 ;SAVE ALL 2ND PLAYER VARIABLES
+    358  8328		       b9 00 00 	      LDA	ARRIVED,Y
+    359  832b		       99 00 00 	      STA	SAVES,Y
+    360  832e		       88		      DEY
+    361  832f		       10 f7		      BPL	ZCOPY
+    362  8331		       a9 4f		      LDA	#$4F
+    363  8333		       8d 00 00 	      STA	RDYREG	;		   ;GIVE INITIAL DELAY TO GAME
+    364  8336		       a9 01		      LDA	#1
+    365  8338		       8d 00 00 	      STA	ABORT	;		    ;GIVE GAME DELAY
+    366  833b				   BLOOP
+    367  833b		       ad 00 00 	      LDA	FRAME
+    368  833e		       30 fb		      BMI	BLOOP
+    369  8340		       20 00 00 	      JSR	UPENLIST
+    370  8343		       20 00 00 	      JSR	COLDET1
+    371  8346		       20 00 00 	      JSR	COLDET2
+    372  8349		       20 00 00 	      JSR	ATTACK
+    373  834c		       20 00 00 	      JSR	ADDSCORE
+    374  834f		       20 00 00 	      JSR	TOFIRE
+    375  8352		       20 00 00 	      JSR	HEROSPIN
+    376  8355		       20 5e 83 	      JSR	CHBONUS
+    377  8358		       20 0c 85 	      JSR	WORDS
+    378  835b		       4c 3b 83 	      JMP	BLOOP
+    379  835e				   CHBONUS
+    380  835e		       ad 00 00 	      LDA	SCRTIME	;		  ;SEE IF TIME FOR SCORE DISPLAY
+    381  8361		       d0 03		      BNE	CHBONUS1
+    382  8363		       4c f7 84 	      JMP	ENDBONS2
+    383  8366							;*WILL NOT LEAVE THIS LOOP UNTIL DONE WITH ALL DISPLAY
+    384  8366		       a9 01	   CHBONUS1   LDA	#1
+    385  8368		       a0 41		      LDY	#65
+    386  836a		       99 00 00    CHBONUS2   STA	ANGLE,Y	;		  ;SET ALL ANGLES TO 1
+    387  836d		       c8		      INY
+    388  836e		       c0 48		      CPY	#72
+    389  8370		       d0 f8		      BNE	CHBONUS2
+    390  8372		       20 94 89 	      JSR	CLREXPLO	;		 CLEAR ANY REMAINING EXPLOSIONS
+    391  8375		       ad 00 00 	      LDA	CHALSCR	;		  ;GET SCORE FOR STAGE
+    392  8378		       c9 40		      CMP	#$40	;		     ;SEE IF PERFECT SCORE
+    393  837a		       d0 0d		      BNE	NOFANFR
+    394  837c		       a9 11		      LDA	#17
+    395  837e		       20 00 00 	      JSR	TUNIN
+    396  8381		       a9 12		      LDA	#18
+    397  8383		       20 00 00 	      JSR	TUNIN	;		    ;CALL PERFECT SCORE FANFARE
+    398  8386		       4c 93 83 	      JMP	NOFAN2
+    399  8389		       a9 13	   NOFANFR    LDA	#19
+    400  838b		       20 00 00 	      JSR	TUNIN
+    401  838e		       a9 14		      LDA	#20
+    402  8390		       20 00 00 	      JSR	TUNIN	;		    ;CALL REGULAR STATS MUSIC
+    403  8393		       a9 00	   NOFAN2     LDA	#0
+    404  8395		       8d 38 00 	      STA	TYPE+56
+    405  8398		       8d 39 00 	      STA	TYPE+57	;		  ;CLEAR OUT HERO MISSILES
+    406  839b		       a9 24		      LDA	#36	;		      ;"NUMBER OF HITS" TYPE
+    407  839d		       8d 41 00 	      STA	TYPE+65
+    408  83a0		       a9 48		      LDA	#72
+    409  83a2		       8d 41 00 	      STA	YCORD+65
+    410  83a5		       a9 1a		      LDA	#26
+    411  83a7		       8d 41 00 	      STA	XCORD+65
+    412  83aa		       a9 5a		      LDA	#90
+    413  83ac		       8d 00 00 	      STA	SCRTIME	;		  ;USE THIS AS A TEMP LOCATION
+    414  83af		       20 f8 84 	      JSR	SCRDELAY	;		 ;WAIT 60 FRAMES
+    415  83b2		       ad 00 00 	      LDA	CHALSCR
+    416  83b5		       4a		      LSR
+    417  83b6		       4a		      LSR
+    418  83b7		       4a		      LSR
+    419  83b8		       4a		      LSR		;			      ;GET RID OF LOWER NIBBLE
+    420  83b9		       8d 42 00 	      STA	ANGLE+66
+    421  83bc		       8d 45 00 	      STA	ANGLE+69
+    422  83bf		       8d 00 00 	      STA	TEMP4	;		    ;HIGH DIGIT OF SCORE
+    423  83c2		       f0 05		      BEQ	NOZEROS	;		  ;DONT SHOW IF LEADING ZERO
+    424  83c4		       a9 28		      LDA	#40	;		      ;DIGIT TYPE
+    425  83c6		       8d 42 00 	      STA	TYPE+66
+    426  83c9		       a9 28	   NOZEROS    LDA	#40
+    427  83cb		       8d 43 00 	      STA	TYPE+67
+    428  83ce		       a9 48		      LDA	#72
+    429  83d0		       8d 42 00 	      STA	YCORD+66
+    430  83d3		       8d 43 00 	      STA	YCORD+67
+    431  83d6		       a9 71		      LDA	#113
+    432  83d8		       8d 42 00 	      STA	XCORD+66
+    433  83db		       a9 51		      LDA	#81
+    434  83dd		       8d 45 00 	      STA	XCORD+69
+    435  83e0		       a9 77		      LDA	#119
+    436  83e2		       8d 43 00 	      STA	XCORD+67
+    437  83e5		       a9 57		      LDA	#87
+    438  83e7		       8d 46 00 	      STA	XCORD+70
+    439  83ea		       ad 00 00 	      LDA	CHALSCR
+    440  83ed		       29 0f		      AND	#$0F	;		     ;BOOT HIGH NIBBLE
+    441  83ef		       8d 43 00 	      STA	ANGLE+67
+    442  83f2		       8d 46 00 	      STA	ANGLE+70
+    443  83f5		       0a		      ASL
+    444  83f6		       0a		      ASL
+    445  83f7		       0a		      ASL
+    446  83f8		       0a		      ASL
+    447  83f9		       8d 00 00 	      STA	TEMP5	;		    ;LOW BYTE OF SCORE
+    448  83fc		       a9 5a		      LDA	#90
+    449  83fe		       8d 00 00 	      STA	SCRTIME
+    450  8401		       20 f8 84 	      JSR	SCRDELAY	;		 ;WAIT 60 FRAMES
+    451  8404		       ad 00 00 	      LDA	CHALSCR
+    452  8407		       c9 40		      CMP	#$40	;		     ;SEE IF PERFECT SCORE
+    453  8409		       f0 50		      BEQ	PRFCTSCR
+    454  840b		       a9 27		      LDA	#39
+    455  840d		       8d 44 00 	      STA	TYPE+68	;		  ;SET "BONUS" TYPE
+    456  8410		       a9 60		      LDA	#96
+    457  8412		       8d 44 00 	      STA	YCORD+68
+    458  8415		       8d 45 00 	      STA	YCORD+69
+    459  8418		       8d 46 00 	      STA	YCORD+70
+    460  841b		       8d 47 00 	      STA	YCORD+71
+    461  841e		       a9 2d		      LDA	#45
+    462  8420		       8d 44 00 	      STA	XCORD+68
+    463  8423		       a9 5a		      LDA	#90
+    464  8425		       8d 00 00 	      STA	SCRTIME
+    465  8428		       20 f8 84 	      JSR	SCRDELAY	;		 ;WAIT 60 FRAMES
+    466  842b		       a9 28		      LDA	#40	;		      ;DIGIT TYPE
+    467  842d		       8d 45 00 	      STA	TYPE+69
+    468  8430		       8d 46 00 	      STA	TYPE+70
+    469  8433		       ad 45 00 	      LDA	ANGLE+69	;		 ;SEE IF IS ZERO
+    470  8436		       d0 0b		      BNE	NOTXERO
+    471  8438		       8d 45 00 	      STA	TYPE+69	;		  ;DONT SHOW IT
+    472  843b		       ad 46 00 	      LDA	ANGLE+70
+    473  843e		       d0 03		      BNE	NOTXERO
+    474  8440		       8d 46 00 	      STA	TYPE+70	;		  ;DONT SHOW IT
+    475  8443		       20 00 00    NOTXERO    JSR	ADDSCORE
+    476  8446		       a9 2a		      LDA	#42	;		      ;DOUBLE ZERO TYPE
+    477  8448		       8d 47 00 	      STA	TYPE+71
+    478  844b		       a9 5d		      LDA	#93
+    479  844d		       8d 47 00 	      STA	XCORD+71
+    480  8450		       a9 b0		      LDA	#$B0
+    481  8452		       8d 00 00 	      STA	SCRTIME
+    482  8455		       20 f8 84 	      JSR	SCRDELAY
+    483  8458		       4c e8 84 	      JMP	ENDBONUS
+    484  845b		       a9 25	   PRFCTSCR   LDA	#37
+    485  845d		       8d 47 00 	      STA	TYPE+71
+    486  8460		       a9 30		      LDA	#48
+    487  8462		       8d 47 00 	      STA	YCORD+71
+    488  8465		       a9 3c		      LDA	#60
+    489  8467		       8d 47 00 	      STA	XCORD+71
+    490  846a		       a9 1e		      LDA	#30
+    491  846c		       8d 00 00 	      STA	SCRTIME
+    492  846f		       20 f8 84 	      JSR	SCRDELAY	;		 ;PERFECT ON
+    493  8472		       a9 00		      LDA	#0
+    494  8474		       8d 47 00 	      STA	TYPE+71
+    495  8477		       a9 1e		      LDA	#30
+    496  8479		       8d 00 00 	      STA	SCRTIME
+    497  847c		       20 f8 84 	      JSR	SCRDELAY	;		 ;PERFECT OFF
+    498  847f		       a9 25		      LDA	#37
+    499  8481		       8d 47 00 	      STA	TYPE+71
+    500  8484		       a9 26		      LDA	#38
+    501  8486		       8d 44 00 	      STA	TYPE+68	;		  ;"SPECIAL BONUS" TYPE
+    502  8489		       a9 14		      LDA	#20
+    503  848b		       8d 44 00 	      STA	XCORD+68
+    504  848e		       a9 60		      LDA	#96
+    505  8490		       8d 44 00 	      STA	YCORD+68
+    506  8493		       a9 1e		      LDA	#30
+    507  8495		       8d 00 00 	      STA	SCRTIME
+    508  8498		       20 f8 84 	      JSR	SCRDELAY	;		 ;PERFECT ON
+    509  849b		       a9 00		      LDA	#0
+    510  849d		       8d 47 00 	      STA	TYPE+71
+    511  84a0		       a9 1e		      LDA	#30
+    512  84a2		       8d 00 00 	      STA	SCRTIME
+    513  84a5		       20 f8 84 	      JSR	SCRDELAY	;		 ;PERFECT OFF
+    514  84a8		       a9 25		      LDA	#37
+    515  84aa		       8d 47 00 	      STA	TYPE+71
+    516  84ad		       a9 00		      LDA	#0
+    517  84af		       8d 00 00 	      STA	TEMP5
+    518  84b2		       a9 0a		      LDA	#10
+    519  84b4		       8d 00 00 	      STA	TEMP4	;		    ;GIVES SCORE OF 10,00 BONUS
+    520  84b7		       20 00 00 	      JSR	ADDSCORE
+    521  84ba		       a9 29		      LDA	#41
+    522  84bc		       8d 45 00 	      STA	TYPE+69	;		  ;TEN THOUSAND TYPE
+    523  84bf		       a9 01		      LDA	#1
+    524  84c1		       8d 45 00 	      STA	ANGLE+69	;		 ;RESET THE ANGLE
+    525  84c4		       a9 60		      LDA	#96
+    526  84c6		       8d 45 00 	      STA	YCORD+69
+    527  84c9		       a9 6b		      LDA	#107
+    528  84cb		       8d 45 00 	      STA	XCORD+69
+    529  84ce		       a9 1e		      LDA	#30
+    530  84d0		       8d 00 00 	      STA	SCRTIME
+    531  84d3		       20 f8 84 	      JSR	SCRDELAY	;		 ;PERFECT ON
+    532  84d6		       a9 00		      LDA	#0
+    533  84d8		       8d 47 00 	      STA	TYPE+71
+    534  84db		       a9 1e		      LDA	#30
+    535  84dd		       8d 00 00 	      STA	SCRTIME
+    536  84e0		       20 f8 84 	      JSR	SCRDELAY	;		 ;PERFECT OFF
+    537  84e3		       a9 25		      LDA	#37
+    538  84e5		       8d 47 00 	      STA	TYPE+71
+    539  84e8		       a9 00	   ENDBONUS   LDA	#0
+    540  84ea		       a0 41		      LDY	#65
+    541  84ec		       99 00 00    ENDBONS1   STA	TYPE,Y
+    542  84ef		       c8		      INY
+    543  84f0		       c0 48		      CPY	#72
+    544  84f2		       30 f8		      BMI	ENDBONS1	;		 ;CLEAR ALL TYPES
+    545  84f4		       8d 00 00 	      STA	CHALSCR	;		  ;RESET SCORE REGISTER
+    546  84f7							;	   LDA	   XCORD+63
+    547  84f7							;	  STA	  HEROX;		  ;RESET HEROS POSITION
+    548  84f7		       60	   ENDBONS2   RTS
+    549  84f8		       ce 00 00    SCRDELAY   DEC	FRAME	;		    ;THIS SUBROUTINE CAUSES A DELAY
+    550  84fb		       ad 00 00    SCRDLY1    LDA	FRAME	;		    ;DELAY LENGTH IS STORED IN SCRTIME
+    551  84fe		       30 fb		      BMI	SCRDLY1
+    552  8500		       ce 00 00 	      DEC	SCRTIME
+    553  8503		       f0 06		      BEQ	SCRDLY2
+    554  8505		       ce 00 00 	      DEC	FRAME
+    555  8508		       4c fb 84 	      JMP	SCRDLY1
+    556  850b		       60	   SCRDLY2    RTS
+    557  850c		       ad 00 00    WORDS      LDA	RDYREG	;		   ;SEE IF READY SHOULD BE DISPLAYED
+    558  850f		       f0 2b		      BEQ	WORDS0	;		   ;GO TO NEXT WORD SECTION
+    559  8511		       38		      SEC
+    560  8512		       e9 01		      SBC	#1
+    561  8514		       8d 00 00 	      STA	RDYREG
+    562  8517		       f0 1b		      BEQ	WORDS1	;		   ;RESET LOGO
+    563  8519		       c9 4e		      CMP	#$4E	;		     ;SEE IF FIRST TIME THROUGH
+    564  851b		       d0 1f		      BNE	WORDS0	;		   ;GO TO NEXT WORD SECTION
+    565  851d							;THIS SECTION DISPLAYS THE "READY" LOGO
+    566  851d		       a9 1a		      LDA	#26	;		      ;THIS IS READY TYPE
+    567  851f		       8d 41 00 	      STA	TYPE+65
+    568  8522		       a9 60		      LDA	#96
+    569  8524		       8d 41 00 	      STA	YCORD+65
+    570  8527		       a9 41		      LDA	#65
+    571  8529		       8d 41 00 	      STA	XCORD+65
+    572  852c		       a9 01		      LDA	#1
+    573  852e		       8d 41 00 	      STA	ANGLE+65
+    574  8531		       4c 3c 85 	      JMP	WORDS0
+    575  8534		       a9 00	   WORDS1     LDA	#0
+    576  8536		       8d 00 00 	      STA	ABORT	;		    ;RESET ABORT REGISTER
+    577  8539		       8d 41 00 	      STA	TYPE+65
+    578  853c							;THIS SECTION DISPLAYS THE "PLAYER X" LOGO
+    579  853c		       ad 00 00    WORDS0     LDA	PLAYRREG
+    580  853f		       f0 58		      BEQ	WORDS2	;		   ;GO TO NEXT SECTION
+    581  8541		       38		      SEC
+    582  8542		       e9 01		      SBC	#1
+    583  8544		       8d 00 00 	      STA	PLAYRREG
+    584  8547		       f0 48		      BEQ	WORDS3	;		   ;RESET LOGO
+    585  8549		       c9 4e		      CMP	#$4E
+    586  854b		       d0 4c		      BNE	WORDS2	;		   ;GO TO NEXT SECTION
+    587  854d		       a9 19		      LDA	#25
+    588  854f		       8d 42 00 	      STA	TYPE+66
+    589  8552		       a9 54		      LDA	#84
+    590  8554		       8d 42 00 	      STA	YCORD+66
+    591  8557		       a9 37		      LDA	#55
+    592  8559		       8d 42 00 	      STA	XCORD+66
+    593  855c		       a9 01		      LDA	#1
+    594  855e		       8d 42 00 	      STA	ANGLE+66
+    595  8561							;DISPLAY  "1" OR "2"
+    596  8561		       ad 00 00 	      LDA	GMOVEREG
+    597  8564		       f0 0a		      BEQ	WPLAYER0
+    598  8566		       ad 00 00 	      LDA	PLAYER
+    599  8569		       d0 0f		      BNE	WPLAYER1
+    600  856b		       a9 20		      LDA	#32
+    601  856d		       4c 7c 85 	      JMP	WPLAYER2
+    602  8570		       ad 00 00    WPLAYER0   LDA	PLAYER
+    603  8573		       f0 05		      BEQ	WPLAYER1
+    604  8575		       a9 20		      LDA	#32
+    605  8577		       4c 7c 85 	      JMP	WPLAYER2	;		 ;PLAYER 2 TYPE
+    606  857a		       a9 1f	   WPLAYER1   LDA	#31	;		      ;PLAYER 1 TYPE
+    607  857c		       8d 43 00    WPLAYER2   STA	TYPE+67
+    608  857f		       a9 54		      LDA	#84
+    609  8581		       8d 43 00 	      STA	YCORD+67
+    610  8584		       a9 5f		      LDA	#95
+    611  8586		       8d 43 00 	      STA	XCORD+67
+    612  8589		       a9 01		      LDA	#1
+    613  858b		       8d 43 00 	      STA	ANGLE+67
+    614  858e		       4c 99 85 	      JMP	WORDS2
+    615  8591		       a9 00	   WORDS3     LDA	#0
+    616  8593		       8d 42 00 	      STA	TYPE+66	;		  ;RESET LOGO
+    617  8596		       8d 43 00 	      STA	TYPE+67
+    618  8599							;THIS SECTION HANDLES A "CHALLENGING STAGE"
+    619  8599		       ad 00 00    WORDS2     LDA	CHLNGREG
+    620  859c		       f0 3b		      BEQ	WORDS4	;		   ;GO TO NEXT SECTION
+    621  859e		       38		      SEC
+    622  859f		       e9 01		      SBC	#1
+    623  85a1		       8d 00 00 	      STA	CHLNGREG
+    624  85a4		       f0 2b		      BEQ	WORDS5	;		   ;RESET LOGO
+    625  85a6		       c9 4e		      CMP	#$4E
+    626  85a8		       d0 2f		      BNE	WORDS4	;		   ;GO TO NEXT SECTION
+    627  85aa		       20 94 89 	      JSR	CLREXPLO
+    628  85ad		       a0 1d		      LDY	#29
+    629  85af		       8c 41 00 	      STY	TYPE+65
+    630  85b2		       c8		      INY		;			      ;Y NOW HAS 30
+    631  85b3		       8c 42 00 	      STY	TYPE+66
+    632  85b6		       8c 41 00 	      STY	XCORD+65
+    633  85b9		       a9 60		      LDA	#96
+    634  85bb		       8d 41 00 	      STA	YCORD+65
+    635  85be		       8d 42 00 	      STA	YCORD+66
+    636  85c1		       a9 64		      LDA	#100
+    637  85c3		       8d 42 00 	      STA	XCORD+66
+    638  85c6		       a9 01		      LDA	#1
+    639  85c8		       8d 41 00 	      STA	ANGLE+65
+    640  85cb		       8d 42 00 	      STA	ANGLE+66
+    641  85ce		       4c d9 85 	      JMP	WORDS4
+    642  85d1		       a9 00	   WORDS5     LDA	#0
+    643  85d3		       8d 41 00 	      STA	TYPE+65
+    644  85d6		       8d 42 00 	      STA	TYPE+66
+    645  85d9							;THIS SECTION HANDLES "GAME OVER"
+    646  85d9		       ad 00 00    WORDS4     LDA	GMOVEREG
+    647  85dc		       d0 03		      BNE	NOWORDS6	;		   ;GO TO NEXT SECTION
+    648  85de		       4c 89 86    GOWORDS6   JMP	WORDS6
+    649  85e1		       38	   NOWORDS6   SEC
+    650  85e2		       e9 01		      SBC	#1
+    651  85e4		       8d 00 00 	      STA	GMOVEREG
+    652  85e7		       d0 03		      BNE	PISMEOFF
+    653  85e9		       4c 79 86 	      JMP	WORDS7	;		   ;RESET LOGO
+    654  85ec		       c9 4e	   PISMEOFF   CMP	#$4E
+    655  85ee		       d0 ee		      BNE	GOWORDS6	;		 ;GO TO NEXT SECTION
+    656  85f0		       20 94 89 	      JSR	CLREXPLO
+    657  85f3		       a9 1c		      LDA	#28
+    658  85f5		       8d 44 00 	      STA	TYPE+68
+    659  85f8		       a9 60		      LDA	#96
+    660  85fa		       8d 44 00 	      STA	YCORD+68
+    661  85fd		       a9 37		      LDA	#55
+    662  85ff		       8d 44 00 	      STA	XCORD+68
+    663  8602		       a9 01		      LDA	#1
+    664  8604		       8d 44 00 	      STA	ANGLE+68
+    665  8607		       ad 00 00 	      LDA	GAMEOVER
+    666  860a		       f0 7d		      BEQ	WORDS6	;		   ;GAME NOT OVER, GO ON
+    667  860c		       a9 01		      LDA	#1
+    668  860e		       8d 00 00 	      STA	LIVES	;		    ;KEEPS LOADER FROM BARFING
+    669  8611		       8d 01 00 	      STA	LIVES+1
+    670  8614				   WORDS8		;NOT USED
+    671  8614		       a9 ff		      LDA	#$FF
+    672  8616		       8d 00 00 	      STA	SCRTIME	;		  ;USE SCRDELAY AS A WAIT LOOP
+    673  8619		       20 f8 84 	      JSR	SCRDELAY
+    674  861c		       20 20 88 	      JSR	STATS	;		    ;SHOW THE GAME STATS
+    675  861f		       ad 00 00 	      LDA	FARREN
+    676  8622		       30 4f		      BMI	HSCBAR
+    677  8624		       a9 01		      LDA	#1
+    678  8626		       8d 00 00 	      STA	INHSC
+    679  8629		       a0 01		      LDY	#1
+    680  862b		       a2 47		      LDX	#71
+    681  862d		       a9 00	   CLRTYPES   LDA	#0
+    682  862f		       9d 00 00 	      STA	TYPE,X	;		   ;BOOT ALL EXTRAEOUS CHARACTERS
+    683  8632		       98		      TYA
+    684  8633		       9d 00 00 	      STA	ANGLE,X
+    685  8636		       ca		      DEX
+    686  8637		       10 f4		      BPL	CLRTYPES
+    687  8639		       20 2f 80 	      JSR	SETLOGO	;		  ;SET UP THE LOGO DISPLAY
+    688  863c		       ad 00 00 	      LDA	LEVELSEL
+    689  863f		       18		      CLC
+    690  8640		       69 01		      ADC	#1	;		       ;DIFCULTY MUST BE 0 OR GREATER
+    691  8642		       8d 00 00 	      STA	DIFCULTY
+    692  8645		       a9 00		      LDA	#0
+    693  8647		       8d 00 00 	      STA	PLAYER
+    694  864a		       20 00 00 	      JSR	HSCENTER
+    695  864d		       ad 00 00 	      LDA	TWOPLAYR	;		 ;SEE IF TWO PEOPLE PLAYING
+    696  8650		       f0 08		      BEQ	ONLYONE
+    697  8652		       a9 01		      LDA	#1
+    698  8654		       8d 00 00 	      STA	PLAYER
+    699  8657		       20 00 00 	      JSR	HSCENTER
+    700  865a		       a9 00	   ONLYONE    LDA	#0
+    701  865c		       8d 00 00 	      STA	INHSC
+    702  865f		       a9 40		      LDA	#$40
+    703  8661		       8d 00 00 	      STA	CTRLWT	;		   ;RESTART THE DLI"S
+    704  8664		       a9 00		      LDA	#<DLSTLST1
+    705  8666		       8d 00 00 	      STA	DPPL
+    706  8669		       a9 00		      LDA	#>DLSTLST1
+    707  866b		       8d 00 00 	      STA	DPPH
+    708  866e		       a9 00		      LDA	#0
+    709  8670		       8d 00 00 	      STA	DLSPTR
+    710  8673		       a2 ff	   HSCBAR     LDX	#$FF
+    711  8675		       9a		      TXS
+    712  8676		       4c 00 00 	      JMP	RESTART
+    713  8679		       a9 00	   WORDS7     LDA	#0
+    714  867b		       8d 44 00 	      STA	TYPE+68	;		  ;RESET "GAME OVER" LOGO
+    715  867e		       8d 00 00 	      STA	GMOVEREG
+    716  8681		       a9 4f		      LDA	#$4F
+    717  8683		       8d 00 00 	      STA	RDYREG
+    718  8686		       8d 00 00 	      STA	PLAYRREG
+    719  8689							;THIS SECTION HANDLES "FIGHTER CAPTURED"
+    720  8689		       ad 00 00    WORDS6     LDA	CAPTDREG
+    721  868c		       f0 3a		      BEQ	WORDS10	;		   ;GO TO NEXT SECTION
+    722  868e		       38		      SEC
+    723  868f		       e9 01		      SBC	#1
+    724  8691		       8d 00 00 	      STA	CAPTDREG
+    725  8694		       f0 2a		      BEQ	WORDS9
+    726  8696		       c9 4e		      CMP	#$4E	;		     ;SEE IF FIRST TIME THROUGH
+    727  8698		       d0 2e		      BNE	WORDS10	;		   ;GO TO NEXT SECTION
+    728  869a		       a0 21		      LDY	#33	;		      ;FIGHTER TYPE
+    729  869c		       8c 41 00 	      STY	TYPE+65
+    730  869f		       c8		      INY
+    731  86a0		       8c 42 00 	      STY	TYPE+66
+    732  86a3		       a9 1e		      LDA	#30
+    733  86a5		       8d 41 00 	      STA	XCORD+65
+    734  86a8		       a9 50		      LDA	#80
+    735  86aa		       8d 42 00 	      STA	XCORD+66
+    736  86ad		       a9 60		      LDA	#96
+    737  86af		       8d 41 00 	      STA	YCORD+65
+    738  86b2		       8d 42 00 	      STA	YCORD+66
+    739  86b5		       a9 01		      LDA	#1
+    740  86b7		       8d 41 00 	      STA	ANGLE+65
+    741  86ba		       8d 42 00 	      STA	ANGLE+66
+    742  86bd		       4c c8 86 	      JMP	WORDS10
+    743  86c0		       a9 00	   WORDS9     LDA	#0
+    744  86c2		       8d 41 00 	      STA	TYPE+65
+    745  86c5		       8d 42 00 	      STA	TYPE+66
+    746  86c8							;*THIS SECTION HANDLES AUTOPLAY MODE
+    747  86c8				   WORDS10
+    748  86c8		       ad 00 00 	      LDA	AUTOPLAY	;		 ;SEE IF IN  AUTOPLAY MODE
+    749  86cb		       f0 38		      BEQ	WORDS11
+    750  86cd		       2c 00 00 	      BIT	INPT4	;		    ;LOOK AT JOYSTICK FIRE BUTTON
+    751  86d0		       30 09		      BMI	WORDS12	;		  ;NO INPUT, GO ON
+    752  86d2		       a2 ff		      LDX	#$FF
+    753  86d4		       9a		      TXS
+    754  86d5		       8e 00 00 	      STX	RSTRTREG	;		 ;INDICATE GAME RESTART
+    755  86d8		       4c 00 00 	      JMP	RESTART
+    756  86db				   WORDS12
+    757  86db		       ad 00 00 	      LDA	SWCHA	;		    ;CHECK JOYSTICK INPUT
+    758  86de		       09 0f		      ORA	#$0F	;		     ;BOOT PLAYER 2 INPUT
+    759  86e0		       c9 ff		      CMP	#$FF
+    760  86e2		       f0 0a		      BEQ	WORDS14
+    761  86e4		       a2 ff		      LDX	#$FF
+    762  86e6		       9a		      TXS
+    763  86e7		       8a		      TXA
+    764  86e8		       8d 00 00 	      STA	SELECT	;		   ;INDICATE SELECT MODE NOW
+    765  86eb		       4c 00 00 	      JMP	RESTART
+    766  86ee		       ce 00 00    WORDS14    DEC	AUTOPLAY
+    767  86f1		       d0 12		      BNE	WORDS11
+    768  86f3		       ce 00 00 	      DEC	AUTOPLAZ
+    769  86f6		       f0 07		      BEQ	WORDS15
+    770  86f8		       a9 ff		      LDA	#$FF
+    771  86fa		       8d 00 00 	      STA	AUTOPLAY
+    772  86fd		       d0 06		      BNE	WORDS11
+    773  86ff		       a2 ff	   WORDS15    LDX	#$FF
+    774  8701		       9a		      TXS
+    775  8702		       4c 00 00 	      JMP	RESTART	;		  ;GO BACK TO TITLE PAGE DISPLAY
+    776  8705							;*THIS SECTION HANDLES RESETS OR SELECTS WHICH OCCUR AT ANY TIME
+    777  8705		       ad 00 00    WORDS11    LDA	SWCHB
+    778  8708		       4a		      LSR
+    779  8709		       b0 09		      BCS	WORDS16
+    780  870b		       a2 ff		      LDX	#$FF
+    781  870d		       9a		      TXS
+    782  870e		       8e 00 00 	      STX	RSTRTREG	;		 ;INDICATE GAME RESTART
+    783  8711		       4c 00 00 	      JMP	RESTART
+    784  8714		       4a	   WORDS16    LSR		;			;CHECK FOR SELECT SWITCH SET
+    785  8715		       b0 0a		      BCS	WORDS17
+    786  8717		       a2 ff		      LDX	#$FF
+    787  8719		       9a		      TXS
+    788  871a		       8a		      TXA
+    789  871b		       8d 00 00 	      STA	SELECT
+    790  871e		       4c 00 00 	      JMP	RESTART
+    791  8721
+    792  8721		       ad 00 00    WORDS17    LDA	PAUSTOG	;		  ;SEE IF PAUSE INPUT IS VALID
+    793  8724		       0a		      ASL		;			;SET CARRY BIT IF PAUSE INVALID
+    794  8725		       90 05		      BCC	PSVALID
+    795  8727		       ee 00 00 	      INC	PAUSTOG	;		  WILL EVENTUALLY INC TO ZERO
+    796  872a		       b0 0c		      BCS	SKIPPAUS
+    797  872c		       a9 f0	   PSVALID    LDA	#$F0
+    798  872e		       8d 00 00 	      STA	PAUSTOG
+    799  8731		       ad 00 00 	      LDA	SWCHB
+    800  8734		       4a		      LSR
+    801  8735		       4a		      LSR
+    802  8736		       4a		      LSR
+    803  8737		       4a		      LSR
+    804  8738							;NO CARRY INDICATES PAUSE IS BEING PUSHED
+    805  8738		       2c 00 00    SKIPPAUS   BIT	PAUSE
+    806  873b		       10 49		      BPL	NOPAUSON	;		 ;PAUSE WASN"T ON ALREADY
+    807  873d		       90 58		      BCC	PAUSOFF	;		  ;PAUSE WAS ON, NOW TAKE IT OFF
+    808  873f							;INC ALL COUNTERS HERE
+    809  873f		       ee 00 00    PAUSCNT    INC	PAUSECT1
+    810  8742		       d0 0f		      BNE	PAUSCNTL
+    811  8744		       ee 00 00 	      INC	PAUSECT2
+    812  8747		       d0 0a		      BNE	PAUSCNTL
+    813  8749		       a9 ff		      LDA	#$FF
+    814  874b		       8d 00 00 	      STA	CTRLWT	;		   ;BLANK OFF THE SCREEN DISPLAY
+    815  874e		       a9 80		      LDA	#$80
+    816  8750		       8d 00 00 	      STA	PAUSE	;		    ;INDICATES THAT SCREEN IS OFF
+    817  8753		       ad 00 00    PAUSCNTL   LDA	SWCHA
+    818  8756		       c9 ff		      CMP	#$FF	;		     ;SEE IF ANY INPUT AT ALL
+    819  8758		       f0 16		      BEQ	PAUSFIRE	;		 ;NO INPUT, CONTINUE TO SCAN
+    820  875a		       a9 00	   PAUSFIR1   LDA	#0
+    821  875c		       8d 00 00 	      STA	PAUSECT1
+    822  875f		       a9 d0		      LDA	#$D0
+    823  8761		       8d 00 00 	      STA	PAUSECT2	;		 ;RESET THESE COUNTERS
+    824  8764		       a9 40		      LDA	#$40
+    825  8766		       8d 00 00 	      STA	CTRLWT	;		   ;RESET THE DISPLAY
+    826  8769		       a9 ff		      LDA	#$FF
+    827  876b		       8d 00 00 	      STA	PAUSE	;		    ;INDICATE SCREEN ON MODE AGAIN
+    828  876e		       d0 05		      BNE	PAUSWAIT
+    829  8770		       2c 00 00    PAUSFIRE   BIT	INPT4	;		    ;SEE IF FIRE BUTTON HIT
+    830  8773		       10 e5		      BPL	PAUSFIR1
+    831  8775		       ce 00 00    PAUSWAIT   DEC	FRAME
+    832  8778		       ad 00 00    PAUSWT     LDA	PAUSE
+    833  877b		       c9 80		      CMP	#$80	;		     ;NO DMA IN THIS MODE
+    834  877d		       f0 a2		      BEQ	WORDS17
+    835  877f		       ad 00 00 	      LDA	FRAME
+    836  8782		       30 f4		      BMI	PAUSWT
+    837  8784		       10 9b		      BPL	WORDS17
+    838  8786
+    839  8786		       b0 24	   NOPAUSON   BCS	WORDSEND	;		 ;PAUSE NOT ON, NO PAUSE INPUT GIVEN
+    840  8788		       a9 ff		      LDA	#$FF
+    841  878a		       8d 00 00 	      STA	PAUSE	;		    ;INDICATE PAUSE ON NOW
+    842  878d		       a9 00		      LDA	#0
+    843  878f		       8d 00 00 	      STA	AUDV0
+    844  8792		       8d 00 00 	      STA	AUDV1	;		    ;SILENCE CURRENT SOUNDS
+    845  8795		       90 a8		      BCC	PAUSCNT	;		  ;GO TO PAUSE COUNTING ROUTINE
+    846  8797
+    847  8797		       a9 00	   PAUSOFF    LDA	#0
+    848  8799		       8d 00 00 	      STA	PAUSE	;		    ;CLEAR PAUSE
+    849  879c		       8d 00 00 	      STA	FRAME
+    850  879f		       8d 00 00 	      STA	PAUSECT1
+    851  87a2		       a9 d0		      LDA	#$D0
+    852  87a4		       8d 00 00 	      STA	PAUSECT2	;		 ;RESET COUNTERS
+    853  87a7		       a9 40		      LDA	#$40
+    854  87a9		       8d 00 00 	      STA	CTRLWT	;		   ;RESET THE CONTROL WORD
+    855  87ac		       ce 00 00    WORDSEND   DEC	FRAME	;		    ;END OF GAME LOOP
+    856  87af		       60		      RTS
+    857  87b0
+    858  87b0		       0a 8c 50 4b*HSTAR      DC.B	10,140,80,75,30,20,50,130	;HORIZONTAL
+    859  87b8		       64 5a 82 50*	      DC.B	100,90,130,80,70,20,30,130	;POSITION
+    860  87c0		       14 50 55 91*	      DC.B	20,80,85,145,20,03,50,30	;FOR
+    861  87c8		       6e 9d 5f 7d*	      DC.B	110,157,95,125,48,11,150,37	;THE STARS
+    862  87d0		       26 03 5c 6f*	      DC.B	38,03,92,111,57,141,42,43
+    863  87d8		       41 48 1e 5f*	      DC.B	65,72,30,95,48,80,138,87
+    864  87e0							;   DC.B      24,117,09,150,58,88,36,80     ; this is gonna mess with the star positions ig
+    865  87e0		       68 44 5e 1f*	      DC.B	104,68,94,31,64,07,150,111
+    866  87e8		       16 58 42 6d*	      DC.B	22,88,66,109,139,117,45,36
+    867  87f0							;   DC.B      43,09,81,94,51,112,18,43
+    868  87f0		       1f 53 89 5a*	      DC.B	31,83,137,90,67,03,77,37
+    869  87f8		       7e 4e 5d 7d*	      DC.B	126,78,93,125,07,157,33,56
+    870  8800		       17 03 45 73*	      DC.B	23,03,69,115,87,60,97,100
+    871  8808		       37 17 4d 10*	      DC.B	55,23,77,16,146,86,45,81
+    872  8810		       11 8f 2a 49*	      DC.B	17,143,42,73,51,35,58,33
+    873  8818		       62 34 24 67*	      DC.B	98,52,36,103,10,71,150,111
+    874  8820
+    875  8820							; TWINKY    DC.B      $43,$50,$41,$48,$52,$50,$5D,$49
+    876  8820
+    877  8820							; TWINKX    DC.B      $28,$3E,$47,$50,$30,$57,$5B,$72
+    878  8820
+    879  8820				   STATS
+    880  8820		       a0 46		      LDY	#70
+    881  8822		       a9 00		      LDA	#0
+    882  8824		       99 00 00    STATS2     STA	TYPE,Y	;		   ;ZERO OUT TYPE LIST
+    883  8827		       88		      DEY
+    884  8828		       10 fa		      BPL	STATS2
+    885  882a		       8d 00 00 	      STA	PLAYER	;		   ;INIT TO PLAYER ONE
+    886  882d							;ASSUME RATIO = 0 BEFORE STARTING
+    887  882d							;THIS SECTION MULTIPLIES MISCNT21 BY 100
+    888  882d		       a2 01	   STATS1     LDX	#1	;		       ;MULTIPLY BY 4 AND ADD
+    889  882f		       20 60 89 	      JSR	SHIFTMIS
+    890  8832		       a2 02		      LDX	#2	;		       ;MULTIPLY BY 8 AND ADD
+    891  8834		       20 60 89 	      JSR	SHIFTMIS
+    892  8837		       a2 00		      LDX	#0	;		       ;MULTIPLY BY 2 AND ADD
+    893  8839		       20 60 89 	      JSR	SHIFTMIS
+    894  883c							;THIS SECTION DIVIDES MISCNT2 BY MISCNT1
+    895  883c		       ad 00 00 	      LDA	MISCNT11
+    896  883f		       d0 05		      BNE	DIVMIS	;		   ;SEE IF THIS IS ZERO
+    897  8841		       ad 01 00 	      LDA	MISCNT11+1
+    898  8844		       f0 35		      BEQ	SHORATIO	;		 ;DON"T DIVIDE BY ZERO
+    899  8846		       38	   DIVMIS     SEC
+    900  8847		       ad 00 00 	      LDA	RATIO
+    901  884a		       ed 00 00 	      SBC	MISCNT11
+    902  884d		       8d 00 00 	      STA	RATIO
+    903  8850		       ad 01 00 	      LDA	RATIO+1
+    904  8853		       ed 01 00 	      SBC	MISCNT11+1
+    905  8856		       8d 01 00 	      STA	RATIO+1
+    906  8859		       ad 02 00 	      LDA	RATIO+2
+    907  885c		       e9 00		      SBC	#0
+    908  885e		       8d 02 00 	      STA	RATIO+2
+    909  8861		       30 18		      BMI	SHORATIO	;		 ;SHOW RATIO WHEN THIS IS NEGATIVE
+    910  8863		       f8		      SED
+    911  8864		       18		      CLC
+    912  8865		       ad 00 00 	      LDA	PRCNTREG	;		 ;INCREMENT THE PERCENTAGE COUNTER
+    913  8868		       69 01		      ADC	#1
+    914  886a		       8d 00 00 	      STA	PRCNTREG
+    915  886d		       d8		      CLD
+    916  886e		       b0 03		      BCS	NOMISSES	;		 ;SEE IF HIT 100%
+    917  8870		       4c 46 88 	      JMP	DIVMIS
+    918  8873		       ac 00 00    NOMISSES   LDY	PLAYER	;		   ;GET CURRENT PLAYER DISPLAYED
+    919  8876		       a9 30		      LDA	#48	;		      ;"1" TYPE, FIRST PAGE
+    920  8878		       99 04 00 	      STA	TYPE+4,Y
+    921  887b		       ac 00 00    SHORATIO   LDY	PLAYER	;		   ;USES TYPE SLOTS 65,66,67,68,69,70
+    922  887e		       d0 4b		      BNE	SHORAT1	;		  ;WILL HAVE ALREADY DONE THIS
+    923  8880		       a9 19		      LDA	#25	;		      ;"PLAYER" TYPE
+    924  8882		       8d 45 00 	      STA	TYPE+69
+    925  8885		       a9 14		      LDA	#20
+    926  8887		       8d 45 00 	      STA	XCORD+69
+    927  888a		       a9 3c		      LDA	#60
+    928  888c		       8d 45 00 	      STA	YCORD+69
+    929  888f		       8d 46 00 	      STA	YCORD+70
+    930  8892		       a9 01		      LDA	#1
+    931  8894		       8d 45 00 	      STA	ANGLE+69	;		 ;PLAYER
+    932  8897		       8d 46 00 	      STA	ANGLE+70	;		 ;NUMBER OF HITS
+    933  889a		       8d 00 00 	      STA	ANGLE	;		    ;1
+    934  889d		       8d 01 00 	      STA	ANGLE+1	;		  ;2
+    935  88a0		       a9 24		      LDA	#36
+    936  88a2		       8d 46 00 	      STA	TYPE+70	;		  ;"NUMBER OF HITS" TYPE
+    937  88a5		       a9 46		      LDA	#70
+    938  88a7		       8d 46 00 	      STA	XCORD+70
+    939  88aa		       a9 30		      LDA	#48	;		      ;"1" TYPE, FIRST PAGE GRAPHICS
+    940  88ac		       8d 00 00 	      STA	TYPE
+    941  88af		       a9 28		      LDA	#40
+    942  88b1		       8d 00 00 	      STA	XCORD
+    943  88b4		       8d 01 00 	      STA	XCORD+1
+    944  88b7		       a9 54		      LDA	#84
+    945  88b9		       8d 00 00 	      STA	YCORD
+    946  88bc		       a9 6c		      LDA	#108
+    947  88be		       8d 01 00 	      STA	YCORD+1
+    948  88c1		       ad 00 00 	      LDA	TWOPLAYR
+    949  88c4		       f0 05		      BEQ	SHORAT1
+    950  88c6		       a9 31		      LDA	#49	;		      ;DON"T SHOW IF ONLY ONE PLAYER
+    951  88c8		       8d 01 00 	      STA	TYPE+1
+    952  88cb		       ad 00 00    SHORAT1    LDA	PRCNTREG	;		 ;GET THE PERCENT SCORE
+    953  88ce		       4a		      LSR
+    954  88cf		       4a		      LSR
+    955  88d0		       4a		      LSR
+    956  88d1		       4a		      LSR		;			      ;GET RID OF LOWER NIBBLE
+    957  88d2		       99 41 00 	      STA	ANGLE+65,Y
+    958  88d5		       a9 28		      LDA	#40	;		      ;DIGIT TYPE
+    959  88d7		       99 41 00 	      STA	TYPE+65,Y
+    960  88da		       99 43 00 	      STA	TYPE+67,Y
+    961  88dd		       98		      TYA		;			      ;LOOK AT Y REG
+    962  88de		       f0 04		      BEQ	SHORAT2	;		  ;SEE WHICH PLAYER
+    963  88e0		       a9 6c		      LDA	#108
+    964  88e2		       d0 02		      BNE	SHORAT3
+    965  88e4		       a9 54	   SHORAT2    LDA	#84
+    966  88e6		       99 41 00    SHORAT3    STA	YCORD+65,Y
+    967  88e9		       99 43 00 	      STA	YCORD+67,Y
+    968  88ec		       99 02 00 	      STA	YCORD+2,Y	;		;PERCENT SIGN
+    969  88ef		       99 04 00 	      STA	YCORD+4,Y	;		;100% SCORE
+    970  88f2		       a9 65		      LDA	#101
+    971  88f4		       99 04 00 	      STA	XCORD+4,Y
+    972  88f7		       a9 6b		      LDA	#107
+    973  88f9		       99 41 00 	      STA	XCORD+65,Y
+    974  88fc		       a9 71		      LDA	#113
+    975  88fe		       99 43 00 	      STA	XCORD+67,Y
+    976  8901		       a9 77		      LDA	#119
+    977  8903		       99 02 00 	      STA	XCORD+2,Y
+    978  8906		       a9 01		      LDA	#1
+    979  8908		       99 02 00 	      STA	ANGLE+2,Y
+    980  890b		       99 04 00 	      STA	ANGLE+4,Y
+    981  890e		       a9 33		      LDA	#51
+    982  8910		       99 02 00 	      STA	TYPE+2,Y
+    983  8913		       ad 00 00 	      LDA	PRCNTREG
+    984  8916		       29 0f		      AND	#$0F	;		     ;BOOT HIGH NIBBLE
+    985  8918		       99 43 00 	      STA	ANGLE+67,Y
+    986  891b		       ad 00 00 	      LDA	TWOPLAYR	;		 ;SEE IF IN TWO PLAYER MODE
+    987  891e		       f0 37		      BEQ	ONESTATS
+    988  8920		       ad 00 00 	      LDA	PLAYER
+    989  8923		       d0 32		      BNE	ONESTATS	;		 ;SEE IF ALREADY DID PLAYER 2
+    990  8925		       ad 00 00 	      LDA	MISCNT22	;		 ;TRANSFER PLAYER2 TO PLAYER1"S REGS
+    991  8928		       8d 00 00 	      STA	MISCNT21
+    992  892b		       ad 01 00 	      LDA	MISCNT22+1
+    993  892e		       8d 01 00 	      STA	MISCNT21+1
+    994  8931		       ad 02 00 	      LDA	MISCNT22+2
+    995  8934		       8d 02 00 	      STA	MISCNT21+2
+    996  8937		       ad 00 00 	      LDA	MISCNT12
+    997  893a		       8d 00 00 	      STA	MISCNT11
+    998  893d		       ad 01 00 	      LDA	MISCNT12+1
+    999  8940		       8d 01 00 	      STA	MISCNT11+1
+   1000  8943		       a9 00		      LDA	#0
+   1001  8945		       8d 00 00 	      STA	RATIO
+   1002  8948		       8d 01 00 	      STA	RATIO+1
+   1003  894b		       8d 02 00 	      STA	RATIO+2
+   1004  894e		       8d 00 00 	      STA	PRCNTREG
+   1005  8951		       ee 00 00 	      INC	PLAYER
+   1006  8954		       4c 2d 88 	      JMP	STATS1
+   1007  8957		       a9 ff	   ONESTATS   LDA	#$FF
+   1008  8959		       8d 00 00 	      STA	SCRTIME
+   1009  895c		       20 f8 84 	      JSR	SCRDELAY	;		 ;GIVE APPROPRIATE DELAY
+   1010  895f		       60		      RTS
+   1011  8960
+   1012  8960		       18	   SHIFTMIS   CLC
+   1013  8961		       0e 02 00 	      ASL	MISCNT21+2
+   1014  8964		       0e 01 00 	      ASL	MISCNT21+1
+   1015  8967		       90 03		      BCC	SHIFTM1
+   1016  8969		       ee 02 00 	      INC	MISCNT21+2
+   1017  896c		       0e 00 00    SHIFTM1    ASL	MISCNT21
+   1018  896f		       90 03		      BCC	SHIFTM2
+   1019  8971		       ee 01 00 	      INC	MISCNT21+1
+   1020  8974		       ca	   SHIFTM2    DEX
+   1021  8975		       10 e9		      BPL	SHIFTMIS
+   1022  8977		       18		      CLC
+   1023  8978		       ad 00 00 	      LDA	RATIO
+   1024  897b		       6d 00 00 	      ADC	MISCNT21
+   1025  897e		       8d 00 00 	      STA	RATIO
+   1026  8981		       ad 01 00 	      LDA	RATIO+1
+   1027  8984		       6d 01 00 	      ADC	MISCNT21+1
+   1028  8987		       8d 01 00 	      STA	RATIO+1
+   1029  898a		       ad 02 00 	      LDA	RATIO+2
+   1030  898d		       6d 02 00 	      ADC	MISCNT21+2
+   1031  8990		       8d 02 00 	      STA	RATIO+2
+   1032  8993		       60		      RTS
+   1033  8994		       a2 39	   CLREXPLO   LDX	#57
+   1034  8996		       e8	   CLREXP     INX
+   1035  8997		       bd 00 00 	      LDA	TYPE,X
+   1036  899a		       c9 08		      CMP	#8	;		       SEE IF SOME SORT OF EXPLOSION
+   1037  899c		       30 05		      BMI	CLREXP1
+   1038  899e		       a9 00		      LDA	#0
+   1039  89a0		       9d 00 00 	      STA	TYPE,X
+   1040  89a3		       e0 3d	   CLREXP1    CPX	#61
+   1041  89a5		       30 ef		      BMI	CLREXP
+   1042  89a7		       60		      RTS
+   1043  89a8		       ce 00 00    TWINKEL    DEC	TEMP1
+   1044  89ab		       d0 47		      BNE	TWINKEND
+   1045  89ad		       ad 00 00 	      LDA	TEMP3	;		    ;USED AS A TOGGLE SWITCH
+   1046  89b0		       10 07		      BPL	INCANGLE
+   1047  89b2		       ce 00 00 	      DEC	ANGLE
+   1048  89b5		       30 13		      BMI	RELOCATE	;		 ;MOVE STAR
+   1049  89b7		       10 33		      BPL	RESETEMP
+   1050  89b9		       ee 00 00    INCANGLE   INC	ANGLE
+   1051  89bc		       ad 00 00 	      LDA	ANGLE
+   1052  89bf		       c9 07		      CMP	#7	;		       ;SEE IF DONE INCREMENTING
+   1053  89c1		       30 29		      BMI	RESETEMP	;		 ;NO, RESET TEMP VARIABLE
+   1054  89c3		       a9 ff		      LDA	#$FF
+   1055  89c5		       8d 00 00 	      STA	TEMP3
+   1056  89c8		       d0 22		      BNE	RESETEMP	;		 ;NOW RESET TEMP
+   1057  89ca		       a9 00	   RELOCATE   LDA	#0
+   1058  89cc		       8d 00 00 	      STA	ANGLE
+   1059  89cf		       8d 00 00 	      STA	TEMP3	;		    ;RESET TOGGLE VARIABLE
+   1060  89d2		       ce 00 00 	      DEC	BOZO0
+   1061  89d5		       10 05		      BPL	RELOC1
+   1062  89d7		       a9 07		      LDA	#7
+   1063  89d9		       8d 00 00 	      STA	BOZO0
+   1064  89dc		       ad 00 00    RELOC1     LDA	BOZO0
+   1065  89df		       a8		      TAY
+   1066  89e0		       b9 00 00 	      LDA	TWINKY,Y	;		 ;GET TWINKLE Y CORD
+   1067  89e3		       8d 00 00 	      STA	YCORD
+   1068  89e6		       b9 00 00 	      LDA	TWINKX,Y	;		 ;GET TWINKLE X CORD
+   1069  89e9		       8d 00 00 	      STA	XCORD
+   1070  89ec		       a9 03	   RESETEMP   LDA	#3
+   1071  89ee		       8d 00 00 	      STA	TEMP1
+   1072  89f1		       ce 00 00 	      DEC	TEMP2
+   1073  89f4		       60	   TWINKEND   RTS

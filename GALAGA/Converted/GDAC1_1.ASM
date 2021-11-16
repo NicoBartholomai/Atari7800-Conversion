@@ -1221,4 +1221,4 @@ UP        LDA     #$81;                   ;DID A CURVE SO SET MODE TO GOHOME
           AND     #$7F
           STA     TYPE,Y;                 ;BOOT THE NEGATIVE SIGN
           RTS
-; END4      DC.B      $00;                    NEXT CODE SECTION GOES HERE
+END4      ;DC.B      $00;                    NEXT CODE SECTION GOES HERE

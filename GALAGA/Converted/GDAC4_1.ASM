@@ -129,7 +129,7 @@ TWINKY    DC.B      $43,$50,$41,$48,$52,$50,$5D
 END3      DC.B      $49
 
 
-          ORG     $DF76
+        ;   ORG      $DF76;$DF76 ; uh oh this could be quite bad if hardcoded, so thats not good :/
 ;COPYRIGHT GCC 1984
-          DC.B      $47,$43,$43,$28,$63,$29,$31,$39,$38,$34
-
+        ;   DC.B      $47,$43,$43,$28,$63,$29,$31,$39,$38,$34
+          

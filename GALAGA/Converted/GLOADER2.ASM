@@ -1,13 +1,15 @@
 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ; VECTORS FOR STARTUP
-          ORG     $DF73
+        ;   ORG     $DF73
 STARTUP1  JMP     STARTUP
+          ORG     STARTUP1 + 3
+          DC.B      $47,$43,$43,$28,$63,$29,$31,$39,$38,$34
 
-          ORG     $DFF8
+          ORG     STARTUP1 + $85;   ORG     $DFF8
           DC.B      $FF,$E7;                ;SECURITY ROM
           DC.B      <HANDLER,>HANDLER  ;NMI VECTOR FOR DLI
-          DC.B      <STARTUP1+$2000,>STARTUP1+$2000  ;STARTUP VECTOR
+          DC.W      <STARTUP1+$2000,>STARTUP1+$2000  ;STARTUP VECTOR
           DC.B      <SPURIOUS,>SPURIOUS  ; HITS AN RTI
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
           ORG     $FF73

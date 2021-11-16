@@ -1,6 +1,7 @@
 
 ;LINE TWELVE
           ORG     $A000
+G2START
           DC.B      0,$0C,0
           DC.B      0,0
           DC.B      0,0
@@ -101,7 +102,7 @@ DIGIT     DC.B      $5,$40
 
 
 ;ELEVENTH LINE
-          ORG     $A100
+          ORG       G2START + $100; ORG     $A100
           DC.B      0,$C0,$B0
           DC.B      0,0
           DC.B      0,0
@@ -202,7 +203,7 @@ DIGIT     DC.B      $5,$40
 
 
 
-          ORG     $A200;                  ; 10 TH LINE
+          ORG       G2START + $200; ORG     $A200;                  ; 10 TH LINE
           DC.B      0,$28,$80
           DC.B      0,0
           DC.B      $28,$00
@@ -298,13 +299,13 @@ DIGIT     DC.B      $5,$40
           DC.B      $5,0
           DC.B      $50,$50
           DC.B      $5,$40
-          DC.B      0,0
-          DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
-          ORG     $A300;                  ; 9 TH LINE
+          ORG       G2START + $300; ORG     $A300;                  ; 9 TH LINE
           DC.B      0,$2A,$80
           DC.B      0,0
           DC.B      $82,0
@@ -400,14 +401,14 @@ DIGIT     DC.B      $5,$40
           DC.B      $1,$40
           DC.B      $50,$50
           DC.B      $1,$40
-          DC.B      0,0
-          DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
 
-          ORG     $A400;                  ; 8 TH LINE
+          ORG       G2START + $400; ORG     $A400;                  ; 8 TH LINE
           DC.B      0,$0A,$AC
           DC.B      $02,$80
           DC.B      $02,0
@@ -503,13 +504,13 @@ DIGIT     DC.B      $5,$40
           DC.B      $1,$40
           DC.B      $55,$50
           DC.B      $55,$50
-          DC.B      0,0
-          DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
-          ORG     $A500;                  ; 7 TH LINE
+          ORG       G2START + $500; ORG     $A500;                  ; 7 TH LINE
           DC.B      3,$AA,$80
           DC.B      $82,$80
           DC.B      $02,$80
@@ -605,14 +606,14 @@ DIGIT     DC.B      $5,$40
           DC.B      $0,$40
           DC.B      $55,$50
           DC.B      $50,$50
-          DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
 
 
-          ORG     $A600;                  ; 6 TH LINE
+          ORG       G2START + $600; ORG     $A600;                  ; 6 TH LINE
           DC.B      0,$8A,$A0
           DC.B      $A2,$80
           DC.B      $02,$80
@@ -708,13 +709,13 @@ DIGIT     DC.B      $5,$40
           DC.B      $40,$50
           DC.B      $50,$50
           DC.B      $50,$50
-          DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
 
-          ORG     $A700;                  ; 5 TH LINE
+          ORG       G2START + $700; ORG     $A700;                  ; 5 TH LINE
           DC.B      0,$0A,$80
           DC.B      $28,0
           DC.B      $1A,$94
@@ -810,11 +811,11 @@ DIGIT     DC.B      $5,$40
           DC.B      $50,$50
           DC.B      $50,$50
           DC.B      $50,$50
-          DC.B      0,0
+        ;   DC.B      0,0
 
 
 
-          ORG     $A800;                  ; 4 TH LINE
+          ORG       G2START + $800; ORG     $A800;                  ; 4 TH LINE
           DC.B      $00,$E8,$B0
           DC.B      $0A,0
           DC.B      $D2,$87
@@ -910,11 +911,11 @@ DIGIT     DC.B      $5,$40
           DC.B      $55,$50
           DC.B      $55,$50
           DC.B      $55,$50
-          DC.B      0,0
+        ;   DC.B      0,0
 
 
 
-          ORG     $A900;                  ; THIRD LINE
+          ORG       G2START + $900; ORG     $A900;                  ; THIRD LINE
           DC.B      0,$C,0
           DC.B      $A2,$80
           DC.B      $D2,$87
@@ -1010,13 +1011,13 @@ DIGIT     DC.B      $5,$40
           DC.B      $15,$50
           DC.B      $15,$40
           DC.B      $15,$40
-          DC.B      0,0
-          DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
-          ORG     $AA00;                  ; SECOND LINE
+          ORG       G2START + $A00; ORG     $AA00;                  ; SECOND LINE
           DC.B      0,0,0
           DC.B      $A0,$80
           DC.B      $D3,$C7
@@ -1112,24 +1113,24 @@ DIGIT     DC.B      $5,$40
           DC.B      0,0
           DC.B      0,0
           DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
-          DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
+        ;   DC.B      0,0
 
 
 
-          ORG     $AB00;                  ;FIRST LINE
+          ORG       G2START + $B00; ORG     $AB00;                  ;FIRST LINE
           DC.B      0,0,0
           DC.B      $A0,0
           DC.B      $E4,$1B
@@ -1217,7 +1218,7 @@ DIGIT     DC.B      $5,$40
           DC.B      $11,$80
 
 
-          ORG     $AC00
+          ORG       G2START + $C00 ; ORG     $AC00
 EXPLO7    DC.B      0,0,0
 PERCENT   DC.B      0,0
 SCORP0    DC.B      0,0
@@ -1317,7 +1318,7 @@ BOSGAL7   DC.B      0,0
 
 
 
-          ORG     $AD00
+          ORG       G2START + $D00; ORG     $AD00
           DC.B      0,0,0
           DC.B      0,0
           DC.B      0,0
@@ -1413,13 +1414,13 @@ BOSGAL7   DC.B      0,0
           DC.B      0,0
           DC.B      0,0
           DC.B      0,0
-          DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
 
-          ORG     $AE00
+          ORG       G2START + $E00; ORG     $AE00
           DC.B      0,0,0
           DC.B      0,0
           DC.B      0,0
@@ -1515,13 +1516,13 @@ BOSGAL7   DC.B      0,0
           DC.B      0,0
           DC.B      0,0
           DC.B      0,0
-          DC.B      0,0
+        ;   DC.B      0,0
 
 
 
 
 
-          ORG     $AF00
+          ORG       G2START + $F00; ORG     $AF00
           DC.B      0,0,0
           DC.B      0,0
           DC.B      0,0

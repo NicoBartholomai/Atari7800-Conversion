@@ -1,6 +1,6 @@
 	processor 6502 
 
-          ORG     $CC00
+        ;   ORG     $CC00
 
 ;
 ;THIS SUBROUTINE INITIALIZES A SHIP TO CAUSE A BOSS ATTACK

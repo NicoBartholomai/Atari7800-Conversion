@@ -18,7 +18,7 @@ HEADER  ORG     $0000
         DC.B    1  ; 0   Header version     - 1 byte
         DC.B    "ATARI7800"     ; 1..16  "ATARI7800   "  - 16 bytes
         DS      7,32
-        DC.B    "Your Name Here"; 17..48 Cart title      - 32 bytes
+        ; DC.B    "Test"; 17..48 Cart title      - 32 bytes
         DS      HEADER+49-.,0
 		; Hack of changing the 256->code line to the $00,$00,$80,$00 code line
 		; added by Aaron Lanterman, 9/4/2020, to stop assembler from complaining...
@@ -51,22 +51,22 @@ HEADER  ORG     $0000
         DC.B    0  ; 63   Expansion module
     ;    0 = No expansion module (default on all currently released games)
     ;    1 = Expansion module required
-        ORG     HEADER+100      ; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
-        DC.B    "ACTUAL CART DATA STARTS HERE"
+        ; ORG     HEADER+100      ; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
+        ; DC.B    "ACTUAL CART DATA STARTS HERE"
 ; end of header code for the simulator added by Aaron Lanterman
 
-	include GRAPHA1.ASM
-	include GMAIN.ASM
-	include GMIV.ASM
-	include GSCORE.ASM
-	include GDAC1_1.ASM
-	include GDAC4_2.ASM
-    include GRAPHA2.ASM
-	include GLOADER1.ASM
-	include GDAC4_3.ASM
-	include GRAPHB.ASM
-	include GDAC1_2.ASM
-	include GDAC2.ASM
-	include GDAC3.ASM
-	include GDAC4_1.ASM
-	include GLOADER2.ASM
+	include "GRAPHA1.ASM"
+	include "GMAIN.ASM"
+	include "GMIV.ASM"
+	include "GSCORE.ASM"
+	include "GDAC1_1.ASM"
+	include "GDAC4_3.ASM"
+    include "GRAPHA2.ASM"
+	include "GLOADER1.ASM"
+	include "GDAC4_2.ASM"
+	include "GRAPHB.ASM"
+	include "GDAC1_2.ASM"
+	include "GDAC2.ASM"
+	include "GDAC3.ASM"
+	include "GDAC4_1.ASM"
+	include "GLOADER2.ASM"

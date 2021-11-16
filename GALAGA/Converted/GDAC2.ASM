@@ -836,7 +836,7 @@ BOOGIE    LDA     TBASE,Y
 ;*         INC     CINDEX0,X
           INC     VINDEX0,X
           INY
-          LDA     (MPTRL),Y;              ;FREQ
+          LDA     MPTRL,Y;              ;FREQ
           CMP     #$FF
           BNE     CKENL
           STA     TUNNUM,X;               ;END THIS FUNKY TUNE
@@ -848,7 +848,7 @@ CKENL     CMP     #$FE;                  ; TEST FOR REPEATS
 CKNXTT    CMP     #$FD;                   ; CONTINUE WITH THE NEXT TUNE
           BNE     STFREQ
           INY;                            ; NEXT BYTE IS TUNE INDEX
-          LDA     (MPTRL),Y
+          LDA     MPTRL,Y
           TAY
           ORA     #$80;                   ; SO THAT NEW CTRL AND VOLUME GET READ
           STA     TUNNUM,X
@@ -860,7 +860,7 @@ FOOBEQ    LDY     #0;                     ; JUMP HERE FOR REPEAT
           TYA;                            ; Y MUST BE 0, IT"S THE FREQ. INDEX
 ;*         STA     CINDEX0,X
           STA     VINDEX0,X
-FRQLOOP   LDA     (MPTRL),Y
+FRQLOOP   LDA     MPTRL,Y
 STFREQ  ; BPL     SKIP0;                  ; IF BIT 7 SET, GET NEW DURATION
 ;         INY
  ;        LDA     (MPTRL),Y;              ;DURATION CHANGES ARE DISABLED
@@ -900,7 +900,7 @@ STIT0     STA     AUDF0,X
           LDA     VBASEH,Y
           STA     MPTRH
           LDY     VINDEX0,X
-          LDA     (MPTRL),Y
+          LDA     MPTRL,Y
           BPL     STVL
           DEY
 STVL      STA     AUDV0,X

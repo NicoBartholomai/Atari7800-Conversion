@@ -1,7 +1,7 @@
 	processor 6502 
 ;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ;*GLOADER.S
-          ORG     $B000;                  ;ORG AFTER GRAPHICS
+       ;    ORG     $B000;                  ;ORG AFTER GRAPHICS
 
 ZERO      EQU     0
 HUNDRED   EQU     $100
@@ -1220,4 +1220,4 @@ DNAME2    DC.B      $1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D ; overlapped
           DC.B      $4,$17,$F,$4,$11,$13;           ; "EXPERT"
           DC.B      $1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D
 
-; END01     DC.B      0
+END01     ;DC.B      0
