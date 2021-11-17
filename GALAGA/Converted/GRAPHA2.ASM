@@ -1,5 +1,5 @@
 
-;LINE TWELVE
+;LINE TWELVE - Bottom row for all sprites in this file
           ORG     $A000
 G2START
           DC.B      0,$0C,0
@@ -1130,7 +1130,7 @@ DIGIT     DC.B      $5,$40
 
 
 
-          ORG       G2START + $B00; ORG     $AB00;                  ;FIRST LINE
+          ORG     $AB00;                  ;FIRST LINE
           DC.B      0,0,0
           DC.B      $A0,0
           DC.B      $E4,$1B
@@ -1318,7 +1318,7 @@ BOSGAL7   DC.B      0,0
 
 
 
-          ORG       G2START + $D00; ORG     $AD00
+          ORG     $AD00
           DC.B      0,0,0
           DC.B      0,0
           DC.B      0,0
@@ -1420,7 +1420,7 @@ BOSGAL7   DC.B      0,0
 
 
 
-          ORG       G2START + $E00; ORG     $AE00
+          ORG     $AE00
           DC.B      0,0,0
           DC.B      0,0
           DC.B      0,0
@@ -1522,7 +1522,7 @@ BOSGAL7   DC.B      0,0
 
 
 
-          ORG       G2START + $F00; ORG     $AF00
+          ORG     $AF00
           DC.B      0,0,0
           DC.B      0,0
           DC.B      0,0
