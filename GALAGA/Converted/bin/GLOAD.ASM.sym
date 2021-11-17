@@ -492,7 +492,7 @@ FRQLOOP                  d4cc              (R )
 FUCKYES                  df51              (R )
 FUCKYOU                  80c6              (R )
 G2START                  a000              (R )
-G2STARTB                 c000              (R )
+G2STARTB                 c000                  
 GAMEOVER                 00af              (R )
 GAMEPOLL                 df3a              (R )
 GASTONHK                 0043              (R )
