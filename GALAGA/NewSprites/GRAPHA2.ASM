@@ -53,7 +53,7 @@ MARIA2    DC.B      0,0,0,0 ; twinkle 0
           DC.B      0,0 ; red bug f
           DC.B      0,0 ; galaga 
           DC.B      0,0 ; galaga f
-          DC.B      0,0 ; hero 0
+          DC.B      $00,$00 ; hero 0
           DC.B      0,0 ; hero 1
           DC.B      0,0 ; hero 2
           DC.B      0,0 ; hero 3
@@ -95,7 +95,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $15,$40 ; 7
           DC.B      $15,$40 ; 8
           DC.B      $54,$00 ; 9
+
 ;11th LINE
+
           ORG     $A100 ;  
           DC.B      0,$C0,$B0 ; Explosion 7
           DC.B      0,0 ; Percent
@@ -192,7 +194,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $5,0 ; 7
           DC.B      $55,$50 ; 8
           DC.B      $15,0 ; 9
+
 ;10TH LINE ;  
+
           ORG     $A200 ;  
           DC.B      0,$28,$80 ; Explosion 7
           DC.B      0,0 ; Percent
@@ -289,7 +293,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $5,0 ; 7
           DC.B      $50,$50 ; 8
           DC.B      $5,$40 ; 9
+
 ;9TH LINE ;  
+
           ORG     $A300 ;  
           DC.B      0,$2A,$80 ; Explosion 7
           DC.B      0,0 ; Percent
@@ -344,7 +350,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $31,$30 ; Red Bug F
           DC.B      $A0,$28 ; Galaga 0
           DC.B      $10,$10 ; Galaga F
-          DC.B      $EB,$AC ; Hero 0
+          DC.B      $DF,$DC ; Hero 0
           DC.B      $33,$C0 ; Hero 1
           DC.B      $FF,0 ; Hero 2
           DC.B      $0F,$3C ; Hero 3
@@ -386,7 +392,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $1,$40 ; 7
           DC.B      $50,$50 ; 8
           DC.B      $1,$40 ; 9
+
 ; 8TH LINE ;  
+
           ORG     $A400 ;  
           DC.B      0,$0A,$AC ; Explosion 7
           DC.B      $02,$80 ; Percent
@@ -441,7 +449,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $35,$70 ; Red Bug F
           DC.B      $52,$14 ; Galaga 0
           DC.B      $52,$14 ; Galaga F
-          DC.B      $F7,$DC ; Hero 0
+          DC.B      $FB,$BC ; Hero 0
           DC.B      $F7,$F0 ; Hero 1
           DC.B      $3C,0 ; Hero 2
           DC.B      $3C,$FC ; Hero 3
@@ -483,7 +491,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $1,$40 ; 7
           DC.B      $55,$50 ; 8
           DC.B      $55,$50 ; 9
+
 ;7 TH LINE ;  
+
           ORG     $A500 ;  
           DC.B      3,$AA,$80 ; Explosion 7
           DC.B      $82,$80 ; Percent
@@ -538,7 +548,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $35,$70 ; Red Bug F
           DC.B      $53,$14 ; Galaga 0
           DC.B      $53,$14 ; Galaga F
-          DC.B      $F7,$DC ; Hero 0
+          DC.B      $7A,$B4 ; Hero 0
           DC.B      $3D,$F0 ; Hero 1
           DC.B      $AF,$C0 ; Hero 2
           DC.B      $F7,$F0 ; Hero 3
@@ -580,7 +590,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $0,$40 ; 7
           DC.B      $55,$50 ; 8
           DC.B      $50,$50 ; 9
+
 ;6 TH LINE ;  
+
           ORG     $A600 ;  
           DC.B      0,$8A,$A0 ; Explosion 7
           DC.B      $A2,$80 ; Percent
@@ -635,7 +647,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $3E,$F0 ; Red Bug F
           DC.B      $57,$54 ; Galaga 0
           DC.B      $57,$54 ; Galaga F
-          DC.B      $F7,$DC ; Hero 0
+          DC.B      $9E,$D8 ; Hero 0
           DC.B      $0F,$70 ; Hero 1
           DC.B      $55,$54 ; Hero 2
           DC.B      $DF,$C0 ; Hero 3
@@ -677,7 +689,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $40,$50 ; 7
           DC.B      $50,$50 ; 8
           DC.B      $50,$50 ; 9
+
 ; 5 TH LINE ;  
+
           ORG     $A700 ;  
           DC.B      0,$0A,$80 ; Explosion 7
           DC.B      $28,0 ; Percent
@@ -732,7 +746,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $3E,$F0 ; Red Bug F
           DC.B      $27,$60 ; Galaga 0
           DC.B      $17,$50 ; Galaga F
-          DC.B      $C7,$CC ; Hero 0
+          DC.B      $8F,$C8 ; Hero 0
           DC.B      $DF,$C0 ; Hero 1
           DC.B      $FF,$FC ; Hero 2
           DC.B      $0F,$70 ; Hero 3
@@ -774,7 +788,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $50,$50 ; 7
           DC.B      $50,$50 ; 8
           DC.B      $50,$50 ; 9
+
 ;4 TH LINE ;  
+
           ORG     $A800 ;  
           DC.B      $00,$E8,$B0 ; Explosion 7
           DC.B      $0A,0 ; Percent
@@ -829,7 +845,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $3A,$B0 ; Red Bug F
           DC.B      $1F,$D0 ; Galaga 0
           DC.B      $1F,$D0 ; Galaga F
-          DC.B      $07,$40 ; Hero 0
+          DC.B      $0B,$80 ; Hero 0
           DC.B      $F7,$F0 ; Hero 1
           DC.B      $AF,$C0 ; Hero 2
           DC.B      $3D,$F0 ; Hero 3
@@ -871,7 +887,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $55,$50 ; 7
           DC.B      $55,$50 ; 8
           DC.B      $55,$50 ; 9
+
 ; 3RD LINE ;  
+
           ORG     $A900 ;  
           DC.B      0,$C,0 ; Explosion 7
           DC.B      $A2,$80 ; Percent
@@ -968,7 +986,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $15,$50 ; 7
           DC.B      $15,$40 ; 8
           DC.B      $15,$40 ; 9
+
 ; 2 ND LINE ;  
+
           ORG     $AA00 ;  
           DC.B      0,0,0 ; Explosion 7
           DC.B      $A0,$80 ; Percent
@@ -1065,7 +1085,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      0,0 ; 7
           DC.B      0,0 ; 8
           DC.B      0,0 ; 9
+
 ; 1 ST LINE ;  
+
           ORG     $AB00 ;  
           DC.B      0,0,0 ; Explosion 7
           DC.B      $A0,0 ; Percent
@@ -1162,7 +1184,9 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      0,0 ; 7
           DC.B      0,0 ; 8
           DC.B      0,0 ; 9
+
 ; 0 TH LINE ;  
+
           ORG     $AC00 ;  
 EXPLO7    DC.B      0,0,0 ; Explosion 7
 PERCENT   DC.B      0,0 ; Percent
@@ -1259,7 +1283,9 @@ BOSGAL7   DC.B      0,0 ; Galaga 7
           DC.B      0,0 ; 7
           DC.B      0,0 ; 8
           DC.B      0,0 ; 9
+
 ; Magic -1 Line ;  
+
           ORG     $AD00 ;  
           DC.B      0,0,0 ; Explosion 7
           DC.B      0,0 ; Percent
@@ -1356,7 +1382,9 @@ BOSGAL7   DC.B      0,0 ; Galaga 7
           DC.B      0,0 ; 7
           DC.B      0,0 ; 8
           DC.B      0,0 ; 9
+
 ; Magic -2 Line ;  
+
           ORG     $AE00 ;  
           DC.B      0,0,0 ; Explosion 7
           DC.B      0,0 ; Percent
@@ -1453,7 +1481,9 @@ BOSGAL7   DC.B      0,0 ; Galaga 7
           DC.B      0,0 ; 7
           DC.B      0,0 ; 8
           DC.B      0,0 ; 9
-;Magic -3 line ;  
+
+;Magic -3 line ;  This is the topmost pixel line that will render, 0 = invisible
+
           ORG     $AF00 ;  
           DC.B      0,0,0 ; Explosion 7
           DC.B      0,0 ; Percent

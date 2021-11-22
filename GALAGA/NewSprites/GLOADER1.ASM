@@ -875,12 +875,12 @@ TINCPP    LDA     #0
           STA     TABPNT
           JMP     UNTOUCH1
 ATABL
-PTABL     DC.B      $0C,$48,$0E,$00        ; 0: HERO SHIP         (41,61,71)
+PTABL     DC.B      $0C,$33,$0E,$00        ; 0: HERO SHIP         (41,61,71)
           DC.B      $1F,$94,$45,$00        ; 1: RED BUG
           DC.B      $2C,$0F,$28,$00        ; 2: EXPLOSIONS, SMALL NUMBERS
           DC.B      $09,$1F,$1D,$00        ; 3: MISSILES, WORDS, SCORES, RACK
-          DC.B      $9B,$E0,$1F,$00        ; 4: BLUE BOSS
-          DC.B      $D6,$40,$1C,$00        ; 5: REGULAR BOSS
+          DC.B      $80,$4A,$63,$00        ; 4: BLUE BOSS
+          DC.B      $D8,$35,$1C,$00        ; 5: REGULAR BOSS
           DC.B      $E9,$E4,$87,$00        ; 6: LOGO
           DC.B      $1F,$95,$40,$00        ; 7: BLUE BUG
 
