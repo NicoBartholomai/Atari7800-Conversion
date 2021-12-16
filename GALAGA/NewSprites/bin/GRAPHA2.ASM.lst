@@ -1,0 +1,1583 @@
+------- FILE GRAPHA2.ASM LEVEL 1 PASS 1
+      1  0000 ????						;LINE TWELVE - Bottom row for all sprites in this file
+      2  a000					      ORG	$A000
+      3  a000		       00 0c 00    G2START    DC.B	0,$0C,0	;Explo7
+      4  a003		       00 00		      DC.B	0,0	;Percent
+      5  a005		       00 00		      DC.B	0,0	; Scorpion 0
+      6  a007		       00 00		      DC.B	0,0	; scorpion 1
+      7  a009		       00 00		      DC.B	0,0	; scorpion 2
+      8  a00b		       00 00		      DC.B	0,0	; scorpion 3
+      9  a00d		       00 00		      DC.B	0,0	; scorpion 4
+     10  a00f		       00 00		      DC.B	0,0	; scorpion 5
+     11  a011		       00 00		      DC.B	0,0	; scorpion 6
+     12  a013		       00 00		      DC.B	0,0	; scorpion 7
+     13  a015		       00 00		      DC.B	0,0	; scorpion f
+     14  a017		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+     15  a01a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+     16  a01d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+     17  a020		       00 00 00 	      DC.B	0,0,0	; Explosion 3
+     18  a023		       00 0c 00 	      DC.B	$00,$0C,$00	; Explosion 2
+     19  a026		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+     20  a029		       03 00 00 	      DC.B	3,0,0	; Explosion 0
+     21  a02c		       00 00		      DC.B	0,0	; New Bird 0
+     22  a02e		       00 00		      DC.B	0,0	; New Bird 1
+     23  a030		       00 00		      DC.B	0,0	; New Bird 2
+     24  a032		       00 00		      DC.B	0,0	; New Bird 3
+     25  a034		       00 00		      DC.B	0,0	; New Bird 4
+     26  a036		       00 00		      DC.B	0,0	; New Bird 5
+     27  a038		       00 00		      DC.B	0,0	; New Bird 6
+     28  a03a		       00 00		      DC.B	0,0	; New Bird 7
+     29  a03c		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Novice
+     30  a045		       00 00		      DC.B	0,0	; S one
+     31  a047		       00 00		      DC.B	0,0	; S two
+     32  a049		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0	; Level
+     33  a051		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+     34  a05d		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Expert
+     35  a066		       00 00 00 00 MARIA2     DC.B	0,0,0,0	; twinkle 0
+     36  a06a		       00 00 00 00	      DC.B	0,0,0,0	; twinkle 1
+     37  a06e		       00 00 00 00	      DC.B	0,0,0,0	; twinkle 2
+     38  a072		       00 00 00 00	      DC.B	0,0,0,0	; twinkle 3
+     39  a076		       00 00 00 00	      DC.B	0,0,0,0	; twinkle 4
+     40  a07a		       00 00 00 00	      DC.B	0,0,0,0	; twinkle 5
+     41  a07e		       00 03 00 00	      DC.B	0,3,0,0	; twinkle 6
+     42  a082		       0a 8f e8 c0	      DC.B	$0A,$8F,$E8,$C0	; twinkle 7
+     43  a086		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left shield
+     44  a08b		       00		      DC.B	0	; Right shield
+     45  a08c		       00 00 00 00	      DC.B	0,0,0,0	; four type
+     46  a090		       00 00 00 00	      DC.B	0,0,0,0	; eight type
+     47  a094		       00 00 00 00	      DC.B	0,0,0,0	; tho type
+     48  a098		       00 00 00 00	      DC.B	0,0,0,0	; six type
+     49  a09c		       00 00		      DC.B	0,0	; special
+     50  a09e		       00 00		      DC.B	0,0	; blue bug
+     51  a0a0		       00 00		      DC.B	0,0	; blue bug f
+     52  a0a2		       00 00		      DC.B	0,0	; red bug
+     53  a0a4		       00 00		      DC.B	0,0	; red bug f
+     54  a0a6		       00 00		      DC.B	0,0	; galaga
+     55  a0a8		       00 00		      DC.B	0,0	; galaga f
+     56  a0aa		       00 00		      DC.B	$00,$00	; hero 0
+     57  a0ac		       00 00		      DC.B	0,0	; hero 1
+     58  a0ae		       00 00		      DC.B	0,0	; hero 2
+     59  a0b0		       00 00		      DC.B	0,0	; hero 3
+     60  a0b2		       00 00		      DC.B	0,0	; hero 4
+     61  a0b4		       00 00		      DC.B	0,0	; hero 5
+     62  a0b6		       00 00		      DC.B	0,0	; hero 6
+     63  a0b8		       00 00		      DC.B	0,0	; hero 7
+     64  a0ba		       00 00 00 00	      DC.B	0,0,0,0	; missle
+     65  a0be		       00 00		      DC.B	0,0	; missle 4
+     66  a0c0		       00 00		      DC.B	0,0	; star graf
+     67  a0c2		       00 00		      DC.B	0,0	; blue bug 1
+     68  a0c4		       00 00		      DC.B	0,0	; blue bug 2
+     69  a0c6		       00 00		      DC.B	0,0	; blue bug 3
+     70  a0c8		       00 00		      DC.B	0,0	; blue bug 4
+     71  a0ca		       00 00		      DC.B	0,0	; blue bug 5
+     72  a0cc		       00 00		      DC.B	0,0	; blue bug 6
+     73  a0ce		       00 00		      DC.B	0,0	; blue bug 7
+     74  a0d0		       00 00		      DC.B	0,0	; red bug 1
+     75  a0d2		       00 00		      DC.B	0,0	; red bug 2
+     76  a0d4		       00 00		      DC.B	0,0	; red bug 3
+     77  a0d6		       00 00		      DC.B	0,0	; red bug 4
+     78  a0d8		       00 00		      DC.B	0,0	; red bug 5
+     79  a0da		       00 00		      DC.B	0,0	; red bug 6
+     80  a0dc		       00 00		      DC.B	0,0	; red bug 7
+     81  a0de		       00 00		      DC.B	0,0	; galaga 1
+     82  a0e0		       00 00		      DC.B	0,0	; galaga 2
+     83  a0e2		       00 00		      DC.B	0,0	; galaga 3
+     84  a0e4		       00 00		      DC.B	0,0	; galaga 4
+     85  a0e6		       00 00		      DC.B	0,0	; galaga 5
+     86  a0e8		       00 00		      DC.B	0,0	; galaga 6
+     87  a0ea		       00 00		      DC.B	0,0	; galaga 7
+     88  a0ec		       05 40	   DIGIT      DC.B	$05,$40	; 0
+     89  a0ee		       05 50		      DC.B	$05,$50	; 1
+     90  a0f0		       55 50		      DC.B	$55,$50	; 2
+     91  a0f2		       55 40		      DC.B	$55,$40	; 3
+     92  a0f4		       00 40		      DC.B	$00,$40	; 4
+     93  a0f6		       55 40		      DC.B	$55,$40	; 5
+     94  a0f8		       15 40		      DC.B	$15,$40	; 6
+     95  a0fa		       15 40		      DC.B	$15,$40	; 7
+     96  a0fc		       15 40		      DC.B	$15,$40	; 8
+     97  a0fe		       54 00		      DC.B	$54,$00	; 9
+     98  a100
+     99  a100							;11th LINE
+    100  a100
+    101  a100					      ORG	$A100	;
+    102  a100		       00 c0 b0 	      DC.B	0,$C0,$B0	; Explosion 7
+    103  a103		       00 00		      DC.B	0,0	; Percent
+    104  a105		       00 00		      DC.B	0,0	; Scorpion 0
+    105  a107		       00 00		      DC.B	0,0	; Scorpion 1
+    106  a109		       00 00		      DC.B	0,0	; Scorpion 2
+    107  a10b		       00 00		      DC.B	0,0	; Scorpion 3
+    108  a10d		       00 00		      DC.B	0,0	; Scorpion 4
+    109  a10f		       00 00		      DC.B	0,0	; Scorpion 5
+    110  a111		       00 00		      DC.B	0,0	; Scorpion 6
+    111  a113		       00 00		      DC.B	0,0	; Scorpion 7
+    112  a115		       00 00		      DC.B	0,0	; Scorpion F
+    113  a117		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+    114  a11a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+    115  a11d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+    116  a120		       00 00 00 	      DC.B	0,0,0	; Explosion 3
+    117  a123		       00 00 00 	      DC.B	0,0,0	; Explosion 2
+    118  a126		       30 c0 00 	      DC.B	$30,$C0,0	; Explosion 1
+    119  a129		       00 00 30 	      DC.B	0,0,$30	; Explosion 0
+    120  a12c		       00 00		      DC.B	0,0	; New Bird 0
+    121  a12e		       00 00		      DC.B	0,0	; New Bird 1
+    122  a130		       00 00		      DC.B	0,0	; New Bird 2
+    123  a132		       00 00		      DC.B	0,0	; New Bird 3
+    124  a134		       00 00		      DC.B	0,0	; New Bird 4
+    125  a136		       00 00		      DC.B	0,0	; New Bird 5
+    126  a138		       00 00		      DC.B	0,0	; New Bird 6
+    127  a13a		       00 00		      DC.B	0,0	; New Bird 7
+    128  a13c		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Novice
+    129  a145		       00 00		      DC.B	0,0	; S one
+    130  a147		       00 00		      DC.B	0,0	; S two
+    131  a149		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0	; Level
+    132  a151		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+    133  a15d		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Expert
+    134  a166		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    135  a16a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+    136  a16e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+    137  a172		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 3
+    138  a176		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 4
+    139  a17a		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 5
+    140  a17e		       00 0f c0 00	      DC.B	0,$0F,$C0,0	; Twinkle 6
+    141  a182		       ae af eb e0	      DC.B	$AE,$AF,$EB,$E0	; Twinkle 7
+    142  a186		       ff ff ff ff*	      DC.B	$FF,$FF,$FF,$FF,$FF	; Left Shield
+    143  a18b		       ff		      DC.B	$FF	; Right Shield
+    144  a18c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+    145  a190		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+    146  a194		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+    147  a198		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+    148  a19c		       00 00		      DC.B	0,0	; Special
+    149  a19e		       00 00		      DC.B	0,0	; Blue Bug 0
+    150  a1a0		       00 00		      DC.B	0,0	; Blue Bug F
+    151  a1a2		       00 00		      DC.B	0,0	; Red Bug 0
+    152  a1a4		       00 00		      DC.B	0,0	; Red Bug F
+    153  a1a6		       00 00		      DC.B	$00,$00	; Galaga 0
+    154  a1a8		       00 00		      DC.B	0,0	; Galaga F
+    155  a1aa		       00 00		      DC.B	0,0	; Hero 0
+    156  a1ac		       00 00		      DC.B	0,0	; Hero 1
+    157  a1ae		       00 00		      DC.B	0,0	; Hero 2
+    158  a1b0		       00 00		      DC.B	0,0	; Hero 3
+    159  a1b2		       00 00		      DC.B	0,0	; Hero 4
+    160  a1b4		       00 00		      DC.B	0,0	; Hero 5
+    161  a1b6		       00 00		      DC.B	0,0	; Hero 6
+    162  a1b8		       00 00		      DC.B	0,0	; Hero 7
+    163  a1ba		       00 00 00 00	      DC.B	0,0,0,0	; Missile
+    164  a1be		       00 00		      DC.B	0,0	; Missile 4
+    165  a1c0		       00 00		      DC.B	0,0	; Star Graph
+    166  a1c2		       00 00		      DC.B	0,0	; Blue Bug 1
+    167  a1c4		       00 00		      DC.B	0,0	; Blue Bug 2
+    168  a1c6		       00 00		      DC.B	0,0	; Blue Bug 3
+    169  a1c8		       00 00		      DC.B	0,0	; Blue Bug 4
+    170  a1ca		       00 00		      DC.B	0,0	; Blue Bug 5
+    171  a1cc		       00 00		      DC.B	0,0	; Blue Bug 6
+    172  a1ce		       00 00		      DC.B	0,0	; Blue Bug 7
+    173  a1d0		       00 00		      DC.B	0,0	; Red Bug 1
+    174  a1d2		       00 00		      DC.B	0,0	; Red Bug 2
+    175  a1d4		       00 00		      DC.B	0,0	; Red Bug 3
+    176  a1d6		       00 00		      DC.B	0,0	; Red Bug 4
+    177  a1d8		       00 00		      DC.B	0,0	; Red Bug 5
+    178  a1da		       00 00		      DC.B	0,0	; Red Bug 6
+    179  a1dc		       00 00		      DC.B	0,0	; Red Bug 7
+    180  a1de		       00 00		      DC.B	0,0	; Galaga 1
+    181  a1e0		       00 00		      DC.B	0,0	; Galaga 2
+    182  a1e2		       00 00		      DC.B	0,0	; Galaga 3
+    183  a1e4		       00 00		      DC.B	0,0	; Galaga 4
+    184  a1e6		       00 00		      DC.B	0,0	; Galaga 5
+    185  a1e8		       00 00		      DC.B	0,0	; Galaga 6
+    186  a1ea		       00 00		      DC.B	0,0	; Galaga 7
+    187  a1ec		       15 50		      DC.B	$15,$50	; 0
+    188  a1ee		       05 50		      DC.B	$5,$50	; 1
+    189  a1f0		       15 50		      DC.B	$15,$50	; 2
+    190  a1f2		       55 50		      DC.B	$55,$50	; 3
+    191  a1f4		       00 40		      DC.B	0,$40	; 4
+    192  a1f6		       55 50		      DC.B	$55,$50	; 5
+    193  a1f8		       55 50		      DC.B	$55,$50	; 6
+    194  a1fa		       05 00		      DC.B	$5,0	; 7
+    195  a1fc		       55 50		      DC.B	$55,$50	; 8
+    196  a1fe		       15 00		      DC.B	$15,0	; 9
+    197  a200
+    198  a200							;10TH LINE ;
+    199  a200
+    200  a200					      ORG	$A200	;
+    201  a200		       00 28 80 	      DC.B	0,$28,$80	; Explosion 7
+    202  a203		       00 00		      DC.B	0,0	; Percent
+    203  a205		       28 00		      DC.B	$28,$00	; Scorpion 0
+    204  a207		       a0 00		      DC.B	$A0,$00	; Scorpion 1
+    205  a209		       00 15		      DC.B	$00,$15	; Scorpion 2
+    206  a20b		       02 40		      DC.B	$02,$40	; Scorpion 3
+    207  a20d		       cc 33		      DC.B	$CC,$33	; Scorpion 4
+    208  a20f		       01 80		      DC.B	$01,$80	; Scorpion 5
+    209  a211		       00 00		      DC.B	0,0	; Scorpion 6
+    210  a213		       00 08		      DC.B	0,$08	; Scorpion 7
+    211  a215		       00 28		      DC.B	$00,$28	; Scorpion F
+    212  a217		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+    213  a21a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+    214  a21d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+    215  a220		       00 0c 00 	      DC.B	0,$0C,0	; Explosion 3
+    216  a223		       0c 30 00 	      DC.B	$0C,$30,0	; Explosion 2
+    217  a226		       00 00 c0 	      DC.B	0,0,$C0	; Explosion 1
+    218  a229		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+    219  a22c		       03 00		      DC.B	$03,$00	; New Bird 0
+    220  a22e		       81 00		      DC.B	$81,$00	; New Bird 1
+    221  a230		       15 a0		      DC.B	$15,$A0	; New Bird 2
+    222  a232		       02 30		      DC.B	$02,$30	; New Bird 3
+    223  a234		       1c d0		      DC.B	$1C,$D0	; New Bird 4
+    224  a236		       32 00		      DC.B	$32,$00	; New Bird 5
+    225  a238		       29 50		      DC.B	$29,$50	; New Bird 6
+    226  a23a		       01 08		      DC.B	$01,$08	; New Bird 7
+    227  a23c		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Novice
+    228  a245		       00 00		      DC.B	0,0	; S one
+    229  a247		       00 00		      DC.B	0,0	; S two
+    230  a249		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0	; Level
+    231  a251		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+    232  a25d		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Expert
+    233  a266		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    234  a26a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+    235  a26e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+    236  a272		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 3
+    237  a276		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 4
+    238  a27a		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 5
+    239  a27e		       00 3d f0 00	      DC.B	0,$3D,$F0,0	; Twinkle 6
+    240  a282		       af ef ef e8	      DC.B	$AF,$EF,$EF,$E8	; Twinkle 7
+    241  a286		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+    242  a28b		       00		      DC.B	0	; Right Shield
+    243  a28c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+    244  a290		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+    245  a294		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+    246  a298		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+    247  a29c		       00 00		      DC.B	0,0	; Special
+    248  a29e		       80 08		      DC.B	$80,$08	; Blue Bug 0
+    249  a2a0		       20 20		      DC.B	$20,$20	; Blue Bug F
+    250  a2a2		       30 30		      DC.B	$30,$30	; Red Bug 0
+    251  a2a4		       30 30		      DC.B	$30,$30	; Red Bug F
+    252  a2a6		       10 10		      DC.B	$10,$10	; Galaga 0
+    253  a2a8		       04 40		      DC.B	$04,$40	; Galaga F
+    254  a2aa		       cb 8c		      DC.B	$CB,$8C	; Hero 0
+    255  a2ac		       08 1e		      DC.B	$8,30	; Hero 1
+    256  a2ae		       54 00		      DC.B	$54,0	; Hero 2
+    257  a2b0		       08 0d		      DC.B	$08,$0D	; Hero 3
+    258  a2b2		       01 00		      DC.B	1,0	; Hero 4
+    259  a2b4		       40 20		      DC.B	$40,$20	; Hero 5
+    260  a2b6		       00 15		      DC.B	$00,$15	; Hero 6
+    261  a2b8		       0c 20		      DC.B	$C,$20	; Hero 7
+    262  a2ba		       00 00 00 00	      DC.B	0,0,0,0	; Missile
+    263  a2be		       00 00		      DC.B	0,0	; Missile 4
+    264  a2c0		       00 00		      DC.B	0,0	; Star Graph
+    265  a2c2		       0a 00		      DC.B	$0A,$00	; Blue Bug 1
+    266  a2c4		       a8 00		      DC.B	$A8,$00	; Blue Bug 2
+    267  a2c6		       0a 10		      DC.B	$0A,$10	; Blue Bug 3
+    268  a2c8		       04 40		      DC.B	$04,$40	; Blue Bug 4
+    269  a2ca		       12 80		      DC.B	$12,$80	; Blue Bug 5
+    270  a2cc		       00 a8		      DC.B	$00,$A8	; Blue Bug 6
+    271  a2ce		       02 80		      DC.B	$02,$80	; Blue Bug 7
+    272  a2d0		       0f c0		      DC.B	$0F,$C0	; Red Bug 1
+    273  a2d2		       0f 30		      DC.B	$0F,$30	; Red Bug 2
+    274  a2d4		       0f 50		      DC.B	$0F,$50	; Red Bug 3
+    275  a2d6		       14 50		      DC.B	$14,$50	; Red Bug 4
+    276  a2d8		       17 c0		      DC.B	$17,$C0	; Red Bug 5
+    277  a2da		       33 c0		      DC.B	$33,$C0	; Red Bug 6
+    278  a2dc		       0f c0		      DC.B	$0F,$C0	; Red Bug 7
+    279  a2de		       06 40		      DC.B	$06,$40	; Galaga 1
+    280  a2e0		       25 10		      DC.B	$25,$10	; Galaga 2
+    281  a2e2		       09 10		      DC.B	$09,$10	; Galaga 3
+    282  a2e4		       05 00		      DC.B	$05,$00	; Galaga 4
+    283  a2e6		       11 80		      DC.B	$11,$80	; Galaga 5
+    284  a2e8		       45 80		      DC.B	$45,$80	; Galaga 6
+    285  a2ea		       06 40		      DC.B	$06,$40	; Galaga 7
+    286  a2ec		       54 54		      DC.B	$54,$54	; 0
+    287  a2ee		       01 40		      DC.B	$1,$40	; 1
+    288  a2f0		       05 00		      DC.B	$5,0	; 2
+    289  a2f2		       40 50		      DC.B	$40,$50	; 3
+    290  a2f4		       55 50		      DC.B	$55,$50	; 4
+    291  a2f6		       00 50		      DC.B	0,$50	; 5
+    292  a2f8		       50 50		      DC.B	$50,$50	; 6
+    293  a2fa		       05 00		      DC.B	$5,0	; 7
+    294  a2fc		       50 50		      DC.B	$50,$50	; 8
+    295  a2fe		       05 40		      DC.B	$5,$40	; 9
+    296  a300
+    297  a300							;9TH LINE ;
+    298  a300
+    299  a300					      ORG	$A300	;
+    300  a300		       00 2a 80 	      DC.B	0,$2A,$80	; Explosion 7
+    301  a303		       00 00		      DC.B	0,0	; Percent
+    302  a305		       82 00		      DC.B	$82,0	; Scorpion 0
+    303  a307		       88 10		      DC.B	$88,$10	; Scorpion 1
+    304  a309		       00 54		      DC.B	0,$54	; Scorpion 2
+    305  a30b		       05 40		      DC.B	5,$40	; Scorpion 3
+    306  a30d		       d3 c7		      DC.B	$D3,$C7	; Scorpion 4
+    307  a30f		       01 50		      DC.B	$01,$50	; Scorpion 5
+    308  a311		       54 00		      DC.B	$54,0	; Scorpion 6
+    309  a313		       04 22		      DC.B	4,$22	; Scorpion 7
+    310  a315		       00 82		      DC.B	0,$82	; Scorpion F
+    311  a317		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+    312  a31a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+    313  a31d		       00 0c 00 	      DC.B	0,$0C,0	; Explosion 4
+    314  a320		       03 00 00 	      DC.B	3,0,0	; Explosion 3
+    315  a323		       00 03 04 	      DC.B	0,3,4	; Explosion 2
+    316  a326		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+    317  a329		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+    318  a32c		       03 00		      DC.B	$03,$00	; New Bird 0
+    319  a32e		       a1 40		      DC.B	$A1,$40	; New Bird 1
+    320  a330		       15 a0		      DC.B	$15,$A0	; New Bird 2
+    321  a332		       0a 3c		      DC.B	$0A,$3C	; New Bird 3
+    322  a334		       0e c0		      DC.B	$0E,$C0	; New Bird 4
+    323  a336		       f2 80		      DC.B	$F2,$80	; New Bird 5
+    324  a338		       29 50		      DC.B	$29,$50	; New Bird 6
+    325  a33a		       05 28		      DC.B	$05,$28	; New Bird 7
+    326  a33c		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Novice
+    327  a345		       00 00		      DC.B	0,0	; S one
+    328  a347		       00 00		      DC.B	0,0	; S two
+    329  a349		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0	; Level
+    330  a351		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+    331  a35d		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Expert
+    332  a366		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    333  a36a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+    334  a36e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+    335  a372		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 3
+    336  a376		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 4
+    337  a37a		       00 0f c0 00	      DC.B	0,$0F,$C0,0	; Twinkle 5
+    338  a37e		       00 f5 7c 00	      DC.B	$00,$F5,$7C,$00	; Twinkle 6
+    339  a382		       ab f7 7f a8	      DC.B	$AB,$F7,$7F,$A8	; Twinkle 7
+    340  a386		       aa aa aa aa*	      DC.B	$AA,$AA,$AA,$AA,$AA	; Left Shield
+    341  a38b		       aa		      DC.B	$AA	; Right Shield
+    342  a38c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+    343  a390		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+    344  a394		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+    345  a398		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+    346  a39c		       00 00		      DC.B	0,0	; Special
+    347  a39e		       a3 28		      DC.B	$A3,$28	; Blue Bug 0
+    348  a3a0		       23 20		      DC.B	$23,$20	; Blue Bug F
+    349  a3a2		       f1 3c		      DC.B	$F1,$3C	; Red Bug 0
+    350  a3a4		       31 30		      DC.B	$31,$30	; Red Bug F
+    351  a3a6		       50 14		      DC.B	$50,$14	; Galaga 0
+    352  a3a8		       14 50		      DC.B	$14,$50	; Galaga F
+    353  a3aa		       df dc		      DC.B	$DF,$DC	; Hero 0
+    354  a3ac		       1c 78		      DC.B	$1C,$78	; Hero 1
+    355  a3ae		       fd 80		      DC.B	$FD,$80	; Hero 2
+    356  a3b0		       20 bc		      DC.B	$20,$BC	; Hero 3
+    357  a3b2		       03 00		      DC.B	$03,$00	; Hero 4
+    358  a3b4		       fe 08		      DC.B	$FE,$08	; Hero 5
+    359  a3b6		       02 7f		      DC.B	$02,$7F	; Hero 6
+    360  a3b8		       2d 34		      DC.B	$2D,$34	; Hero 7
+    361  a3ba		       03 00 0c 00	      DC.B	3,0,12,0	; Missile
+    362  a3be		       00 00		      DC.B	0,0	; Missile 4
+    363  a3c0		       00 00		      DC.B	0,0	; Star Graph
+    364  a3c2		       0a 80		      DC.B	$0A,$80	; Blue Bug 1
+    365  a3c4		       aa 80		      DC.B	$AA,$80	; Blue Bug 2
+    366  a3c6		       2a b0		      DC.B	$2A,$B0	; Blue Bug 3
+    367  a3c8		       0d c0		      DC.B	$0D,$C0	; Blue Bug 4
+    368  a3ca		       3a a0		      DC.B	$3A,$A0	; Blue Bug 5
+    369  a3cc		       0a a8		      DC.B	$0A,$A8	; Blue Bug 6
+    370  a3ce		       0a 80		      DC.B	$0A,$80	; Blue Bug 7
+    371  a3d0		       0f f0		      DC.B	$0F,$F0	; Red Bug 1
+    372  a3d2		       3f fc		      DC.B	$3F,$FC	; Red Bug 2
+    373  a3d4		       3e c0		      DC.B	$3E,$C0	; Red Bug 3
+    374  a3d6		       fd fc		      DC.B	$FD,$FC	; Red Bug 4
+    375  a3d8		       0e f0		      DC.B	$0E,$F0	; Red Bug 5
+    376  a3da		       ff f0		      DC.B	$FF,$F0	; Red Bug 6
+    377  a3dc		       3f c0		      DC.B	$3F,$C0	; Red Bug 7
+    378  a3de		       01 50		      DC.B	$01,$50	; Galaga 1
+    379  a3e0		       65 d0		      DC.B	$65,$D0	; Galaga 2
+    380  a3e2		       0d d0		      DC.B	$0D,$D0	; Galaga 3
+    381  a3e4		       5f 50		      DC.B	$5F,$50	; Galaga 4
+    382  a3e6		       1d c0		      DC.B	$1D,$C0	; Galaga 5
+    383  a3e8		       75 90		      DC.B	$75,$90	; Galaga 6
+    384  a3ea		       15 00		      DC.B	$15,$00	; Galaga 7
+    385  a3ec		       50 14		      DC.B	$50,$14	; 0
+    386  a3ee		       01 40		      DC.B	$1,$40	; 1
+    387  a3f0		       01 40		      DC.B	$1,$40	; 2
+    388  a3f2		       00 50		      DC.B	0,$50	; 3
+    389  a3f4		       55 50		      DC.B	$55,$50	; 4
+    390  a3f6		       00 50		      DC.B	0,$50	; 5
+    391  a3f8		       50 50		      DC.B	$50,$50	; 6
+    392  a3fa		       01 40		      DC.B	$1,$40	; 7
+    393  a3fc		       50 50		      DC.B	$50,$50	; 8
+    394  a3fe		       01 40		      DC.B	$1,$40	; 9
+    395  a400
+    396  a400							; 8TH LINE ;
+    397  a400
+    398  a400					      ORG	$A400	;
+    399  a400		       00 0a ac 	      DC.B	0,$0A,$AC	; Explosion 7
+    400  a403		       02 80		      DC.B	$02,$80	; Percent
+    401  a405		       02 00		      DC.B	$02,0	; Scorpion 0
+    402  a407		       88 54		      DC.B	$88,$54	; Scorpion 1
+    403  a409		       00 40		      DC.B	$00,$40	; Scorpion 2
+    404  a40b		       15 10		      DC.B	$15,$10	; Scorpion 3
+    405  a40d		       d2 87		      DC.B	$D2,$87	; Scorpion 4
+    406  a40f		       04 54		      DC.B	$04,$54	; Scorpion 5
+    407  a411		       15 00		      DC.B	$15,$00	; Scorpion 6
+    408  a413		       15 22		      DC.B	$15,$22	; Scorpion 7
+    409  a415		       00 80		      DC.B	$00,$80	; Scorpion F
+    410  a417		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+    411  a41a		       00 0c 00 	      DC.B	0,$0C,0	; Explosion 5
+    412  a41d		       00 c0 00 	      DC.B	0,$C0,0	; Explosion 4
+    413  a420		       00 0c 10 	      DC.B	0,$0C,$10	; Explosion 3
+    414  a423		       02 00 00 	      DC.B	2,0,0	; Explosion 2
+    415  a426		       08 00 00 	      DC.B	8,0,0	; Explosion 1
+    416  a429		       80 00 00 	      DC.B	$80,0,0	; Explosion 0
+    417  a42c		       53 14		      DC.B	$53,$14	; New Bird 0
+    418  a42e		       29 50		      DC.B	$29,$50	; New Bird 1
+    419  a430		       05 a0		      DC.B	$05,$A0	; New Bird 2
+    420  a432		       1a 3c		      DC.B	$1A,$3C	; New Bird 3
+    421  a434		       a2 28		      DC.B	$A2,$28	; New Bird 4
+    422  a436		       f2 90		      DC.B	$F2,$90	; New Bird 5
+    423  a438		       29 40		      DC.B	$29,$40	; New Bird 6
+    424  a43a		       15 a0		      DC.B	$15,$A0	; New Bird 7
+    425  a43c		       a0 82 a0 08*	      DC.B	$A0,$82,$A0,$08,$0A,$A0,$A8,$2A,$A0	; Novice
+    426  a445		       aa 00		      DC.B	$AA,$00	; S one
+    427  a447		       aa 80		      DC.B	$AA,$80	; S two
+    428  a449		       aa 8a a8 08*	      DC.B	$AA,$8A,$A8,$08,$0A,$A8,$AA,$80	; Level
+    429  a451		       a2 8a a0 08*	      DC.B	$A2,$8A,$A0,$08,$0A,$28,$A0,$82,$A0,$AA,$8A,$A0	; Advanced
+    430  a45d		       aa 8a 28 a0*	      DC.B	$AA,$8A,$28,$A0,$0A,$A8,$A2,$82,$80	; Expert
+    431  a466		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    432  a46a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+    433  a46e		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 2
+    434  a472		       00 01 00 00	      DC.B	0,1,0,0	; Twinkle 3
+    435  a476		       00 0d c0 00	      DC.B	0,$0D,$C0,0	; Twinkle 4
+    436  a47a		       00 3d f0 00	      DC.B	0,$3D,$F0,0	; Twinkle 5
+    437  a47e		       03 dd df 00	      DC.B	$03,$DD,$DF,$00	; Twinkle 6
+    438  a482		       8a dd de a8	      DC.B	$8A,$DD,$DE,$A8	; Twinkle 7
+    439  a486		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+    440  a48b		       00		      DC.B	0	; Right Shield
+    441  a48c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+    442  a490		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+    443  a494		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+    444  a498		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+    445  a49c		       00 00		      DC.B	0,0	; Special
+    446  a49e		       a3 28		      DC.B	$A3,$28	; Blue Bug 0
+    447  a4a0		       23 20		      DC.B	$23,$20	; Blue Bug F
+    448  a4a2		       f1 3c		      DC.B	$F1,$3C	; Red Bug 0
+    449  a4a4		       35 70		      DC.B	$35,$70	; Red Bug F
+    450  a4a6		       a0 28		      DC.B	$A0,$28	; Galaga 0
+    451  a4a8		       50 14		      DC.B	$50,$14	; Galaga F
+    452  a4aa		       fb bc		      DC.B	$FB,$BC	; Hero 0
+    453  a4ac		       bf f2		      DC.B	$BF,$F2	; Hero 1
+    454  a4ae		       3c 00		      DC.B	$3C,00	; Hero 2
+    455  a4b0		       fd fc		      DC.B	$FD,$FC	; Hero 3
+    456  a4b2		       03 00		      DC.B	3,0	; Hero 4
+    457  a4b4		       3f 7f		      DC.B	$3F,$7F	; Hero 5
+    458  a4b6		       00 3c		      DC.B	0,$3C	; Hero 6
+    459  a4b8		       8f fe		      DC.B	$8F,$FE	; Hero 7
+    460  a4ba		       03 00 0c 00	      DC.B	3,0,12,0	; Missile
+    461  a4be		       03 00		      DC.B	3,0	; Missile 4
+    462  a4c0		       00 00		      DC.B	0,0	; Star Graph
+    463  a4c2		       02 a0		      DC.B	$02,$A0	; Blue Bug 1
+    464  a4c4		       2a 84		      DC.B	$2A,$84	; Blue Bug 2
+    465  a4c6		       ae 50		      DC.B	$AE,$50	; Blue Bug 3
+    466  a4c8		       05 40		      DC.B	$05,$40	; Blue Bug 4
+    467  a4ca		       16 e8		      DC.B	$16,$E8	; Blue Bug 5
+    468  a4cc		       4a a0		      DC.B	$4A,$A0	; Blue Bug 6
+    469  a4ce		       2a 00		      DC.B	$2A,$00	; Blue Bug 7
+    470  a4d0		       03 f0		      DC.B	$03,$F0	; Red Bug 1
+    471  a4d2		       ff f4		      DC.B	$FF,$F4	; Red Bug 2
+    472  a4d4		       ff b4		      DC.B	$FF,$B4	; Red Bug 3
+    473  a4d6		       fa bc		      DC.B	$FA,$BC	; Red Bug 4
+    474  a4d8		       7b fc		      DC.B	$7B,$FC	; Red Bug 5
+    475  a4da		       6f fc		      DC.B	$6F,$FC	; Red Bug 6
+    476  a4dc		       3f 00		      DC.B	$3F,$00	; Red Bug 7
+    477  a4de		       00 50		      DC.B	$00,$50	; Galaga 1
+    478  a4e0		       01 c0		      DC.B	$01,$C0	; Galaga 2
+    479  a4e2		       17 f4		      DC.B	$17,$F4	; Galaga 3
+    480  a4e4		       1f 40		      DC.B	$1F,$40	; Galaga 4
+    481  a4e6		       7f 50		      DC.B	$7F,$50	; Galaga 5
+    482  a4e8		       34 00		      DC.B	$34,$00	; Galaga 6
+    483  a4ea		       14 00		      DC.B	$14,$00	; Galaga 7
+    484  a4ec		       50 14		      DC.B	$50,$14	; 0
+    485  a4ee		       01 40		      DC.B	$1,$40	; 1
+    486  a4f0		       00 40		      DC.B	$0,$40	; 2
+    487  a4f2		       05 50		      DC.B	$5,$50	; 3
+    488  a4f4		       50 40		      DC.B	$50,$40	; 4
+    489  a4f6		       55 50		      DC.B	$55,$50	; 5
+    490  a4f8		       50 50		      DC.B	$50,$50	; 6
+    491  a4fa		       01 40		      DC.B	$1,$40	; 7
+    492  a4fc		       55 50		      DC.B	$55,$50	; 8
+    493  a4fe		       55 50		      DC.B	$55,$50	; 9
+    494  a500
+    495  a500							;7 TH LINE ;
+    496  a500
+    497  a500					      ORG	$A500	;
+    498  a500		       03 aa 80 	      DC.B	3,$AA,$80	; Explosion 7
+    499  a503		       82 80		      DC.B	$82,$80	; Percent
+    500  a505		       02 80		      DC.B	$02,$80	; Scorpion 0
+    501  a507		       0a 55		      DC.B	$0A,$55	; Scorpion 1
+    502  a509		       0a a1		      DC.B	$0A,$A1	; Scorpion 2
+    503  a50b		       14 a4		      DC.B	$14,$A4	; Scorpion 3
+    504  a50d		       d2 87		      DC.B	$D2,$87	; Scorpion 4
+    505  a50f		       1a 14		      DC.B	$1A,$14	; Scorpion 5
+    506  a511		       01 00		      DC.B	$01,$00	; Scorpion 6
+    507  a513		       55 a0		      DC.B	$55,$A0	; Scorpion 7
+    508  a515		       02 80		      DC.B	$02,$80	; Scorpion F
+    509  a517		       00 0f 80 	      DC.B	0,$0F,$80	; Explosion 6
+    510  a51a		       00 30 00 	      DC.B	0,$30,0	; Explosion 5
+    511  a51d		       00 0c 40 	      DC.B	0,$0C,$40	; Explosion 4
+    512  a520		       00 80 00 	      DC.B	0,$80,0	; Explosion 3
+    513  a523		       00 00 00 	      DC.B	0,0,0	; Explosion 2
+    514  a526		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+    515  a529		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+    516  a52c		       56 54		      DC.B	$56,$54	; New Bird 0
+    517  a52e		       0a 68		      DC.B	$0A,$68	; New Bird 1
+    518  a530		       01 8c		      DC.B	$01,$8C	; New Bird 2
+    519  a532		       56 80		      DC.B	$56,$80	; New Bird 3
+    520  a534		       aa a8		      DC.B	$AA,$A8	; New Bird 4
+    521  a536		       0a 54		      DC.B	$0A,$54	; New Bird 5
+    522  a538		       c9 00		      DC.B	$C9,$00	; New Bird 6
+    523  a53a		       a6 80		      DC.B	$A6,$80	; New Bird 7
+    524  a53c		       a2 8a a8 2a*	      DC.B	$A2,$8A,$A8,$2A,$02,$82,$AA,$2A,$A0	; Novice
+    525  a545		       aa 00		      DC.B	$AA,$00	; S one
+    526  a547		       aa 80		      DC.B	$AA,$80	; S two
+    527  a549		       aa 8a a8 2a*	      DC.B	$AA,$8A,$A8,$2A,$0A,$A8,$AA,$80	; Level
+    528  a551		       a2 8a a8 2a*	      DC.B	$A2,$8A,$A8,$2A,$0A,$28,$A2,$8A,$A8,$AA,$8A,$A8	; Advanced
+    529  a55d		       aa 8a 28 a0*	      DC.B	$AA,$8A,$28,$A0,$0A,$A8,$A2,$82,$80	; Expert
+    530  a566		       00 01 00 00	      DC.B	0,1,0,0	; Twinkle 0
+    531  a56a		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 1
+    532  a56e		       00 0d c0 00	      DC.B	0,$0D,$C0,0	; Twinkle 2
+    533  a572		       00 0d c0 00	      DC.B	0,$0D,$C0,0	; Twinkle 3
+    534  a576		       00 35 70 00	      DC.B	0,$35,$70,0	; Twinkle 4
+    535  a57a		       ff ff ff ff	      DC.B	$FF,$FF,$FF,$FF	; Twinkle 5
+    536  a57e		       ff ff ff ff	      DC.B	$FF,$FF,$FF,$FF	; Twinkle 6
+    537  a582		       ff ff ff ff	      DC.B	$FF,$FF,$FF,$FF	; Twinkle 7
+    538  a586		       55 55 55 55*	      DC.B	$55,$55,$55,$55,$55	; Left Shield
+    539  a58b		       55		      DC.B	$55	; Right Shield
+    540  a58c		       8a 8a 8a 80	      DC.B	$8A,$8A,$8A,$80	; Four Type
+    541  a590		       8a 8a 8a 80	      DC.B	$8A,$8A,$8A,$80	; Eight Type
+    542  a594		       a8 a8 a8 00	      DC.B	$A8,$A8,$A8,$00	; Tho Type
+    543  a598		       08 a8 a8 00	      DC.B	$08,$A8,$A8,$00	; Six Type
+    544  a59c		       f0 fc		      DC.B	$F0,$FC	; Special
+    545  a59e		       a5 68		      DC.B	$A5,$68	; Blue Bug 0
+    546  a5a0		       25 60		      DC.B	$25,$60	; Blue Bug F
+    547  a5a2		       f5 7c		      DC.B	$F5,$7C	; Red Bug 0
+    548  a5a4		       35 70		      DC.B	$35,$70	; Red Bug F
+    549  a5a6		       a0 28		      DC.B	$A0,$28	; Galaga 0
+    550  a5a8		       60 24		      DC.B	$60,$24	; Galaga F
+    551  a5aa		       7a b4		      DC.B	$7A,$B4	; Hero 0
+    552  a5ac		       0f 90		      DC.B	$0F,$90	; Hero 1
+    553  a5ae		       bf a0		      DC.B	$BF,$A0	; Hero 2
+    554  a5b0		       1e b8		      DC.B	$1E,$B8	; Hero 3
+    555  a5b2		       0b 80		      DC.B	$0B,$80	; Hero 4
+    556  a5b4		       2e b4		      DC.B	$2E,$B4	; Hero 5
+    557  a5b6		       0a fe		      DC.B	$0A,$FE	; Hero 6
+    558  a5b8		       06 f0		      DC.B	$06,$F0	; Hero 7
+    559  a5ba		       03 00 0c 00	      DC.B	3,0,12,0	; Missile
+    560  a5be		       0f c0		      DC.B	$0F,$C0	; Missile 4
+    561  a5c0		       00 00		      DC.B	0,0	; Star Graph
+    562  a5c2		       21 a0		      DC.B	$21,$A0	; Blue Bug 1
+    563  a5c4		       07 d8		      DC.B	$07,$D8	; Blue Bug 2
+    564  a5c6		       a7 5c		      DC.B	$A7,$5C	; Blue Bug 3
+    565  a5c8		       21 20		      DC.B	$21,$20	; Blue Bug 4
+    566  a5ca		       d7 68		      DC.B	$D7,$68	; Blue Bug 5
+    567  a5cc		       9f 40		      DC.B	$9F,$40	; Blue Bug 6
+    568  a5ce		       29 20		      DC.B	$29,$20	; Blue Bug 7
+    569  a5d0		       04 f0		      DC.B	$04,$F0	; Red Bug 1
+    570  a5d2		       05 f4		      DC.B	$05,$F4	; Red Bug 2
+    571  a5d4		       f5 b4		      DC.B	$F5,$B4	; Red Bug 3
+    572  a5d6		       3e f0		      DC.B	$3E,$F0	; Red Bug 4
+    573  a5d8		       79 7c		      DC.B	$79,$7C	; Red Bug 5
+    574  a5da		       6d 40		      DC.B	$6D,$40	; Red Bug 6
+    575  a5dc		       3c 40		      DC.B	$3C,$40	; Red Bug 7
+    576  a5de		       40 74		      DC.B	$40,$74	; Galaga 1
+    577  a5e0		       0f d0		      DC.B	$0F,$D0	; Galaga 2
+    578  a5e2		       55 f4		      DC.B	$55,$F4	; Galaga 3
+    579  a5e4		       25 80		      DC.B	$25,$80	; Galaga 4
+    580  a5e6		       7d f4		      DC.B	$7D,$F4	; Galaga 5
+    581  a5e8		       7f 00		      DC.B	$7F,$00	; Galaga 6
+    582  a5ea		       74 04		      DC.B	$74,$04	; Galaga 7
+    583  a5ec		       50 14		      DC.B	$50,$14	; 0
+    584  a5ee		       01 40		      DC.B	$1,$40	; 1
+    585  a5f0		       00 50		      DC.B	0,$50	; 2
+    586  a5f2		       05 50		      DC.B	$5,$50	; 3
+    587  a5f4		       14 40		      DC.B	$14,$40	; 4
+    588  a5f6		       55 40		      DC.B	$55,$40	; 5
+    589  a5f8		       55 40		      DC.B	$55,$40	; 6
+    590  a5fa		       00 40		      DC.B	$0,$40	; 7
+    591  a5fc		       55 50		      DC.B	$55,$50	; 8
+    592  a5fe		       50 50		      DC.B	$50,$50	; 9
+    593  a600
+    594  a600							;6 TH LINE ;
+    595  a600
+    596  a600					      ORG	$A600	;
+    597  a600		       00 8a a0 	      DC.B	0,$8A,$A0	; Explosion 7
+    598  a603		       a2 80		      DC.B	$A2,$80	; Percent
+    599  a605		       02 80		      DC.B	$02,$80	; Scorpion 0
+    600  a607		       0a 85		      DC.B	$0A,$85	; Scorpion 1
+    601  a609		       2a a8		      DC.B	$2A,$A8	; Scorpion 2
+    602  a60b		       06 a1		      DC.B	$06,$A1	; Scorpion 3
+    603  a60d		       1a 94		      DC.B	$1A,$94	; Scorpion 4
+    604  a60f		       4a 90		      DC.B	$4A,$90	; Scorpion 5
+    605  a611		       4a a0		      DC.B	$4A,$A0	; Scorpion 6
+    606  a613		       52 a0		      DC.B	$52,$A0	; Scorpion 7
+    607  a615		       02 80		      DC.B	$02,$80	; Scorpion F
+    608  a617		       00 3f 00 	      DC.B	0,$3F,0	; Explosion 6
+    609  a61a		       00 c1 00 	      DC.B	0,$C1,0	; Explosion 5
+    610  a61d		       03 20 00 	      DC.B	3,$20,0	; Explosion 4
+    611  a620		       00 00 00 	      DC.B	0,0,0	; Explosion 3
+    612  a623		       00 00 80 	      DC.B	0,0,$80	; Explosion 2
+    613  a626		       00 00 20 	      DC.B	0,0,$20	; Explosion 1
+    614  a629		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+    615  a62c		       56 54		      DC.B	$56,$54	; New Bird 0
+    616  a62e		       56 a8		      DC.B	$56,$A8	; New Bird 1
+    617  a630		       aa bc		      DC.B	$AA,$BC	; New Bird 2
+    618  a632		       56 a8		      DC.B	$56,$A8	; New Bird 3
+    619  a634		       56 54		      DC.B	$56,$54	; New Bird 4
+    620  a636		       aa 54		      DC.B	$AA,$54	; New Bird 5
+    621  a638		       fa a8		      DC.B	$FA,$A8	; New Bird 6
+    622  a63a		       aa 54		      DC.B	$AA,$54	; New Bird 7
+    623  a63c		       aa 8a 28 aa*	      DC.B	$AA,$8A,$28,$AA,$82,$82,$8A,$28,$0	; Novice
+    624  a645		       28 00		      DC.B	$28,$00	; S one
+    625  a647		       2a 00		      DC.B	$2A,$00	; S two
+    626  a649		       a0 0a 00 aa*	      DC.B	$A0,$0A,$00,$AA,$8A,$00,$A0,$00	; Level
+    627  a651		       aa 8a 28 aa*	      DC.B	$AA,$8A,$28,$AA,$8A,$A8,$AA,$8A,$28,$A0,$0A,$28	; Advanced
+    628  a65d		       a0 0a a8 aa*	      DC.B	$A0,$0A,$A8,$AA,$0A,$00,$AA,$82,$80	; Expert
+    629  a666		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    630  a66a		       00 0d c0 00	      DC.B	0,$0D,$C0,0	; Twinkle 1
+    631  a66e		       00 35 70 00	      DC.B	0,$35,$70,0	; Twinkle 2
+    632  a672		       00 d5 5c 00	      DC.B	0,$D5,$5C,0	; Twinkle 3
+    633  a676		       03 d5 5f 00	      DC.B	3,$D5,$5F,0	; Twinkle 4
+    634  a67a		       0f d5 5f c0	      DC.B	$0F,$D5,$5F,$C0	; Twinkle 5
+    635  a67e		       3d 55 55 f0	      DC.B	$3D,$55,$55,$F0	; Twinkle 6
+    636  a682		       bf dd df f8	      DC.B	$BF,$DD,$DF,$F8	; Twinkle 7
+    637  a686		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+    638  a68b		       00		      DC.B	0	; Right Shield
+    639  a68c		       88 88 88 80	      DC.B	$88,$88,$88,$80	; Four Type
+    640  a690		       88 88 88 80	      DC.B	$88,$88,$88,$80	; Eight Type
+    641  a694		       88 88 88 00	      DC.B	$88,$88,$88,$00	; Tho Type
+    642  a698		       08 88 88 00	      DC.B	$08,$88,$88,$00	; Six Type
+    643  a69c		       cc c0		      DC.B	$CC,$C0	; Special
+    644  a69e		       af e8		      DC.B	$AF,$E8	; Blue Bug 0
+    645  a6a0		       2f e0		      DC.B	$2F,$E0	; Blue Bug F
+    646  a6a2		       f5 7c		      DC.B	$F5,$7C	; Red Bug 0
+    647  a6a4		       3e f0		      DC.B	$3E,$F0	; Red Bug F
+    648  a6a6		       60 24		      DC.B	$60,$24	; Galaga 0
+    649  a6a8		       60 24		      DC.B	$60,$24	; Galaga F
+    650  a6aa		       9e d8		      DC.B	$9E,$D8	; Hero 0
+    651  a6ac		       1e b8		      DC.B	$1E,$B8	; Hero 1
+    652  a6ae		       f9 55		      DC.B	$F9,$55	; Hero 2
+    653  a6b0		       0f 90		      DC.B	$0F,$90	; Hero 3
+    654  a6b2		       8f c8		      DC.B	$8F,$C8	; Hero 4
+    655  a6b4		       06 f0		      DC.B	$06,$F0	; Hero 5
+    656  a6b6		       55 6f		      DC.B	$55,$6F	; Hero 6
+    657  a6b8		       2e b4		      DC.B	$2E,$B4	; Hero 7
+    658  a6ba		       03 00 0c 00	      DC.B	3,0,12,0	; Missile
+    659  a6be		       0e c0		      DC.B	$0E,$C0	; Missile 4
+    660  a6c0		       00 00		      DC.B	0,0	; Star Graph
+    661  a6c2		       29 e0		      DC.B	$29,$E0	; Blue Bug 1
+    662  a6c4		       a7 54		      DC.B	$A7,$54	; Blue Bug 2
+    663  a6c6		       81 e4		      DC.B	$81,$E4	; Blue Bug 3
+    664  a6c8		       2f e0		      DC.B	$2F,$E0	; Blue Bug 4
+    665  a6ca		       6d 08		      DC.B	$6D,$08	; Blue Bug 5
+    666  a6cc		       57 68		      DC.B	$57,$68	; Blue Bug 6
+    667  a6ce		       2d a0		      DC.B	$2D,$A0	; Blue Bug 7
+    668  a6d0		       c5 7c		      DC.B	$C5,$7C	; Red Bug 1
+    669  a6d2		       95 f8		      DC.B	$95,$F8	; Red Bug 2
+    670  a6d4		       f5 6c		      DC.B	$F5,$6C	; Red Bug 3
+    671  a6d6		       35 70		      DC.B	$35,$70	; Red Bug 4
+    672  a6d8		       e5 3c		      DC.B	$E5,$3C	; Red Bug 5
+    673  a6da		       ad 58		      DC.B	$AD,$58	; Red Bug 6
+    674  a6dc		       f5 4c		      DC.B	$F5,$4C	; Red Bug 7
+    675  a6de		       a3 74		      DC.B	$A3,$74	; Galaga 1
+    676  a6e0		       0f d0		      DC.B	$0F,$D0	; Galaga 2
+    677  a6e2		       5b 7c		      DC.B	$5B,$7C	; Galaga 3
+    678  a6e4		       50 50		      DC.B	$50,$50	; Galaga 4
+    679  a6e6		       57 94		      DC.B	$57,$94	; Galaga 5
+    680  a6e8		       7f 00		      DC.B	$7F,$00	; Galaga 6
+    681  a6ea		       77 28		      DC.B	$77,$28	; Galaga 7
+    682  a6ec		       50 14		      DC.B	$50,$14	; 0
+    683  a6ee		       01 40		      DC.B	$1,$40	; 1
+    684  a6f0		       50 50		      DC.B	$50,$50	; 2
+    685  a6f2		       00 50		      DC.B	0,$50	; 3
+    686  a6f4		       15 40		      DC.B	$15,$40	; 4
+    687  a6f6		       50 00		      DC.B	$50,0	; 5
+    688  a6f8		       50 00		      DC.B	$50,0	; 6
+    689  a6fa		       40 50		      DC.B	$40,$50	; 7
+    690  a6fc		       50 50		      DC.B	$50,$50	; 8
+    691  a6fe		       50 50		      DC.B	$50,$50	; 9
+    692  a700
+    693  a700							; 5 TH LINE ;
+    694  a700
+    695  a700					      ORG	$A700	;
+    696  a700		       00 0a 80 	      DC.B	0,$0A,$80	; Explosion 7
+    697  a703		       28 00		      DC.B	$28,0	; Percent
+    698  a705		       1a 94		      DC.B	$1A,$94	; Scorpion 0
+    699  a707		       06 a1		      DC.B	$06,$A1	; Scorpion 1
+    700  a709		       8a a1		      DC.B	$8A,$A1	; Scorpion 2
+    701  a70b		       0a 85		      DC.B	$0A,$85	; Scorpion 3
+    702  a70d		       02 80		      DC.B	$02,$80	; Scorpion 4
+    703  a70f		       52 a0		      DC.B	$52,$A0	; Scorpion 5
+    704  a711		       2a a8		      DC.B	$2A,$A8	; Scorpion 6
+    705  a713		       4a 90		      DC.B	$4A,$90	; Scorpion 7
+    706  a715		       1a 94		      DC.B	$1A,$94	; Scorpion F
+    707  a717		       00 0d c0 	      DC.B	0,$0D,$C0	; Explosion 6
+    708  a71a		       00 0c 00 	      DC.B	0,$0C,0	; Explosion 5
+    709  a71d		       00 03 00 	      DC.B	0,3,0	; Explosion 4
+    710  a720		       0c 00 c0 	      DC.B	$0C,0,$C0	; Explosion 3
+    711  a723		       30 c0 0c 	      DC.B	$30,$C0,$0C	; Explosion 2
+    712  a726		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+    713  a729		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+    714  a72c		       aa a8		      DC.B	$AA,$A8	; New Bird 0
+    715  a72e		       56 80		      DC.B	$56,$80	; New Bird 1
+    716  a730		       0a 8c		      DC.B	$0A,$8C	; New Bird 2
+    717  a732		       0a 68		      DC.B	$0A,$68	; New Bird 3
+    718  a734		       56 54		      DC.B	$56,$54	; New Bird 4
+    719  a736		       a6 80		      DC.B	$A6,$80	; New Bird 5
+    720  a738		       c9 00		      DC.B	$C9,$00	; New Bird 6
+    721  a73a		       0a 54		      DC.B	$0A,$54	; New Bird 7
+    722  a73c		       aa 8a 28 a2*	      DC.B	$AA,$8A,$28,$A2,$82,$82,$80,$2A,$80	; Novice
+    723  a745		       28 00		      DC.B	$28,$00	; S one
+    724  a747		       0a 80		      DC.B	$0A,$80	; S two
+    725  a749		       a0 0a a0 a2*	      DC.B	$A0,$0A,$A0,$A2,$8A,$A0,$A0,$00	; Level
+    726  a751		       aa 8a 28 a2*	      DC.B	$AA,$8A,$28,$A2,$8A,$A8,$AA,$8A,$00,$AA,$0A,$28	; Advanced
+    727  a75d		       aa 02 a0 aa*	      DC.B	$AA,$02,$A0,$AA,$8A,$A0,$AA,$02,$80	; Expert
+    728  a766		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    729  a76a		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 1
+    730  a76e		       00 0d c0 00	      DC.B	0,$0D,$C0,0	; Twinkle 2
+    731  a772		       00 0d c0 00	      DC.B	0,$0D,$C0,0	; Twinkle 3
+    732  a776		       00 35 70 00	      DC.B	0,$35,$70,0	; Twinkle 4
+    733  a77a		       00 f5 7c 00	      DC.B	0,$F5,$7C,0	; Twinkle 5
+    734  a77e		       0f 75 77 c0	      DC.B	$0F,$75,$77,$C0	; Twinkle 6
+    735  a782		       aa f7 76 a8	      DC.B	$AA,$F7,$76,$A8	; Twinkle 7
+    736  a786		       3f ff ff ff*	      DC.B	$3F,$FF,$FF,$FF,$FF	; Left Shield
+    737  a78b		       fc		      DC.B	$FC	; Right Shield
+    738  a78c		       8a 88 88 80	      DC.B	$8A,$88,$88,$80	; Four Type
+    739  a790		       88 88 88 80	      DC.B	$88,$88,$88,$80	; Eight Type
+    740  a794		       a8 88 88 00	      DC.B	$A8,$88,$88,$00	; Tho Type
+    741  a798		       a8 88 88 00	      DC.B	$A8,$88,$88,$00	; Six Type
+    742  a79c		       cc c0		      DC.B	$CC,$C0	; Special
+    743  a79e		       2f e0		      DC.B	$2F,$E0	; Blue Bug 0
+    744  a7a0		       2f e0		      DC.B	$2F,$E0	; Blue Bug F
+    745  a7a2		       3e f0		      DC.B	$3E,$F0	; Red Bug 0
+    746  a7a4		       3e f0		      DC.B	$3E,$F0	; Red Bug F
+    747  a7a6		       53 14		      DC.B	$53,$14	; Galaga 0
+    748  a7a8		       53 14		      DC.B	$53,$14	; Galaga F
+    749  a7aa		       8f c8		      DC.B	$8F,$C8	; Hero 0
+    750  a7ac		       ff fc		      DC.B	$FF,$FC	; Hero 1
+    751  a7ae		       fa ff		      DC.B	$FA,$FF	; Hero 2
+    752  a7b0		       bf f2		      DC.B	$BF,$F2	; Hero 3
+    753  a7b2		       9e d8		      DC.B	$9E,$D8	; Hero 4
+    754  a7b4		       8f fe		      DC.B	$8F,$FE	; Hero 5
+    755  a7b6		       ff af		      DC.B	$FF,$AF	; Hero 6
+    756  a7b8		       37 f7		      DC.B	$37,$F7	; Hero 7
+    757  a7ba		       09 80 26 00	      DC.B	$09,$80,$26,$00	; Missile
+    758  a7be		       01 00		      DC.B	1,0	; Missile 4
+    759  a7c0		       00 00		      DC.B	0,0	; Star Graph
+    760  a7c2		       81 e4		      DC.B	$81,$E4	; Blue Bug 1
+    761  a7c4		       a7 54		      DC.B	$A7,$54	; Blue Bug 2
+    762  a7c6		       29 e0		      DC.B	$29,$E0	; Blue Bug 3
+    763  a7c8		       af e8		      DC.B	$AF,$E8	; Blue Bug 4
+    764  a7ca		       2d a0		      DC.B	$2D,$A0	; Blue Bug 5
+    765  a7cc		       57 68		      DC.B	$57,$68	; Blue Bug 6
+    766  a7ce		       6d 88		      DC.B	$6D,$88	; Blue Bug 7
+    767  a7d0		       f5 6c		      DC.B	$F5,$6C	; Red Bug 1
+    768  a7d2		       95 f8		      DC.B	$95,$F8	; Red Bug 2
+    769  a7d4		       c5 7c		      DC.B	$C5,$7C	; Red Bug 3
+    770  a7d6		       75 7c		      DC.B	$75,$7C	; Red Bug 4
+    771  a7d8		       f5 4c		      DC.B	$F5,$4C	; Red Bug 5
+    772  a7da		       ad 58		      DC.B	$AD,$58	; Red Bug 6
+    773  a7dc		       e5 7c		      DC.B	$E5,$7C	; Red Bug 7
+    774  a7de		       5b 7c		      DC.B	$5B,$7C	; Galaga 1
+    775  a7e0		       01 c0		      DC.B	$01,$C0	; Galaga 2
+    776  a7e2		       a3 74		      DC.B	$A3,$74	; Galaga 3
+    777  a7e4		       50 50		      DC.B	$50,$50	; Galaga 4
+    778  a7e6		       77 28		      DC.B	$77,$28	; Galaga 5
+    779  a7e8		       34 00		      DC.B	$34,$00	; Galaga 6
+    780  a7ea		       57 94		      DC.B	$57,$94	; Galaga 7
+    781  a7ec		       54 54		      DC.B	$54,$54	; 0
+    782  a7ee		       01 40		      DC.B	$1,$40	; 1
+    783  a7f0		       50 50		      DC.B	$50,$50	; 2
+    784  a7f2		       40 50		      DC.B	$40,$50	; 3
+    785  a7f4		       05 40		      DC.B	$5,$40	; 4
+    786  a7f6		       50 00		      DC.B	$50,$0	; 5
+    787  a7f8		       50 10		      DC.B	$50,$10	; 6
+    788  a7fa		       50 50		      DC.B	$50,$50	; 7
+    789  a7fc		       50 50		      DC.B	$50,$50	; 8
+    790  a7fe		       50 50		      DC.B	$50,$50	; 9
+    791  a800
+    792  a800							;4 TH LINE ;
+    793  a800
+    794  a800					      ORG	$A800	;
+    795  a800		       00 e8 b0 	      DC.B	$00,$E8,$B0	; Explosion 7
+    796  a803		       0a 00		      DC.B	$0A,0	; Percent
+    797  a805		       d2 87		      DC.B	$D2,$87	; Scorpion 0
+    798  a807		       14 a4		      DC.B	$14,$A4	; Scorpion 1
+    799  a809		       80 40		      DC.B	$80,$40	; Scorpion 2
+    800  a80b		       0a 55		      DC.B	$0A,$55	; Scorpion 3
+    801  a80d		       02 80		      DC.B	$02,$80	; Scorpion 4
+    802  a80f		       55 a0		      DC.B	$55,$A0	; Scorpion 5
+    803  a811		       4a a2		      DC.B	$4A,$A2	; Scorpion 6
+    804  a813		       1a 14		      DC.B	$1A,$14	; Scorpion 7
+    805  a815		       5e d4		      DC.B	$5E,$D4	; Scorpion F
+    806  a817		       00 0c c0 	      DC.B	0,$0C,$C0	; Explosion 6
+    807  a81a		       00 c3 00 	      DC.B	0,$C3,0	; Explosion 5
+    808  a81d		       00 4c 00 	      DC.B	0,$4C,0	; Explosion 4
+    809  a820		       00 30 00 	      DC.B	0,$30,0	; Explosion 3
+    810  a823		       00 00 00 	      DC.B	0,0,0	; Explosion 2
+    811  a826		       03 00 00 	      DC.B	3,0,0	; Explosion 1
+    812  a829		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+    813  a82c		       a2 28		      DC.B	$A2,$28	; New Bird 0
+    814  a82e		       1a 3c		      DC.B	$1A,$3C	; New Bird 1
+    815  a830		       05 a0		      DC.B	$05,$A0	; New Bird 2
+    816  a832		       29 50		      DC.B	$29,$50	; New Bird 3
+    817  a834		       53 14		      DC.B	$53,$14	; New Bird 4
+    818  a836		       15 a0		      DC.B	$15,$A0	; New Bird 5
+    819  a838		       29 40		      DC.B	$29,$40	; New Bird 6
+    820  a83a		       f2 90		      DC.B	$F2,$90	; New Bird 7
+    821  a83c		       aa 8a 28 a2*	      DC.B	$AA,$8A,$28,$A2,$82,$82,$80,$2A,$80	; Novice
+    822  a845		       28 00		      DC.B	$28,$00	; S one
+    823  a847		       a2 80		      DC.B	$A2,$80	; S two
+    824  a849		       a0 0a a0 a2*	      DC.B	$A0,$0A,$A0,$A2,$8A,$A0,$A0,$00	; Level
+    825  a851		       a2 8a 28 a2*	      DC.B	$A2,$8A,$28,$A2,$8A,$28,$AA,$8A,$00,$AA,$0A,$28	; Advanced
+    826  a85d		       aa 02 a0 a2*	      DC.B	$AA,$02,$A0,$A2,$8A,$A0,$A2,$82,$80	; Expert
+    827  a866		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    828  a86a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+    829  a86e		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 2
+    830  a872		       00 01 00 00	      DC.B	0,1,0,0	; Twinkle 3
+    831  a876		       00 0d c0 00	      DC.B	0,$0D,$C0,0	; Twinkle 4
+    832  a87a		       00 3d f0 00	      DC.B	0,$3D,$F0,0	; Twinkle 5
+    833  a87e		       03 dd df 00	      DC.B	$03,$DD,$DF,$00	; Twinkle 6
+    834  a882		       ab dd df a8	      DC.B	$AB,$DD,$DF,$A8	; Twinkle 7
+    835  a886		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+    836  a88b		       00		      DC.B	0	; Right Shield
+    837  a88c		       88 08 88 80	      DC.B	$88,$08,$88,$80	; Four Type
+    838  a890		       88 88 88 80	      DC.B	$88,$88,$88,$80	; Eight Type
+    839  a894		       88 88 88 00	      DC.B	$88,$88,$88,$00	; Tho Type
+    840  a898		       88 88 88 00	      DC.B	$88,$88,$88,$00	; Six Type
+    841  a89c		       f0 fc		      DC.B	$F0,$FC	; Special
+    842  a89e		       21 20		      DC.B	$21,$20	; Blue Bug 0
+    843  a8a0		       21 20		      DC.B	$21,$20	; Blue Bug F
+    844  a8a2		       3e f0		      DC.B	$3E,$F0	; Red Bug 0
+    845  a8a4		       3a b0		      DC.B	$3A,$B0	; Red Bug F
+    846  a8a6		       1f d0		      DC.B	$1F,$D0	; Galaga 0
+    847  a8a8		       1f d0		      DC.B	$1F,$D0	; Galaga F
+    848  a8aa		       0b 80		      DC.B	$0B,$80	; Hero 0
+    849  a8ac		       20 bc		      DC.B	$20,$BC	; Hero 1
+    850  a8ae		       bf a0		      DC.B	$BF,$A0	; Hero 2
+    851  a8b0		       1c 78		      DC.B	$1C,$78	; Hero 3
+    852  a8b2		       7a b4		      DC.B	$7A,$B4	; Hero 4
+    853  a8b4		       2d 34		      DC.B	$2D,$34	; Hero 5
+    854  a8b6		       0a fe		      DC.B	$0A,$FE	; Hero 6
+    855  a8b8		       3e 08		      DC.B	$3E,$08	; Hero 7
+    856  a8ba		       0a 80 2a 00	      DC.B	$0A,$80,$2A,$00	; $A,$80,$2A,0 ; Missile
+    857  a8be		       01 00		      DC.B	1,0	; Missile 4
+    858  a8c0		       00 00		      DC.B	0,0	; Star Graph
+    859  a8c2		       a7 5c		      DC.B	$A7,$5C	; Blue Bug 1
+    860  a8c4		       07 d8		      DC.B	$07,$D8	; Blue Bug 2
+    861  a8c6		       21 a0		      DC.B	$21,$A0	; Blue Bug 3
+    862  a8c8		       a5 68		      DC.B	$A5,$68	; Blue Bug 4
+    863  a8ca		       29 20		      DC.B	$29,$20	; Blue Bug 5
+    864  a8cc		       9f 40		      DC.B	$9F,$40	; Blue Bug 6
+    865  a8ce		       d7 68		      DC.B	$D7,$68	; Blue Bug 7
+    866  a8d0		       f5 b4		      DC.B	$F5,$B4	; Red Bug 1
+    867  a8d2		       05 f4		      DC.B	$05,$F4	; Red Bug 2
+    868  a8d4		       04 f0		      DC.B	$04,$F0	; Red Bug 3
+    869  a8d6		       f1 3c		      DC.B	$F1,$3C	; Red Bug 4
+    870  a8d8		       3c 40		      DC.B	$3C,$40	; Red Bug 5
+    871  a8da		       6d 40		      DC.B	$6D,$40	; Red Bug 6
+    872  a8dc		       79 7c		      DC.B	$79,$7C	; Red Bug 7
+    873  a8de		       55 f4		      DC.B	$55,$F4	; Galaga 1
+    874  a8e0		       65 d0		      DC.B	$65,$D0	; Galaga 2
+    875  a8e2		       40 74		      DC.B	$40,$74	; Galaga 3
+    876  a8e4		       50 50		      DC.B	$50,$50	; Galaga 4
+    877  a8e6		       74 04		      DC.B	$74,$04	; Galaga 5
+    878  a8e8		       75 90		      DC.B	$75,$90	; Galaga 6
+    879  a8ea		       7d 54		      DC.B	$7D,$54	; Galaga 7
+    880  a8ec		       15 50		      DC.B	$15,$50	; 0
+    881  a8ee		       05 40		      DC.B	$05,$40	; 1
+    882  a8f0		       55 50		      DC.B	$55,$50	; 2
+    883  a8f2		       55 50		      DC.B	$55,$50	; 3
+    884  a8f4		       01 40		      DC.B	$1,$40	; 4
+    885  a8f6		       55 50		      DC.B	$55,$50	; 5
+    886  a8f8		       55 50		      DC.B	$55,$50	; 6
+    887  a8fa		       55 50		      DC.B	$55,$50	; 7
+    888  a8fc		       55 50		      DC.B	$55,$50	; 8
+    889  a8fe		       55 50		      DC.B	$55,$50	; 9
+    890  a900
+    891  a900							; 3RD LINE ;
+    892  a900
+    893  a900					      ORG	$A900	;
+    894  a900		       00 0c 00 	      DC.B	0,$C,0	; Explosion 7
+    895  a903		       a2 80		      DC.B	$A2,$80	; Percent
+    896  a905		       d2 87		      DC.B	$D2,$87	; Scorpion 0
+    897  a907		       15 10		      DC.B	$15,$10	; Scorpion 1
+    898  a909		       20 54		      DC.B	$20,$54	; Scorpion 2
+    899  a90b		       88 54		      DC.B	$88,$54	; Scorpion 3
+    900  a90d		       02 00		      DC.B	$02,$00	; Scorpion 4
+    901  a90f		       15 22		      DC.B	$15,$22	; Scorpion 5
+    902  a911		       01 02		      DC.B	$01,$02	; Scorpion 6
+    903  a913		       04 54		      DC.B	$04,$54	; Scorpion 7
+    904  a915		       5e d4		      DC.B	$5E,$D4	; Scorpion F
+    905  a917		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+    906  a91a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+    907  a91d		       00 00 c0 	      DC.B	0,0,$C0	; Explosion 4
+    908  a920		       01 02 30 	      DC.B	1,2,$30	; Explosion 3
+    909  a923		       00 03 00 	      DC.B	0,3,0	; Explosion 2
+    910  a926		       00 00 c0 	      DC.B	0,0,$C0	; Explosion 1
+    911  a929		       0c 00 00 	      DC.B	$0C,0,0	; Explosion 0
+    912  a92c		       0e c0		      DC.B	$0E,$C0	; New Bird 0
+    913  a92e		       0a 3c		      DC.B	$0A,$3C	; New Bird 1
+    914  a930		       15 a0		      DC.B	$15,$A0	; New Bird 2
+    915  a932		       a1 40		      DC.B	$A1,$40	; New Bird 3
+    916  a934		       43 04		      DC.B	$43,$04	; New Bird 4
+    917  a936		       05 28		      DC.B	$05,$28	; New Bird 5
+    918  a938		       29 50		      DC.B	$29,$50	; New Bird 6
+    919  a93a		       f2 80		      DC.B	$F2,$80	; New Bird 7
+    920  a93c		       aa 8a 28 a2*	      DC.B	$AA,$8A,$28,$A2,$82,$82,$8A,$28,$0	; Novice
+    921  a945		       a8 00		      DC.B	$A8,$00	; S one
+    922  a947		       a2 80		      DC.B	$A2,$80	; S two
+    923  a949		       a0 0a 00 a2*	      DC.B	$A0,$0A,$00,$A2,$8A,$00,$A0,$00	; Level
+    924  a951		       a2 8a 28 a2*	      DC.B	$A2,$8A,$28,$A2,$8A,$28,$AA,$8A,$28,$A0,$0A,$28	; Advanced
+    925  a95d		       a0 0a a8 a2*	      DC.B	$A0,$0A,$A8,$A2,$8A,$00,$A2,$82,$80	; Expert
+    926  a966		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+    927  a96a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+    928  a96e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+    929  a972		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 3
+    930  a976		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 4
+    931  a97a		       00 0f c0 00	      DC.B	0,$0F,$C0,0	; Twinkle 5
+    932  a97e		       00 f5 7c 00	      DC.B	0,$F5,$7C,0	; Twinkle 6
+    933  a982		       af ef ef e8	      DC.B	$AF,$EF,$EF,$E8	; Twinkle 7
+    934  a986		       2a aa aa aa*	      DC.B	$2A,$AA,$AA,$AA,$AA	; Left Shield
+    935  a98b		       a8		      DC.B	$A8	; Right Shield
+    936  a98c		       8a 8a 8a 80	      DC.B	$8A,$8A,$8A,$80	; Four Type
+    937  a990		       8a 8a 8a 80	      DC.B	$8A,$8A,$8A,$80	; Eight Type
+    938  a994		       a8 a8 a8 00	      DC.B	$A8,$A8,$A8,$00	; Tho Type
+    939  a998		       88 a8 a8 00	      DC.B	$88,$A8,$A8,$00	; Six Type
+    940  a99c		       00 00		      DC.B	0,0	; Special
+    941  a99e		       05 40		      DC.B	$05,$40	; Blue Bug 0
+    942  a9a0		       05 40		      DC.B	$05,$40	; Blue Bug F
+    943  a9a2		       fa bc		      DC.B	$FA,$BC	; Red Bug 0
+    944  a9a4		       3d f0		      DC.B	$3D,$F0	; Red Bug F
+    945  a9a6		       1f d0		      DC.B	$1F,$D0	; Galaga 0
+    946  a9a8		       1f d0		      DC.B	$1F,$D0	; Galaga F
+    947  a9aa		       03 00		      DC.B	$03,$00	; Hero 0
+    948  a9ac		       08 0d		      DC.B	$08,$0D	; Hero 1
+    949  a9ae		       3c 00		      DC.B	$3C,0	; Hero 2
+    950  a9b0		       08 30		      DC.B	$08,$30	; Hero 3
+    951  a9b2		       fb bc		      DC.B	$FB,$BC	; Hero 4
+    952  a9b4		       0c 20		      DC.B	$0C,$20	; Hero 5
+    953  a9b6		       00 3c		      DC.B	0,$3C	; Hero 6
+    954  a9b8		       70 20		      DC.B	$70,$20	; Hero 7
+    955  a9ba		       02 00 08 00	      DC.B	$02,$00,8,$00	; Missile
+    956  a9be		       01 00		      DC.B	1,0	; Missile 4
+    957  a9c0		       00 00		      DC.B	0,0	; Star Graph
+    958  a9c2		       ae 50		      DC.B	$AE,$50	; Blue Bug 1
+    959  a9c4		       2a 84		      DC.B	$2A,$84	; Blue Bug 2
+    960  a9c6		       02 a0		      DC.B	$02,$A0	; Blue Bug 3
+    961  a9c8		       a3 28		      DC.B	$A3,$28	; Blue Bug 4
+    962  a9ca		       2a 00		      DC.B	$2A,$00	; Blue Bug 5
+    963  a9cc		       4a a0		      DC.B	$4A,$A0	; Blue Bug 6
+    964  a9ce		       16 e8		      DC.B	$16,$E8	; Blue Bug 7
+    965  a9d0		       ff b4		      DC.B	$FF,$B4	; Red Bug 1
+    966  a9d2		       ff f4		      DC.B	$FF,$F4	; Red Bug 2
+    967  a9d4		       03 f0		      DC.B	$03,$F0	; Red Bug 3
+    968  a9d6		       f1 3c		      DC.B	$F1,$3C	; Red Bug 4
+    969  a9d8		       3f 00		      DC.B	$3F,$00	; Red Bug 5
+    970  a9da		       7b fc		      DC.B	$7B,$FC	; Red Bug 6
+    971  a9dc		       7b fc		      DC.B	$7B,$FC	; Red Bug 7
+    972  a9de		       17 f4		      DC.B	$17,$F4	; Galaga 1
+    973  a9e0		       25 10		      DC.B	$25,$10	; Galaga 2
+    974  a9e2		       01 50		      DC.B	$01,$50	; Galaga 3
+    975  a9e4		       a0 a0		      DC.B	$A0,$A0	; Galaga 4
+    976  a9e6		       16 00		      DC.B	$16,$00	; Galaga 5
+    977  a9e8		       45 80		      DC.B	$45,$80	; Galaga 6
+    978  a9ea		       7f 50		      DC.B	$7F,$50	; Galaga 7
+    979  a9ec		       05 40		      DC.B	$5,$40	; 0
+    980  a9ee		       05 40		      DC.B	$5,$40	; 1
+    981  a9f0		       15 40		      DC.B	$15,$40	; 2
+    982  a9f2		       55 40		      DC.B	$55,$40	; 3
+    983  a9f4		       00 40		      DC.B	$0,$40	; 4
+    984  a9f6		       55 50		      DC.B	$55,$50	; 5
+    985  a9f8		       15 40		      DC.B	$15,$40	; 6
+    986  a9fa		       15 50		      DC.B	$15,$50	; 7
+    987  a9fc		       15 40		      DC.B	$15,$40	; 8
+    988  a9fe		       15 40		      DC.B	$15,$40	; 9
+    989  aa00
+    990  aa00							; 2 ND LINE ;
+    991  aa00
+    992  aa00					      ORG	$AA00	;
+    993  aa00		       00 00 00 	      DC.B	0,0,0	; Explosion 7
+    994  aa03		       a0 80		      DC.B	$A0,$80	; Percent
+    995  aa05		       d3 c7		      DC.B	$D3,$C7	; Scorpion 0
+    996  aa07		       05 40		      DC.B	$05,$40	; Scorpion 1
+    997  aa09		       00 15		      DC.B	$00,$15	; Scorpion 2
+    998  aa0b		       88 10		      DC.B	$88,$10	; Scorpion 3
+    999  aa0d		       82 00		      DC.B	$82,$00	; Scorpion 4
+   1000  aa0f		       04 22		      DC.B	$04,$22	; Scorpion 5
+   1001  aa11		       15 08		      DC.B	$15,$08	; Scorpion 6
+   1002  aa13		       01 50		      DC.B	$01,$50	; Scorpion 7
+   1003  aa15		       52 14		      DC.B	$52,$14	; Scorpion F
+   1004  aa17		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+   1005  aa1a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+   1006  aa1d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+   1007  aa20		       00 0c 00 	      DC.B	0,$0C,0	; Explosion 3
+   1008  aa23		       0c 80 0c 	      DC.B	$0C,$80,$0C	; Explosion 2
+   1009  aa26		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+   1010  aa29		       00 00 30 	      DC.B	0,0,$30	; Explosion 0
+   1011  aa2c		       0f c0		      DC.B	$0F,$C0	; New Bird 0
+   1012  aa2e		       02 30		      DC.B	$02,$30	; New Bird 1
+   1013  aa30		       15 a0		      DC.B	$15,$A0	; New Bird 2
+   1014  aa32		       81 00		      DC.B	$81,$00	; New Bird 3
+   1015  aa34		       03 00		      DC.B	$03,$00	; New Bird 4
+   1016  aa36		       01 08		      DC.B	$01,$08	; New Bird 5
+   1017  aa38		       29 50		      DC.B	$29,$50	; New Bird 6
+   1018  aa3a		       32 00		      DC.B	$32,$00	; New Bird 7
+   1019  aa3c		       a2 8a a8 a2*	      DC.B	$A2,$8A,$A8,$A2,$82,$82,$AA,$2A,$A0	; Novice
+   1020  aa45		       a8 00		      DC.B	$A8,$00	; S one
+   1021  aa47		       aa 80		      DC.B	$AA,$80	; S two
+   1022  aa49		       a0 0a a8 a2*	      DC.B	$A0,$0A,$A8,$A2,$8A,$A8,$A0,$00	; Level
+   1023  aa51		       aa 8a a8 a2*	      DC.B	$AA,$8A,$A8,$A2,$8A,$A8,$A2,$8A,$A8,$AA,$8A,$A8	; Advanced
+   1024  aa5d		       aa 8a 28 aa*	      DC.B	$AA,$8A,$28,$AA,$8A,$A8,$AA,$8A,$A0	; Expert
+   1025  aa66		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+   1026  aa6a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+   1027  aa6e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+   1028  aa72		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 3
+   1029  aa76		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 4
+   1030  aa7a		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 5
+   1031  aa7e		       00 3d f0 00	      DC.B	0,$3D,$F0,0	; Twinkle 6
+   1032  aa82		       2e af ca f0	      DC.B	$2E,$AF,$CA,$F0	; Twinkle 7
+   1033  aa86		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+   1034  aa8b		       00		      DC.B	0	; Right Shield
+   1035  aa8c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+   1036  aa90		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+   1037  aa94		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+   1038  aa98		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+   1039  aa9c		       00 00		      DC.B	0,0	; Special
+   1040  aa9e		       0d c0		      DC.B	$0D,$C0	; Blue Bug 0
+   1041  aaa0		       0d c0		      DC.B	$0D,$C0	; Blue Bug F
+   1042  aaa2		       fd fc		      DC.B	$FD,$FC	; Red Bug 0
+   1043  aaa4		       34 70		      DC.B	$34,$70	; Red Bug F
+   1044  aaa6		       59 94		      DC.B	$59,$94	; Galaga 0
+   1045  aaa8		       59 94		      DC.B	$59,$94	; Galaga F
+   1046  aaaa		       03 00		      DC.B	$03,$00	; Hero 0
+   1047  aaac		       00 00		      DC.B	0,0	; Hero 1
+   1048  aaae		       55 80		      DC.B	$55,$80	; Hero 2
+   1049  aab0		       00 00		      DC.B	$0,0	; Hero 3
+   1050  aab2		       df dc		      DC.B	$DF,$DC	; Hero 4
+   1051  aab4		       00 00		      DC.B	$00,$00	; Hero 5
+   1052  aab6		       02 55		      DC.B	$02,$55	; Hero 6
+   1053  aab8		       00 00		      DC.B	$00,$00	; Hero 7
+   1054  aaba		       00 00 00 00	      DC.B	0,0,0,0	; Missile
+   1055  aabe		       01 00		      DC.B	1,0	; Missile 4
+   1056  aac0		       00 00		      DC.B	0,0	; Star Graph
+   1057  aac2		       2a b0		      DC.B	$2A,$B0	; Blue Bug 1
+   1058  aac4		       aa 80		      DC.B	$AA,$80	; Blue Bug 2
+   1059  aac6		       0a 80		      DC.B	$0A,$80	; Blue Bug 3
+   1060  aac8		       a3 28		      DC.B	$A3,$28	; Blue Bug 4
+   1061  aaca		       0a 80		      DC.B	$0A,$80	; Blue Bug 5
+   1062  aacc		       0a a8		      DC.B	$0A,$A8	; Blue Bug 6
+   1063  aace		       3a a0		      DC.B	$3A,$A0	; Blue Bug 7
+   1064  aad0		       3e c0		      DC.B	$3E,$C0	; Red Bug 1
+   1065  aad2		       3f fc		      DC.B	$3F,$FC	; Red Bug 2
+   1066  aad4		       0f f0		      DC.B	$0F,$F0	; Red Bug 3
+   1067  aad6		       f0 3c		      DC.B	$F0,$3C	; Red Bug 4
+   1068  aad8		       3f c0		      DC.B	$3F,$C0	; Red Bug 5
+   1069  aada		       f3 f0		      DC.B	$F3,$F0	; Red Bug 6
+   1070  aadc		       0e f0		      DC.B	$0E,$F0	; Red Bug 7
+   1071  aade		       0d d0		      DC.B	$0D,$D0	; Galaga 1
+   1072  aae0		       00 00		      DC.B	0,0	; Galaga 2
+   1073  aae2		       01 50		      DC.B	$01,$50	; Galaga 3
+   1074  aae4		       60 90		      DC.B	$60,$90	; Galaga 4
+   1075  aae6		       15 00		      DC.B	$15,$00	; Galaga 5
+   1076  aae8		       00 00		      DC.B	0,0	; Galaga 6
+   1077  aaea		       1d c0		      DC.B	$1D,$C0	; Galaga 7
+   1078  aaec		       00 00		      DC.B	0,0	; 0
+   1079  aaee		       00 00		      DC.B	0,0	; 1
+   1080  aaf0		       00 00		      DC.B	0,0	; 2
+   1081  aaf2		       00 00		      DC.B	0,0	; 3
+   1082  aaf4		       00 00		      DC.B	0,0	; 4
+   1083  aaf6		       00 00		      DC.B	0,0	; 5
+   1084  aaf8		       00 00		      DC.B	0,0	; 6
+   1085  aafa		       00 00		      DC.B	0,0	; 7
+   1086  aafc		       00 00		      DC.B	0,0	; 8
+   1087  aafe		       00 00		      DC.B	0,0	; 9
+   1088  ab00
+   1089  ab00							; 1 ST LINE ;
+   1090  ab00
+   1091  ab00					      ORG	$AB00	;
+   1092  ab00		       00 00 00 	      DC.B	0,0,0	; Explosion 7
+   1093  ab03		       a0 00		      DC.B	$A0,0	; Percent
+   1094  ab05		       e4 1b		      DC.B	$E4,$1B	; Scorpion 0
+   1095  ab07		       02 40		      DC.B	$02,$40	; Scorpion 1
+   1096  ab09		       00 00		      DC.B	0,0	; Scorpion 2
+   1097  ab0b		       20 00		      DC.B	$20,0	; Scorpion 3
+   1098  ab0d		       28 00		      DC.B	$28,0	; Scorpion 4
+   1099  ab0f		       00 0a		      DC.B	0,$0A	; Scorpion 5
+   1100  ab11		       54 00		      DC.B	$54,0	; Scorpion 6
+   1101  ab13		       01 80		      DC.B	$01,$80	; Scorpion 7
+   1102  ab15		       44 44		      DC.B	$44,$44	; Scorpion F
+   1103  ab17		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+   1104  ab1a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+   1105  ab1d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+   1106  ab20		       00 00 00 	      DC.B	0,0,0	; Explosion 3
+   1107  ab23		       00 0c 10 	      DC.B	0,$0C,$10	; Explosion 2
+   1108  ab26		       00 80 00 	      DC.B	0,$80,0	; Explosion 1
+   1109  ab29		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+   1110  ab2c		       00 00		      DC.B	0,0	; New Bird 0
+   1111  ab2e		       00 00		      DC.B	0,0	; New Bird 1
+   1112  ab30		       00 00		      DC.B	0,0	; New Bird 2
+   1113  ab32		       00 00		      DC.B	0,0	; New Bird 3
+   1114  ab34		       03 00		      DC.B	$03,0	; New Bird 4
+   1115  ab36		       00 00		      DC.B	0,0	; New Bird 5
+   1116  ab38		       00 00		      DC.B	0,0	; New Bird 6
+   1117  ab3a		       00 00		      DC.B	0,0	; New Bird 7
+   1118  ab3c		       82 82 a0 a2*	      DC.B	$82,$82,$A0,$A2,$8A,$A0,$A8,$2A,$A0	; Novice
+   1119  ab45		       28 00		      DC.B	$28,$00	; S one
+   1120  ab47		       2a 00		      DC.B	$2A,$00	; S two
+   1121  ab49		       a0 0a a8 a2*	      DC.B	$A0,$0A,$A8,$A2,$8A,$A8,$A0,$00	; Level
+   1122  ab51		       2a 0a a0 a2*	      DC.B	$2A,$0A,$A0,$A2,$82,$A0,$82,$82,$A0,$AA,$8A,$A0	; Advanced
+   1123  ab5d		       aa 8a 28 aa*	      DC.B	$AA,$8A,$28,$AA,$0A,$A8,$AA,$0A,$A0	; Expert
+   1124  ab66		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+   1125  ab6a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+   1126  ab6e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+   1127  ab72		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 3
+   1128  ab76		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 4
+   1129  ab7a		       00 03 00 00	      DC.B	0,3,0,0	; Twinkle 5
+   1130  ab7e		       00 0f c0 00	      DC.B	0,$0F,$C0,0	; Twinkle 6
+   1131  ab82		       02 af ea 88	      DC.B	$02,$AF,$EA,$88	; Twinkle 7
+   1132  ab86		       15 55 55 55*	      DC.B	$15,$55,$55,$55,$55	; Left Shield
+   1133  ab8b		       50		      DC.B	$50	; Right Shield
+   1134  ab8c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+   1135  ab90		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+   1136  ab94		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+   1137  ab98		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+   1138  ab9c		       00 00		      DC.B	0,0	; Special
+   1139  ab9e		       04 40		      DC.B	$04,$40	; Blue Bug 0
+   1140  aba0		       04 40		      DC.B	$04,$40	; Blue Bug F
+   1141  aba2		       34 70		      DC.B	$34,$70	; Red Bug 0
+   1142  aba4		       04 40		      DC.B	$04,$40	; Red Bug F
+   1143  aba6		       08 80		      DC.B	$08,$80	; Galaga 0
+   1144  aba8		       08 80		      DC.B	$08,$80	; Galaga F
+   1145  abaa		       01 00		      DC.B	$01,$00	; Hero 0
+   1146  abac		       00 00		      DC.B	$0,0	; Hero 1
+   1147  abae		       fc 00		      DC.B	$FC,0	; Hero 2
+   1148  abb0		       00 00		      DC.B	$0,0	; Hero 3
+   1149  abb2		       cb 8c		      DC.B	$CB,$8C	; Hero 4
+   1150  abb4		       00 00		      DC.B	$0,0	; Hero 5
+   1151  abb6		       00 3f		      DC.B	$0,$3F	; Hero 6
+   1152  abb8		       00 00		      DC.B	0,0	; Hero 7
+   1153  abba		       00 00 00 00	      DC.B	0,0,0,0	; Missile
+   1154  abbe		       00 00		      DC.B	0,0	; Missile 4
+   1155  abc0		       03 00		      DC.B	3,0	; Star Graph
+   1156  abc2		       0a 10		      DC.B	$0A,$10	; Blue Bug 1
+   1157  abc4		       a8 00		      DC.B	$A8,$00	; Blue Bug 2
+   1158  abc6		       0a 00		      DC.B	$0A,$00	; Blue Bug 3
+   1159  abc8		       80 08		      DC.B	$80,$08	; Blue Bug 4
+   1160  abca		       02 80		      DC.B	$02,$80	; Blue Bug 5
+   1161  abcc		       00 a8		      DC.B	$00,$A8	; Blue Bug 6
+   1162  abce		       12 80		      DC.B	$12,$80	; Blue Bug 7
+   1163  abd0		       0f 50		      DC.B	$0F,$50	; Red Bug 1
+   1164  abd2		       0f 30		      DC.B	$0F,$30	; Red Bug 2
+   1165  abd4		       0f c0		      DC.B	$0F,$C0	; Red Bug 3
+   1166  abd6		       30 30		      DC.B	$30,$30	; Red Bug 4
+   1167  abd8		       0f c0		      DC.B	$0F,$C0	; Red Bug 5
+   1168  abda		       33 c0		      DC.B	$33,$C0	; Red Bug 6
+   1169  abdc		       17 c0		      DC.B	$17,$C0	; Red Bug 7
+   1170  abde		       09 10		      DC.B	$09,$10	; Galaga 1
+   1171  abe0		       00 00		      DC.B	$00,$00	; Galaga 2
+   1172  abe2		       06 40		      DC.B	$06,$40	; Galaga 3
+   1173  abe4		       10 40		      DC.B	$10,$40	; Galaga 4
+   1174  abe6		       06 40		      DC.B	$06,$40	; Galaga 5
+   1175  abe8		       00 00		      DC.B	$00,$00	; Galaga 6
+   1176  abea		       11 80		      DC.B	$11,$80	; Galaga 7
+   1177  abec		       00 00		      DC.B	0,0	; 0
+   1178  abee		       00 00		      DC.B	0,0	; 1
+   1179  abf0		       00 00		      DC.B	0,0	; 2
+   1180  abf2		       00 00		      DC.B	0,0	; 3
+   1181  abf4		       00 00		      DC.B	0,0	; 4
+   1182  abf6		       00 00		      DC.B	0,0	; 5
+   1183  abf8		       00 00		      DC.B	0,0	; 6
+   1184  abfa		       00 00		      DC.B	0,0	; 7
+   1185  abfc		       00 00		      DC.B	0,0	; 8
+   1186  abfe		       00 00		      DC.B	0,0	; 9
+   1187  ac00
+   1188  ac00							; 0 TH LINE ;
+   1189  ac00
+   1190  ac00					      ORG	$AC00	;
+   1191  ac00		       00 00 00    EXPLO7     DC.B	0,0,0	; Explosion 7
+   1192  ac03		       00 00	   PERCENT    DC.B	0,0	; Percent
+   1193  ac05		       00 00	   SCORP0     DC.B	0,0	; Scorpion 0
+   1194  ac07		       00 00	   SCORP1     DC.B	0,0	; Scorpion 1
+   1195  ac09		       00 00	   SCORP2     DC.B	0,0	; Scorpion 2
+   1196  ac0b		       00 00	   SCORP3     DC.B	0,0	; Scorpion 3
+   1197  ac0d		       00 00	   SCORP4     DC.B	0,0	; Scorpion 4
+   1198  ac0f		       00 00	   SCORP5     DC.B	0,0	; Scorpion 5
+   1199  ac11		       00 00	   SCORP6     DC.B	0,0	; Scorpion 6
+   1200  ac13		       00 00	   SCORP7     DC.B	0,0	; Scorpion 7
+   1201  ac15		       00 00	   SCORPF     DC.B	0,0	; Scorpion F
+   1202  ac17		       00 00 00    EXPLO6     DC.B	0,0,0	; Explosion 6
+   1203  ac1a		       00 00 00    EXPLO5     DC.B	0,0,0	; Explosion 5
+   1204  ac1d		       00 00 00    EXPLO4     DC.B	0,0,0	; Explosion 4
+   1205  ac20		       00 00 00    EXPLO3     DC.B	0,0,0	; Explosion 3
+   1206  ac23		       00 00 00    EXPLO2     DC.B	0,0,0	; Explosion 2
+   1207  ac26		       00 00 00    EXPLO1     DC.B	0,0,0	; Explosion 1
+   1208  ac29		       00 00 00    EXPLO0     DC.B	0,0,0	; Explosion 0
+   1209  ac2c		       00 00	   NEWBIRD0   DC.B	0,0	; New Bird 0
+   1210  ac2e		       00 00	   NEWBIRD1   DC.B	0,0	; New Bird 1
+   1211  ac30		       00 00	   NEWBIRD2   DC.B	0,0	; New Bird 2
+   1212  ac32		       00 00	   NEWBIRD3   DC.B	0,0	; New Bird 3
+   1213  ac34		       00 00	   NEWBIRD4   DC.B	0,0	; New Bird 4
+   1214  ac36		       00 00	   NEWBIRD5   DC.B	0,0	; New Bird 5
+   1215  ac38		       00 00	   NEWBIRD6   DC.B	0,0	; New Bird 6
+   1216  ac3a		       00 00	   NEWBIRD7   DC.B	0,0	; New Bird 7
+   1217  ac3c		       00 00 00 00*NOVICE     DC.B	0,0,0,0,0,0,0,0,0	; Novice
+   1218  ac45		       00 00	   SONE       DC.B	0,0	; S one
+   1219  ac47		       00 00	   STWO       DC.B	0,0	; S two
+   1220  ac49		       00 00 00 00*LEVEL      DC.B	0,0,0,0,0,0,0,0	; Level
+   1221  ac51		       00 00 00 00*ADVANCED   DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+   1222  ac5d		       00 00 00 00*EXPERT     DC.B	0,0,0,0,0,0,0,0,0	; Expert
+   1223  ac66		       00 00 00 00 TWINKLE    DC.B	0,0,0,0	; Twinkle 0
+   1224  ac6a		       00 00 00 00 TWINKL1    DC.B	0,0,0,0	; Twinkle 1
+   1225  ac6e		       00 00 00 00 TWINKL2    DC.B	0,0,0,0	; Twinkle 2
+   1226  ac72		       00 00 00 00 TWINKL3    DC.B	0,0,0,0	; Twinkle 3
+   1227  ac76		       00 00 00 00 TWINKL4    DC.B	0,0,0,0	; Twinkle 4
+   1228  ac7a		       00 00 00 00 TWINKL5    DC.B	0,0,0,0	; Twinkle 5
+   1229  ac7e		       00 00 00 00 TWINKL6    DC.B	0,0,0,0	; Twinkle 6
+   1230  ac82		       00 00 00 00 TWINKL7    DC.B	0,0,0,0	; Twinkle 7
+   1231  ac86		       00 00 00 00*LSHIELD    DC.B	0,0,0,0,0	; Left Shield
+   1232  ac8b		       00	   RSHIELD    DC.B	0	; Right Shield
+   1233  ac8c		       00 00 00 00 FOUTYPE    DC.B	0,0,0,0	; Four Type
+   1234  ac90		       00 00 00 00 EIGTYPE    DC.B	0,0,0,0	; Eight Type
+   1235  ac94		       00 00 00 00 THOTYPE    DC.B	0,0,0,0	; Tho Type
+   1236  ac98		       00 00 00 00 SIXTYPE    DC.B	0,0,0,0	; Six Type
+   1237  ac9c		       00 00	   SPECIAL    DC.B	0,0	; Special
+   1238  ac9e		       00 00	   BLUBUG     DC.B	0,0	; Blue Bug 0
+   1239  aca0		       00 00	   BLUBUGF    DC.B	0,0	; Blue Bug F
+   1240  aca2		       00 00	   REDBUG     DC.B	0,0	; Red Bug 0
+   1241  aca4		       00 00	   REDBUGF    DC.B	0,0	; Red Bug F
+   1242  aca6		       00 00	   BOSGAL     DC.B	0,0	; Galaga 0
+   1243  aca8		       00 00	   BOSGALF    DC.B	0,0	; Galaga F
+   1244  acaa		       00 00	   HEROS      DC.B	0,0	; Hero 0
+   1245  acac		       00 00	   HERO1      DC.B	0,0	; Hero 1
+   1246  acae		       00 00	   HERO2      DC.B	0,0	; Hero 2
+   1247  acb0		       00 00	   HERO3      DC.B	0,0	; Hero 3
+   1248  acb2		       00 00	   HERO4      DC.B	0,0	; Hero 4
+   1249  acb4		       00 00	   HERO5      DC.B	0,0	; Hero 5
+   1250  acb6		       00 00	   HERO6      DC.B	0,0	; Hero 6
+   1251  acb8		       00 00	   HERO7      DC.B	0,0	; Hero 7
+   1252  acba		       00 00 00 00 MISSLE     DC.B	0,0,0,0	; Missile
+   1253  acbe		       00 00	   MISSLE4    DC.B	0,0	; Missile 4
+   1254  acc0		       00 00	   STARGRAF   DC.B	0,0	; Star Graph
+   1255  acc2		       00 00	   BLUBUG1    DC.B	0,0	; Blue Bug 1
+   1256  acc4		       00 00	   BLUBUG2    DC.B	0,0	; Blue Bug 2
+   1257  acc6		       00 00	   BLUBUG3    DC.B	0,0	; Blue Bug 3
+   1258  acc8		       00 00	   BLUBUG4    DC.B	0,0	; Blue Bug 4
+   1259  acca		       00 00	   BLUBUG5    DC.B	0,0	; Blue Bug 5
+   1260  accc		       00 00	   BLUBUG6    DC.B	0,0	; Blue Bug 6
+   1261  acce		       00 00	   BLUBUG7    DC.B	0,0	; Blue Bug 7
+   1262  acd0		       00 00	   REDBUG1    DC.B	0,0	; Red Bug 1
+   1263  acd2		       00 00	   REDBUG2    DC.B	0,0	; Red Bug 2
+   1264  acd4		       00 00	   REDBUG3    DC.B	0,0	; Red Bug 3
+   1265  acd6		       00 00	   REDBUG4    DC.B	0,0	; Red Bug 4
+   1266  acd8		       00 00	   REDBUG5    DC.B	0,0	; Red Bug 5
+   1267  acda		       00 00	   REDBUG6    DC.B	0,0	; Red Bug 6
+   1268  acdc		       00 00	   REDBUG7    DC.B	0,0	; Red Bug 7
+   1269  acde		       00 00	   BOSGAL1    DC.B	0,0	; Galaga 1
+   1270  ace0		       00 00	   BOSGAL2    DC.B	0,0	; Galaga 2
+   1271  ace2		       00 00	   BOSGAL3    DC.B	0,0	; Galaga 3
+   1272  ace4		       00 00	   BOSGAL4    DC.B	0,0	; Galaga 4
+   1273  ace6		       00 00	   BOSGAL5    DC.B	0,0	; Galaga 5
+   1274  ace8		       00 00	   BOSGAL6    DC.B	0,0	; Galaga 6
+   1275  acea		       00 00	   BOSGAL7    DC.B	0,0	; Galaga 7
+   1276  acec		       00 00		      DC.B	0,0	; 0
+   1277  acee		       00 00		      DC.B	0,0	; 1
+   1278  acf0		       00 00		      DC.B	0,0	; 2
+   1279  acf2		       00 00		      DC.B	0,0	; 3
+   1280  acf4		       00 00		      DC.B	0,0	; 4
+   1281  acf6		       00 00		      DC.B	0,0	; 5
+   1282  acf8		       00 00		      DC.B	0,0	; 6
+   1283  acfa		       00 00		      DC.B	0,0	; 7
+   1284  acfc		       00 00		      DC.B	0,0	; 8
+   1285  acfe		       00 00		      DC.B	0,0	; 9
+   1286  ad00
+   1287  ad00							; Magic -1 Line ;
+   1288  ad00
+   1289  ad00					      ORG	$AD00	;
+   1290  ad00		       00 00 00 	      DC.B	0,0,0	; Explosion 7
+   1291  ad03		       00 00		      DC.B	0,0	; Percent
+   1292  ad05		       00 00		      DC.B	0,0	; Scorpion 0
+   1293  ad07		       00 00		      DC.B	0,0	; Scorpion 1
+   1294  ad09		       00 00		      DC.B	0,0	; Scorpion 2
+   1295  ad0b		       00 00		      DC.B	0,0	; Scorpion 3
+   1296  ad0d		       00 00		      DC.B	0,0	; Scorpion 4
+   1297  ad0f		       00 00		      DC.B	0,0	; Scorpion 5
+   1298  ad11		       00 00		      DC.B	0,0	; Scorpion 6
+   1299  ad13		       00 00		      DC.B	0,0	; Scorpion 7
+   1300  ad15		       00 00		      DC.B	0,0	; Scorpion F
+   1301  ad17		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+   1302  ad1a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+   1303  ad1d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+   1304  ad20		       00 00 00 	      DC.B	0,0,0	; Explosion 3
+   1305  ad23		       00 00 00 	      DC.B	0,0,0	; Explosion 2
+   1306  ad26		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+   1307  ad29		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+   1308  ad2c		       00 00		      DC.B	0,0	; New Bird 0
+   1309  ad2e		       00 00		      DC.B	0,0	; New Bird 1
+   1310  ad30		       00 00		      DC.B	0,0	; New Bird 2
+   1311  ad32		       00 00		      DC.B	0,0	; New Bird 3
+   1312  ad34		       00 00		      DC.B	0,0	; New Bird 4
+   1313  ad36		       00 00		      DC.B	0,0	; New Bird 5
+   1314  ad38		       00 00		      DC.B	0,0	; New Bird 6
+   1315  ad3a		       00 00		      DC.B	0,0	; New Bird 7
+   1316  ad3c		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Novice
+   1317  ad45		       00 00		      DC.B	0,0	; S one
+   1318  ad47		       00 00		      DC.B	0,0	; S two
+   1319  ad49		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0	; Level
+   1320  ad51		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+   1321  ad5d		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Expert
+   1322  ad66		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+   1323  ad6a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+   1324  ad6e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+   1325  ad72		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 3
+   1326  ad76		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 4
+   1327  ad7a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 5
+   1328  ad7e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 6
+   1329  ad82		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 7
+   1330  ad86		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+   1331  ad8b		       00		      DC.B	0	; Right Shield
+   1332  ad8c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+   1333  ad90		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+   1334  ad94		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+   1335  ad98		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+   1336  ad9c		       00 00		      DC.B	0,0	; Special
+   1337  ad9e		       00 00		      DC.B	0,0	; Blue Bug 0
+   1338  ada0		       00 00		      DC.B	0,0	; Blue Bug F
+   1339  ada2		       00 00		      DC.B	0,0	; Red Bug 0
+   1340  ada4		       00 00		      DC.B	0,0	; Red Bug F
+   1341  ada6		       00 00		      DC.B	0,0	; Galaga 0
+   1342  ada8		       00 00		      DC.B	0,0	; Galaga F
+   1343  adaa		       00 00		      DC.B	0,0	; Hero 0
+   1344  adac		       00 00		      DC.B	0,0	; Hero 1
+   1345  adae		       00 00		      DC.B	0,0	; Hero 2
+   1346  adb0		       00 00		      DC.B	0,0	; Hero 3
+   1347  adb2		       00 00		      DC.B	0,0	; Hero 4
+   1348  adb4		       00 00		      DC.B	0,0	; Hero 5
+   1349  adb6		       00 00		      DC.B	0,0	; Hero 6
+   1350  adb8		       00 00		      DC.B	0,0	; Hero 7
+   1351  adba		       00 00 00 00	      DC.B	0,0,0,0	; Missile
+   1352  adbe		       00 00		      DC.B	0,0	; Missile 4
+   1353  adc0		       00 00		      DC.B	0,0	; Star Graph
+   1354  adc2		       00 00		      DC.B	0,0	; Blue Bug 1
+   1355  adc4		       00 00		      DC.B	0,0	; Blue Bug 2
+   1356  adc6		       00 00		      DC.B	0,0	; Blue Bug 3
+   1357  adc8		       00 00		      DC.B	0,0	; Blue Bug 4
+   1358  adca		       00 00		      DC.B	0,0	; Blue Bug 5
+   1359  adcc		       00 00		      DC.B	0,0	; Blue Bug 6
+   1360  adce		       00 00		      DC.B	0,0	; Blue Bug 7
+   1361  add0		       00 00		      DC.B	0,0	; Red Bug 1
+   1362  add2		       00 00		      DC.B	0,0	; Red Bug 2
+   1363  add4		       00 00		      DC.B	0,0	; Red Bug 3
+   1364  add6		       00 00		      DC.B	0,0	; Red Bug 4
+   1365  add8		       00 00		      DC.B	0,0	; Red Bug 5
+   1366  adda		       00 00		      DC.B	0,0	; Red Bug 6
+   1367  addc		       00 00		      DC.B	0,0	; Red Bug 7
+   1368  adde		       00 00		      DC.B	0,0	; Galaga 1
+   1369  ade0		       00 00		      DC.B	0,0	; Galaga 2
+   1370  ade2		       00 00		      DC.B	0,0	; Galaga 3
+   1371  ade4		       00 00		      DC.B	0,0	; Galaga 4
+   1372  ade6		       00 00		      DC.B	0,0	; Galaga 5
+   1373  ade8		       00 00		      DC.B	0,0	; Galaga 6
+   1374  adea		       00 00		      DC.B	0,0	; Galaga 7
+   1375  adec		       00 00		      DC.B	0,0	; 0
+   1376  adee		       00 00		      DC.B	0,0	; 1
+   1377  adf0		       00 00		      DC.B	0,0	; 2
+   1378  adf2		       00 00		      DC.B	0,0	; 3
+   1379  adf4		       00 00		      DC.B	0,0	; 4
+   1380  adf6		       00 00		      DC.B	0,0	; 5
+   1381  adf8		       00 00		      DC.B	0,0	; 6
+   1382  adfa		       00 00		      DC.B	0,0	; 7
+   1383  adfc		       00 00		      DC.B	0,0	; 8
+   1384  adfe		       00 00		      DC.B	0,0	; 9
+   1385  ae00
+   1386  ae00							; Magic -2 Line ;
+   1387  ae00
+   1388  ae00					      ORG	$AE00	;
+   1389  ae00		       00 00 00 	      DC.B	0,0,0	; Explosion 7
+   1390  ae03		       00 00		      DC.B	0,0	; Percent
+   1391  ae05		       00 00		      DC.B	0,0	; Scorpion 0
+   1392  ae07		       00 00		      DC.B	0,0	; Scorpion 1
+   1393  ae09		       00 00		      DC.B	0,0	; Scorpion 2
+   1394  ae0b		       00 00		      DC.B	0,0	; Scorpion 3
+   1395  ae0d		       00 00		      DC.B	0,0	; Scorpion 4
+   1396  ae0f		       00 00		      DC.B	0,0	; Scorpion 5
+   1397  ae11		       00 00		      DC.B	0,0	; Scorpion 6
+   1398  ae13		       00 00		      DC.B	0,0	; Scorpion 7
+   1399  ae15		       00 00		      DC.B	0,0	; Scorpion F
+   1400  ae17		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+   1401  ae1a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+   1402  ae1d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+   1403  ae20		       00 00 00 	      DC.B	0,0,0	; Explosion 3
+   1404  ae23		       00 00 00 	      DC.B	0,0,0	; Explosion 2
+   1405  ae26		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+   1406  ae29		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+   1407  ae2c		       00 00		      DC.B	0,0	; New Bird 0
+   1408  ae2e		       00 00		      DC.B	0,0	; New Bird 1
+   1409  ae30		       00 00		      DC.B	0,0	; New Bird 2
+   1410  ae32		       00 00		      DC.B	0,0	; New Bird 3
+   1411  ae34		       00 00		      DC.B	0,0	; New Bird 4
+   1412  ae36		       00 00		      DC.B	0,0	; New Bird 5
+   1413  ae38		       00 00		      DC.B	0,0	; New Bird 6
+   1414  ae3a		       00 00		      DC.B	0,0	; New Bird 7
+   1415  ae3c		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Novice
+   1416  ae45		       00 00		      DC.B	0,0	; S one
+   1417  ae47		       00 00		      DC.B	0,0	; S two
+   1418  ae49		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0	; Level
+   1419  ae51		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+   1420  ae5d		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Expert
+   1421  ae66		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+   1422  ae6a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+   1423  ae6e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+   1424  ae72		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 3
+   1425  ae76		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 4
+   1426  ae7a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 5
+   1427  ae7e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 6
+   1428  ae82		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 7
+   1429  ae86		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+   1430  ae8b		       00		      DC.B	0	; Right Shield
+   1431  ae8c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+   1432  ae90		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+   1433  ae94		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+   1434  ae98		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+   1435  ae9c		       00 00		      DC.B	0,0	; Special
+   1436  ae9e		       00 00		      DC.B	0,0	; Blue Bug 0
+   1437  aea0		       00 00		      DC.B	0,0	; Blue Bug F
+   1438  aea2		       00 00		      DC.B	0,0	; Red Bug 0
+   1439  aea4		       00 00		      DC.B	0,0	; Red Bug F
+   1440  aea6		       00 00		      DC.B	0,0	; Galaga 0
+   1441  aea8		       00 00		      DC.B	0,0	; Galaga F
+   1442  aeaa		       00 00		      DC.B	0,0	; Hero 0
+   1443  aeac		       00 00		      DC.B	0,0	; Hero 1
+   1444  aeae		       00 00		      DC.B	0,0	; Hero 2
+   1445  aeb0		       00 00		      DC.B	0,0	; Hero 3
+   1446  aeb2		       00 00		      DC.B	0,0	; Hero 4
+   1447  aeb4		       00 00		      DC.B	0,0	; Hero 5
+   1448  aeb6		       00 00		      DC.B	0,0	; Hero 6
+   1449  aeb8		       00 00		      DC.B	0,0	; Hero 7
+   1450  aeba		       00 00 00 00	      DC.B	0,0,0,0	; Missile
+   1451  aebe		       00 00		      DC.B	0,0	; Missile 4
+   1452  aec0		       00 00		      DC.B	0,0	; Star Graph
+   1453  aec2		       00 00		      DC.B	0,0	; Blue Bug 1
+   1454  aec4		       00 00		      DC.B	0,0	; Blue Bug 2
+   1455  aec6		       00 00		      DC.B	0,0	; Blue Bug 3
+   1456  aec8		       00 00		      DC.B	0,0	; Blue Bug 4
+   1457  aeca		       00 00		      DC.B	0,0	; Blue Bug 5
+   1458  aecc		       00 00		      DC.B	0,0	; Blue Bug 6
+   1459  aece		       00 00		      DC.B	0,0	; Blue Bug 7
+   1460  aed0		       00 00		      DC.B	0,0	; Red Bug 1
+   1461  aed2		       00 00		      DC.B	0,0	; Red Bug 2
+   1462  aed4		       00 00		      DC.B	0,0	; Red Bug 3
+   1463  aed6		       00 00		      DC.B	0,0	; Red Bug 4
+   1464  aed8		       00 00		      DC.B	0,0	; Red Bug 5
+   1465  aeda		       00 00		      DC.B	0,0	; Red Bug 6
+   1466  aedc		       00 00		      DC.B	0,0	; Red Bug 7
+   1467  aede		       00 00		      DC.B	0,0	; Galaga 1
+   1468  aee0		       00 00		      DC.B	0,0	; Galaga 2
+   1469  aee2		       00 00		      DC.B	0,0	; Galaga 3
+   1470  aee4		       00 00		      DC.B	0,0	; Galaga 4
+   1471  aee6		       00 00		      DC.B	0,0	; Galaga 5
+   1472  aee8		       00 00		      DC.B	0,0	; Galaga 6
+   1473  aeea		       00 00		      DC.B	0,0	; Galaga 7
+   1474  aeec		       00 00		      DC.B	0,0	; 0
+   1475  aeee		       00 00		      DC.B	0,0	; 1
+   1476  aef0		       00 00		      DC.B	0,0	; 2
+   1477  aef2		       00 00		      DC.B	0,0	; 3
+   1478  aef4		       00 00		      DC.B	0,0	; 4
+   1479  aef6		       00 00		      DC.B	0,0	; 5
+   1480  aef8		       00 00		      DC.B	0,0	; 6
+   1481  aefa		       00 00		      DC.B	0,0	; 7
+   1482  aefc		       00 00		      DC.B	0,0	; 8
+   1483  aefe		       00 00		      DC.B	0,0	; 9
+   1484  af00
+   1485  af00							;Magic -3 line ;  This is the topmost pixel line that will render, 0 = invisible
+   1486  af00
+   1487  af00					      ORG	$AF00	;
+   1488  af00		       00 00 00 	      DC.B	0,0,0	; Explosion 7
+   1489  af03		       00 00		      DC.B	0,0	; Percent
+   1490  af05		       00 00		      DC.B	0,0	; Scorpion 0
+   1491  af07		       00 00		      DC.B	0,0	; Scorpion 1
+   1492  af09		       00 00		      DC.B	0,0	; Scorpion 2
+   1493  af0b		       00 00		      DC.B	0,0	; Scorpion 3
+   1494  af0d		       00 00		      DC.B	0,0	; Scorpion 4
+   1495  af0f		       00 00		      DC.B	0,0	; Scorpion 5
+   1496  af11		       00 00		      DC.B	0,0	; Scorpion 6
+   1497  af13		       00 00		      DC.B	0,0	; Scorpion 7
+   1498  af15		       00 00		      DC.B	0,0	; Scorpion F
+   1499  af17		       00 00 00 	      DC.B	0,0,0	; Explosion 6
+   1500  af1a		       00 00 00 	      DC.B	0,0,0	; Explosion 5
+   1501  af1d		       00 00 00 	      DC.B	0,0,0	; Explosion 4
+   1502  af20		       00 00 00 	      DC.B	0,0,0	; Explosion 3
+   1503  af23		       00 00 00 	      DC.B	0,0,0	; Explosion 2
+   1504  af26		       00 00 00 	      DC.B	0,0,0	; Explosion 1
+   1505  af29		       00 00 00 	      DC.B	0,0,0	; Explosion 0
+   1506  af2c		       00 00		      DC.B	0,0	; New Bird 0
+   1507  af2e		       00 00		      DC.B	0,0	; New Bird 1
+   1508  af30		       00 00		      DC.B	0,0	; New Bird 2
+   1509  af32		       00 00		      DC.B	0,0	; New Bird 3
+   1510  af34		       00 00		      DC.B	0,0	; New Bird 4
+   1511  af36		       00 00		      DC.B	0,0	; New Bird 5
+   1512  af38		       00 00		      DC.B	0,0	; New Bird 6
+   1513  af3a		       00 00		      DC.B	0,0	; New Bird 7
+   1514  af3c		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Novice
+   1515  af45		       00 00		      DC.B	0,0	; S one
+   1516  af47		       00 00		      DC.B	0,0	; S two
+   1517  af49		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0	; Level
+   1518  af51		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0,0,0,0	; Advanced
+   1519  af5d		       00 00 00 00*	      DC.B	0,0,0,0,0,0,0,0,0	; Expert
+   1520  af66		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 0
+   1521  af6a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 1
+   1522  af6e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 2
+   1523  af72		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 3
+   1524  af76		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 4
+   1525  af7a		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 5
+   1526  af7e		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 6
+   1527  af82		       00 00 00 00	      DC.B	0,0,0,0	; Twinkle 7
+   1528  af86		       00 00 00 00*	      DC.B	0,0,0,0,0	; Left Shield
+   1529  af8b		       00		      DC.B	0	; Right Shield
+   1530  af8c		       00 00 00 00	      DC.B	0,0,0,0	; Four Type
+   1531  af90		       00 00 00 00	      DC.B	0,0,0,0	; Eight Type
+   1532  af94		       00 00 00 00	      DC.B	0,0,0,0	; Tho Type
+   1533  af98		       00 00 00 00	      DC.B	0,0,0,0	; Six Type
+   1534  af9c		       00 00		      DC.B	0,0	; Special
+   1535  af9e		       00 00		      DC.B	0,0	; Blue Bug 0
+   1536  afa0		       00 00		      DC.B	0,0	; Blue Bug F
+   1537  afa2		       00 00		      DC.B	0,0	; Red Bug 0
+   1538  afa4		       00 00		      DC.B	0,0	; Red Bug F
+   1539  afa6		       00 00		      DC.B	0,0	; Galaga 0
+   1540  afa8		       00 00		      DC.B	0,0	; Galaga F
+   1541  afaa		       00 00		      DC.B	0,0	; Hero 0
+   1542  afac		       00 00		      DC.B	0,0	; Hero 1
+   1543  afae		       00 00		      DC.B	0,0	; Hero 2
+   1544  afb0		       00 00		      DC.B	0,0	; Hero 3
+   1545  afb2		       00 00		      DC.B	0,0	; Hero 4
+   1546  afb4		       00 00		      DC.B	0,0	; Hero 5
+   1547  afb6		       00 00		      DC.B	0,0	; Hero 6
+   1548  afb8		       00 00		      DC.B	0,0	; Hero 7
+   1549  afba		       00 00 00 00	      DC.B	0,0,0,0	; Missile
+   1550  afbe		       00 00		      DC.B	0,0	; Missile 4
+   1551  afc0		       00 00		      DC.B	0,0	; Star Graph
+   1552  afc2		       00 00		      DC.B	0,0	; Blue Bug 1
+   1553  afc4		       00 00		      DC.B	0,0	; Blue Bug 2
+   1554  afc6		       00 00		      DC.B	0,0	; Blue Bug 3
+   1555  afc8		       00 00		      DC.B	0,0	; Blue Bug 4
+   1556  afca		       00 00		      DC.B	0,0	; Blue Bug 5
+   1557  afcc		       00 00		      DC.B	0,0	; Blue Bug 6
+   1558  afce		       00 00		      DC.B	0,0	; Blue Bug 7
+   1559  afd0		       00 00		      DC.B	0,0	; Red Bug 1
+   1560  afd2		       00 00		      DC.B	0,0	; Red Bug 2
+   1561  afd4		       00 00		      DC.B	0,0	; Red Bug 3
+   1562  afd6		       00 00		      DC.B	0,0	; Red Bug 4
+   1563  afd8		       00 00		      DC.B	0,0	; Red Bug 5
+   1564  afda		       00 00		      DC.B	0,0	; Red Bug 6
+   1565  afdc		       00 00		      DC.B	0,0	; Red Bug 7
+   1566  afde		       00 00		      DC.B	0,0	; Galaga 1
+   1567  afe0		       00 00		      DC.B	0,0	; Galaga 2
+   1568  afe2		       00 00		      DC.B	0,0	; Galaga 3
+   1569  afe4		       00 00		      DC.B	0,0	; Galaga 4
+   1570  afe6		       00 00		      DC.B	0,0	; Galaga 5
+   1571  afe8		       00 00		      DC.B	0,0	; Galaga 6
+   1572  afea		       00 00		      DC.B	0,0	; Galaga 7
+   1573  afec		       00 00		      DC.B	0,0	; 0
+   1574  afee		       00 00		      DC.B	0,0	; 1
+   1575  aff0		       00 00		      DC.B	0,0	; 2
+   1576  aff2		       00 00		      DC.B	0,0	; 3
+   1577  aff4		       00 00		      DC.B	0,0	; 4
+   1578  aff6		       00 00		      DC.B	0,0	; 5
+   1579  aff8		       00 00		      DC.B	0,0	; 6
+   1580  affa		       00 00		      DC.B	0,0	; 7
+   1581  affc		       00 00		      DC.B	0,0	; 8
+   1582  affe		       00 00		      DC.B	0,0	; 9

@@ -1,0 +1,1224 @@
+------- FILE GLOADER1.ASM LEVEL 1 PASS 2
+      1  0a91 ????				      processor	6502
+      2  0a91 ????						;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      3  0a91 ????						;*GLOADER.S
+      4  0a91 ????						;    ORG     $B000;		      ;ORG AFTER GRAPHICS
+      5  0a91 ????
+      6  0a91 ????	       00 00	   ZERO       EQU	0
+      7  0a91 ????	       01 00	   HUNDRED    EQU	$100
+      8  0a91 ????
+      9  0a91 ????	       78	   STARTUP    SEI		;			      ; STARTUP CODE
+     10  0a91 ????	       d8		      CLD
+     11  0a92 ????	       a2 ff		      LDX	#$FF
+     12  0a94 ????	       9a		      TXS
+     13  0a95 ????
+     14  0a95 ????	       a9 17		      LDA	#$17
+     15  0a97 ????	       85 01		      STA	$01	;		      ;LOCK INTO MARIA MODE
+     16  0a99 ????
+     17  0a99 ????	       8e 00 00 	      STX	CTRLWT	;		   ;TURN OFF DMA
+     18  0a9c ????
+     19  0a9c ????
+     20  0a9c ????	       a9 00		      LDA	#0
+     21  0a9e ????	       85 38		      STA	$38	;		      STORE ZERO INTO OFFSET
+     22  0aa0 ????						;	   LDX	   #$FF;		   ;ZERO OUT ZERO PAGE
+     23  0aa0 ????	       95 00	   ZEROLOP1   STA	ZERO,X
+     24  0aa2 ????	       ca		      DEX
+     25  0aa3 ????	       e0 3f		      CPX	#$3F
+     26  0aa5 ????	       d0 3f		      BNE	ZEROLOP1
+     27  0aa7 ????
+     28  0aa7 ????						;	   LDA	   #0;			 ; ZERO OUT ZERO PAGE
+     29  0aa7 ????	       a8		      TAY		;			      SAVE A ZERO HERE
+     30  0aa8 ????	       85 01		      STA	1	;			;DECONFUSE 6532
+     31  0aaa ????	       8d 00 00 	      STA	INPT4
+     32  0aad ????	       8d 00 00 	      STA	INPT5
+     33  0ab0 ????	       8d 00 00 	      STA	CHARBASE
+     34  0ab3 ????	       8d 00 00 	      STA	DUMYHDR
+     35  0ab6 ????	       8d 04 00 	      STA	DUMYHDR+4
+     36  0ab9 ????	       8d 05 00 	      STA	DUMYHDR+5
+     37  0abc ????	       8d 06 00 	      STA	DUMYHDR+6
+     38  0abf ????	       8d 00 00 	      STA	ZEROHDR
+     39  0ac2 ????	       8d 01 00 	      STA	ZEROHDR+1
+     40  0ac5 ????	       a9 40		      LDA	#$40
+     41  0ac7 ????	       8d 01 00 	      STA	DUMYHDR+1
+     42  0aca ????	       a9 a0		      LDA	#$A0
+     43  0acc ????	       8d 02 00 	      STA	DUMYHDR+2
+     44  0acf ????	       a9 1f		      LDA	#$1F
+     45  0ad1 ????	       8d 03 00 	      STA	DUMYHDR+3
+     46  0ad4 ????
+     47  0ad4 ????						; SET UP THE TWO DISPLAY LIST LISTS
+     48  0ad4 ????						;	   LDY	   #0
+     49  0ad4 ????	       a9 48		      LDA	#$48
+     50  0ad6 ????	       99 00 00 	      STA	DLSTLST1,Y
+     51  0ad9 ????	       99 00 00 	      STA	DLSTLST2,Y
+     52  0adc ????	       c8		      INY
+     53  0add ????	       a9 00		      LDA	#>DUMYHDR
+     54  0adf ????	       99 00 00 	      STA	DLSTLST1,Y
+     55  0ae2 ????	       99 00 00 	      STA	DLSTLST2,Y
+     56  0ae5 ????	       c8		      INY
+     57  0ae6 ????	       a9 00		      LDA	#<DUMYHDR
+     58  0ae8 ????	       99 00 00 	      STA	DLSTLST1,Y
+     59  0aeb ????	       99 00 00 	      STA	DLSTLST2,Y
+     60  0aee ????	       c8		      INY
+     61  0aef ????	       a9 4f		      LDA	#$4F
+     62  0af1 ????	       99 00 00 	      STA	DLSTLST1,Y
+     63  0af4 ????	       99 00 00 	      STA	DLSTLST2,Y
+     64  0af7 ????	       c8		      INY
+     65  0af8 ????	       a9 00		      LDA	#>ZEROHDR
+     66  0afa ????	       99 00 00 	      STA	DLSTLST1,Y
+     67  0afd ????	       99 00 00 	      STA	DLSTLST2,Y
+     68  0b00 ????	       c8		      INY
+     69  0b01 ????	       a9 00		      LDA	#<ZEROHDR
+     70  0b03 ????	       99 00 00 	      STA	DLSTLST1,Y
+     71  0b06 ????	       99 00 00 	      STA	DLSTLST2,Y
+     72  0b09 ????	       c8		      INY
+     73  0b0a ????	       a2 00		      LDX	#0
+     74  0b0c ????	       a9 4b	   INITDLST   LDA	#$4B
+     75  0b0e ????	       99 00 00 	      STA	DLSTLST1,Y
+     76  0b11 ????	       99 00 00 	      STA	DLSTLST2,Y
+     77  0b14 ????	       c8		      INY
+     78  0b15 ????	       bd 50 08 	      LDA	LISTTBH1,X
+     79  0b18 ????	       99 00 00 	      STA	DLSTLST1,Y
+     80  0b1b ????	       bd 60 08 	      LDA	LISTTBH2,X
+     81  0b1e ????	       99 00 00 	      STA	DLSTLST2,Y
+     82  0b21 ????	       c8		      INY
+     83  0b22 ????	       bd 40 08 	      LDA	LISTTABL,X
+     84  0b25 ????	       99 00 00 	      STA	DLSTLST1,Y
+     85  0b28 ????	       99 00 00 	      STA	DLSTLST2,Y
+     86  0b2b ????	       c8		      INY
+     87  0b2c ????	       e8		      INX
+     88  0b2d ????	       e0 10		      CPX	#16
+     89  0b2f ????	       30 10		      BMI	INITDLST
+     90  0b31 ????						;NOW FINISH LAST TWO ZONES (OFF THE SCREEN)
+     91  0b31 ????	       a9 4f		      LDA	#$4F
+     92  0b33 ????	       99 00 00 	      STA	DLSTLST1,Y
+     93  0b36 ????	       99 00 00 	      STA	DLSTLST2,Y
+     94  0b39 ????	       c8		      INY
+     95  0b3a ????	       a9 00		      LDA	#>ZEROHDR
+     96  0b3c ????	       99 00 00 	      STA	DLSTLST1,Y
+     97  0b3f ????	       99 00 00 	      STA	DLSTLST2,Y
+     98  0b42 ????	       c8		      INY
+     99  0b43 ????	       a9 00		      LDA	#<ZEROHDR
+    100  0b45 ????	       99 00 00 	      STA	DLSTLST1,Y
+    101  0b48 ????	       99 00 00 	      STA	DLSTLST2,Y
+    102  0b4b ????	       c8		      INY
+    103  0b4c ????	       a9 47		      LDA	#$47
+    104  0b4e ????	       99 00 00 	      STA	DLSTLST1,Y
+    105  0b51 ????	       99 00 00 	      STA	DLSTLST2,Y
+    106  0b54 ????	       c8		      INY
+    107  0b55 ????	       a9 00		      LDA	#>ZEROHDR
+    108  0b57 ????	       99 00 00 	      STA	DLSTLST1,Y
+    109  0b5a ????	       99 00 00 	      STA	DLSTLST2,Y
+    110  0b5d ????	       c8		      INY
+    111  0b5e ????	       a9 00		      LDA	#<ZEROHDR
+    112  0b60 ????	       99 00 00 	      STA	DLSTLST1,Y
+    113  0b63 ????	       99 00 00 	      STA	DLSTLST2,Y
+    114  0b66 ????	       c8		      INY
+    115  0b67 ????	       a9 cf		      LDA	#$CF
+    116  0b69 ????	       99 00 00 	      STA	DLSTLST1,Y
+    117  0b6c ????	       99 00 00 	      STA	DLSTLST2,Y
+    118  0b6f ????	       c8		      INY
+    119  0b70 ????	       a9 00		      LDA	#>ZEROHDR
+    120  0b72 ????	       99 00 00 	      STA	DLSTLST1,Y
+    121  0b75 ????	       99 00 00 	      STA	DLSTLST2,Y
+    122  0b78 ????	       c8		      INY
+    123  0b79 ????	       a9 00		      LDA	#<ZEROHDR
+    124  0b7b ????	       99 00 00 	      STA	DLSTLST1,Y
+    125  0b7e ????	       99 00 00 	      STA	DLSTLST2,Y
+    126  0b81 ????						;*INITIALIZE COLOR PALETTES
+    127  0b81 ????	       a9 00		      LDA	#0
+    128  0b83 ????	       8d 00 00 	      STA	INTIM	;		    ;TEMPORARILY OUT OF ACTION
+    129  0b86 ????	       8d 00 00 	      STA	P0C0	;		     ; MAKE THE SCREEN BLACK
+    130  0b89 ????	       8d 00 00 	      STA	SELECT	;		   ;CLEAR SELECT MODE FLAG
+    131  0b8c ????	       8d 00 00 	      STA	RSTRTREG	;		 ;CLEAR RESTART MODE FLAG
+    132  0b8f ????	       8d 00 00 	      STA	LEVELSEL
+    133  0b92 ????	       8d 00 00 	      STA	TWOPLAYR
+    134  0b95 ????	       8d 00 00 	      STA	FARREN
+    135  0b98 ????	       20 00 00 	      JSR	CLRSCORE	;		 ;CLEAR ALL SCORES
+    136  0b9b ????	       a2 08		      LDX	#8
+    137  0b9d ????	       a0 1e		      LDY	#30
+    138  0b9f ????	       b9 52 07    PLOOP      LDA	PTABL,Y
+    139  0ba2 ????	       99 00 00 	      STA	P0C1,Y
+    140  0ba5 ????	       88		      DEY
+    141  0ba6 ????	       b9 52 07 	      LDA	PTABL,Y
+    142  0ba9 ????	       99 00 00 	      STA	P0C1,Y
+    143  0bac ????	       88		      DEY
+    144  0bad ????	       b9 52 07 	      LDA	PTABL,Y
+    145  0bb0 ????	       99 00 00 	      STA	P0C1,Y
+    146  0bb3 ????	       88		      DEY
+    147  0bb4 ????	       88		      DEY
+    148  0bb5 ????	       ca		      DEX
+    149  0bb6 ????	       d0 00		      BNE	PLOOP
+    150  0bb8 ????	       ad 00 00    WGHTLOOP   LDA	CTRLRD	;		  ;WAIT FOR VBLANK OFF
+    151  0bbb ????	       30 00		      BMI	WGHTLOOP	;		 ;LOOP UNTIL VBLANK OFF
+    152  0bbd ????	       ad 00 00    WGHTLOP2   LDA	CTRLRD	;		   ;LOOP UNTIL VBLANK ON
+    153  0bc0 ????	       10 00		      BPL	WGHTLOP2
+    154  0bc2 ????	       ad 00 00 	      LDA	CTRLRD
+    155  0bc5 ????	       10 00		      BPL	WGHTLOP2
+    156  0bc7 ????	       20 00 00 	      JSR	CLEARDL1	;		 CLEAR OUT DISPLAY LIST FIRST
+    157  0bca ????	       a9 00		      LDA	#<DLSTLST1
+    158  0bcc ????	       8d 00 00 	      STA	DPPL
+    159  0bcf ????	       a9 00		      LDA	#>DLSTLST1
+    160  0bd1 ????	       8d 00 00 	      STA	DPPH
+    161  0bd4 ????	       a9 40		      LDA	#$40
+    162  0bd6 ????	       8d 00 00 	      STA	CTRLWT
+    163  0bd9 ????						;CONTINUE WITH REMAINDER OF INITIALIZATION
+    164  0bd9 ????			   RESTART
+    165  0bd9 ????	       20 00 00 	      JSR	SCRAPALL
+    166  0bdc ????	       a9 00		      LDA	#0
+    167  0bde ????	       a2 ff		      LDX	#$FF	;		     ;ZERO OUT ZERO PAGE
+    168  0be0 ????	       95 00	   ZEROLOOP   STA	ZERO,X
+    169  0be2 ????	       ca		      DEX
+    170  0be3 ????	       e0 3f		      CPX	#$3F
+    171  0be5 ????	       d0 3f		      BNE	ZEROLOOP
+    172  0be7 ????	       20 00 00 	      JSR	INITCOLS
+    173  0bea ????	       a9 4c		      LDA	#76
+    174  0bec ????	       8d 00 00 	      STA	HEROX
+    175  0bef ????	       a9 14		      LDA	#20
+    176  0bf1 ????	       8d 00 00 	      STA	ANIMATE
+    177  0bf4 ????	       8d 00 00 	      STA	SELTIMER	;		 ;SELECT TIMER
+    178  0bf7 ????	       4c 00 00 	      JMP	BEGIN
+    179  0bfa ????
+    180  0bfa ????						;HANDLER  IS CALLED BY THE DLI AT THE END OF THE VISIBLE SCREEN
+    181  0bfa ????			   HANDLER
+    182  0bfa ????						; NO PERMINANT LOCAL VARIABLES
+    183  0bfa ????						;TEMP VARIABLES
+    184  0bfa ????						; LISTSIZ   DS 16
+    185  0bfa ????						; ELISTPTR  DS 2     ZERO PAGE
+    186  0bfa ????						; LTYPE     DS 1
+    187  0bfa ????						; LY	     DS 1
+    188  0bfa ????						; LA	     DS 1
+    189  0bfa ????						; HEADER0   DS 1
+    190  0bfa ????						; HEADER1   DS 1
+    191  0bfa ????						; HEADER2   DS 1
+    192  0bfa ????						; HEADER3   DS 1
+    193  0bfa ????	       8d 00 00 	      STA	SAVEB	;		    ;THIS IS FOR LOOPING INTERRUPTS
+    194  0bfd ????
+    195  0bfd ????	       ad 00 00 	      LDA	INHSC	;		    ;SEE IF IN HIGH SCORE CART
+    196  0c00 ????	       f0 00		      BEQ	NOTHSC
+    197  0c02 ????	       c9 01		      CMP	#1	;		       ;SEE IF FIRST DLI ON SCREEN
+    198  0c04 ????	       d0 01		      BNE	SCNDDLI
+    199  0c06 ????	       ee 00 00 	      INC	INHSC
+    200  0c09 ????	       a9 00		      LDA	#0
+    201  0c0b ????	       8d 00 00 	      STA	FLAP	;		     ;PREVENT FLAPPING WHILE IN HSC
+    202  0c0e ????	       a9 40		      LDA	#$40
+    203  0c10 ????	       8d 00 00 	      STA	CTRLWT	;		   ;NEED $40 RATHER THAN THE $4B OF HSC
+    204  0c13 ????	       d0 00		      BNE	YESHSC
+    205  0c15 ????	       a9 4b	   SCNDDLI    LDA	#$4B
+    206  0c17 ????	       8d 00 00 	      STA	CTRLWT
+    207  0c1a ????	       ce 00 00 	      DEC	INHSC
+    208  0c1d ????	       ee 00 00 	      INC	BOOTLDR
+    209  0c20 ????	       d8		      CLD		;			      ;CLEAR DECIMAL MODE, JUST IN CASE
+    210  0c21 ????	       a9 ff		      LDA	#$FF
+    211  0c23 ????	       8d 00 00 	      STA	DLSPTR	;		   ;USE FIRST DISPLAY LIST FOR GRAPHICS
+    212  0c26 ????	       ad 00 00 	      LDA	SAVEB
+    213  0c29 ????	       8d 00 00 	      STA	SAVEA
+    214  0c2c ????	       8e 00 00 	      STX	SAVEX
+    215  0c2f ????	       8c 00 00 	      STY	SAVEY
+    216  0c32 ????	       4c 2f 02 	      JMP	DOHNDLER	;		 ;RUN THE HSC LOADER NOW
+    217  0c35 ????
+    218  0c35 ????	       ad 00 00    NOTHSC     LDA	PAUSE	;		    ;SEE IF PAUSE
+    219  0c38 ????	       10 00		      BPL	NOPAUSE
+    220  0c3a ????	       ee 00 00 	      INC	FRAME	;		    ;INC FRAME COUNTER
+    221  0c3d ????	       ad 00 00    YESHSC     LDA	SAVEB
+    222  0c40 ????	       40		      RTI
+    223  0c41 ????
+    224  0c41 ????	       ad 00 00    NOPAUSE    LDA	BOOTLDR	;		  ;SEE IF SHOULD BOOT LDR
+    225  0c44 ????	       f0 00		      BEQ	NBOOTLDR
+    226  0c46 ????	       ad 00 00 	      LDA	SAVEB
+    227  0c49 ????	       40		      RTI
+    228  0c4a ????
+    229  0c4a ????			   NBOOTLDR
+    230  0c4a ????	       ad 00 00 	      LDA	SAVEB
+    231  0c4d ????	       8d 00 00 	      STA	SAVEA	;		    ;THIS IS FOR LOOPING INTERRUPTS
+    232  0c50 ????	       8e 00 00 	      STX	SAVEX
+    233  0c53 ????	       8c 00 00 	      STY	SAVEY
+    234  0c56 ????	       d8		      CLD		;			      ;CLEAR DECIMAL MODE
+    235  0c57 ????	       20 00 00 	      JSR	TUNER
+    236  0c5a ????
+    237  0c5a ????						;THIS SECTION FIGURES OUT THE STAR INC SPEED
+    238  0c5a ????	       ad 00 00 	      LDA	RACK
+    239  0c5d ????	       c9 0a		      CMP	#10
+    240  0c5f ????	       90 0a		      BCC	SLOWSTAR
+    241  0c61 ????	       c9 12		      CMP	#18
+    242  0c63 ????	       b0 12		      BCS	FASTAR
+    243  0c65 ????	       a9 01		      LDA	#1	;		       ;SPEED IS 1 UNCONDITIONALLY
+    244  0c67 ????	       8d 00 00 	      STA	STRSPEED
+    245  0c6a ????	       d0 00		      BNE	SETBOOT
+    246  0c6c ????	       ad 00 00    SLOWSTAR   LDA	STRSPEED	;		 ;DEC STRSPEED UNTIL ZERO, THEN INC
+    247  0c6f ????	       f0 00		      BEQ	INCSPD
+    248  0c71 ????	       a9 00		      LDA	#0
+    249  0c73 ????	       8d 00 00 	      STA	STRSPEED
+    250  0c76 ????	       f0 00		      BEQ	SETBOOT
+    251  0c78 ????	       a9 01	   INCSPD     LDA	#1
+    252  0c7a ????	       8d 00 00 	      STA	STRSPEED
+    253  0c7d ????	       d0 00		      BNE	SETBOOT
+    254  0c7f ????			   FASTAR
+    255  0c7f ????	       ad 00 00 	      LDA	STRSPEED
+    256  0c82 ????	       c9 02		      CMP	#2
+    257  0c84 ????	       10 02		      BPL	DECFSPD	;		  ;IF 2 OR GREATER, DEC STRSPEED
+    258  0c86 ????	       a9 02		      LDA	#2
+    259  0c88 ????	       8d 00 00 	      STA	STRSPEED
+    260  0c8b ????	       d0 00		      BNE	SETBOOT
+    261  0c8d ????	       a9 01	   DECFSPD    LDA	#1
+    262  0c8f ????	       8d 00 00 	      STA	STRSPEED
+    263  0c92 ????	       ee 00 00    SETBOOT    INC	BOOTLDR	;		  ;INC FLAG FOR LOADER
+    264  0c95 ????	       ad 00 00 	      LDA	FRAME
+    265  0c98 ????	       30 00		      BMI	DOHNDLER
+    266  0c9a ????						;THIS CODE UPDATES THE STAR POINTERS ONLY
+    267  0c9a ????	       20 0f 02 	      JSR	MOVSTARS
+    268  0c9d ????	       4c a1 06 	      JMP	UPSHIP	;		   ;JUST UPDATE SHIP IF INSUF. TIME
+    269  0ca0 ????
+    270  0ca0 ????	       ad 00 00    MOVSTARS   LDA	THREECNT	;		 ;SEE IF TIME FOR NEW STAR
+    271  0ca3 ????	       18		      CLC
+    272  0ca4 ????	       6d 00 00 	      ADC	STRSPEED
+    273  0ca7 ????	       8d 00 00 	      STA	THREECNT
+    274  0caa ????	       c9 03		      CMP	#3
+    275  0cac ????	       90 03		      BCC	SSTAR1
+    276  0cae ????	       38		      SEC
+    277  0caf ????	       e9 03		      SBC	#3
+    278  0cb1 ????	       8d 00 00 	      STA	THREECNT
+    279  0cb4 ????	       ce 00 00 	      DEC	STARPTR	;		  ;GO TO NEXT STAR
+    280  0cb7 ????	       30 00		      BMI	SSTARRES
+    281  0cb9 ????	       60		      RTS
+    282  0cba ????	       a9 7f	   SSTARRES   LDA	#$7F
+    283  0cbc ????	       8d 00 00 	      STA	STARPTR
+    284  0cbf ????	       60	   SSTAR1     RTS
+    285  0cc0 ????
+    286  0cc0 ????			   DOHNDLER
+    287  0cc0 ????	       a9 10		      LDA	#16	;		      ;SAVE SPACE FOR THE STARS
+    288  0cc2 ????	       a0 0f		      LDY	#15
+    289  0cc4 ????	       99 00 00    LSTSIZLP   STA	LISTSIZ,Y
+    290  0cc7 ????	       88		      DEY
+    291  0cc8 ????	       10 00		      BPL	LSTSIZLP
+    292  0cca ????
+    293  0cca ????	       a9 00		      LDA	#0	;		       ;ZEROS OUT SECOND LIST
+    294  0ccc ????	       a0 08		      LDY	#8
+    295  0cce ????	       99 00 00    LIST2LP    STA	LISTSIZ2,Y
+    296  0cd1 ????	       88		      DEY
+    297  0cd2 ????	       10 00		      BPL	LIST2LP
+    298  0cd4 ????
+    299  0cd4 ????	       ad 00 00 	      LDA	INHSC
+    300  0cd7 ????	       f0 00		      BEQ	STARLDR
+    301  0cd9 ????	       4c d1 02 	      JMP	LSTSZOUT	;		 ;IF IN HSC, DONT DO STARS
+    302  0cdc ????
+    303  0cdc ????	       a9 10	   STARLDR    LDA	#16
+    304  0cde ????	       8d 00 00 	      STA	TEMP6	;		    ;GET SET FOR 16 ZONES
+    305  0ce1 ????	       a9 00		      LDA	#0
+    306  0ce3 ????	       8d 00 00 	      STA	STARCNTR	;		 ;INC INTO HSTAR
+    307  0ce6 ????	       a9 04		      LDA	#4
+    308  0ce8 ????	       8d 00 00 	      STA	FOURCNT	;		  ;FOUR STARS PER ZONE
+    309  0ceb ????	       a0 00		      LDY	#0
+    310  0ced ????	       a9 00		      LDA	#<S1L1	;		 ;SAME AS S2L1
+    311  0cef ????	       8d 00 00 	      STA	LISTPTR
+    312  0cf2 ????	       2c 00 00 	      BIT	DLSPTR
+    313  0cf5 ????	       10 00		      BPL	SUSES2
+    314  0cf7 ????	       a9 00		      LDA	#>S1L1
+    315  0cf9 ????	       d0 00		      BNE	SUSES3
+    316  0cfb ????	       a9 00	   SUSES2     LDA	#>S2L1
+    317  0cfd ????	       8d 01 00    SUSES3     STA	LISTPTR+1
+    318  0d00 ????	       20 a0 0c 	      JSR	MOVSTARS
+    319  0d03 ????	       ad 00 00    STAR1      LDA	STARPTR
+    320  0d06 ????	       18		      CLC
+    321  0d07 ????	       6d 00 00 	      ADC	STARCNTR
+    322  0d0a ????	       50 00		      BVC	STAR3
+    323  0d0c ????	       29 7f	   STAR2      AND	#$7F	;		     ;BOOT THE SIGN BIT
+    324  0d0e ????	       aa	   STAR3      TAX		;			      ;X NOW HAS OFFSET INTO HSTAR
+    325  0d0f ????	       a9 00		      LDA	#<STARGRAF
+    326  0d11 ????	       91 00		      STA	(LISTPTR),Y
+    327  0d13 ????	       c8		      INY
+    328  0d14 ????	       a9 df		      LDA	#$DF
+    329  0d16 ????	       91 00		      STA	(LISTPTR),Y	;	      ;PALLET 0, WIDTH 1
+    330  0d18 ????	       c8		      INY
+    331  0d19 ????	       a9 00		      LDA	#>MARIA2
+    332  0d1b ????	       18		      CLC
+    333  0d1c ????	       6d 00 00 	      ADC	THREECNT
+    334  0d1f ????	       91 00		      STA	(LISTPTR),Y
+    335  0d21 ????	       c8		      INY
+    336  0d22 ????	       bd 00 00 	      LDA	HSTAR,X
+    337  0d25 ????	       91 00		      STA	(LISTPTR),Y
+    338  0d27 ????	       c8		      INY
+    339  0d28 ????	       ee 00 00 	      INC	STARCNTR
+    340  0d2b ????	       ad 00 00 	      LDA	THREECNT
+    341  0d2e ????	       18		      CLC
+    342  0d2f ????	       69 03		      ADC	#3
+    343  0d31 ????	       8d 00 00 	      STA	THREECNT
+    344  0d34 ????	       ce 00 00 	      DEC	FOURCNT
+    345  0d37 ????	       d0 00		      BNE	STAR1
+    346  0d39 ????	       ad 00 00 	      LDA	THREECNT
+    347  0d3c ????	       38		      SEC
+    348  0d3d ????	       e9 0c		      SBC	#12
+    349  0d3f ????	       8d 00 00 	      STA	THREECNT
+    350  0d42 ????	       ce 00 00 	      DEC	TEMP6	;		    ;SEE IF ALL ZONES DONE
+    351  0d45 ????	       f0 00		      BEQ	LSTSZOUT	;		 ;GO TO NEXT ROUTINE
+    352  0d47 ????	       ad 00 00 	      LDA	LISTPTR
+    353  0d4a ????	       18		      CLC
+    354  0d4b ????	       69 00		      ADC	#DLSIZE
+    355  0d4d ????	       8d 00 00 	      STA	LISTPTR
+    356  0d50 ????	       ad 01 00 	      LDA	LISTPTR+1
+    357  0d53 ????	       69 00		      ADC	#0
+    358  0d55 ????	       8d 01 00 	      STA	LISTPTR+1
+    359  0d58 ????	       a0 00		      LDY	#0
+    360  0d5a ????	       a9 04		      LDA	#4
+    361  0d5c ????	       8d 00 00 	      STA	FOURCNT
+    362  0d5f ????	       4c 03 0d 	      JMP	STAR1
+    363  0d62 ????			   LSTSZOUT
+    364  0d62 ????	       a9 47		      LDA	#71	;		       ;SET POINTER TO THE FIRST ENEMY DATA
+    365  0d64 ????	       8d 00 00 	      STA	TEMP6
+    366  0d67 ????	       a8		      TAY
+    367  0d68 ????			   LREADL		;				 ;READ THE ENEMY DATA
+    368  0d68 ????	       b9 00 00 	      LDA	TYPE,Y
+    369  0d6b ????	       29 7f		      AND	#$7F
+    370  0d6d ????	       d0 7f		      BNE	DOREAD	;		   ;IF THE TYPE IS ZERO THE ENEMY IS
+    371  0d6f ????	       ce 00 00    XXX	      DEC	TEMP6	;		    ;NOTHING
+    372  0d72 ????	       ac 00 00 	      LDY	TEMP6
+    373  0d75 ????	       10 00		      BPL	LREADL
+    374  0d77 ????	       4c 08 04 	      JMP	DONENMY
+    375  0d7a ????	       c9 06	   DOREAD     CMP	#6
+    376  0d7c ????	       f0 06		      BEQ	XXX
+    377  0d7e ????	       8d 00 00 	      STA	LTYPE
+    378  0d81 ????	       b9 00 00 	      LDA	XCORD,Y
+    379  0d84 ????	       8d 00 00 	      STA	HEADER3	;		  ;HORIZONTAL POSITION
+    380  0d87 ????	       b9 00 00 	      LDA	YCORD,Y	;		  ;VERTICAL POSITION
+    381  0d8a ????	       c9 c0		      CMP	#192
+    382  0d8c ????	       b0 c0		      BCS	XXX
+    383  0d8e ????	       8d 00 00    DLFKJ      STA	LY
+    384  0d91 ????	       b9 00 00 	      LDA	ANGLE,Y	;		  ;ANGLE
+    385  0d94 ????	       c0 41		      CPY	#65
+    386  0d96 ????	       10 41		      BPL	DLFKK
+    387  0d98 ????	       29 07		      AND	#$07
+    388  0d9a ????	       8d 00 00 	      STA	LA	;		       ;DON"T ROUND OFF ANGLE IF Y>64
+    389  0d9d ????						;				 ; OR FLAP
+    390  0d9d ????	       ad 00 00 	      LDA	FLAP	;		     ; FIND THE LOW BYTE FOR THE STAMP
+    391  0da0 ????	       4a		      LSR
+    392  0da1 ????	       90 00		      BCC	NOFLAP	;		   ;FLAP ONLY IF THE ANGLE IS ZERO
+    393  0da3 ????	       ad 00 00 	      LDA	LA
+    394  0da6 ????	       d0 00		      BNE	NOFLAP
+    395  0da8 ????	       a9 08		      LDA	#8
+    396  0daa ????	       8d 00 00    DLFKK      STA	LA
+    397  0dad ????	       ae 00 00    NOFLAP     LDX	LTYPE
+    398  0db0 ????	       bd 70 08 	      LDA	PALWDT,X	;		 ;PALLET AND WIDTH
+    399  0db3 ????	       8d 00 00 	      STA	HEADER1
+    400  0db6 ????	       bd a5 08 	      LDA	TYPTOLT,X
+    401  0db9 ????	       18		      CLC
+    402  0dba ????	       6d 00 00 	      ADC	LA
+    403  0dbd ????	       aa		      TAX
+    404  0dbe ????	       bd da 08 	      LDA	LSTPTBL,X
+    405  0dc1 ????	       8d 00 00 	      STA	HEADER0	;		  ;LOW BYTE OF STAMP ADDRESS
+    406  0dc4 ????	       ad 00 00    SZLP       LDA	LY
+    407  0dc7 ????	       4a		      LSR
+    408  0dc8 ????	       4a		      LSR
+    409  0dc9 ????	       aa		      TAX
+    410  0dca ????	       bd e4 07 	      LDA	DIV3,X
+    411  0dcd ????	       aa		      TAX		;			      ;X NOW HAS CURRENT ZONE
+    412  0dce ????	       bc 00 00 	      LDY	LISTSIZ,X
+    413  0dd1 ????	       c0 4d		      CPY	#77	;		      ;NEED ROOM FOR ONE MORE HDR
+    414  0dd3 ????	       90 4d		      BCC	CONT
+    415  0dd5 ????	       bc 00 00 	      LDY	LISTSIZ2,X	;	       ;USE SECOND LIST
+    416  0dd8 ????	       ad 00 00    CONT       LDA	TEMP6
+    417  0ddb ????	       c9 41		      CMP	#65
+    418  0ddd ????	       90 41		      BCC	CONT1
+    419  0ddf ????	       ad 00 00 	      LDA	LY
+    420  0de2 ????	       38		      SEC
+    421  0de3 ????	       fd 29 08 	      SBC	ZOFF,X
+    422  0de6 ????	       18		      CLC
+    423  0de7 ????	       69 c0		      ADC	#$C0	;		     ;NEXT GRAPHICS AT $C000
+    424  0de9 ????	       4c 65 03 	      JMP	CONT2
+    425  0dec ????	       ad 00 00    CONT1      LDA	LY
+    426  0def ????	       38		      SEC
+    427  0df0 ????	       fd 29 08 	      SBC	ZOFF,X
+    428  0df3 ????	       18		      CLC
+    429  0df4 ????	       69 00		      ADC	#>MARIA2
+    430  0df6 ????	       8d 00 00    CONT2      STA	HEADER2
+    431  0df9 ????	       bd 40 08 	      LDA	LISTTABL,X	;	       ;GET POINTER TO THE ZONES LIST
+    432  0dfc ????	       8d 00 00 	      STA	LISTPTR
+    433  0dff ????	       bd 50 08 	      LDA	LISTTBH1,X
+    434  0e02 ????	       2c 00 00 	      BIT	DLSPTR
+    435  0e05 ????	       30 00		      BMI	LUST1
+    436  0e07 ????	       bd 60 08 	      LDA	LISTTBH2,X
+    437  0e0a ????	       8d 01 00    LUST1      STA	LISTPTR+1
+    438  0e0d ????	       ad 00 00 	      LDA	HEADER0	;		  ;STORE THE HEADER
+    439  0e10 ????	       91 00		      STA	(LISTPTR),Y
+    440  0e12 ????	       c8		      INY
+    441  0e13 ????	       ad 00 00 	      LDA	HEADER1
+    442  0e16 ????	       91 00		      STA	(LISTPTR),Y
+    443  0e18 ????	       c8		      INY
+    444  0e19 ????	       ad 00 00 	      LDA	HEADER2
+    445  0e1c ????	       91 00		      STA	(LISTPTR),Y
+    446  0e1e ????	       c8		      INY
+    447  0e1f ????	       ad 00 00 	      LDA	HEADER3
+    448  0e22 ????	       91 00		      STA	(LISTPTR),Y
+    449  0e24 ????	       c8		      INY
+    450  0e25 ????	       bd 00 00 	      LDA	LISTSIZ,X	;	       ;SEE IF USING LIST 2
+    451  0e28 ????	       c9 4d		      CMP	#77
+    452  0e2a ????	       90 4d		      BCC	LUST4
+    453  0e2c ????	       98		      TYA
+    454  0e2d ????	       9d 00 00 	      STA	LISTSIZ2,X	;	       ;STORE NEW LIST SIZE
+    455  0e30 ????	       d0 00		      BNE	CROSSB1
+    456  0e32 ????	       98	   LUST4      TYA
+    457  0e33 ????	       9d 00 00 	      STA	LISTSIZ,X	;		;INCREMENT THE OFFSET
+    458  0e36 ????	       ad 00 00    CROSSB1    LDA	TEMP6	;		    ;SEE IF WORD
+    459  0e39 ????	       c9 41		      CMP	#65
+    460  0e3b ????	       b0 41		      BCS	XXXX
+    461  0e3d ????	       ad 00 00 	      LDA	HEADER2	;		  ;SEE IF GOES TO NEXT ZONE
+    462  0e40 ????	       c9 a3		      CMP	#$A3	;		     ;GRAPHICS ORG"D AT $A000
+    463  0e42 ????	       90 a3		      BCC	XXXX
+    464  0e44 ????	       e0 0f		      CPX	#$F
+    465  0e46 ????	       f0 0f		      BEQ	XXXX
+    466  0e48 ????	       38		      SEC
+    467  0e49 ????	       e9 0c		      SBC	#$C
+    468  0e4b ????	       8d 00 00 	      STA	HEADER2
+    469  0e4e ????	       e8		      INX
+    470  0e4f ????	       bc 00 00 	      LDY	LISTSIZ,X
+    471  0e52 ????	       c0 4d		      CPY	#77
+    472  0e54 ????	       90 4d		      BCC	LUST3
+    473  0e56 ????	       bc 00 00 	      LDY	LISTSIZ2,X
+    474  0e59 ????	       bd 40 08    LUST3      LDA	LISTTABL,X	;	       ;GET POINTER TO THE ZONES LIST
+    475  0e5c ????	       8d 00 00 	      STA	LISTPTR
+    476  0e5f ????	       bd 50 08 	      LDA	LISTTBH1,X
+    477  0e62 ????	       2c 00 00 	      BIT	DLSPTR
+    478  0e65 ????	       30 00		      BMI	LUST2
+    479  0e67 ????	       bd 60 08 	      LDA	LISTTBH2,X
+    480  0e6a ????	       8d 01 00    LUST2      STA	LISTPTR+1
+    481  0e6d ????	       ad 00 00 	      LDA	HEADER0	;		  ;STORE THE HEADER
+    482  0e70 ????	       91 00		      STA	(LISTPTR),Y
+    483  0e72 ????	       c8		      INY
+    484  0e73 ????	       ad 00 00 	      LDA	HEADER1
+    485  0e76 ????	       91 00		      STA	(LISTPTR),Y
+    486  0e78 ????	       c8		      INY
+    487  0e79 ????	       ad 00 00 	      LDA	HEADER2
+    488  0e7c ????	       91 00		      STA	(LISTPTR),Y
+    489  0e7e ????	       c8		      INY
+    490  0e7f ????	       ad 00 00 	      LDA	HEADER3
+    491  0e82 ????	       91 00		      STA	(LISTPTR),Y
+    492  0e84 ????	       c8		      INY
+    493  0e85 ????	       bd 00 00 	      LDA	LISTSIZ,X
+    494  0e88 ????	       c9 4d		      CMP	#77
+    495  0e8a ????	       90 4d		      BCC	LUST5
+    496  0e8c ????	       98		      TYA
+    497  0e8d ????	       9d 00 00 	      STA	LISTSIZ2,X
+    498  0e90 ????	       d0 00		      BNE	XXXX
+    499  0e92 ????	       98	   LUST5      TYA
+    500  0e93 ????	       9d 00 00 	      STA	LISTSIZ,X	;		;INCREMENT THE OFFSET
+    501  0e96 ????	       4c 6f 0d    XXXX       JMP	XXX
+    502  0e99 ????	       a2 ff	   DONENMY    LDX	#$FF
+    503  0e9b ????	       ad 00 00 	      LDA	INHSC	;		    ;SEE IF IN HSC
+    504  0e9e ????	       d0 00		      BNE	ZHSCLEND
+    505  0ea0 ????	       ad 00 00 	      LDA	RLOGO
+    506  0ea3 ????	       d0 00		      BNE	LPFZ0
+    507  0ea5 ????	       4c 59 06    ZHSCLEND   JMP	LEND
+    508  0ea8 ????	       ac 40 08    LPFZ0      LDY	LISTTABL+0
+    509  0eab ????	       8c 00 00 	      STY	LISTPTR
+    510  0eae ????	       ac 50 08 	      LDY	LISTTBH1+0
+    511  0eb1 ????	       2c 00 00 	      BIT	DLSPTR
+    512  0eb4 ????	       30 00		      BMI	LZL10
+    513  0eb6 ????	       ac 60 08 	      LDY	LISTTBH2+0
+    514  0eb9 ????	       8c 01 00    LZL10      STY	LISTPTR+1
+    515  0ebc ????	       e8	   SLOADER    INX
+    516  0ebd ????	       e0 10		      CPX	#16
+    517  0ebf ????	       f0 10		      BEQ	PUTRACK
+    518  0ec1 ????	       bd 00 00 	      LDA	SCORE,X
+    519  0ec4 ????	       c9 0a		      CMP	#$A
+    520  0ec6 ????	       f0 0a		      BEQ	SLOADER
+    521  0ec8 ????	       0a		      ASL
+    522  0ec9 ????	       18		      CLC
+    523  0eca ????	       69 00		      ADC	#<DIGIT
+    524  0ecc ????	       8d 00 00 	      STA	HEADER0
+    525  0ecf ????	       a9 9e		      LDA	#$9E	;		     ;NUMBERS ON FIRST GRAPHICS PAGE
+    526  0ed1 ????	       69 00		      ADC	#0
+    527  0ed3 ????	       8d 00 00 	      STA	HEADER2
+    528  0ed6 ????	       a9 7e		      LDA	#$7E	;		     ;PALETTE AND WIDTH
+    529  0ed8 ????	       8d 00 00 	      STA	HEADER1
+    530  0edb ????	       bd 7b 09 	      LDA	GETXSC,X
+    531  0ede ????	       8d 00 00 	      STA	HEADER3
+    532  0ee1 ????	       ac 00 00 	      LDY	LISTSIZ+0
+    533  0ee4 ????	       c0 4d		      CPY	#77
+    534  0ee6 ????	       90 4d		      BCC	OVER1
+    535  0ee8 ????	       ac 00 00 	      LDY	LISTSIZ2+0
+    536  0eeb ????			   OVER1
+    537  0eeb ????	       ad 00 00 	      LDA	HEADER0
+    538  0eee ????	       91 00		      STA	(LISTPTR),Y
+    539  0ef0 ????	       c8		      INY
+    540  0ef1 ????	       ad 00 00 	      LDA	HEADER1
+    541  0ef4 ????	       91 00		      STA	(LISTPTR),Y
+    542  0ef6 ????	       c8		      INY
+    543  0ef7 ????	       ad 00 00 	      LDA	HEADER2
+    544  0efa ????	       91 00		      STA	(LISTPTR),Y
+    545  0efc ????	       c8		      INY
+    546  0efd ????	       ad 00 00 	      LDA	HEADER3
+    547  0f00 ????	       91 00		      STA	(LISTPTR),Y
+    548  0f02 ????	       c8		      INY
+    549  0f03 ????	       98		      TYA
+    550  0f04 ????	       ac 00 00 	      LDY	LISTSIZ+0
+    551  0f07 ????	       c0 4d		      CPY	#77
+    552  0f09 ????	       90 4d		      BCC	OVER2
+    553  0f0b ????	       8d 00 00 	      STA	LISTSIZ2+0
+    554  0f0e ????	       b0 00		      BCS	OVER3
+    555  0f10 ????	       8d 00 00    OVER2      STA	LISTSIZ+0
+    556  0f13 ????	       4c bc 0e    OVER3      JMP	SLOADER
+    557  0f16 ????						;*PUT UP RACK NUMBER HERE
+    558  0f16 ????	       ac 4f 08    PUTRACK    LDY	LISTTABL+15
+    559  0f19 ????	       8c 00 00 	      STY	LISTPTR
+    560  0f1c ????	       ac 5f 08 	      LDY	LISTTBH1+15
+    561  0f1f ????	       2c 00 00 	      BIT	DLSPTR
+    562  0f22 ????	       30 00		      BMI	LZL11
+    563  0f24 ????	       ac 6f 08 	      LDY	LISTTBH2+15
+    564  0f27 ????	       8c 01 00    LZL11      STY	LISTPTR+1
+    565  0f2a ????	       ad 00 00 	      LDA	GASTONHK	;		 ;BCD RACK NUMBER
+    566  0f2d ????	       29 0f		      AND	#$0F	;		     ;BOOT HIGH NIBBLE
+    567  0f2f ????	       8d 01 00 	      STA	TEMP8+1	;		  ;ONES DIGIT
+    568  0f32 ????	       ad 00 00 	      LDA	GASTONHK
+    569  0f35 ????	       4a		      LSR
+    570  0f36 ????	       4a		      LSR
+    571  0f37 ????	       4a		      LSR
+    572  0f38 ????	       4a		      LSR
+    573  0f39 ????	       8d 00 00 	      STA	TEMP8	;		    ;TENS DIGIT
+    574  0f3c ????			   OUTRLOP
+    575  0f3c ????						;	   LDA	   TEMP8
+    576  0f3c ????	       f0 00		      BEQ	OUTRAL
+    577  0f3e ????	       0a		      ASL
+    578  0f3f ????	       18		      CLC
+    579  0f40 ????	       69 00		      ADC	#<DIGIT
+    580  0f42 ????	       8d 00 00 	      STA	HEADER0
+    581  0f45 ????	       a9 9e		      LDA	#$9E	;		     ;1ST GRAPHICS PAGE
+    582  0f47 ????	       69 00		      ADC	#0
+    583  0f49 ????	       8d 00 00 	      STA	HEADER2
+    584  0f4c ????	       a9 7e		      LDA	#$7E
+    585  0f4e ????	       8d 00 00 	      STA	HEADER1
+    586  0f51 ????	       a9 8e		      LDA	#142
+    587  0f53 ????	       8d 00 00 	      STA	HEADER3
+    588  0f56 ????	       ac 0f 00 	      LDY	LISTSIZ+15
+    589  0f59 ????	       ad 00 00 	      LDA	HEADER0
+    590  0f5c ????	       91 00		      STA	(LISTPTR),Y
+    591  0f5e ????	       c8		      INY
+    592  0f5f ????	       ad 00 00 	      LDA	HEADER1
+    593  0f62 ????	       91 00		      STA	(LISTPTR),Y
+    594  0f64 ????	       c8		      INY
+    595  0f65 ????	       ad 00 00 	      LDA	HEADER2
+    596  0f68 ????	       91 00		      STA	(LISTPTR),Y
+    597  0f6a ????	       c8		      INY
+    598  0f6b ????	       ad 00 00 	      LDA	HEADER3
+    599  0f6e ????	       91 00		      STA	(LISTPTR),Y
+    600  0f70 ????	       c8		      INY
+    601  0f71 ????	       8c 0f 00 	      STY	LISTSIZ+15
+    602  0f74 ????	       ad 01 00    OUTRAL     LDA	TEMP8+1
+    603  0f77 ????	       0a		      ASL
+    604  0f78 ????	       18		      CLC
+    605  0f79 ????	       69 00		      ADC	#<DIGIT
+    606  0f7b ????	       8d 00 00 	      STA	HEADER0
+    607  0f7e ????	       a9 9e		      LDA	#$9E	;		     ;FIRST GRAPHICS PAGE
+    608  0f80 ????	       69 00		      ADC	#0
+    609  0f82 ????	       8d 00 00 	      STA	HEADER2
+    610  0f85 ????	       a9 7e		      LDA	#$7E
+    611  0f87 ????	       8d 00 00 	      STA	HEADER1
+    612  0f8a ????	       a9 96		      LDA	#150
+    613  0f8c ????	       8d 00 00 	      STA	HEADER3
+    614  0f8f ????	       ac 0f 00 	      LDY	LISTSIZ+15
+    615  0f92 ????	       ad 00 00 	      LDA	HEADER0
+    616  0f95 ????	       91 00		      STA	(LISTPTR),Y
+    617  0f97 ????	       c8		      INY
+    618  0f98 ????	       ad 00 00 	      LDA	HEADER1
+    619  0f9b ????	       91 00		      STA	(LISTPTR),Y
+    620  0f9d ????	       c8		      INY
+    621  0f9e ????	       ad 00 00 	      LDA	HEADER2
+    622  0fa1 ????	       91 00		      STA	(LISTPTR),Y
+    623  0fa3 ????	       c8		      INY
+    624  0fa4 ????	       ad 00 00 	      LDA	HEADER3
+    625  0fa7 ????	       91 00		      STA	(LISTPTR),Y
+    626  0fa9 ????	       c8		      INY
+    627  0faa ????	       8c 0f 00 	      STY	LISTSIZ+15
+    628  0fad ????			   INDLOAD
+    629  0fad ????	       ae 00 00 	      LDX	PLAYER
+    630  0fb0 ????	       bd 00 00 	      LDA	LIVES,X
+    631  0fb3 ????	       aa		      TAX
+    632  0fb4 ????	       ca		      DEX
+    633  0fb5 ????	       f0 00		      BEQ	BEAMLOAD
+    634  0fb7 ????	       a9 00	   PUTIND     LDA	#>MARIA2
+    635  0fb9 ????	       8d 00 00 	      STA	HEADER2
+    636  0fbc ????	       a9 00		      LDA	#<HEROS
+    637  0fbe ????	       8d 00 00 	      STA	HEADER0
+    638  0fc1 ????	       a9 1e		      LDA	#$1E
+    639  0fc3 ????	       8d 00 00 	      STA	HEADER1
+    640  0fc6 ????	       bd d6 07 	      LDA	INDX,X
+    641  0fc9 ????	       8d 00 00 	      STA	HEADER3
+    642  0fcc ????	       ac 0f 00 	      LDY	LISTSIZ+15
+    643  0fcf ????	       c0 4d		      CPY	#77	;		      SEE IF HAVE EXCEEDED DISPLAY LIST SIZE
+    644  0fd1 ????	       90 4d		      BCC	LSTLINOK
+    645  0fd3 ????	       ac 08 00 	      LDY	LISTSIZ2+8	;	       USE SECOND LIST OF SIZES
+    646  0fd6 ????	       ad 00 00    LSTLINOK   LDA	HEADER0
+    647  0fd9 ????	       91 00		      STA	(LISTPTR),Y
+    648  0fdb ????	       c8		      INY
+    649  0fdc ????	       ad 00 00 	      LDA	HEADER1
+    650  0fdf ????	       91 00		      STA	(LISTPTR),Y
+    651  0fe1 ????	       c8		      INY
+    652  0fe2 ????	       ad 00 00 	      LDA	HEADER2
+    653  0fe5 ????	       91 00		      STA	(LISTPTR),Y
+    654  0fe7 ????	       c8		      INY
+    655  0fe8 ????	       ad 00 00 	      LDA	HEADER3
+    656  0feb ????	       91 00		      STA	(LISTPTR),Y
+    657  0fed ????	       c8		      INY
+    658  0fee ????	       ad 0f 00 	      LDA	LISTSIZ+15	;	       SEE IF LIST HAS BEEN EXCEEDED
+    659  0ff1 ????	       c9 4d		      CMP	#77
+    660  0ff3 ????	       90 4d		      BCC	LASTLNOK
+    661  0ff5 ????	       8c 08 00 	      STY	LISTSIZ2+8
+    662  0ff8 ????	       d0 08		      BNE	LASTLNOQ
+    663  0ffa ????	       8c 0f 00    LASTLNOK   STY	LISTSIZ+15
+    664  0ffd ????	       ca	   LASTLNOQ   DEX
+    665  0ffe ????	       d0 0f		      BNE	PUTIND
+    666  1000 ????	       ad 00 00    BEAMLOAD   LDA	WAITCNT	;		  ;GRAB WAITCNT
+    667  1003 ????	       f0 00		      BEQ	BEAM4	;		    ;IF ZERO, GO TO NEXT ROUTINE
+    668  1005 ????	       c9 78		      CMP	#120
+    669  1007 ????	       b0 78		      BCS	BEAM1
+    670  1009 ????	       ad 00 00 	      LDA	WAITCNT
+    671  100c ????	       8d 00 00 	      STA	WAITCNT3	;		 ;THIS IS THE ZONE OFFSET
+    672  100f ????	       4c 8a 05 	      JMP	BEAM2
+    673  1012 ????	       a9 b5	   BEAM1      LDA	#181
+    674  1014 ????	       38		      SEC
+    675  1015 ????	       ed 00 00 	      SBC	WAITCNT
+    676  1018 ????	       8d 00 00 	      STA	WAITCNT3
+    677  101b ????	       a9 00	   BEAM2      LDA	#0	;		       ;FIRST DISPLAY ALL FULL ZONES
+    678  101d ????	       8d 00 00 	      STA	ZOFFSET	;		  ;CLEAR ZOFFSET
+    679  1020 ????	       a2 0b		      LDX	#11	;		      ;SET INDEX TO ZONE 12
+    680  1022 ????	       ad 00 00    BEAM3      LDA	WAITCNT3
+    681  1025 ????	       38		      SEC
+    682  1026 ????	       e9 0c		      SBC	#12
+    683  1028 ????	       90 0c		      BCC	NEWZONE
+    684  102a ????	       8d 00 00 	      STA	WAITCNT3
+    685  102d ????	       ad 00 00 	      LDA	ZOFFSET
+    686  1030 ????	       18		      CLC
+    687  1031 ????	       69 0c		      ADC	#12
+    688  1033 ????	       8d 00 00 	      STA	ZOFFSET	;		  ;ADVANCE OFFSET TO NEXT ZONE
+    689  1036 ????	       a9 0c		      LDA	#12
+    690  1038 ????	       8d 00 00 	      STA	WAITCNT2
+    691  103b ????	       20 cd 05 	      JSR	DISPLAYZ
+    692  103e ????	       e8		      INX
+    693  103f ????	       e0 0f		      CPX	#15
+    694  1041 ????	       f0 0f		      BEQ	BEAM4	;		    ;ALL ZONES DISPLAYED
+    695  1043 ????	       4c 22 10 	      JMP	BEAM3
+    696  1046 ????	       ad 00 00    NEWZONE    LDA	WAITCNT3	;		 ;SEE IF NEW ZONE NEEDED
+    697  1049 ????	       f0 00		      BEQ	BEAM4
+    698  104b ????	       18		      CLC
+    699  104c ????	       6d 00 00 	      ADC	ZOFFSET
+    700  104f ????	       8d 00 00 	      STA	ZOFFSET	;		  ;SET ZOFFSET FOR LAST DISPLAY
+    701  1052 ????	       ad 00 00 	      LDA	WAITCNT3	;		 ;GET OFFSET INTO LAST ZONE
+    702  1055 ????	       8d 00 00 	      STA	WAITCNT2
+    703  1058 ????	       20 cd 05 	      JSR	DISPLAYZ	;		 ;NOW DISPLAY NEW ZONE
+    704  105b ????	       4c 59 06    BEAM4      JMP	LEND
+    705  105e ????	       bd 40 08    DISPLAYZ   LDA	LISTTABL,X
+    706  1061 ????	       8d 00 00 	      STA	LISTPTR
+    707  1064 ????	       bd 50 08 	      LDA	LISTTBH1,X	;	       ;GET HIGH @ BYTE
+    708  1067 ????	       2c 00 00 	      BIT	DLSPTR	;		   ;FIND CURRENT DISPLAY LIST
+    709  106a ????	       30 00		      BMI	OTHERLST
+    710  106c ????	       bd 60 08 	      LDA	LISTTBH2,X	;	       ;GET OTHER HIGH @ BYTE
+    711  106f ????	       8d 01 00    OTHERLST   STA	LISTPTR+1	;		;NOW LISTPTR POINTS TO THE DISPLAY
+    712  1072 ????						;				 ;LIST OF THE CURRENT ZONE
+    713  1072 ????	       a9 00		      LDA	#<LSHIELD	;	      ;LOW @ FOR LEFT SHIELD
+    714  1074 ????	       8d 00 00 	      STA	HEADER0
+    715  1077 ????	       ac 00 00 	      LDY	ZOFFSET	;		  ;GET TABLE OFFSET
+    716  107a ????	       b9 a4 07 	      LDA	BMWIDTH,Y	;		;GET CURRENT BEAM WIDTH
+    717  107d ????	       09 80		      ORA	#$80	;		     ;USE PALETTE 4
+    718  107f ????	       8d 00 00 	      STA	HEADER1
+    719  1082 ????	       a9 00		      LDA	#>MARIA2
+    720  1084 ????	       38		      SEC
+    721  1085 ????	       e9 0c		      SBC	#12
+    722  1087 ????	       18		      CLC
+    723  1088 ????	       6d 00 00 	      ADC	WAITCNT2
+    724  108b ????	       8d 00 00 	      STA	HEADER2
+    725  108e ????	       8d 00 00 	      STA	HEADER6	;		  ;HIGH @ FOR RIGHT SHIELD
+    726  1091 ????	       ad 00 00 	      LDA	CAPTUREX
+    727  1094 ????	       38		      SEC
+    728  1095 ????	       f9 72 07 	      SBC	XCORDOFF,Y
+    729  1098 ????	       8d 00 00 	      STA	HEADER3
+    730  109b ????	       a9 00		      LDA	#<RSHIELD
+    731  109d ????	       8d 00 00 	      STA	HEADER4
+    732  10a0 ????	       a9 9f		      LDA	#$9F	;		      ;PALETTE AND WIDTH
+    733  10a2 ????	       8d 00 00 	      STA	HEADER5
+    734  10a5 ????	       ad 00 00 	      LDA	CAPTUREX
+    735  10a8 ????	       18		      CLC
+    736  10a9 ????	       79 72 07 	      ADC	XCORDOFF,Y
+    737  10ac ????	       18		      CLC		;			      ;IN CASE OF NEGATIVE NO.
+    738  10ad ????	       69 04		      ADC	#4
+    739  10af ????	       8d 00 00 	      STA	HEADER7
+    740  10b2 ????						;ALL HEADERS LOADED, NOW STORE IN DISPLAY LIST
+    741  10b2 ????	       bc 00 00 	      LDY	LISTSIZ,X
+    742  10b5 ????	       ad 00 00 	      LDA	HEADER0
+    743  10b8 ????	       91 00		      STA	(LISTPTR),Y
+    744  10ba ????	       c8		      INY
+    745  10bb ????	       ad 00 00 	      LDA	HEADER1
+    746  10be ????	       91 00		      STA	(LISTPTR),Y
+    747  10c0 ????	       c8		      INY
+    748  10c1 ????	       ad 00 00 	      LDA	HEADER2
+    749  10c4 ????	       91 00		      STA	(LISTPTR),Y
+    750  10c6 ????	       c8		      INY
+    751  10c7 ????	       ad 00 00 	      LDA	HEADER3
+    752  10ca ????	       91 00		      STA	(LISTPTR),Y
+    753  10cc ????	       c8		      INY
+    754  10cd ????	       ad 00 00 	      LDA	HEADER4
+    755  10d0 ????	       91 00		      STA	(LISTPTR),Y
+    756  10d2 ????	       c8		      INY
+    757  10d3 ????	       ad 00 00 	      LDA	HEADER5
+    758  10d6 ????	       91 00		      STA	(LISTPTR),Y
+    759  10d8 ????	       c8		      INY
+    760  10d9 ????	       ad 00 00 	      LDA	HEADER6
+    761  10dc ????	       91 00		      STA	(LISTPTR),Y
+    762  10de ????	       c8		      INY
+    763  10df ????	       ad 00 00 	      LDA	HEADER7
+    764  10e2 ????	       91 00		      STA	(LISTPTR),Y
+    765  10e4 ????	       c8		      INY
+    766  10e5 ????	       98		      TYA
+    767  10e6 ????	       9d 00 00 	      STA	LISTSIZ,X	;		;RESET LIST SIZE FOR CURRENT ZONE
+    768  10e9 ????	       60		      RTS
+    769  10ea ????	       a9 00	   LEND       LDA	#0	;		       ; PUT TWO ZEROS AT THE ENDS OF THE
+    770  10ec ????	       a2 0f		      LDX	#15	;		      ; LISTS
+    771  10ee ????	       bc 40 08    LPFZ       LDY	LISTTABL,X
+    772  10f1 ????	       8c 00 00 	      STY	LISTPTR
+    773  10f4 ????	       bc 50 08 	      LDY	LISTTBH1,X
+    774  10f7 ????	       2c 00 00 	      BIT	DLSPTR
+    775  10fa ????	       30 00		      BMI	LZL1
+    776  10fc ????	       bc 60 08 	      LDY	LISTTBH2,X
+    777  10ff ????	       8c 01 00    LZL1       STY	LISTPTR+1
+    778  1102 ????	       bc 00 00 	      LDY	LISTSIZ,X
+    779  1105 ????	       91 00		      STA	(LISTPTR),Y
+    780  1107 ????	       c8		      INY
+    781  1108 ????	       91 00		      STA	(LISTPTR),Y
+    782  110a ????	       ca		      DEX
+    783  110b ????	       10 00		      BPL	LPFZ
+    784  110d ????						;SET DLL TO  POINT TO NEW DISPLAY LIST LIST
+    785  110d ????	       ad 00 00 	      LDA	INHSC	;		    ;SEE IF IN HSC
+    786  1110 ????	       d0 00		      BNE	CONTB	;		    ;IF SO, BOOT THIS PART
+    787  1112 ????	       a9 00		      LDA	#>DLSTLST1
+    788  1114 ????	       2c 00 00 	      BIT	DLSPTR
+    789  1117 ????	       30 00		      BMI	DLST1
+    790  1119 ????	       a9 00		      LDA	#>DLSTLST2
+    791  111b ????	       8d 00 00    DLST1      STA	DPPH
+    792  111e ????	       a9 00		      LDA	#<DLSTLST1
+    793  1120 ????	       2c 00 00 	      BIT	DLSPTR
+    794  1123 ????	       30 00		      BMI	DLST11
+    795  1125 ????	       a9 00		      LDA	#<DLSTLST2
+    796  1127 ????	       8d 00 00    DLST11     STA	DPPL
+    797  112a ????	       ad 00 00 	      LDA	DLSPTR
+    798  112d ????	       49 ff		      EOR	#$FF
+    799  112f ????	       8d 00 00 	      STA	DLSPTR	;		   ;NEXT TIME, WILL USE OTHER DLL
+    800  1132 ????						;VESTIGAL KERNEL REMAINS
+    801  1132 ????	       a0 3f	   UPSHIP     LDY	#63
+    802  1134 ????	       b9 00 00 	      LDA	TYPE,Y
+    803  1137 ????	       f0 00		      BEQ	UNTOUCH1
+    804  1139 ????	       ad 00 00 	      LDA	AUTOPLAY	;		 ;NON ZERO IF IN AUTO
+    805  113c ????	       f0 00		      BEQ	NLOOKTAB
+    806  113e ????	       4c 2e 07 	      JMP	ALOOKTAB
+    807  1141 ????	       ad 28 00    NLOOKTAB   LDA	MODE+40	;		  ;SEE IF IN REUNITE MODE
+    808  1144 ????	       c9 09		      CMP	#9
+    809  1146 ????	       f0 09		      BEQ	UNTOUCH1
+    810  1148 ????	       ad 00 00 	      LDA	PLAYER	;		   ;SEE WHICH PLAYER IS UP
+    811  114b ????	       f0 00		      BEQ	NLOOKTB1
+    812  114d ????	       ad 00 00 	      LDA	SWCHA
+    813  1150 ????	       6a		      ROR
+    814  1151 ????	       6a		      ROR
+    815  1152 ????	       6a		      ROR		;			;W BIT IN CARRY
+    816  1153 ????	       90 00		      BCC	GOWEST
+    817  1155 ????	       6a		      ROR
+    818  1156 ????	       90 00		      BCC	GOEAST	;		   ;E BIT IN CARRY
+    819  1158 ????	       b0 00		      BCS	UNTOUCH1
+    820  115a ????	       2c 00 00    NLOOKTB1   BIT	SWCHA
+    821  115d ????	       10 00		      BPL	GOEAST
+    822  115f ????	       50 00		      BVC	GOWEST
+    823  1161 ????			   UNTOUCH1
+    824  1161 ????	       ee 00 00 	      INC	STARINC
+    825  1164 ????	       ad 00 00 	      LDA	STARINC
+    826  1167 ????	       4a		      LSR
+    827  1168 ????	       90 00		      BCC	NODEC
+    828  116a ????	       ce 00 00    NODEC      DEC	ANIMATE
+    829  116d ????	       d0 00		      BNE	CONTA
+    830  116f ????	       a9 14		      LDA	#20
+    831  1171 ????	       8d 00 00 	      STA	ANIMATE
+    832  1174 ????	       ee 00 00 	      INC	FLAP
+    833  1177 ????	       ad 00 00    CONTA      LDA	MISTIMER
+    834  117a ????	       f0 00		      BEQ	CONTB
+    835  117c ????	       ce 00 00 	      DEC	MISTIMER
+    836  117f ????			   CONTB
+    837  117f ????	       ee 00 00 	      INC	FRAME
+    838  1182 ????	       ce 00 00 	      DEC	BOOTLDR	;		  ;RESET LOADER FLAG
+    839  1185 ????	       ad 00 00 	      LDA	SAVEA
+    840  1188 ????	       ae 00 00 	      LDX	SAVEX
+    841  118b ????	       ac 00 00 	      LDY	SAVEY
+    842  118e ????	       40	   SPURIOUS   RTI
+    843  118f ????
+    844  118f ????	       ad 00 00    GOWEST     LDA	HEROX
+    845  1192 ????	       f0 00		      BEQ	UNTOUCH1
+    846  1194 ????	       ce 00 00 	      DEC	HEROX
+    847  1197 ????	       ce 3e 00 	      DEC	XCORD+62	;		 ;BLINDLY MOVE THIS GUY
+    848  119a ????	       4c 61 11 	      JMP	UNTOUCH1
+    849  119d ????	       ad 3f 00    GOEAST     LDA	MODE+63	;		  ;GET HERO SHIP MODE
+    850  11a0 ????	       c9 0a		      CMP	#10	;		      ;SEE IF DUAL HERO MODE
+    851  11a2 ????	       d0 0a		      BNE	GOEAST1
+    852  11a4 ????	       ad 00 00 	      LDA	HEROX
+    853  11a7 ????	       c9 91		      CMP	#145
+    854  11a9 ????	       f0 91		      BEQ	UNTOUCH1
+    855  11ab ????	       ee 00 00 	      INC	HEROX
+    856  11ae ????	       ee 3e 00 	      INC	XCORD+62	;		 ;BLINDLY MOVE THIS GUY
+    857  11b1 ????	       d0 3e		      BNE	UNTOUCH1
+    858  11b3 ????	       ad 00 00    GOEAST1    LDA	HEROX
+    859  11b6 ????	       c9 98		      CMP	#152
+    860  11b8 ????	       f0 98		      BEQ	UNTOUCH1
+    861  11ba ????	       ee 00 00 	      INC	HEROX
+    862  11bd ????	       d0 00		      BNE	UNTOUCH1
+    863  11bf ????	       ac 00 00    ALOOKTAB   LDY	TABPNT	;		   ;HANDLES AUTO GAME
+    864  11c2 ????	       b9 6a 09 	      LDA	AUTAB,Y	;		  ;PICK X COORDINATE TO SHOOT FOR
+    865  11c5 ????	       cd 00 00 	      CMP	HEROX
+    866  11c8 ????	       f0 00		      BEQ	TINCPNT	;		  ;INCREMENT POINTER IF IT IS REACHED
+    867  11ca ????	       b0 00		      BCS	GOEAST
+    868  11cc ????	       90 00		      BCC	GOWEST
+    869  11ce ????	       ee 00 00    TINCPNT    INC	TABPNT
+    870  11d1 ????	       ad 00 00 	      LDA	TABPNT
+    871  11d4 ????	       c9 10		      CMP	#16
+    872  11d6 ????	       f0 10		      BEQ	TINCPP
+    873  11d8 ????	       4c 61 11 	      JMP	UNTOUCH1
+    874  11db ????	       a9 00	   TINCPP     LDA	#0
+    875  11dd ????	       8d 00 00 	      STA	TABPNT
+    876  11e0 ????	       4c 61 11 	      JMP	UNTOUCH1
+    877  11e3 ????			   ATABL
+    878  11e3 ????	       0c 33 0e 00 PTABL      DC.B	$0C,$33,$0E,$00	; 0: HERO SHIP 	(41,61,71)
+    879  11e7 ????	       1f 94 45 00	      DC.B	$1F,$94,$45,$00	; 1: RED BUG
+    880  11eb ????	       2c 0f 28 00	      DC.B	$2C,$0F,$28,$00	; 2: EXPLOSIONS, SMALL NUMBERS
+    881  11ef ????	       09 1f 1d 00	      DC.B	$09,$1F,$1D,$00	; 3: MISSILES, WORDS, SCORES, RACK
+    882  11f3 ????	       80 4a 63 00	      DC.B	$80,$4A,$63,$00	; 4: BLUE BOSS
+    883  11f7 ????	       d8 35 1c 00	      DC.B	$D8,$35,$1C,$00	; 5: REGULAR BOSS
+    884  11fb ????	       e9 e4 87 00	      DC.B	$E9,$E4,$87,$00	; 6: LOGO
+    885  11ff ????	       1f 81 31 00	      DC.B	$1F,$81,$31,$00	; 7: BLUE BUG
+    886  1203 ????
+    887  1203 ????	       00 00 00 00*XCORDOFF   DC.B	0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3
+    888  121a ????	       04 04 04 04*	      DC.B	4,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6
+    889  122c ????	       07 07 07 07*	      DC.B	7,7,7,7,7,7,8,8,8
+    890  1235 ????
+    891  1235 ????	       1e 1e 1e 1e*BMWIDTH    DC.B	$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E,$1E
+    892  1243 ????	       1e 1e 1e 1d*	      DC.B	$1E,$1E,$1E,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D
+    893  1251 ????	       1d 1c 1c 1c*	      DC.B	$1D,$1C,$1C,$1C,$1C,$1C,$1C,$1C,$1C,$1C,$1C,$1C,$1C,$1B
+    894  125f ????	       1b 1b 1b 1b*	      DC.B	$1B,$1B,$1B,$1B,$1B,$1B,$1B,$1B
+    895  1267 ????
+    896  1267 ????	       00 00 0a 14*INDX       DC.B	0,0,10,20,30,40,50,60,70,80,90,100,110,120
+    897  1275 ????
+    898  1275 ????	       00 00 00 01*DIV3       DC.B	0,0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7
+    899  128d ????	       08 08 08 09*	      DC.B	8,8,8,9,9,9,10,10,10,11,11,11,12,12,12,13,13,13
+    900  129f ????	       0e 0e 0e 0f*	      DC.B	14,14,14,15,15,15,16,16,16,17,17,17,18,18,18,19,19,19
+    901  12b1 ????	       14 14 14 15*	      DC.B	20,20,20,21,21,21,22,22,22
+    902  12ba ????	       00 0c 18 24*ZOFF       DC.B	0,12,24,36,48,60,72,84,96,108,120,132,144,156,168,180,192
+    903  12cb ????	       f4 f4 f4 f4*	      DC.B	$F4,$F4,$F4,$F4,$F4,$F4
+    904  12d1 ????
+    905  12d1 ????	       00 00 00 00*LISTTABL   DC.B	<S1L1,<S1L2,<S1L3,<S1L4,<S1L5,<S1L6
+    906  12d7 ????	       00 00 00 00*	      DC.B	<S1L7,<S1L8,<S1L9,<S1L10,<S1L11,<S1L12
+    907  12dd ????	       00 00 00 00	      DC.B	<S1L13,<S1L14,<S1L15,<S1L16
+    908  12e1 ????	       00 00 00 00*LISTTBH1   DC.B	>S1L1,>S1L2,>S1L3,>S1L4,>S1L5,>S1L6
+    909  12e7 ????	       00 00 00 00*	      DC.B	>S1L7,>S1L8,>S1L9,>S1L10,>S1L11,>S1L12
+    910  12ed ????	       00 00 00 00	      DC.B	>S1L13,>S1L14,>S1L15,>S1L16
+    911  12f1 ????	       00 00 00 00*LISTTBH2   DC.B	>S2L1,>S2L2,>S2L3,>S2L4,>S2L5,>S2L6
+    912  12f7 ????	       00 00 00 00*	      DC.B	>S2L7,>S2L8,>S2L9,>S2L10,>S2L11,>S2L12
+    913  12fd ????	       00 00 00 00	      DC.B	>S2L13,>S2L14,>S2L15,>S2L16
+    914  1301 ????						;GIVES PALETTE AND WIDTH INDEXED BY TYPE
+    915  1301 ????	       00	   PALWDT     DC.B	0	;			;PALLET FOR NOTHING
+    916  1302 ????	       fe		      DC.B	$FE	;		      ;PALLET FOR BLUE BUG
+    917  1303 ????	       3e		      DC.B	$3E	;		      ;PALLET FOR RED BUG
+    918  1304 ????	       be		      DC.B	$BE	;		      ;PALLET FOR REG BOS-GALAGA
+    919  1305 ????	       9e		      DC.B	$9E	;		      ;PALLET FOR BLUE BOS-GALAGA
+    920  1306 ????	       1e		      DC.B	$1E	;		      ;PALLET FOR HERO SHIP
+    921  1307 ????	       00		      DC.B	0	;			;INVISO SHIP (NOT USED)
+    922  1308 ????	       7e		      DC.B	$7E	;		      ;PALLET FOR MISSLES
+    923  1309 ????	       5d		      DC.B	$5D	;		      ;PALLET FOR EXPLOSIONS
+    924  130a ????	       5c		      DC.B	$5C	;		      ;PALLET FOR SMALL NUMBERS
+    925  130b ????	       5c		      DC.B	$5C	;		      ;PALLET FOR SMALL NUMBERS
+    926  130c ????	       5c		      DC.B	$5C	;		      ;PALLET FOR SMALL NUMBERS
+    927  130d ????	       5c		      DC.B	$5C	;		      ;PALLET FOR SMALL NUMBERS
+    928  130e ????	       7e		      DC.B	$7E	;		      ;SCORPION,PAL=?,T=13
+    929  130f ????	       00 00		      DC.B	0,0
+    930  1311 ????	       be		      DC.B	$BE	;		      ;PALLET FOR REG-BOSS GALAGA
+    931  1312 ????	       9e		      DC.B	$9E	;		      ;PALLET FOR BLUE-BOSS GALAGA
+    932  1313 ????	       d3		      DC.B	$D3	;		      ;LOGO SECTIONS, W=13,T=18
+    933  1314 ????	       d3		      DC.B	$D3	;		      ;T=19
+    934  1315 ????	       d3		      DC.B	$D3	;		      ;T=20
+    935  1316 ????	       d3		      DC.B	$D3	;		      ;T=21
+    936  1317 ????	       d7		      DC.B	$D7	;		      ;T=22
+    937  1318 ????	       d7		      DC.B	$D7	;		      ;T=23
+    938  1319 ????	       7e		      DC.B	$7E	;		      ;T=24, LINE, NOT USED
+    939  131a ????	       77		      DC.B	$77	;		      ;THIS IS PLAYER
+    940  131b ????	       78		      DC.B	$78	;		      ;WIDTH 8 FOR READY....
+    941  131c ????	       7c		      DC.B	$7C	;		      ;DOUBLE MISSILE  TYPE=27
+    942  131d ????	       73		      DC.B	$73	;		      ;GAME OVER, WIDTH = 13
+    943  131e ????	       70		      DC.B	$70	;		      ;CHALLENGING, WIDTH = 16
+    944  131f ????	       79		      DC.B	$79	;		      ;STAGE, WIDTH = 7
+    945  1320 ????	       7e		      DC.B	$7E	;		      ;"1", WIDTH = 2
+    946  1321 ????	       7e		      DC.B	$7E	;		      ;"2", WIDTH = 2
+    947  1322 ????	       76		      DC.B	$76	;		      ;"FIGHTER" WIDTH = 10
+    948  1323 ????	       74		      DC.B	$74	;		      ;"CAPTURED" WIDTH = 12
+    949  1324 ????	       9c		      DC.B	$9C	;		      ;TWINKLE, PAL 4, WIDTH = 4
+    950  1325 ????	       6c		      DC.B	$6C	;		      ;NUMOFHTS, PAL3, W=20, TYPE=36
+    951  1326 ????	       76		      DC.B	$76	;		      ;PERFECT, W=10, PAL3, TYPE=37
+    952  1327 ????	       6d		      DC.B	$6D	;		      ;SPECIAL BONUS, W=19, TYPE=38
+    953  1328 ????	       78		      DC.B	$78	;		      ;BONUS, W=8, TYPE=39
+    954  1329 ????	       7e		      DC.B	$7E	;		      ;DIGIT, W=2, TYPE=40
+    955  132a ????	       7a		      DC.B	$7A	;		      ;TEN K, W=6, TYPE=41
+    956  132b ????	       7d		      DC.B	$7D	;		      ;DOUBLE ZERO, W=3, TYPE=42
+    957  132c ????	       74		      DC.B	$74	;		      ;ADVANCED,W=12,T=43
+    958  132d ????	       77		      DC.B	$77	;		      ;EXPERT,W=9,T=44
+    959  132e ????	       77		      DC.B	$77	;		      ;NOVICE,W=9,T=45
+    960  132f ????	       78		      DC.B	$78	;		      ;LEVEL,W=8,T=46
+    961  1330 ????	       75		      DC.B	$75	;		      ;PLAYERS,W=11?,T=47
+    962  1331 ????	       7e		      DC.B	$7E	;		      ;SONE,W=2,T=48
+    963  1332 ????	       7e		      DC.B	$7E	;		      ;TTWO,W=2,T=49
+    964  1333 ????	       fe		      DC.B	$FE	;		      ;NEWBIRD,W=2,T=50
+    965  1334 ????	       7e		      DC.B	$7E	;		      ;%,W=2,T=51
+    966  1335 ????	       5d		      DC.B	$5D	;		      ;HERO EXPLOSION, W=3,T=52
+    967  1336 ????
+    968  1336 ????						;THIS TABLE IS INDEXED BY THE TYPE OF THE GIVEN CHARACTER
+    969  1336 ????						; IT GIVES AN INDEX INTO THE LSTPTBL
+    970  1336 ????	       00	   TYPTOLT    DC.B	0	;			;CALL NO SHIP GRAPHICS (NOT USED)
+    971  1337 ????	       00		      DC.B	0	;			;CALL BLUE BUG GRAPHICS
+    972  1338 ????	       09		      DC.B	9	;			;CALL RED BUG GRAPHICS
+    973  1339 ????	       12		      DC.B	18	;		       ;CALL BOSS BUG GRAPHICS
+    974  133a ????	       12		      DC.B	18	;		       ;CALL BOSS BUG GRAPHICS
+    975  133b ????	       1b		      DC.B	27	;		       ;CALL HERO GRAPHICS
+    976  133c ????	       00		      DC.B	0	;			;CALL INVISO SHIP GRAPHICS (NOT USED)
+    977  133d ????	       2d		      DC.B	45	;		       ;CALL MISSLE GRAPHICS
+    978  133e ????	       24		      DC.B	36	;		       ;CALL EXPLOSION GRAPHICS
+    979  133f ????	       35		      DC.B	53	;		       ;CALL SMALL NUMBER GRAPHICS
+    980  1340 ????	       36		      DC.B	54	;		       ;CALL SMALL NUMBER GRAPHICS
+    981  1341 ????	       37		      DC.B	55	;		       ;CALL SMALL NUMBER GRAPHICS
+    982  1342 ????	       38		      DC.B	56	;		       ;CALL SMALL NUMBER GRAPHICS
+    983  1343 ????	       7e		      DC.B	126	;		      ;SCORPION,T=13
+    984  1344 ????	       00 00		      DC.B	0,0
+    985  1346 ????	       12		      DC.B	18	;		       ;CALL BOSS BUG GRAPHICS
+    986  1347 ????	       12		      DC.B	18	;		       ;CALL BOSS BUG GRAPHICS
+    987  1348 ????	       45 46 47 48*	      DC.B	69,70,71,72,73,74,75
+    988  134f ????	       4c		      DC.B	76	;		       ;THIS IS FOR PLAYER ANGLE IS 1
+    989  1350 ????	       4d		      DC.B	77	;		       ;FOR READY
+    990  1351 ????	       2d		      DC.B	45	;		       ;CALL MISSILE GRAPHICS
+    991  1352 ????	       4e		      DC.B	78	;		       ;GAME OVER
+    992  1353 ????	       4f		      DC.B	79	;		       ;CHALLENGING
+    993  1354 ????	       50		      DC.B	80	;		       ;STAGE
+    994  1355 ????	       51		      DC.B	81	;		       ;"1"
+    995  1356 ????	       52		      DC.B	82	;		       ;"2"
+    996  1357 ????	       53		      DC.B	83	;		       ;FIGHTER
+    997  1358 ????	       54		      DC.B	84	;		       ;CAPTURED
+    998  1359 ????	       56		      DC.B	86	;		       ;TWINKLE    TYPE=35
+    999  135a ????	       5d		      DC.B	93	;		       ;NUMOFHTS, T=36
+   1000  135b ????	       5e		      DC.B	94	;		       ;PERFECT, T=37
+   1001  135c ????	       5f		      DC.B	95	;		       ;SPECIAL BONUS, T=38
+   1002  135d ????	       60		      DC.B	96	;		       ;BONUS, T=39
+   1003  135e ????	       62		      DC.B	98	;		       ;DIGIT, T=40
+   1004  135f ????	       6b		      DC.B	107	;		      ;TENK, T=41
+   1005  1360 ????	       6c		      DC.B	108	;		      ;DBLZERO, T=42
+   1006  1361 ????	       6d		      DC.B	109	;		      ;ADVANCED,T=43
+   1007  1362 ????	       6e		      DC.B	110	;		      ;EXPERT,T=44
+   1008  1363 ????	       6f		      DC.B	111	;		      ;NOVICE,T=45
+   1009  1364 ????	       70		      DC.B	112	;		      ;LEVEL,T=46
+   1010  1365 ????	       4c		      DC.B	76	;		       ;PLAYERS,T=47
+   1011  1366 ????	       71		      DC.B	113	;		      ;"1",T=48
+   1012  1367 ????	       72		      DC.B	114	;		      ;"2",T=49
+   1013  1368 ????	       74		      DC.B	116	;		      ;NEWBIRD,T=50
+   1014  1369 ????	       7c		      DC.B	124	;		      ;%,T=51
+   1015  136a ????	       87		      DC.B	135	;		      ;HERO EXPLOSION, T=52
+   1016  136b ????
+   1017  136b ????	       00 00 00 00 LSTPTBL    DC.B	<BLUBUG,<BLUBUG1,<BLUBUG2,<BLUBUG3
+   1018  136f ????	       00 00 00 00*	      DC.B	<BLUBUG4,<BLUBUG5,<BLUBUG6,<BLUBUG7,<BLUBUGF
+   1019  1374 ????	       00 00 00 00	      DC.B	<REDBUG,<REDBUG1,<REDBUG2,<REDBUG3
+   1020  1378 ????	       00 00 00 00*	      DC.B	<REDBUG4,<REDBUG5,<REDBUG6,<REDBUG7,<REDBUGF
+   1021  137d ????	       00 00 00 00	      DC.B	<BOSGAL,<BOSGAL1,<BOSGAL2,<BOSGAL3	;	       ;21
+   1022  1381 ????	       00 00 00 00*	      DC.B	<BOSGAL4,<BOSGAL5,<BOSGAL6,<BOSGAL7,<BOSGALF
+   1023  1386 ????	       00 00 00 00	      DC.B	<HEROS,<HERO1,<HERO2,<HERO3
+   1024  138a ????	       00 00 00 00*	      DC.B	<HERO4,<HERO5,<HERO6,<HERO7,<HEROS	;	     ;35
+   1025  138f ????	       00 00 00 00	      DC.B	<EXPLO0,<EXPLO1,<EXPLO2,<EXPLO3
+   1026  1393 ????	       00 00 00 00*	      DC.B	<EXPLO4,<EXPLO5,<EXPLO6,<EXPLO7,<EXPLO0	;44
+   1027  1398 ????	       00 00 00 00	      DC.B	<MISSLE,<MISSLE,<MISSLE,<MISSLE
+   1028  139c ????	       00 00 00 00*	      DC.B	<MISSLE4,<MISSLE,<MISSLE,<MISSLE,<MISSLE	;53
+   1029  13a1 ????	       00 00 00 00	      DC.B	<SIXTYPE,<THOTYPE,<EIGTYPE,<FOUTYPE	;NEW
+   1030  13a5 ????	       00 00 00 00*	      DC.B	<FOUTYPE,<FOUTYPE,<FOUTYPE,<FOUTYPE,<FOUTYPE
+   1031  13aa ????	       00 00 00 00	      DC.B	<FOUTYPE,<FOUTYPE,<FOUTYPE,<FOUTYPE	;NEW
+   1032  13ae ????	       00 00 00 	      DC.B	<FOUTYPE,<FOUTYPE,<FOUTYPE	;	       ;NEW
+   1033  13b1 ????	       00 00 00 00	      DC.B	<LULOGO,<LILOGO,<RULOGO,<RILOGO
+   1034  13b5 ????	       00 00		      DC.B	<BULOGO,<BILOGO
+   1035  13b7 ????	       00		      DC.B	<LINE
+   1036  13b8 ????	       00		      DC.B	<PLAYERG	;	       ;77
+   1037  13b9 ????	       00		      DC.B	<READY	;		 ;78
+   1038  13ba ????	       00		      DC.B	<GMEOVER	;	       ;79
+   1039  13bb ????	       00		      DC.B	<CHLNGING	;	      ;80
+   1040  13bc ????	       00		      DC.B	<STAGE	;		 ;81
+   1041  13bd ????	       00		      DC.B	<PONE	;		  ;82
+   1042  13be ????	       00		      DC.B	<PTWO	;		  ;83
+   1043  13bf ????	       00		      DC.B	<FIGHTER	;	       ;84
+   1044  13c0 ????	       00		      DC.B	<CAPTD	;		 ;85
+   1045  13c1 ????	       00		      DC.B	<TWINKLE	;	       ;86
+   1046  13c2 ????	       00		      DC.B	<TWINKL1	;	       ;87
+   1047  13c3 ????	       00		      DC.B	<TWINKL2	;	       ;88
+   1048  13c4 ????	       00		      DC.B	<TWINKL3	;	       ;89
+   1049  13c5 ????	       00		      DC.B	<TWINKL4	;	       ;90
+   1050  13c6 ????	       00		      DC.B	<TWINKL5	;	       ;91
+   1051  13c7 ????	       00		      DC.B	<TWINKL6	;	       ;92
+   1052  13c8 ????	       00		      DC.B	<TWINKL7	;	       ;93
+   1053  13c9 ????	       00		      DC.B	<NUMOFHTS	;	      ;94TH ENTRY, ANGLE =1
+   1054  13ca ????	       00		      DC.B	<PERFECT	;	       ;95
+   1055  13cb ????	       00		      DC.B	<SPECIALG	;	      ;96
+   1056  13cc ????	       00		      DC.B	<BONUS	;		 ;97
+   1057  13cd ????	       00		      DC.B	<DIGIT0	;		;98
+   1058  13ce ????	       00		      DC.B	<DIGIT1	;		;99
+   1059  13cf ????	       00		      DC.B	<DIGIT2
+   1060  13d0 ????	       00		      DC.B	<DIGIT3
+   1061  13d1 ????	       00		      DC.B	<DIGIT4
+   1062  13d2 ????	       00		      DC.B	<DIGIT5
+   1063  13d3 ????	       00		      DC.B	<DIGIT6
+   1064  13d4 ????	       00		      DC.B	<DIGIT7
+   1065  13d5 ????	       00		      DC.B	<DIGIT8
+   1066  13d6 ????	       00		      DC.B	<DIGIT9	;		;107
+   1067  13d7 ????	       00		      DC.B	<TENK	;		  ;108
+   1068  13d8 ????	       00		      DC.B	<DBLZERO	;	       ;109
+   1069  13d9 ????	       00		      DC.B	<ADVANCED	;	      ;110
+   1070  13da ????	       00		      DC.B	<EXPERT	;		;111
+   1071  13db ????	       00		      DC.B	<NOVICE	;		;112
+   1072  13dc ????	       00		      DC.B	<LEVEL	;		 ;113
+   1073  13dd ????	       00		      DC.B	<SONE	;		  ;114TH ENTRY
+   1074  13de ????	       00		      DC.B	<STWO	;		  ;115
+   1075  13df ????	       00 00 00 00	      DC.B	<NEWBIRD0,<NEWBIRD1,<NEWBIRD2,<NEWBIRD3
+   1076  13e3 ????	       00 00 00 00	      DC.B	<NEWBIRD4,<NEWBIRD5,<NEWBIRD6,<NEWBIRD7
+   1077  13e7 ????	       00		      DC.B	<NEWBIRD0	;	      ;124
+   1078  13e8 ????	       00		      DC.B	<PERCENT	;	       ;125
+   1079  13e9 ????	       00 00 00 00*	      DC.B	<SCORP0,<SCORP1,<SCORP2,<SCORP3,<SCORP4
+   1080  13ee ????	       00 00 00 00	      DC.B	<SCORP5,<SCORP6,<SCORP7,<SCORPF	;134
+   1081  13f2 ????	       00 00 00 00	      DC.B	<HEXPLO0,<HEXPLO1,<HEXPLO2,<HEXPLO3
+   1082  13f6 ????	       00 00 00 00*	      DC.B	<HEXPLO4,<HEXPLO5,<HEXPLO6,<HEXPLO7,<HEXPLO0	;143
+   1083  13fb ????
+   1084  13fb ????	       58 19 46 30*AUTAB      DC.B	$58,$19,$46,$30,$50,$5A,$40,$20,$50,$45
+   1085  1405 ????	       72 1e 31 4c*	      DC.B	$72,$1E,$31,$4C,$80,$30,$38
+   1086  140c ????
+   1087  140c ????	       00 08 10 18*GETXSC     DC.B	0,8,16,24,32,40,48,56,94,102,110,118,126,134,142,150
+   1088  141c ????
+   1089  141c ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+   1090  141c ????						;*;*;*;*;* High Score Code ;*;*;*;*;*
+   1091  141c ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+   1092  141c ????						; THIS FILE CONTAINS THE HANDLERS FOR THE INTERFACE TO THE HISCORE
+   1093  141c ????						;	   MODULE.  "MKHISCOR" AND "MKENTER" INITIATE MODES;
+   1094  141c ????						;	   "HISCORE" AND "ENTER" JUST LOOP IN WAIT.
+   1095  141c ????						; THIS CODE IS REACHED THROUGH A JSR
+   1096  141c ????
+   1097  141c ????	       3f fa	   HSCATRCT   EQU	$3FFA
+   1098  141c ????	       3f fd	   HSCINITL   EQU	$3FFD
+   1099  141c ????	       22 00	   HSCRAM     EQU	$2200
+   1100  141c ????	       3f f7	   HSCSTAT    EQU	$3FF7
+   1101  141c ????
+   1102  141c ????	       20 b1 09    HSCTEST    JSR	BUILDHSC
+   1103  141f ????	       a9 00		      LDA	#0
+   1104  1421 ????	       8d 0e 22 	      STA	HSCRAM+14	;		SET WAITING TIME TO ZERO
+   1105  1424 ????	       4c f7 3f 	      JMP	HSCSTAT	;		  SEE IF DISPLAY FOR THIS LEVEL
+   1106  1427 ????
+   1107  1427 ????	       20 b1 09    HSCDSPLY   JSR	BUILDHSC
+   1108  142a ????	       4c fa 3f 	      JMP	HSCATRCT	;		 RETURN FROM THERE
+   1109  142d ????
+   1110  142d ????			   HSCENTER
+   1111  142d ????	       20 b1 09 	      JSR	BUILDHSC
+   1112  1430 ????	       ad 00 00 	      LDA	PLAYER
+   1113  1433 ????	       d0 00		      BNE	HSC2PLR	;		  IF SECOND PLAYER, LEAVE ALONE
+   1114  1435 ????	       ad 00 00 	      LDA	TWOPLAYR	;		 SEE IF TWO PLAYER GAME
+   1115  1438 ????	       f0 00		      BEQ	HSC2PLR	;		  IF ONE PLAYER ONLY, LEAVE IT ALONE
+   1116  143a ????	       a9 00		      LDA	#0
+   1117  143c ????	       8d 0e 22 	      STA	HSCRAM+14	;		SET WAIT TIME TO 0 SECONDS
+   1118  143f ????	       4c fd 3f    HSC2PLR    JMP	HSCINITL	;		 RETURN FROM THERE
+   1119  1442 ????
+   1120  1442 ????			   BUILDHSC
+   1121  1442 ????	       ad 00 39 	      LDA	$3900
+   1122  1445 ????	       c9 c6		      CMP	#$C6
+   1123  1447 ????	       d0 c6		      BNE	HSCMISSS
+   1124  1449 ????	       ad 04 39 	      LDA	$3904
+   1125  144c ????	       c9 fe		      CMP	#$FE
+   1126  144e ????	       d0 fe	   HSCMISSS   BNE	HSCMISS
+   1127  1450 ????
+   1128  1450 ????						;	   LDX	   #31
+   1129  1450 ????						;DLSTLD    LDA     HSCDLST1,X; 	    ;MOVE LOGO DISPLAY LIST DOWN INTO RAM
+   1130  1450 ????						;	  STA	  S1L1,X
+   1131  1450 ????						;	 DEX
+   1132  1450 ????						;	BPL	DLSTLD
+   1133  1450 ????
+   1134  1450 ????	       a2 0e		      LDX	#14	;		      COPY 15 BYTES FROM HSCROM TO HSCRAM
+   1135  1452 ????	       bd 00 00    HSCLOAD    LDA	HSCROM,X
+   1136  1455 ????	       9d 00 22 	      STA	HSCRAM,X
+   1137  1458 ????	       ca		      DEX
+   1138  1459 ????	       10 00		      BPL	HSCLOAD
+   1139  145b ????
+   1140  145b ????	       ad 00 00 	      LDA	DIFCULTY	;		 ; DIFFICULTY LEVEL FOR THIS CALL
+   1141  145e ????	       aa		      TAX
+   1142  145f ????	       0a		      ASL		;			;  --CALLED 3 TIMES FROM "LOGO"
+   1143  1460 ????	       0a		      ASL		;			; ONCE FOR EACH DIFFICULTY LEVEL
+   1144  1461 ????	       0d 00 00 	      ORA	PLAYER	;		   WHO"S ENTERING HIS INITIALS
+   1145  1464 ????	       8d 02 22 	      STA	HSCRAM+2
+   1146  1467 ????
+   1147  1467 ????	       bd 00 00 	      LDA	DNTABL,X
+   1148  146a ????	       8d 06 22 	      STA	HSCRAM+6
+   1149  146d ????	       bd 00 00 	      LDA	DNTABH,X
+   1150  1470 ????	       8d 07 22 	      STA	HSCRAM+7
+   1151  1473 ????
+   1152  1473 ????	       ad 00 00 	      LDA	PLAYER
+   1153  1476 ????	       f0 00		      BEQ	CONTINUE
+   1154  1478 ????						;	   MOVEPTR SCORE2,HSCRAM+8	  OTHER PLAYER
+   1155  1478 ????	       ad 08 00 	      LDA	SCORE+8	;		  HIGHEST BYTE OF P2 SCORE
+   1156  147b ????	       c9 0a		      CMP	#$A
+   1157  147d ????	       d0 0a		      BNE	NIBOK1
+   1158  147f ????	       a9 00		      LDA	#0
+   1159  1481 ????	       f0 00		      BEQ	NXTNIB
+   1160  1483 ????	       0a	   NIBOK1     ASL
+   1161  1484 ????	       0a		      ASL
+   1162  1485 ????	       0a		      ASL
+   1163  1486 ????	       0a		      ASL
+   1164  1487 ????	       0d 09 00    NXTNIB     ORA	SCORE+9	;		  PUT IN BCD FORM
+   1165  148a ????	       c9 0a		      CMP	#$A
+   1166  148c ????	       d0 0a		      BNE	NIBOK2
+   1167  148e ????	       a9 00		      LDA	#0
+   1168  1490 ????	       8d 00 00    NIBOK2     STA	HSCORE
+   1169  1493 ????	       a2 02		      LDX	#2
+   1170  1495 ????	       bd 00 00    LDSCORE    LDA	P2SCORE,X
+   1171  1498 ????	       9d 01 00 	      STA	HSCORE+1,X
+   1172  149b ????	       ca		      DEX
+   1173  149c ????	       10 01		      BPL	LDSCORE
+   1174  149e ????	       30 01		      BMI	SETXANDY
+   1175  14a0 ????			   CONTINUE
+   1176  14a0 ????	       ad 00 00 	      LDA	SCORE
+   1177  14a3 ????	       c9 0a		      CMP	#$A	;		      ;SEE IF BLANK
+   1178  14a5 ????	       d0 0a		      BNE	NIBOK3
+   1179  14a7 ????	       a9 00		      LDA	#0
+   1180  14a9 ????	       f0 00		      BEQ	NXTNIBL
+   1181  14ab ????	       0a	   NIBOK3     ASL
+   1182  14ac ????	       0a		      ASL
+   1183  14ad ????	       0a		      ASL
+   1184  14ae ????	       0a		      ASL
+   1185  14af ????	       0d 01 00    NXTNIBL    ORA	SCORE+1	;		  ;PUT SCORE IN BCD FORM
+   1186  14b2 ????	       c9 0a		      CMP	#$A
+   1187  14b4 ????	       d0 0a		      BNE	NIBOKK
+   1188  14b6 ????	       a9 00		      LDA	#0
+   1189  14b8 ????	       8d 00 00    NIBOKK     STA	HSCORE
+   1190  14bb ????	       a2 02		      LDX	#2
+   1191  14bd ????	       bd 00 00    LDSCORE2   LDA	P1SCORE,X
+   1192  14c0 ????	       9d 01 00 	      STA	HSCORE+1,X
+   1193  14c3 ????	       ca		      DEX
+   1194  14c4 ????	       10 01		      BPL	LDSCORE2
+   1195  14c6 ????						;	   COPY    HSCDLIST,ARAMZONE,40
+   1196  14c6 ????	       a2 00	   SETXANDY   LDX	#<HSCRAM
+   1197  14c8 ????	       a0 22		      LDY	#>HSCRAM
+   1198  14ca ????	       60	   NOSOUND    RTS
+   1199  14cb ????
+   1200  14cb ????	       68	   HSCMISS    PLA
+   1201  14cc ????	       68		      PLA
+   1202  14cd ????	       60		      RTS
+   1203  14ce ????
+   1204  14ce ????
+   1205  14ce ????	       c9 00 00    HSCDLL     DC.B	$C9,>DUMYHDR,<DUMYHDR
+   1206  14d1 ????	       43 00 00 	      DC.B	$43,>ZEROHDR,<ZEROHDR
+   1207  14d4 ????	       4b 00 00 	      DC.B	$4B,>S1L6,<S1L6
+   1208  14d7 ????						;*THIS STUFF IS OFF THE SCREEN ON MOST TV"S
+   1209  14d7 ????	       4b 00 00 	      DC.B	$4B,>S1L7,<S1L7
+   1210  14da ????	       4b 00 00 	      DC.B	$4B,>S1L8,<S1L8
+   1211  14dd ????	       4b 00 00 	      DC.B	$4B,>S1L9,<S1L9
+   1212  14e0 ????	       4b 00 00 	      DC.B	$4B,>S1L10,<S1L10
+   1213  14e3 ????
+   1214  14e3 ????	       1d 1d 1d 1d*DNAME0     DC.B	$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D	; overlapped
+   1215  14ec ????	       1d 0d 0e 15*	      DC.B	$1D,13,14,21,8,2,4,$1D	; "NOVICE"
+   1216  14f4 ????	       1d 1d 1d 	      DC.B	$1D,$1D,$1D
+   1217  14f7 ????	       1d 1d 1d 1d*DNAME1     DC.B	$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D	; overlapped
+   1218  1500 ????	       00 03 15 00*	      DC.B	$0,$3,$15,$0,$D,$2,$4,$3	; "ADVANCED"
+   1219  1508 ????	       1d 1d 1d 1d*DNAME2     DC.B	$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D	; overlapped
+   1220  1512 ????	       04 17 0f 04*	      DC.B	$4,$17,$F,$4,$11,$13	;	     ; "EXPERT"
+   1221  1518 ????	       1d 1d 1d 1d*	      DC.B	$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D
+   1222  1522 ????
+   1223  1522 ????			   END01		;DC.B	    0

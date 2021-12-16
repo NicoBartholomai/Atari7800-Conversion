@@ -876,13 +876,13 @@ TINCPP    LDA     #0
           JMP     UNTOUCH1
 ATABL
 PTABL     DC.B      $0C,$33,$0E,$00        ; 0: HERO SHIP         (41,61,71)
-          DC.B      $1F,$94,$45,$00        ; 1: RED BUG
+          DC.B      $4E,$94,$32,$00        ; 1: RED BUG
           DC.B      $2C,$0F,$28,$00        ; 2: EXPLOSIONS, SMALL NUMBERS
           DC.B      $09,$1F,$1D,$00        ; 3: MISSILES, WORDS, SCORES, RACK
           DC.B      $80,$4A,$63,$00        ; 4: BLUE BOSS
           DC.B      $D8,$35,$1C,$00        ; 5: REGULAR BOSS
           DC.B      $E9,$E4,$87,$00        ; 6: LOGO
-          DC.B      $1F,$95,$40,$00        ; 7: BLUE BUG
+          DC.B      $1D,$93,$42,$00        ; 7: BLUE BUG
 
 XCORDOFF  DC.B      0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3
           DC.B      4,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6
@@ -919,7 +919,7 @@ PALWDT    DC.B      0;                      ;PALLET FOR NOTHING
           DC.B      $9E;                    ;PALLET FOR BLUE BOS-GALAGA
           DC.B      $1E;                    ;PALLET FOR HERO SHIP
           DC.B      0;                      ;INVISO SHIP (NOT USED)
-          DC.B      $7E;                    ;PALLET FOR MISSLES
+          DC.B      $3E;                    ;PALLET FOR MISSLES
           DC.B      $5D;                    ;PALLET FOR EXPLOSIONS
           DC.B      $5C;                    ;PALLET FOR SMALL NUMBERS
           DC.B      $5C;                    ;PALLET FOR SMALL NUMBERS
@@ -938,7 +938,7 @@ PALWDT    DC.B      0;                      ;PALLET FOR NOTHING
           DC.B      $7E;                    ;T=24, LINE, NOT USED
           DC.B      $77;                    ;THIS IS PLAYER
           DC.B      $78;                    ;WIDTH 8 FOR READY....
-          DC.B      $7C;                    ;DOUBLE MISSILE  TYPE=27
+          DC.B      $3C;                    ;DOUBLE MISSILE  TYPE=27
           DC.B      $73;                    ;GAME OVER, WIDTH = 13
           DC.B      $70;                    ;CHALLENGING, WIDTH = 16
           DC.B      $79;                    ;STAGE, WIDTH = 7

@@ -150,7 +150,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      0,0 ; Blue Bug F
           DC.B      0,0 ; Red Bug 0
           DC.B      0,0 ; Red Bug F
-          DC.B      $10,$10 ; Galaga 0
+          DC.B      $00,$00 ; Galaga 0
           DC.B      0,0 ; Galaga F
           DC.B      0,0 ; Hero 0
           DC.B      0,0 ; Hero 1
@@ -249,7 +249,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $20,$20 ; Blue Bug F
           DC.B      $30,$30 ; Red Bug 0
           DC.B      $30,$30 ; Red Bug F
-          DC.B      $60,$24 ; Galaga 0
+          DC.B      $10,$10 ; Galaga 0
           DC.B      $04,$40 ; Galaga F
           DC.B      $CB,$8C ; Hero 0
           DC.B      $8,30 ; Hero 1
@@ -348,8 +348,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $23,$20 ; Blue Bug F
           DC.B      $F1,$3C ; Red Bug 0
           DC.B      $31,$30 ; Red Bug F
-          DC.B      $A0,$28 ; Galaga 0
-          DC.B      $10,$10 ; Galaga F
+          DC.B      $50,$14 ; Galaga 0
+          DC.B      $14,$50 ; Galaga F
           DC.B      $DF,$DC ; Hero 0
           DC.B      $1C,$78 ; Hero 1
           DC.B      $FD,$80 ; Hero 2
@@ -358,7 +358,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $FE,$08 ; Hero 5
           DC.B      $02,$7F ; Hero 6
           DC.B      $2D,$34 ; Hero 7
-          DC.B      2,0,8,0 ; Missile
+          DC.B      3,0,12,0 ; Missile
           DC.B      0,0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $0A,$80 ; Blue Bug 1
@@ -447,8 +447,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $23,$20 ; Blue Bug F
           DC.B      $F1,$3C ; Red Bug 0
           DC.B      $35,$70 ; Red Bug F
-          DC.B      $52,$14 ; Galaga 0
-          DC.B      $52,$14 ; Galaga F
+          DC.B      $A0,$28 ; Galaga 0
+          DC.B      $50,$14 ; Galaga F
           DC.B      $FB,$BC ; Hero 0
           DC.B      $BF,$F2 ; Hero 1
           DC.B      $3C,00 ; Hero 2
@@ -457,7 +457,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $3F,$7F ; Hero 5
           DC.B      0,$3C ; Hero 6
           DC.B      $8F,$FE ; Hero 7
-          DC.B      2,0,8,0 ; Missile
+          DC.B      3,0,12,0 ; Missile
           DC.B      3,0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $02,$A0 ; Blue Bug 1
@@ -543,11 +543,11 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $08,$A8,$A8,$00 ; Six Type
           DC.B      $F0,$FC ; Special
           DC.B      $A5,$68 ; Blue Bug 0
-          DC.B      $25,$E0 ; Blue Bug F
+          DC.B      $25,$60 ; Blue Bug F
           DC.B      $F5,$7C ; Red Bug 0
           DC.B      $35,$70 ; Red Bug F
-          DC.B      $53,$14 ; Galaga 0
-          DC.B      $53,$14 ; Galaga F
+          DC.B      $A0,$28 ; Galaga 0
+          DC.B      $60,$24 ; Galaga F
           DC.B      $7A,$B4 ; Hero 0
           DC.B      $0F,$90 ; Hero 1
           DC.B      $BF,$A0 ; Hero 2
@@ -556,8 +556,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $2E,$B4 ; Hero 5
           DC.B      $0A,$FE ; Hero 6
           DC.B      $06,$F0 ; Hero 7
-          DC.B      2,0,8,0 ; Missile
-          DC.B      $0A,$80 ; Missile 4
+          DC.B      3,0,12,0 ; Missile
+          DC.B      $0F,$C0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $21,$A0 ; Blue Bug 1
           DC.B      $07,$D8 ; Blue Bug 2
@@ -645,8 +645,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $2F,$E0 ; Blue Bug F
           DC.B      $F5,$7C ; Red Bug 0
           DC.B      $3E,$F0 ; Red Bug F
-          DC.B      $57,$54 ; Galaga 0
-          DC.B      $57,$54 ; Galaga F
+          DC.B      $60,$24 ; Galaga 0
+          DC.B      $60,$24 ; Galaga F
           DC.B      $9E,$D8 ; Hero 0
           DC.B      $1E,$B8 ; Hero 1
           DC.B      $F9,$55 ; Hero 2
@@ -655,8 +655,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $06,$F0 ; Hero 5
           DC.B      $55,$6F ; Hero 6
           DC.B      $2E,$B4 ; Hero 7
-          DC.B      2,0,8,0 ; Missile
-          DC.B      2,0 ; Missile 4
+          DC.B      3,0,12,0 ; Missile
+          DC.B      $0E,$C0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $29,$E0 ; Blue Bug 1
           DC.B      $A7,$54 ; Blue Bug 2
@@ -741,11 +741,11 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $A8,$88,$88,$00 ; Six Type
           DC.B      $CC,$C0 ; Special
           DC.B      $2F,$E0 ; Blue Bug 0
-          DC.B      $2E,$E0 ; Blue Bug F
+          DC.B      $2F,$E0 ; Blue Bug F
           DC.B      $3E,$F0 ; Red Bug 0
           DC.B      $3E,$F0 ; Red Bug F
-          DC.B      $27,$60 ; Galaga 0
-          DC.B      $17,$50 ; Galaga F
+          DC.B      $53,$14 ; Galaga 0
+          DC.B      $53,$14 ; Galaga F
           DC.B      $8F,$C8 ; Hero 0
           DC.B      $FF,$FC ; Hero 1
           DC.B      $FA,$FF ; Hero 2
@@ -754,8 +754,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $8F,$FE ; Hero 5
           DC.B      $FF,$AF ; Hero 6
           DC.B      $37,$F7 ; Hero 7
-          DC.B      2,0,8,0 ; Missile
-          DC.B      2,0 ; Missile 4
+          DC.B      $09,$80,$26,$00 ; Missile
+          DC.B      1,0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $81,$E4 ; Blue Bug 1
           DC.B      $A7,$54 ; Blue Bug 2
@@ -853,8 +853,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $2D,$34 ; Hero 5
           DC.B      $0A,$FE ; Hero 6
           DC.B      $3E,$08 ; Hero 7
-          DC.B      $02,$00,$08,$00         ; $A,$80,$2A,0 ; Missile
-          DC.B      2,0 ; Missile 4
+          DC.B      $0A,$80,$2A,$00         ; $A,$80,$2A,0 ; Missile
+          DC.B      1,0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $A7,$5C ; Blue Bug 1
           DC.B      $07,$D8 ; Blue Bug 2
@@ -942,8 +942,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $05,$40 ; Blue Bug F
           DC.B      $FA,$BC ; Red Bug 0
           DC.B      $3D,$F0 ; Red Bug F
-          DC.B      $5C,$D4 ; Galaga 0
-          DC.B      $5C,$D4 ; Galaga F
+          DC.B      $1F,$D0 ; Galaga 0
+          DC.B      $1F,$D0 ; Galaga F
           DC.B      $03,$00 ; Hero 0
           DC.B      $08,$0D ; Hero 1
           DC.B      $3C,0 ; Hero 2
@@ -952,8 +952,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $0C,$20 ; Hero 5
           DC.B      0,$3C ; Hero 6
           DC.B      $70,$20 ; Hero 7
-          DC.B      3,0,$0C,0 ; Missile
-          DC.B      2,0 ; Missile 4
+          DC.B      $02,$00,8,$00 ; Missile
+          DC.B      1,0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $AE,$50 ; Blue Bug 1
           DC.B      $2A,$84 ; Blue Bug 2
@@ -1041,8 +1041,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $0D,$C0 ; Blue Bug F
           DC.B      $FD,$FC ; Red Bug 0
           DC.B      $34,$70 ; Red Bug F
-          DC.B      $04,$40 ; Galaga 0
-          DC.B      $08,$80 ; Galaga F
+          DC.B      $59,$94 ; Galaga 0
+          DC.B      $59,$94 ; Galaga F
           DC.B      $03,$00 ; Hero 0
           DC.B      0,0 ; Hero 1
           DC.B      $55,$80 ; Hero 2
@@ -1052,7 +1052,7 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $02,$55 ; Hero 6
           DC.B      $00,$00 ; Hero 7
           DC.B      0,0,0,0 ; Missile
-          DC.B      2,0 ; Missile 4
+          DC.B      1,0 ; Missile 4
           DC.B      0,0 ; Star Graph
           DC.B      $2A,$B0 ; Blue Bug 1
           DC.B      $AA,$80 ; Blue Bug 2
@@ -1140,8 +1140,8 @@ DIGIT     DC.B      $05,$40 ; 0
           DC.B      $04,$40 ; Blue Bug F
           DC.B      $34,$70 ; Red Bug 0
           DC.B      $04,$40 ; Red Bug F
-          DC.B      0,0 ; Galaga 0
-          DC.B      $04,$40 ; Galaga F
+          DC.B      $08,$80 ; Galaga 0
+          DC.B      $08,$80 ; Galaga F
           DC.B      $01,$00 ; Hero 0
           DC.B      $0,0 ; Hero 1
           DC.B      $FC,0 ; Hero 2
