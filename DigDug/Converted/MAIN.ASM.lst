@@ -1,0 +1,137 @@
+------- FILE MAIN.ASM LEVEL 1 PASS 2
+      1  0080					      processor	6502
+      2  0080 ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      3  0080 ????
+      4  0080 ????						;*;*;*;*;*;*;*;*;*;*;*;		    3600 DIG DUG		       ;*;*;*;*;*;*;*;*;*;*;*;*;*
+      5  0080 ????
+      6  0080 ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      7  0080 ????						;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+      8  0080 ????			   MAIN
+      9  0080 ????	       78		      SEI
+     10  0080 ????	       d8		      CLD
+     11  0081 ????	       a9 17		      LDA	#$17	;		     ;LOCK 3600 MODE.
+     12  0083 ????	       85 01		      STA	$1
+     13  0085 ????	       a2 00		      LDX	#STACK
+     14  0087 ????	       9a		      TXS
+     15  0088 ????	       a9 7f		      LDA	#$7F
+     16  008a ????	       8d 00 00 	      STA	CTRL
+     17  008d ????	       a9 00		      LDA	#0	;		       ;UNFREEZE JOYSTICKS.
+     18  008f ????	       85 01		      STA	$1
+     19  0091 ????
+     20  0091 ????	       20 00 00 	      JSR	INIT	;		     ;INIT DISPLAY LIST, VARIABLES, ETC.
+     21  0094 ????
+     22  0094 ????	       20 00 00 	      JSR	WAITVBL	;		  ;WE WANT TO SYNC OURSELVES WITH MARIA:
+     23  0097 ????	       a9 50		      LDA	#$50	;		     ;	WAIT FOR VBLANK.
+     24  0099 ????	       8d 00 00 	      STA	CTRL	;		     ;ENABLE DMA.
+     25  009c ????
+     26  009c ????	       20 00 00    PLAYTITL   JSR	TITLEPAG	;		 ;START OFF IN TITLE PAGE.
+     27  009f ????
+     28  009f ????
+     29  009f ????			   PLAYGAME
+     30  009f ????	       ad 00 00 	      LDA	SYNCFRAM
+     31  00a2 ????	       10 00		      BPL	PLAYGAME
+     32  00a4 ????
+     33  00a4 ????			   DOCODE
+     34  00a4 ????	       ad 00 00 	      LDA	FRMCNT
+     35  00a7 ????	       8d 00 00 	      STA	AVAROBIN
+     36  00aa ????						;*	    LDY     DOOMPTR+1
+     37  00aa ????						;*	    CPY     #$A0
+     38  00aa ????						;*	    BEQ     DOOMOVER
+     39  00aa ????						;*	    LDY     #0
+     40  00aa ????						;*	    STA     (DOOMPTR),Y
+     41  00aa ????						;*	    INC     DOOMPTR
+     42  00aa ????						;*	    BNE     DOCODE2
+     43  00aa ????						;*	    INC     DOOMPTR+1
+     44  00aa ????						;*	    BNE     DOCODE2
+     45  00aa ????						;*DOOMOVER  NOP
+     46  00aa ????	       ee 00 00    DOCODE2    INC	RACKTIME
+     47  00ad ????	       20 00 00 	      JSR	CHKDEATH	;		 ;CHKDEATH SHOULD PRECEDE CHKSTATE
+     48  00b0 ????	       20 00 00 	      JSR	CHKSTATE
+     49  00b3 ????	       20 00 00 	      JSR	CHKRACK
+     50  00b6 ????
+     51  00b6 ????	       ad 00 00 	      LDA	DETHWISH
+     52  00b9 ????	       d0 00		      BNE	DOFALL
+     53  00bb ????
+     54  00bb ????	       20 00 00 	      JSR	DDMOVE	;		   ;DDMOVE SHOULD PRECEDE COLLISON
+     55  00be ????						;	   ;				   ; DDMOVE SHOULD PRECEDE ALL GAMEPLAY
+     56  00be ????						;				 ;DDMOVE SHOULD PRECEDE PUMPER
+     57  00be ????	       20 00 00 	      JSR	EATVEG	;		   ;EATVEG SHOULD PRECEDE FRUITER
+     58  00c1 ????	       20 00 00 	      JSR	MONSTERS	;		 ;INCLUDES PUMPER,FRUITER,FLAMER,FLAMCOL
+     59  00c4 ????						;				 ;PUMPER SHOULD PRECEDE COLLISONS+FALL
+     60  00c4 ????	       20 00 00 	      JSR	COLLISON
+     61  00c7 ????
+     62  00c7 ????						;*	    LDA     DETHWISH;		    ; PROBABLY NOT NECESSARY ANYMORE
+     63  00c7 ????						;*	    BNE     DOFALL
+     64  00c7 ????
+     65  00c7 ????	       20 00 00 	      JSR	BLOWUP
+     66  00ca ????	       20 00 00    DOFALL     JSR	FALL
+     67  00cd ????
+     68  00cd ????	       20 00 00 	      JSR	GENDPL	;		   ;GENERATE NEW DISPLAY LIST.
+     69  00d0 ????
+     70  00d0 ????	       ad 00 00 	      LDA	FRMCNT	;		   ;IF WE TOOK LONGER THAN ONE FRAME, GO
+     71  00d3 ????	       cd 00 00 	      CMP	AVAROBIN	;		 ;  BACK TO PLAYGAME TO EXECUTE AGAIN IN
+     72  00d6 ????						;*	    BEQ     WAIT1FRM
+     73  00d6 ????	       d0 00	   DOCODE4    BNE	PLAYGAME	;		 ;  CASE THE FRAME WE SKIPPED SHOULD
+     74  00d8 ????						;				 ;  HAVE BEEN EXECUTED.
+     75  00d8 ????
+     76  00d8 ????	       cd 00 00    WAIT1FRM   CMP	FRMCNT	;		   ;WE TOOK LESS THAN OR EQUAL TO ONE
+     77  00db ????	       f0 00		      BEQ	WAIT1FRM	;		 ;  FRAME TO EXECUTE DOCODE.  WAIT FOR
+     78  00dd ????	       d0 00		      BNE	PLAYGAME	;		 ;  NEXT FRAME BEFORE CONTINUING.
+     79  00df ????
+     80  00df ????
+     81  00df ????						;*	    AND     #$07;		    ;DO STUFF 5 OUT OF 8 FRAMES
+     82  00df ????						;*	    BEQ     DOCODE
+     83  00df ????						;*	    CMP     #1
+     84  00df ????						;*	    BEQ     DOCODE
+     85  00df ????						;*	    CMP     #3
+     86  00df ????						;*	    BEQ     DOCODE
+     87  00df ????						;*	    CMP     #4
+     88  00df ????						;*	    BEQ     DOCODE
+     89  00df ????						;*	    CMP     #6
+     90  00df ????						;*	    BNE     PLAYGAME
+     91  00df ????
+     92  00df ????						;*	    LDA     AVAROBIN
+     93  00df ????						;*WAITARC   CMP     FRMCNT
+     94  00df ????						;*	    BEQ     WAITARC
+     95  00df ????						;*	    BNE     PLAYGAME
+     96  00df ????				      SEG	ROM
+     97  0000				   HEADER     ORG	$0000
+     98  0000		       01		      DC.B	1	; 0   Header version	  - 1 byte
+     99  0001		       41 54 41 52*	      DC.B	"ATARI7800"	; 1..16  "ATARI7800   "  - 16 bytes
+    100  000a		       20 20 20 20*	      DS	7,32
+    101  0011		       59 6f 75 72*	      DC.B	"Your Name Here"	; 17..48 Cart title	  - 32 bytes
+    102  001f		       00 00 00 00*	      DS	HEADER+49-.,0
+    103  0031							; Hack of changing the 256->code line to the $00,$00,$80,$00 code line
+    104  0031							; added by Aaron Lanterman, 9/4/2020, to stop assembler from complaining...
+    105  0031							; Basically, I'm telling it you have a 32K cartridge, but that doesn't
+    106  0031							; seem to break the emulator (at least)
+    107  0031		       00 00 80 00	      DC.B	$00,$00,$80,$00	;
+    108  0035							;DC.B	  $00,$00,256->code,$00; 49..52 data length	 - 4 bytes
+    109  0035		       00 00		      DC.B	$00,$00	; 53..54 cart type	 - 2 bytes
+    110  0037							;    bit 0 - pokey at $4000
+    111  0037							;    bit 1 - supergame bank switched
+    112  0037							;    bit 2 - supergame ram at $4000
+    113  0037							;    bit 3 - rom at $4000
+    114  0037							;    bit 4 - bank 6 at $4000
+    115  0037							;    bit 5 - supergame banked ram
+    116  0037							;    bit 6 - pokey at $450
+    117  0037							;    bit 7 - mirror ram at $4000
+    118  0037							;    bit 8-15 - Special
+    119  0037							;   0 = Normal cart
+    120  0037		       01		      DC.B	1	; 55	controller 1 type  - 1 byte
+    121  0038		       01		      DC.B	1	; 56	controller 2 type  - 1 byte
+    122  0039							;    0 = None
+    123  0039							;    1 = Joystick
+    124  0039							;    2 = Light Gun
+    125  0039		       00		      DC.B	0	; 57 0 = NTSC 1 = PA
+    126  003a		       00		      DC.B	0	; 58	Save data peripheral - 1 byte (version 2)
+    127  003b							;    0 = None / unknown (default)
+    128  003b							;    1 = High Score Cart (HSC)
+    129  003b							;    2 = SaveKey
+    130  003f					      ORG	HEADER+63
+    131  003f		       00		      DC.B	0	; 63	Expansion module
+    132  0040							;    0 = No expansion module (default on all currently released games)
+    133  0040							;    1 = Expansion module required
+    134  0064					      ORG	HEADER+100	; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
+    135  0064		       41 43 54 55*	      DC.B	"ACTUAL CART DATA STARTS HERE"
+    136  0080							; end of header code for the simulator added by Aaron LantermanEND
