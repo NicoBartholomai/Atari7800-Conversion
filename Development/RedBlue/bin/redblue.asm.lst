@@ -1,0 +1,3124 @@
+------- FILE redblue.asm LEVEL 1 PASS 2
+------- FILE vcs.h LEVEL 2 PASS 2
+------- FILE redblue.asm
+     13  0000 ????				      LIST	ON
+     14  0000 ????
+     15  0000 ????						;===============================================================================
+     16  0000 ????						; T I A - C O N S T A N T S
+     17  0000 ????						;===============================================================================
+     18  0000 ????
+     19  0000 ????	       00 70	   HMOVE_L7   =	$70
+     20  0000 ????	       00 60	   HMOVE_L6   =	$60
+     21  0000 ????	       00 50	   HMOVE_L5   =	$50
+     22  0000 ????	       00 40	   HMOVE_L4   =	$40
+     23  0000 ????	       00 30	   HMOVE_L3   =	$30
+     24  0000 ????	       00 20	   HMOVE_L2   =	$20
+     25  0000 ????	       00 10	   HMOVE_L1   =	$10
+     26  0000 ????	       00 00	   HMOVE_0    =	$00
+     27  0000 ????	       00 f0	   HMOVE_R1   =	$F0
+     28  0000 ????	       00 e0	   HMOVE_R2   =	$E0
+     29  0000 ????	       00 d0	   HMOVE_R3   =	$D0
+     30  0000 ????	       00 c0	   HMOVE_R4   =	$C0
+     31  0000 ????	       00 b0	   HMOVE_R5   =	$B0
+     32  0000 ????	       00 a0	   HMOVE_R6   =	$A0
+     33  0000 ????	       00 90	   HMOVE_R7   =	$90
+     34  0000 ????	       00 80	   HMOVE_R8   =	$80
+     35  0000 ????
+     36  0000 ????						; values for NUSIZx:
+     37  0000 ????	       00 00	   ONE_COPY   =	%000
+     38  0000 ????	       00 01	   TWO_COPIES =	%001
+     39  0000 ????	       00 02	   TWO_MED_COPIES =	%010
+     40  0000 ????	       00 04	   TWO_WIDE_COPIES =	%100
+     41  0000 ????	       00 03	   THREE_COPIES =	%011
+     42  0000 ????	       00 05	   DOUBLE_SIZE =	%101
+     43  0000 ????	       00 06	   THREE_MED_COPIES =	%110
+     44  0000 ????	       00 07	   QUAD_SIZE  =	%111
+     45  0000 ????
+     46  0000 ????						; values for REFPx:
+     47  0000 ????	       00 00	   NO_REFLECT =	%0000
+     48  0000 ????	       00 08	   REFLECT    =	%1000
+     49  0000 ????
+     50  0000 ????						;============================================================================
+     51  0000 ????						; U S E R - C O N S T A N T S
+     52  0000 ????						;============================================================================
+     53  0000 ????
+     54  0000 ????	       00 c0	   KERNEL_HEIGHT =	192	; height of the display kernel
+     55  0000 ????	       00 14	   PLAYER_HEIGHT =	20	; height of the players
+     56  0000 ????	       00 2d	   VBLANK_TIME =	45	; vertical blank timeout time
+     57  0000 ????	       00 e4	   KERNEL_TIME =	228	; kernel timeout time
+     58  0000 ????	       00 22	   OVERSCAN_TIME =	34	; overscan timeout time
+     59  0000 ????	       00 08	   ANIMATION_FRAMES =	8	; number of animation frames
+     60  0000 ????
+     61  0000 ????	       00 09	   NUMBER_OF_PLAYERS =	9	; the number of players
+     62  0000 ????
+     63  0000 ????						;============================================================================
+     64  0000 ????						; C O L O R  C O N S T A N T S
+     65  0000 ????						;============================================================================
+     66  0000 ????
+     67  0000 ????	       00 00	   BLACK      =	$00
+     68  0000 ????	       00 0a	   WHITE      =	$0A
+     69  0000 ????	       00 c4	   GREEN      =	$C4
+     70  0000 ????	       00 36	   RED	      =	$36
+     71  0000 ????	       00 16	   BLUE       =	$16
+     72  0000 ????	       00 64	   LT_GREEN   =	$64
+     73  0000 ????
+     74  0000 ????						;===============================================================================
+     75  0000 ????						; Z P - V A R I A B L E S
+     76  0000 ????						;===============================================================================
+     77 U008f ????				      SEG.U	variables
+     78 U0080					      org	$80
+     79 U0080
+     80 U0080		       00	   gameTimer1 ds	1
+     81 U0081		       00	   gameTimer2 ds	1
+     82 U0082		       00	   gameTimer3 ds	1
+     83 U0083		       00	   gameTimer4 ds	1
+     84 U0084
+     85 U0086					      org	$86
+     86 U0086		       00 00	   player0Pointer ds	2
+     87 U0088		       00 00	   player1Pointer ds	2	; not used
+     88 U008a		       00 00 00 00 colorPointers ds	4
+     89 U008e
+     90 U008a					      org	colorPointers
+     91 U008a
+     92 U008a		       00 00	   player0ColorPointers ds	2
+     93 U008c		       00 00	   player1ColorPointers ds	2
+     94 U008e		       00	   animationFrame ds	1
+     95 U008f
+     96 U008f							;===============================================================================
+     97 U008f							; R O M - C O D E
+     98 U008f							;===============================================================================
+     99 U008f
+    100  10000 ????				       SEG	ROM
+    101  f000					      org	$F000
+    102  f000
+    103  f000				   Start
+    104  f000		       d8		      cld
+    105  f001		       78		      sei
+    106  f002		       a2 ff		      ldx	#$FF
+    107  f004		       9a		      txs		; set stack to beginning
+    108  f005		       e8		      inx		; x now = 0
+    109  f006		       8a		      txa
+    110  f007				   .clear		; clears all RAM (does not set VSYNC to 0)
+    111  f007		       95 00		      sta	VSYNC,x
+    112  f009		       e8		      inx
+    113  f00a		       d0 fb		      bne	.clear
+    114  f00c
+    115  f00c				   MainLoop
+    116  f00c				   VerticalSync
+    117  f00c		       a9 03		      lda	#$03
+    118  f00e		       85 02		      sta	WSYNC
+    119  f010		       85 00		      sta	VSYNC	; start vertical sync (D1 = 1)
+    120  f012		       85 02		      sta	WSYNC
+    121  f014		       85 02		      sta	WSYNC
+    122  f016		       85 02		      sta	WSYNC
+    123  f018		       a2 00		      ldx	#$00
+    124  f01a		       86 00		      stx	VSYNC	; end vertical sync (D1 = 0)
+    125  f01c		       a9 2d		      lda	#VBLANK_TIME
+    126  f01e		       8d 96 02 	      sta	TIM64T
+    127  f021
+    128  f021		       ad 82 02 	      lda	SWCHB	; read the console switches
+    129  f024		       6a		      ror
+    130  f025		       6a		      ror
+    131  f026
+    132  f026							; The following is a too complicated time cycle which has no affect on the
+    133  f026							; ROM execution. I assume it was here to control the animation frame rate
+    134  f026							; but it's not needed. Removing it doesn't alter the animation rate.
+    135  f026
+    136  f026		       b0 1a		      bcs	.resetGameTimer3	; carry bit holds select state
+    137  f028
+    138  f028		       a5 82		      lda	gameTimer3
+    139  f02a		       d0 0c		      bne	.incrementGameTimer3
+    140  f02c				   .incrementGameTimer4
+    141  f02c		       e6 83		      inc	gameTimer4
+    142  f02e		       a5 83		      lda	gameTimer4
+    143  f030		       c9 11		      cmp	#17
+    144  f032		       d0 02		      bne	.setGameTimer4
+    145  f034		       a9 00		      lda	#$00
+    146  f036				   .setGameTimer4
+    147  f036		       85 83		      sta	gameTimer4
+    148  f038				   .incrementGameTimer3
+    149  f038		       e6 82		      inc	gameTimer3
+    150  f03a		       a5 82		      lda	gameTimer3
+    151  f03c		       29 1f		      and	#$1F
+    152  f03e		       d0 06		      bne	.incrementGameTimer1
+    153  f040		       f0 ea		      beq	.incrementGameTimer4
+    154  f042				   .resetGameTimer3
+    155  f042		       a0 00		      ldy	#$00
+    156  f044		       84 82		      sty	gameTimer3
+    157  f046				   .incrementGameTimer1
+    158  f046		       e6 80		      inc	gameTimer1
+    159  f048		       d0 02		      bne	GameCalc
+    160  f04a		       e6 81		      inc	gameTimer2
+    161  f04c
+    162  f04c				   GameCalc
+    163  f04c		       a9 01		      lda	#%00000001
+    164  f04e		       85 0a		      sta	CTRLPF	; reflect the PF
+    165  f050
+    166  f050		       a2 03		      ldx	#$03
+    167  f052				   .setColorPointers
+    168  f052		       bd 02 f1 	      lda	ColorPointerTbl,x
+    169  f055		       95 8a		      sta	colorPointers,x
+    170  f057		       ca		      dex
+    171  f058		       10 f8		      bpl	.setColorPointers
+    172  f05a
+    173  f05a		       a6 8e		      ldx	animationFrame
+    174  f05c		       bd 06 f1 	      lda	LowPlayerTable,x
+    175  f05f		       bc 0e f1 	      ldy	HiPlayerTable,x
+    176  f062
+    177  f062		       85 86		      sta	player0Pointer
+    178  f064		       85 88		      sta	player1Pointer
+    179  f066
+    180  f066		       84 87		      sty	player0Pointer+1
+    181  f068		       84 89		      sty	player1Pointer+1
+    182  f06a
+    183  f06a		       a2 06		      ldx	#$06
+    184  f06c		       85 02		      sta	WSYNC
+    185  f06e				   .coarseMovePlayers
+    186  f06e		       ca		      dex
+    187  f06f		       10 fd		      bpl	.coarseMovePlayers
+    188  f071		       85 10		      sta	RESP0	; reset the horiz position of GRP0 (pixel 111)
+    189  f073		       a9 40		      lda	#HMOVE_L4
+    190  f075		       85 20		      sta	HMP0	; GRP0 now at pixel 107
+    191  f077		       a9 0a		      lda	#WHITE
+    192  f079		       85 08		      sta	COLUPF	; color the playfield
+    193  f07b		       85 11		      sta	RESP1	; reset the horiz position of GRP1 (pixel 150)
+    194  f07d		       a9 a0		      lda	#HMOVE_R6
+    195  f07f		       85 21		      sta	HMP1	; GRP1 now at pixel 156
+    196  f081
+    197  f081				   .vblankWait		; loop until vertical blank is done
+    198  f081		       ad 84 02 	      lda	INTIM
+    199  f084		       d0 fb		      bne	.vblankWait
+    200  f086
+    201  f086		       a9 e4		      lda	#KERNEL_TIME
+    202  f088		       8d 96 02 	      sta	TIM64T	; set the timer to end kernel
+    203  f08b
+    204  f08b		       a9 00		      lda	#$00
+    205  f08d		       85 02		      sta	WSYNC
+    206  f08f							;---------------------------------
+    207  f08f		       85 2a		      sta	HMOVE	;3
+    208  f091		       85 01		      sta	VBLANK	;3 = @6  enable TIA output
+    209  f093
+    210  f093				   Kernel     SUBROUTINE
+    211  f093		       a9 c4		      lda	#GREEN	;2
+    212  f095		       85 09		      sta	COLUBK	;3 = @11 color the background green
+    213  f097
+    214  f097		       a9 01		      lda	#%00000001	;2
+    215  f099		       85 0f		      sta	PF2	;3 = @16 set the playfield graphic
+    216  f09b		       85 2b		      sta	HMCLR	;3 = @19 clear horiz movements >24 cycles since HMOVE :-(
+    217  f09d
+    218  f09d		       a9 08		      lda	#REFLECT	;2
+    219  f09f		       85 0c		      sta	REFP1	;3 = @24 reflect player1
+    220  f0a1
+    221  f0a1		       a0 be		      ldy	#KERNEL_HEIGHT-2	;2
+    222  f0a3				   .kernelLoop
+    223  f0a3		       85 02		      sta	WSYNC
+    224  f0a5							;---------------------------------
+    225  f0a5		       85 2a		      sta	HMOVE	;3
+    226  f0a7		       b9 8c f8 	      lda	CopiesOfGRP0,y	;4
+    227  f0aa		       85 04		      sta	NUSIZ0	;3 = @10 -- still in HBLANK
+    228  f0ac		       b9 4b f9 	      lda	CopiesOfGRP1,y	;4
+    229  f0af		       85 05		      sta	NUSIZ1	;3 = @17 -- still in HBLANK
+    230  f0b1		       b1 86		      lda	(player0Pointer),y	;5
+    231  f0b3		       85 1b		      sta	GRP0	;3 = @25
+    232  f0b5		       85 1c		      sta	GRP1	;3 = @28
+    233  f0b7		       b1 8a		      lda	(player0ColorPointers),y	;5
+    234  f0b9		       85 06		      sta	COLUP0	;3 = @36
+    235  f0bb		       b1 8c		      lda	(player1ColorPointers),y	;5
+    236  f0bd		       85 07		      sta	COLUP1	;3 = @44
+    237  f0bf		       b9 0e f7 	      lda	HorizPosP0,y	;4
+    238  f0c2		       85 20		      sta	HMP0	;3 = @51
+    239  f0c4		       b9 cd f7 	      lda	HorizPosP1,y	;4
+    240  f0c7		       85 21		      sta	HMP1	;3 = @58
+    241  f0c9		       88		      dey		;2
+    242  f0ca		       d0 d7		      bne	.kernelLoop	;2³
+    243  f0cc
+    244  f0cc		       85 02		      sta	WSYNC
+    245  f0ce							;---------------------------------
+    246  f0ce		       85 2a		      sta	HMOVE	;3
+    247  f0d0		       a9 00		      lda	#$00	;2
+    248  f0d2		       85 1b		      sta	GRP0	;3
+    249  f0d4		       85 1c		      sta	GRP1	;3
+    250  f0d6
+    251  f0d6				   .wait
+    252  f0d6		       ad 84 02 	      lda	INTIM
+    253  f0d9		       d0 fb		      bne	.wait
+    254  f0db
+    255  f0db				   Overscan   SUBROUTINE
+    256  f0db		       a9 02		      lda	#$02
+    257  f0dd		       85 02		      sta	WSYNC
+    258  f0df		       85 01		      sta	VBLANK	; disable TIA output
+    259  f0e1
+    260  f0e1		       a9 22		      lda	#OVERSCAN_TIME
+    261  f0e3		       8d 96 02 	      sta	TIM64T
+    262  f0e6
+    263  f0e6				   .wait
+    264  f0e6		       ad 84 02 	      lda	INTIM
+    265  f0e9		       d0 fb		      bne	.wait
+    266  f0eb
+    267  f0eb		       a5 80		      lda	gameTimer1
+    268  f0ed		       29 07		      and	#$07
+    269  f0ef		       c9 07		      cmp	#$07
+    270  f0f1		       d0 0c		      bne	.nextFrame
+    271  f0f3		       e6 8e		      inc	animationFrame
+    272  f0f5		       a9 08		      lda	#ANIMATION_FRAMES
+    273  f0f7		       c5 8e		      cmp	animationFrame
+    274  f0f9		       d0 04		      bne	.nextFrame
+    275  f0fb		       a9 00		      lda	#$00
+    276  f0fd		       85 8e		      sta	animationFrame
+    277  f0ff				   .nextFrame
+    278  f0ff		       4c 0c f0 	      jmp	MainLoop
+    279  f102
+    280  f102				   ColorPointerTbl
+    281  f102		       0a fa c9 fa	      .word.w	RedPlayerColors-1, BluePlayerColors-1
+    282  f106
+    283  f106				   LowPlayerTable
+    284  f106		       16		      .byte.b	<AnimationFrame1-1
+    285  f107		       d5		      .byte.b	<AnimationFrame2-1
+    286  f108		       94		      .byte.b	<AnimationFrame3-1
+    287  f109		       53		      .byte.b	<AnimationFrame4-1
+    288  f10a		       12		      .byte.b	<AnimationFrame5-1
+    289  f10b		       d1		      .byte.b	<AnimationFrame6-1
+    290  f10c		       90		      .byte.b	<AnimationFrame7-1
+    291  f10d		       4f		      .byte.b	<AnimationFrame8-1
+    292  f10e
+    293  f10e				   HiPlayerTable
+    294  f10e		       f1		      .byte.b	>AnimationFrame1
+    295  f10f		       f1		      .byte.b	>AnimationFrame2
+    296  f110		       f2		      .byte.b	>AnimationFrame3
+    297  f111		       f3		      .byte.b	>AnimationFrame4
+    298  f112		       f4		      .byte.b	>AnimationFrame5
+    299  f113		       f4		      .byte.b	>AnimationFrame6
+    300  f114		       f5		      .byte.b	>AnimationFrame7
+    301  f115		       f6		      .byte.b	>AnimationFrame8
+    302  f116
+    303  f116		       00		      .byte.b	$00
+    304  f117
+    305  f117				   PlayerGraphics
+    306  f117				   AnimationFrame1
+    307  f117					      REPEAT	NUMBER_OF_PLAYERS
+    308  f117		       00		      .byte.b	$00	;|........|
+    309  f118		       00		      .byte.b	$00	;|........|
+    310  f119		       00		      .byte.b	$00	;|........|
+    311  f11a		       00		      .byte.b	$00	;|........|
+    312  f11b		       00		      .byte.b	$00	;|........|
+    313  f11c		       00		      .byte.b	$00	;|........|
+    314  f11d		       00		      .byte.b	$00	;|........|
+    315  f11e		       00		      .byte.b	$00	;|........|
+    316  f11f		       83		      .byte.b	$83	;|X.....XX|
+    317  f120		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f121		       12		      .byte.b	$12	;|...X..X.|
+    319  f122		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f123		       18		      .byte.b	$18	;|...XX...|
+    321  f124		       18		      .byte.b	$18	;|...XX...|
+    322  f125		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f126		       30		      .byte.b	$30	;|..XX....|
+    324  f127		       10		      .byte.b	$10	;|...X....|
+    325  f128		       18		      .byte.b	$18	;|...XX...|
+    326  f129		       10		      .byte.b	$10	;|...X....|
+    327  f12a		       18		      .byte.b	$18	;|...XX...|
+    307  f12a					      REPEND
+    308  f12b		       00		      .byte.b	$00	;|........|
+    309  f12c		       00		      .byte.b	$00	;|........|
+    310  f12d		       00		      .byte.b	$00	;|........|
+    311  f12e		       00		      .byte.b	$00	;|........|
+    312  f12f		       00		      .byte.b	$00	;|........|
+    313  f130		       00		      .byte.b	$00	;|........|
+    314  f131		       00		      .byte.b	$00	;|........|
+    315  f132		       00		      .byte.b	$00	;|........|
+    316  f133		       83		      .byte.b	$83	;|X.....XX|
+    317  f134		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f135		       12		      .byte.b	$12	;|...X..X.|
+    319  f136		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f137		       18		      .byte.b	$18	;|...XX...|
+    321  f138		       18		      .byte.b	$18	;|...XX...|
+    322  f139		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f13a		       30		      .byte.b	$30	;|..XX....|
+    324  f13b		       10		      .byte.b	$10	;|...X....|
+    325  f13c		       18		      .byte.b	$18	;|...XX...|
+    326  f13d		       10		      .byte.b	$10	;|...X....|
+    327  f13e		       18		      .byte.b	$18	;|...XX...|
+    307  f13e					      REPEND
+    308  f13f		       00		      .byte.b	$00	;|........|
+    309  f140		       00		      .byte.b	$00	;|........|
+    310  f141		       00		      .byte.b	$00	;|........|
+    311  f142		       00		      .byte.b	$00	;|........|
+    312  f143		       00		      .byte.b	$00	;|........|
+    313  f144		       00		      .byte.b	$00	;|........|
+    314  f145		       00		      .byte.b	$00	;|........|
+    315  f146		       00		      .byte.b	$00	;|........|
+    316  f147		       83		      .byte.b	$83	;|X.....XX|
+    317  f148		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f149		       12		      .byte.b	$12	;|...X..X.|
+    319  f14a		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f14b		       18		      .byte.b	$18	;|...XX...|
+    321  f14c		       18		      .byte.b	$18	;|...XX...|
+    322  f14d		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f14e		       30		      .byte.b	$30	;|..XX....|
+    324  f14f		       10		      .byte.b	$10	;|...X....|
+    325  f150		       18		      .byte.b	$18	;|...XX...|
+    326  f151		       10		      .byte.b	$10	;|...X....|
+    327  f152		       18		      .byte.b	$18	;|...XX...|
+    307  f152					      REPEND
+    308  f153		       00		      .byte.b	$00	;|........|
+    309  f154		       00		      .byte.b	$00	;|........|
+    310  f155		       00		      .byte.b	$00	;|........|
+    311  f156		       00		      .byte.b	$00	;|........|
+    312  f157		       00		      .byte.b	$00	;|........|
+    313  f158		       00		      .byte.b	$00	;|........|
+    314  f159		       00		      .byte.b	$00	;|........|
+    315  f15a		       00		      .byte.b	$00	;|........|
+    316  f15b		       83		      .byte.b	$83	;|X.....XX|
+    317  f15c		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f15d		       12		      .byte.b	$12	;|...X..X.|
+    319  f15e		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f15f		       18		      .byte.b	$18	;|...XX...|
+    321  f160		       18		      .byte.b	$18	;|...XX...|
+    322  f161		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f162		       30		      .byte.b	$30	;|..XX....|
+    324  f163		       10		      .byte.b	$10	;|...X....|
+    325  f164		       18		      .byte.b	$18	;|...XX...|
+    326  f165		       10		      .byte.b	$10	;|...X....|
+    327  f166		       18		      .byte.b	$18	;|...XX...|
+    307  f166					      REPEND
+    308  f167		       00		      .byte.b	$00	;|........|
+    309  f168		       00		      .byte.b	$00	;|........|
+    310  f169		       00		      .byte.b	$00	;|........|
+    311  f16a		       00		      .byte.b	$00	;|........|
+    312  f16b		       00		      .byte.b	$00	;|........|
+    313  f16c		       00		      .byte.b	$00	;|........|
+    314  f16d		       00		      .byte.b	$00	;|........|
+    315  f16e		       00		      .byte.b	$00	;|........|
+    316  f16f		       83		      .byte.b	$83	;|X.....XX|
+    317  f170		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f171		       12		      .byte.b	$12	;|...X..X.|
+    319  f172		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f173		       18		      .byte.b	$18	;|...XX...|
+    321  f174		       18		      .byte.b	$18	;|...XX...|
+    322  f175		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f176		       30		      .byte.b	$30	;|..XX....|
+    324  f177		       10		      .byte.b	$10	;|...X....|
+    325  f178		       18		      .byte.b	$18	;|...XX...|
+    326  f179		       10		      .byte.b	$10	;|...X....|
+    327  f17a		       18		      .byte.b	$18	;|...XX...|
+    307  f17a					      REPEND
+    308  f17b		       00		      .byte.b	$00	;|........|
+    309  f17c		       00		      .byte.b	$00	;|........|
+    310  f17d		       00		      .byte.b	$00	;|........|
+    311  f17e		       00		      .byte.b	$00	;|........|
+    312  f17f		       00		      .byte.b	$00	;|........|
+    313  f180		       00		      .byte.b	$00	;|........|
+    314  f181		       00		      .byte.b	$00	;|........|
+    315  f182		       00		      .byte.b	$00	;|........|
+    316  f183		       83		      .byte.b	$83	;|X.....XX|
+    317  f184		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f185		       12		      .byte.b	$12	;|...X..X.|
+    319  f186		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f187		       18		      .byte.b	$18	;|...XX...|
+    321  f188		       18		      .byte.b	$18	;|...XX...|
+    322  f189		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f18a		       30		      .byte.b	$30	;|..XX....|
+    324  f18b		       10		      .byte.b	$10	;|...X....|
+    325  f18c		       18		      .byte.b	$18	;|...XX...|
+    326  f18d		       10		      .byte.b	$10	;|...X....|
+    327  f18e		       18		      .byte.b	$18	;|...XX...|
+    307  f18e					      REPEND
+    308  f18f		       00		      .byte.b	$00	;|........|
+    309  f190		       00		      .byte.b	$00	;|........|
+    310  f191		       00		      .byte.b	$00	;|........|
+    311  f192		       00		      .byte.b	$00	;|........|
+    312  f193		       00		      .byte.b	$00	;|........|
+    313  f194		       00		      .byte.b	$00	;|........|
+    314  f195		       00		      .byte.b	$00	;|........|
+    315  f196		       00		      .byte.b	$00	;|........|
+    316  f197		       83		      .byte.b	$83	;|X.....XX|
+    317  f198		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f199		       12		      .byte.b	$12	;|...X..X.|
+    319  f19a		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f19b		       18		      .byte.b	$18	;|...XX...|
+    321  f19c		       18		      .byte.b	$18	;|...XX...|
+    322  f19d		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f19e		       30		      .byte.b	$30	;|..XX....|
+    324  f19f		       10		      .byte.b	$10	;|...X....|
+    325  f1a0		       18		      .byte.b	$18	;|...XX...|
+    326  f1a1		       10		      .byte.b	$10	;|...X....|
+    327  f1a2		       18		      .byte.b	$18	;|...XX...|
+    307  f1a2					      REPEND
+    308  f1a3		       00		      .byte.b	$00	;|........|
+    309  f1a4		       00		      .byte.b	$00	;|........|
+    310  f1a5		       00		      .byte.b	$00	;|........|
+    311  f1a6		       00		      .byte.b	$00	;|........|
+    312  f1a7		       00		      .byte.b	$00	;|........|
+    313  f1a8		       00		      .byte.b	$00	;|........|
+    314  f1a9		       00		      .byte.b	$00	;|........|
+    315  f1aa		       00		      .byte.b	$00	;|........|
+    316  f1ab		       83		      .byte.b	$83	;|X.....XX|
+    317  f1ac		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f1ad		       12		      .byte.b	$12	;|...X..X.|
+    319  f1ae		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f1af		       18		      .byte.b	$18	;|...XX...|
+    321  f1b0		       18		      .byte.b	$18	;|...XX...|
+    322  f1b1		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f1b2		       30		      .byte.b	$30	;|..XX....|
+    324  f1b3		       10		      .byte.b	$10	;|...X....|
+    325  f1b4		       18		      .byte.b	$18	;|...XX...|
+    326  f1b5		       10		      .byte.b	$10	;|...X....|
+    327  f1b6		       18		      .byte.b	$18	;|...XX...|
+    307  f1b6					      REPEND
+    308  f1b7		       00		      .byte.b	$00	;|........|
+    309  f1b8		       00		      .byte.b	$00	;|........|
+    310  f1b9		       00		      .byte.b	$00	;|........|
+    311  f1ba		       00		      .byte.b	$00	;|........|
+    312  f1bb		       00		      .byte.b	$00	;|........|
+    313  f1bc		       00		      .byte.b	$00	;|........|
+    314  f1bd		       00		      .byte.b	$00	;|........|
+    315  f1be		       00		      .byte.b	$00	;|........|
+    316  f1bf		       83		      .byte.b	$83	;|X.....XX|
+    317  f1c0		       e2		      .byte.b	$E2	;|XXX...X.|
+    318  f1c1		       12		      .byte.b	$12	;|...X..X.|
+    319  f1c2		       0e		      .byte.b	$0E	;|....XXX.|
+    320  f1c3		       18		      .byte.b	$18	;|...XX...|
+    321  f1c4		       18		      .byte.b	$18	;|...XX...|
+    322  f1c5		       3e		      .byte.b	$3E	;|..XXXXX.|
+    323  f1c6		       30		      .byte.b	$30	;|..XX....|
+    324  f1c7		       10		      .byte.b	$10	;|...X....|
+    325  f1c8		       18		      .byte.b	$18	;|...XX...|
+    326  f1c9		       10		      .byte.b	$10	;|...X....|
+    327  f1ca		       18		      .byte.b	$18	;|...XX...|
+    328  f1cb					      REPEND
+    329  f1cb
+    330  f1d6					      org	AnimationFrame1 + KERNEL_HEIGHT-1, 0
+    331  f1d6				   AnimationFrame2
+    332  f1d6					      REPEAT	NUMBER_OF_PLAYERS
+    333  f1d6		       00		      .byte.b	$00	;|........|
+    334  f1d7		       00		      .byte.b	$00	;|........|
+    335  f1d8		       00		      .byte.b	$00	;|........|
+    336  f1d9		       00		      .byte.b	$00	;|........|
+    337  f1da		       00		      .byte.b	$00	;|........|
+    338  f1db		       00		      .byte.b	$00	;|........|
+    339  f1dc		       00		      .byte.b	$00	;|........|
+    340  f1dd		       03		      .byte.b	$03	;|......XX|
+    341  f1de		       04		      .byte.b	$04	;|.....X..|
+    342  f1df		       82		      .byte.b	$82	;|X.....X.|
+    343  f1e0		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f1e1		       04		      .byte.b	$04	;|.....X..|
+    345  f1e2		       30		      .byte.b	$30	;|..XX....|
+    346  f1e3		       18		      .byte.b	$18	;|...XX...|
+    347  f1e4		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f1e5		       38		      .byte.b	$38	;|..XXX...|
+    349  f1e6		       10		      .byte.b	$10	;|...X....|
+    350  f1e7		       18		      .byte.b	$18	;|...XX...|
+    351  f1e8		       10		      .byte.b	$10	;|...X....|
+    352  f1e9		       18		      .byte.b	$18	;|...XX...|
+    332  f1e9					      REPEND
+    333  f1ea		       00		      .byte.b	$00	;|........|
+    334  f1eb		       00		      .byte.b	$00	;|........|
+    335  f1ec		       00		      .byte.b	$00	;|........|
+    336  f1ed		       00		      .byte.b	$00	;|........|
+    337  f1ee		       00		      .byte.b	$00	;|........|
+    338  f1ef		       00		      .byte.b	$00	;|........|
+    339  f1f0		       00		      .byte.b	$00	;|........|
+    340  f1f1		       03		      .byte.b	$03	;|......XX|
+    341  f1f2		       04		      .byte.b	$04	;|.....X..|
+    342  f1f3		       82		      .byte.b	$82	;|X.....X.|
+    343  f1f4		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f1f5		       04		      .byte.b	$04	;|.....X..|
+    345  f1f6		       30		      .byte.b	$30	;|..XX....|
+    346  f1f7		       18		      .byte.b	$18	;|...XX...|
+    347  f1f8		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f1f9		       38		      .byte.b	$38	;|..XXX...|
+    349  f1fa		       10		      .byte.b	$10	;|...X....|
+    350  f1fb		       18		      .byte.b	$18	;|...XX...|
+    351  f1fc		       10		      .byte.b	$10	;|...X....|
+    352  f1fd		       18		      .byte.b	$18	;|...XX...|
+    332  f1fd					      REPEND
+    333  f1fe		       00		      .byte.b	$00	;|........|
+    334  f1ff		       00		      .byte.b	$00	;|........|
+    335  f200		       00		      .byte.b	$00	;|........|
+    336  f201		       00		      .byte.b	$00	;|........|
+    337  f202		       00		      .byte.b	$00	;|........|
+    338  f203		       00		      .byte.b	$00	;|........|
+    339  f204		       00		      .byte.b	$00	;|........|
+    340  f205		       03		      .byte.b	$03	;|......XX|
+    341  f206		       04		      .byte.b	$04	;|.....X..|
+    342  f207		       82		      .byte.b	$82	;|X.....X.|
+    343  f208		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f209		       04		      .byte.b	$04	;|.....X..|
+    345  f20a		       30		      .byte.b	$30	;|..XX....|
+    346  f20b		       18		      .byte.b	$18	;|...XX...|
+    347  f20c		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f20d		       38		      .byte.b	$38	;|..XXX...|
+    349  f20e		       10		      .byte.b	$10	;|...X....|
+    350  f20f		       18		      .byte.b	$18	;|...XX...|
+    351  f210		       10		      .byte.b	$10	;|...X....|
+    352  f211		       18		      .byte.b	$18	;|...XX...|
+    332  f211					      REPEND
+    333  f212		       00		      .byte.b	$00	;|........|
+    334  f213		       00		      .byte.b	$00	;|........|
+    335  f214		       00		      .byte.b	$00	;|........|
+    336  f215		       00		      .byte.b	$00	;|........|
+    337  f216		       00		      .byte.b	$00	;|........|
+    338  f217		       00		      .byte.b	$00	;|........|
+    339  f218		       00		      .byte.b	$00	;|........|
+    340  f219		       03		      .byte.b	$03	;|......XX|
+    341  f21a		       04		      .byte.b	$04	;|.....X..|
+    342  f21b		       82		      .byte.b	$82	;|X.....X.|
+    343  f21c		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f21d		       04		      .byte.b	$04	;|.....X..|
+    345  f21e		       30		      .byte.b	$30	;|..XX....|
+    346  f21f		       18		      .byte.b	$18	;|...XX...|
+    347  f220		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f221		       38		      .byte.b	$38	;|..XXX...|
+    349  f222		       10		      .byte.b	$10	;|...X....|
+    350  f223		       18		      .byte.b	$18	;|...XX...|
+    351  f224		       10		      .byte.b	$10	;|...X....|
+    352  f225		       18		      .byte.b	$18	;|...XX...|
+    332  f225					      REPEND
+    333  f226		       00		      .byte.b	$00	;|........|
+    334  f227		       00		      .byte.b	$00	;|........|
+    335  f228		       00		      .byte.b	$00	;|........|
+    336  f229		       00		      .byte.b	$00	;|........|
+    337  f22a		       00		      .byte.b	$00	;|........|
+    338  f22b		       00		      .byte.b	$00	;|........|
+    339  f22c		       00		      .byte.b	$00	;|........|
+    340  f22d		       03		      .byte.b	$03	;|......XX|
+    341  f22e		       04		      .byte.b	$04	;|.....X..|
+    342  f22f		       82		      .byte.b	$82	;|X.....X.|
+    343  f230		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f231		       04		      .byte.b	$04	;|.....X..|
+    345  f232		       30		      .byte.b	$30	;|..XX....|
+    346  f233		       18		      .byte.b	$18	;|...XX...|
+    347  f234		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f235		       38		      .byte.b	$38	;|..XXX...|
+    349  f236		       10		      .byte.b	$10	;|...X....|
+    350  f237		       18		      .byte.b	$18	;|...XX...|
+    351  f238		       10		      .byte.b	$10	;|...X....|
+    352  f239		       18		      .byte.b	$18	;|...XX...|
+    332  f239					      REPEND
+    333  f23a		       00		      .byte.b	$00	;|........|
+    334  f23b		       00		      .byte.b	$00	;|........|
+    335  f23c		       00		      .byte.b	$00	;|........|
+    336  f23d		       00		      .byte.b	$00	;|........|
+    337  f23e		       00		      .byte.b	$00	;|........|
+    338  f23f		       00		      .byte.b	$00	;|........|
+    339  f240		       00		      .byte.b	$00	;|........|
+    340  f241		       03		      .byte.b	$03	;|......XX|
+    341  f242		       04		      .byte.b	$04	;|.....X..|
+    342  f243		       82		      .byte.b	$82	;|X.....X.|
+    343  f244		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f245		       04		      .byte.b	$04	;|.....X..|
+    345  f246		       30		      .byte.b	$30	;|..XX....|
+    346  f247		       18		      .byte.b	$18	;|...XX...|
+    347  f248		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f249		       38		      .byte.b	$38	;|..XXX...|
+    349  f24a		       10		      .byte.b	$10	;|...X....|
+    350  f24b		       18		      .byte.b	$18	;|...XX...|
+    351  f24c		       10		      .byte.b	$10	;|...X....|
+    352  f24d		       18		      .byte.b	$18	;|...XX...|
+    332  f24d					      REPEND
+    333  f24e		       00		      .byte.b	$00	;|........|
+    334  f24f		       00		      .byte.b	$00	;|........|
+    335  f250		       00		      .byte.b	$00	;|........|
+    336  f251		       00		      .byte.b	$00	;|........|
+    337  f252		       00		      .byte.b	$00	;|........|
+    338  f253		       00		      .byte.b	$00	;|........|
+    339  f254		       00		      .byte.b	$00	;|........|
+    340  f255		       03		      .byte.b	$03	;|......XX|
+    341  f256		       04		      .byte.b	$04	;|.....X..|
+    342  f257		       82		      .byte.b	$82	;|X.....X.|
+    343  f258		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f259		       04		      .byte.b	$04	;|.....X..|
+    345  f25a		       30		      .byte.b	$30	;|..XX....|
+    346  f25b		       18		      .byte.b	$18	;|...XX...|
+    347  f25c		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f25d		       38		      .byte.b	$38	;|..XXX...|
+    349  f25e		       10		      .byte.b	$10	;|...X....|
+    350  f25f		       18		      .byte.b	$18	;|...XX...|
+    351  f260		       10		      .byte.b	$10	;|...X....|
+    352  f261		       18		      .byte.b	$18	;|...XX...|
+    332  f261					      REPEND
+    333  f262		       00		      .byte.b	$00	;|........|
+    334  f263		       00		      .byte.b	$00	;|........|
+    335  f264		       00		      .byte.b	$00	;|........|
+    336  f265		       00		      .byte.b	$00	;|........|
+    337  f266		       00		      .byte.b	$00	;|........|
+    338  f267		       00		      .byte.b	$00	;|........|
+    339  f268		       00		      .byte.b	$00	;|........|
+    340  f269		       03		      .byte.b	$03	;|......XX|
+    341  f26a		       04		      .byte.b	$04	;|.....X..|
+    342  f26b		       82		      .byte.b	$82	;|X.....X.|
+    343  f26c		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f26d		       04		      .byte.b	$04	;|.....X..|
+    345  f26e		       30		      .byte.b	$30	;|..XX....|
+    346  f26f		       18		      .byte.b	$18	;|...XX...|
+    347  f270		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f271		       38		      .byte.b	$38	;|..XXX...|
+    349  f272		       10		      .byte.b	$10	;|...X....|
+    350  f273		       18		      .byte.b	$18	;|...XX...|
+    351  f274		       10		      .byte.b	$10	;|...X....|
+    352  f275		       18		      .byte.b	$18	;|...XX...|
+    332  f275					      REPEND
+    333  f276		       00		      .byte.b	$00	;|........|
+    334  f277		       00		      .byte.b	$00	;|........|
+    335  f278		       00		      .byte.b	$00	;|........|
+    336  f279		       00		      .byte.b	$00	;|........|
+    337  f27a		       00		      .byte.b	$00	;|........|
+    338  f27b		       00		      .byte.b	$00	;|........|
+    339  f27c		       00		      .byte.b	$00	;|........|
+    340  f27d		       03		      .byte.b	$03	;|......XX|
+    341  f27e		       04		      .byte.b	$04	;|.....X..|
+    342  f27f		       82		      .byte.b	$82	;|X.....X.|
+    343  f280		       f2		      .byte.b	$F2	;|XXXX..X.|
+    344  f281		       04		      .byte.b	$04	;|.....X..|
+    345  f282		       30		      .byte.b	$30	;|..XX....|
+    346  f283		       18		      .byte.b	$18	;|...XX...|
+    347  f284		       3c		      .byte.b	$3C	;|..XXXX..|
+    348  f285		       38		      .byte.b	$38	;|..XXX...|
+    349  f286		       10		      .byte.b	$10	;|...X....|
+    350  f287		       18		      .byte.b	$18	;|...XX...|
+    351  f288		       10		      .byte.b	$10	;|...X....|
+    352  f289		       18		      .byte.b	$18	;|...XX...|
+    353  f28a					      REPEND
+    354  f28a
+    355  f295					      org	AnimationFrame2 + KERNEL_HEIGHT-1, 0
+    356  f295				   AnimationFrame3
+    357  f295					      REPEAT	NUMBER_OF_PLAYERS
+    358  f295		       00		      .byte.b	$00	;|........|
+    359  f296		       00		      .byte.b	$00	;|........|
+    360  f297		       00		      .byte.b	$00	;|........|
+    361  f298		       00		      .byte.b	$00	;|........|
+    362  f299		       00		      .byte.b	$00	;|........|
+    363  f29a		       00		      .byte.b	$00	;|........|
+    364  f29b		       06		      .byte.b	$06	;|.....XX.|
+    365  f29c		       04		      .byte.b	$04	;|.....X..|
+    366  f29d		       04		      .byte.b	$04	;|.....X..|
+    367  f29e		       84		      .byte.b	$84	;|X....X..|
+    368  f29f		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f2a0		       08		      .byte.b	$08	;|....X...|
+    370  f2a1		       38		      .byte.b	$38	;|..XXX...|
+    371  f2a2		       30		      .byte.b	$30	;|..XX....|
+    372  f2a3		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f2a4		       38		      .byte.b	$38	;|..XXX...|
+    374  f2a5		       18		      .byte.b	$18	;|...XX...|
+    375  f2a6		       0c		      .byte.b	$0C	;|....XX..|
+    376  f2a7		       08		      .byte.b	$08	;|....X...|
+    377  f2a8		       0c		      .byte.b	$0C	;|....XX..|
+    357  f2a8					      REPEND
+    358  f2a9		       00		      .byte.b	$00	;|........|
+    359  f2aa		       00		      .byte.b	$00	;|........|
+    360  f2ab		       00		      .byte.b	$00	;|........|
+    361  f2ac		       00		      .byte.b	$00	;|........|
+    362  f2ad		       00		      .byte.b	$00	;|........|
+    363  f2ae		       00		      .byte.b	$00	;|........|
+    364  f2af		       06		      .byte.b	$06	;|.....XX.|
+    365  f2b0		       04		      .byte.b	$04	;|.....X..|
+    366  f2b1		       04		      .byte.b	$04	;|.....X..|
+    367  f2b2		       84		      .byte.b	$84	;|X....X..|
+    368  f2b3		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f2b4		       08		      .byte.b	$08	;|....X...|
+    370  f2b5		       38		      .byte.b	$38	;|..XXX...|
+    371  f2b6		       30		      .byte.b	$30	;|..XX....|
+    372  f2b7		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f2b8		       38		      .byte.b	$38	;|..XXX...|
+    374  f2b9		       18		      .byte.b	$18	;|...XX...|
+    375  f2ba		       0c		      .byte.b	$0C	;|....XX..|
+    376  f2bb		       08		      .byte.b	$08	;|....X...|
+    377  f2bc		       0c		      .byte.b	$0C	;|....XX..|
+    357  f2bc					      REPEND
+    358  f2bd		       00		      .byte.b	$00	;|........|
+    359  f2be		       00		      .byte.b	$00	;|........|
+    360  f2bf		       00		      .byte.b	$00	;|........|
+    361  f2c0		       00		      .byte.b	$00	;|........|
+    362  f2c1		       00		      .byte.b	$00	;|........|
+    363  f2c2		       00		      .byte.b	$00	;|........|
+    364  f2c3		       06		      .byte.b	$06	;|.....XX.|
+    365  f2c4		       04		      .byte.b	$04	;|.....X..|
+    366  f2c5		       04		      .byte.b	$04	;|.....X..|
+    367  f2c6		       84		      .byte.b	$84	;|X....X..|
+    368  f2c7		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f2c8		       08		      .byte.b	$08	;|....X...|
+    370  f2c9		       38		      .byte.b	$38	;|..XXX...|
+    371  f2ca		       30		      .byte.b	$30	;|..XX....|
+    372  f2cb		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f2cc		       38		      .byte.b	$38	;|..XXX...|
+    374  f2cd		       18		      .byte.b	$18	;|...XX...|
+    375  f2ce		       0c		      .byte.b	$0C	;|....XX..|
+    376  f2cf		       08		      .byte.b	$08	;|....X...|
+    377  f2d0		       0c		      .byte.b	$0C	;|....XX..|
+    357  f2d0					      REPEND
+    358  f2d1		       00		      .byte.b	$00	;|........|
+    359  f2d2		       00		      .byte.b	$00	;|........|
+    360  f2d3		       00		      .byte.b	$00	;|........|
+    361  f2d4		       00		      .byte.b	$00	;|........|
+    362  f2d5		       00		      .byte.b	$00	;|........|
+    363  f2d6		       00		      .byte.b	$00	;|........|
+    364  f2d7		       06		      .byte.b	$06	;|.....XX.|
+    365  f2d8		       04		      .byte.b	$04	;|.....X..|
+    366  f2d9		       04		      .byte.b	$04	;|.....X..|
+    367  f2da		       84		      .byte.b	$84	;|X....X..|
+    368  f2db		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f2dc		       08		      .byte.b	$08	;|....X...|
+    370  f2dd		       38		      .byte.b	$38	;|..XXX...|
+    371  f2de		       30		      .byte.b	$30	;|..XX....|
+    372  f2df		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f2e0		       38		      .byte.b	$38	;|..XXX...|
+    374  f2e1		       18		      .byte.b	$18	;|...XX...|
+    375  f2e2		       0c		      .byte.b	$0C	;|....XX..|
+    376  f2e3		       08		      .byte.b	$08	;|....X...|
+    377  f2e4		       0c		      .byte.b	$0C	;|....XX..|
+    357  f2e4					      REPEND
+    358  f2e5		       00		      .byte.b	$00	;|........|
+    359  f2e6		       00		      .byte.b	$00	;|........|
+    360  f2e7		       00		      .byte.b	$00	;|........|
+    361  f2e8		       00		      .byte.b	$00	;|........|
+    362  f2e9		       00		      .byte.b	$00	;|........|
+    363  f2ea		       00		      .byte.b	$00	;|........|
+    364  f2eb		       06		      .byte.b	$06	;|.....XX.|
+    365  f2ec		       04		      .byte.b	$04	;|.....X..|
+    366  f2ed		       04		      .byte.b	$04	;|.....X..|
+    367  f2ee		       84		      .byte.b	$84	;|X....X..|
+    368  f2ef		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f2f0		       08		      .byte.b	$08	;|....X...|
+    370  f2f1		       38		      .byte.b	$38	;|..XXX...|
+    371  f2f2		       30		      .byte.b	$30	;|..XX....|
+    372  f2f3		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f2f4		       38		      .byte.b	$38	;|..XXX...|
+    374  f2f5		       18		      .byte.b	$18	;|...XX...|
+    375  f2f6		       0c		      .byte.b	$0C	;|....XX..|
+    376  f2f7		       08		      .byte.b	$08	;|....X...|
+    377  f2f8		       0c		      .byte.b	$0C	;|....XX..|
+    357  f2f8					      REPEND
+    358  f2f9		       00		      .byte.b	$00	;|........|
+    359  f2fa		       00		      .byte.b	$00	;|........|
+    360  f2fb		       00		      .byte.b	$00	;|........|
+    361  f2fc		       00		      .byte.b	$00	;|........|
+    362  f2fd		       00		      .byte.b	$00	;|........|
+    363  f2fe		       00		      .byte.b	$00	;|........|
+    364  f2ff		       06		      .byte.b	$06	;|.....XX.|
+    365  f300		       04		      .byte.b	$04	;|.....X..|
+    366  f301		       04		      .byte.b	$04	;|.....X..|
+    367  f302		       84		      .byte.b	$84	;|X....X..|
+    368  f303		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f304		       08		      .byte.b	$08	;|....X...|
+    370  f305		       38		      .byte.b	$38	;|..XXX...|
+    371  f306		       30		      .byte.b	$30	;|..XX....|
+    372  f307		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f308		       38		      .byte.b	$38	;|..XXX...|
+    374  f309		       18		      .byte.b	$18	;|...XX...|
+    375  f30a		       0c		      .byte.b	$0C	;|....XX..|
+    376  f30b		       08		      .byte.b	$08	;|....X...|
+    377  f30c		       0c		      .byte.b	$0C	;|....XX..|
+    357  f30c					      REPEND
+    358  f30d		       00		      .byte.b	$00	;|........|
+    359  f30e		       00		      .byte.b	$00	;|........|
+    360  f30f		       00		      .byte.b	$00	;|........|
+    361  f310		       00		      .byte.b	$00	;|........|
+    362  f311		       00		      .byte.b	$00	;|........|
+    363  f312		       00		      .byte.b	$00	;|........|
+    364  f313		       06		      .byte.b	$06	;|.....XX.|
+    365  f314		       04		      .byte.b	$04	;|.....X..|
+    366  f315		       04		      .byte.b	$04	;|.....X..|
+    367  f316		       84		      .byte.b	$84	;|X....X..|
+    368  f317		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f318		       08		      .byte.b	$08	;|....X...|
+    370  f319		       38		      .byte.b	$38	;|..XXX...|
+    371  f31a		       30		      .byte.b	$30	;|..XX....|
+    372  f31b		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f31c		       38		      .byte.b	$38	;|..XXX...|
+    374  f31d		       18		      .byte.b	$18	;|...XX...|
+    375  f31e		       0c		      .byte.b	$0C	;|....XX..|
+    376  f31f		       08		      .byte.b	$08	;|....X...|
+    377  f320		       0c		      .byte.b	$0C	;|....XX..|
+    357  f320					      REPEND
+    358  f321		       00		      .byte.b	$00	;|........|
+    359  f322		       00		      .byte.b	$00	;|........|
+    360  f323		       00		      .byte.b	$00	;|........|
+    361  f324		       00		      .byte.b	$00	;|........|
+    362  f325		       00		      .byte.b	$00	;|........|
+    363  f326		       00		      .byte.b	$00	;|........|
+    364  f327		       06		      .byte.b	$06	;|.....XX.|
+    365  f328		       04		      .byte.b	$04	;|.....X..|
+    366  f329		       04		      .byte.b	$04	;|.....X..|
+    367  f32a		       84		      .byte.b	$84	;|X....X..|
+    368  f32b		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f32c		       08		      .byte.b	$08	;|....X...|
+    370  f32d		       38		      .byte.b	$38	;|..XXX...|
+    371  f32e		       30		      .byte.b	$30	;|..XX....|
+    372  f32f		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f330		       38		      .byte.b	$38	;|..XXX...|
+    374  f331		       18		      .byte.b	$18	;|...XX...|
+    375  f332		       0c		      .byte.b	$0C	;|....XX..|
+    376  f333		       08		      .byte.b	$08	;|....X...|
+    377  f334		       0c		      .byte.b	$0C	;|....XX..|
+    357  f334					      REPEND
+    358  f335		       00		      .byte.b	$00	;|........|
+    359  f336		       00		      .byte.b	$00	;|........|
+    360  f337		       00		      .byte.b	$00	;|........|
+    361  f338		       00		      .byte.b	$00	;|........|
+    362  f339		       00		      .byte.b	$00	;|........|
+    363  f33a		       00		      .byte.b	$00	;|........|
+    364  f33b		       06		      .byte.b	$06	;|.....XX.|
+    365  f33c		       04		      .byte.b	$04	;|.....X..|
+    366  f33d		       04		      .byte.b	$04	;|.....X..|
+    367  f33e		       84		      .byte.b	$84	;|X....X..|
+    368  f33f		       f4		      .byte.b	$F4	;|XXXX.X..|
+    369  f340		       08		      .byte.b	$08	;|....X...|
+    370  f341		       38		      .byte.b	$38	;|..XXX...|
+    371  f342		       30		      .byte.b	$30	;|..XX....|
+    372  f343		       3c		      .byte.b	$3C	;|..XXXX..|
+    373  f344		       38		      .byte.b	$38	;|..XXX...|
+    374  f345		       18		      .byte.b	$18	;|...XX...|
+    375  f346		       0c		      .byte.b	$0C	;|....XX..|
+    376  f347		       08		      .byte.b	$08	;|....X...|
+    377  f348		       0c		      .byte.b	$0C	;|....XX..|
+    378  f349					      REPEND
+    379  f349
+    380  f354					      org	AnimationFrame3 + KERNEL_HEIGHT - 1, 0
+    381  f354				   AnimationFrame4
+    382  f354					      REPEAT	NUMBER_OF_PLAYERS
+    383  f354		       00		      .byte.b	$00	;|........|
+    384  f355		       00		      .byte.b	$00	;|........|
+    385  f356		       00		      .byte.b	$00	;|........|
+    386  f357		       00		      .byte.b	$00	;|........|
+    387  f358		       00		      .byte.b	$00	;|........|
+    388  f359		       00		      .byte.b	$00	;|........|
+    389  f35a		       0c		      .byte.b	$0C	;|....XX..|
+    390  f35b		       08		      .byte.b	$08	;|....X...|
+    391  f35c		       40		      .byte.b	$40	;|.X......|
+    392  f35d		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f35e		       04		      .byte.b	$04	;|.....X..|
+    394  f35f		       08		      .byte.b	$08	;|....X...|
+    395  f360		       18		      .byte.b	$18	;|...XX...|
+    396  f361		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f362		       38		      .byte.b	$38	;|..XXX...|
+    398  f363		       18		      .byte.b	$18	;|...XX...|
+    399  f364		       08		      .byte.b	$08	;|....X...|
+    400  f365		       0c		      .byte.b	$0C	;|....XX..|
+    401  f366		       08		      .byte.b	$08	;|....X...|
+    402  f367		       0c		      .byte.b	$0C	;|....XX..|
+    382  f367					      REPEND
+    383  f368		       00		      .byte.b	$00	;|........|
+    384  f369		       00		      .byte.b	$00	;|........|
+    385  f36a		       00		      .byte.b	$00	;|........|
+    386  f36b		       00		      .byte.b	$00	;|........|
+    387  f36c		       00		      .byte.b	$00	;|........|
+    388  f36d		       00		      .byte.b	$00	;|........|
+    389  f36e		       0c		      .byte.b	$0C	;|....XX..|
+    390  f36f		       08		      .byte.b	$08	;|....X...|
+    391  f370		       40		      .byte.b	$40	;|.X......|
+    392  f371		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f372		       04		      .byte.b	$04	;|.....X..|
+    394  f373		       08		      .byte.b	$08	;|....X...|
+    395  f374		       18		      .byte.b	$18	;|...XX...|
+    396  f375		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f376		       38		      .byte.b	$38	;|..XXX...|
+    398  f377		       18		      .byte.b	$18	;|...XX...|
+    399  f378		       08		      .byte.b	$08	;|....X...|
+    400  f379		       0c		      .byte.b	$0C	;|....XX..|
+    401  f37a		       08		      .byte.b	$08	;|....X...|
+    402  f37b		       0c		      .byte.b	$0C	;|....XX..|
+    382  f37b					      REPEND
+    383  f37c		       00		      .byte.b	$00	;|........|
+    384  f37d		       00		      .byte.b	$00	;|........|
+    385  f37e		       00		      .byte.b	$00	;|........|
+    386  f37f		       00		      .byte.b	$00	;|........|
+    387  f380		       00		      .byte.b	$00	;|........|
+    388  f381		       00		      .byte.b	$00	;|........|
+    389  f382		       0c		      .byte.b	$0C	;|....XX..|
+    390  f383		       08		      .byte.b	$08	;|....X...|
+    391  f384		       40		      .byte.b	$40	;|.X......|
+    392  f385		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f386		       04		      .byte.b	$04	;|.....X..|
+    394  f387		       08		      .byte.b	$08	;|....X...|
+    395  f388		       18		      .byte.b	$18	;|...XX...|
+    396  f389		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f38a		       38		      .byte.b	$38	;|..XXX...|
+    398  f38b		       18		      .byte.b	$18	;|...XX...|
+    399  f38c		       08		      .byte.b	$08	;|....X...|
+    400  f38d		       0c		      .byte.b	$0C	;|....XX..|
+    401  f38e		       08		      .byte.b	$08	;|....X...|
+    402  f38f		       0c		      .byte.b	$0C	;|....XX..|
+    382  f38f					      REPEND
+    383  f390		       00		      .byte.b	$00	;|........|
+    384  f391		       00		      .byte.b	$00	;|........|
+    385  f392		       00		      .byte.b	$00	;|........|
+    386  f393		       00		      .byte.b	$00	;|........|
+    387  f394		       00		      .byte.b	$00	;|........|
+    388  f395		       00		      .byte.b	$00	;|........|
+    389  f396		       0c		      .byte.b	$0C	;|....XX..|
+    390  f397		       08		      .byte.b	$08	;|....X...|
+    391  f398		       40		      .byte.b	$40	;|.X......|
+    392  f399		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f39a		       04		      .byte.b	$04	;|.....X..|
+    394  f39b		       08		      .byte.b	$08	;|....X...|
+    395  f39c		       18		      .byte.b	$18	;|...XX...|
+    396  f39d		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f39e		       38		      .byte.b	$38	;|..XXX...|
+    398  f39f		       18		      .byte.b	$18	;|...XX...|
+    399  f3a0		       08		      .byte.b	$08	;|....X...|
+    400  f3a1		       0c		      .byte.b	$0C	;|....XX..|
+    401  f3a2		       08		      .byte.b	$08	;|....X...|
+    402  f3a3		       0c		      .byte.b	$0C	;|....XX..|
+    382  f3a3					      REPEND
+    383  f3a4		       00		      .byte.b	$00	;|........|
+    384  f3a5		       00		      .byte.b	$00	;|........|
+    385  f3a6		       00		      .byte.b	$00	;|........|
+    386  f3a7		       00		      .byte.b	$00	;|........|
+    387  f3a8		       00		      .byte.b	$00	;|........|
+    388  f3a9		       00		      .byte.b	$00	;|........|
+    389  f3aa		       0c		      .byte.b	$0C	;|....XX..|
+    390  f3ab		       08		      .byte.b	$08	;|....X...|
+    391  f3ac		       40		      .byte.b	$40	;|.X......|
+    392  f3ad		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f3ae		       04		      .byte.b	$04	;|.....X..|
+    394  f3af		       08		      .byte.b	$08	;|....X...|
+    395  f3b0		       18		      .byte.b	$18	;|...XX...|
+    396  f3b1		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f3b2		       38		      .byte.b	$38	;|..XXX...|
+    398  f3b3		       18		      .byte.b	$18	;|...XX...|
+    399  f3b4		       08		      .byte.b	$08	;|....X...|
+    400  f3b5		       0c		      .byte.b	$0C	;|....XX..|
+    401  f3b6		       08		      .byte.b	$08	;|....X...|
+    402  f3b7		       0c		      .byte.b	$0C	;|....XX..|
+    382  f3b7					      REPEND
+    383  f3b8		       00		      .byte.b	$00	;|........|
+    384  f3b9		       00		      .byte.b	$00	;|........|
+    385  f3ba		       00		      .byte.b	$00	;|........|
+    386  f3bb		       00		      .byte.b	$00	;|........|
+    387  f3bc		       00		      .byte.b	$00	;|........|
+    388  f3bd		       00		      .byte.b	$00	;|........|
+    389  f3be		       0c		      .byte.b	$0C	;|....XX..|
+    390  f3bf		       08		      .byte.b	$08	;|....X...|
+    391  f3c0		       40		      .byte.b	$40	;|.X......|
+    392  f3c1		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f3c2		       04		      .byte.b	$04	;|.....X..|
+    394  f3c3		       08		      .byte.b	$08	;|....X...|
+    395  f3c4		       18		      .byte.b	$18	;|...XX...|
+    396  f3c5		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f3c6		       38		      .byte.b	$38	;|..XXX...|
+    398  f3c7		       18		      .byte.b	$18	;|...XX...|
+    399  f3c8		       08		      .byte.b	$08	;|....X...|
+    400  f3c9		       0c		      .byte.b	$0C	;|....XX..|
+    401  f3ca		       08		      .byte.b	$08	;|....X...|
+    402  f3cb		       0c		      .byte.b	$0C	;|....XX..|
+    382  f3cb					      REPEND
+    383  f3cc		       00		      .byte.b	$00	;|........|
+    384  f3cd		       00		      .byte.b	$00	;|........|
+    385  f3ce		       00		      .byte.b	$00	;|........|
+    386  f3cf		       00		      .byte.b	$00	;|........|
+    387  f3d0		       00		      .byte.b	$00	;|........|
+    388  f3d1		       00		      .byte.b	$00	;|........|
+    389  f3d2		       0c		      .byte.b	$0C	;|....XX..|
+    390  f3d3		       08		      .byte.b	$08	;|....X...|
+    391  f3d4		       40		      .byte.b	$40	;|.X......|
+    392  f3d5		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f3d6		       04		      .byte.b	$04	;|.....X..|
+    394  f3d7		       08		      .byte.b	$08	;|....X...|
+    395  f3d8		       18		      .byte.b	$18	;|...XX...|
+    396  f3d9		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f3da		       38		      .byte.b	$38	;|..XXX...|
+    398  f3db		       18		      .byte.b	$18	;|...XX...|
+    399  f3dc		       08		      .byte.b	$08	;|....X...|
+    400  f3dd		       0c		      .byte.b	$0C	;|....XX..|
+    401  f3de		       08		      .byte.b	$08	;|....X...|
+    402  f3df		       0c		      .byte.b	$0C	;|....XX..|
+    382  f3df					      REPEND
+    383  f3e0		       00		      .byte.b	$00	;|........|
+    384  f3e1		       00		      .byte.b	$00	;|........|
+    385  f3e2		       00		      .byte.b	$00	;|........|
+    386  f3e3		       00		      .byte.b	$00	;|........|
+    387  f3e4		       00		      .byte.b	$00	;|........|
+    388  f3e5		       00		      .byte.b	$00	;|........|
+    389  f3e6		       0c		      .byte.b	$0C	;|....XX..|
+    390  f3e7		       08		      .byte.b	$08	;|....X...|
+    391  f3e8		       40		      .byte.b	$40	;|.X......|
+    392  f3e9		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f3ea		       04		      .byte.b	$04	;|.....X..|
+    394  f3eb		       08		      .byte.b	$08	;|....X...|
+    395  f3ec		       18		      .byte.b	$18	;|...XX...|
+    396  f3ed		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f3ee		       38		      .byte.b	$38	;|..XXX...|
+    398  f3ef		       18		      .byte.b	$18	;|...XX...|
+    399  f3f0		       08		      .byte.b	$08	;|....X...|
+    400  f3f1		       0c		      .byte.b	$0C	;|....XX..|
+    401  f3f2		       08		      .byte.b	$08	;|....X...|
+    402  f3f3		       0c		      .byte.b	$0C	;|....XX..|
+    382  f3f3					      REPEND
+    383  f3f4		       00		      .byte.b	$00	;|........|
+    384  f3f5		       00		      .byte.b	$00	;|........|
+    385  f3f6		       00		      .byte.b	$00	;|........|
+    386  f3f7		       00		      .byte.b	$00	;|........|
+    387  f3f8		       00		      .byte.b	$00	;|........|
+    388  f3f9		       00		      .byte.b	$00	;|........|
+    389  f3fa		       0c		      .byte.b	$0C	;|....XX..|
+    390  f3fb		       08		      .byte.b	$08	;|....X...|
+    391  f3fc		       40		      .byte.b	$40	;|.X......|
+    392  f3fd		       7e		      .byte.b	$7E	;|.XXXXXX.|
+    393  f3fe		       04		      .byte.b	$04	;|.....X..|
+    394  f3ff		       08		      .byte.b	$08	;|....X...|
+    395  f400		       18		      .byte.b	$18	;|...XX...|
+    396  f401		       3c		      .byte.b	$3C	;|..XXXX..|
+    397  f402		       38		      .byte.b	$38	;|..XXX...|
+    398  f403		       18		      .byte.b	$18	;|...XX...|
+    399  f404		       08		      .byte.b	$08	;|....X...|
+    400  f405		       0c		      .byte.b	$0C	;|....XX..|
+    401  f406		       08		      .byte.b	$08	;|....X...|
+    402  f407		       0c		      .byte.b	$0C	;|....XX..|
+    403  f408					      REPEND
+    404  f408
+    405  f413					      org	AnimationFrame4 + KERNEL_HEIGHT - 1, 0
+    406  f413				   AnimationFrame5
+    407  f413		       00		      .byte.b	$00	;|........|
+    408  f414		       00		      .byte.b	$00	;|........|
+    409  f415		       00		      .byte.b	$00	;|........|
+    410  f416		       00		      .byte.b	$00	;|........|
+    411  f417		       00		      .byte.b	$00	;|........|
+    412  f418		       00		      .byte.b	$00	;|........|
+    413  f419		       30		      .byte.b	$30	;|..XX....|
+    414  f41a		       00		      .byte.b	$00	;|........|
+    415  f41b		       20		      .byte.b	$20	;|..X.....|
+    416  f41c		       3a		      .byte.b	$3A	;|..XXX.X.|
+    417  f41d		       0c		      .byte.b	$0C	;|....XX..|
+    418  f41e		       18		      .byte.b	$18	;|...XX...|
+    419  f41f		       18		      .byte.b	$18	;|...XX...|
+    420  f420		       3a		      .byte.b	$3A	;|..XXX.X.|
+    421  f421		       38		      .byte.b	$38	;|..XXX...|
+    422  f422		       38		      .byte.b	$38	;|..XXX...|
+    423  f423		       18		      .byte.b	$18	;|...XX...|
+    424  f424		       0c		      .byte.b	$0C	;|....XX..|
+    425  f425		       08		      .byte.b	$08	;|....X...|
+    426  f426		       0c		      .byte.b	$0C	;|....XX..|
+    427  f427
+    428  f427					      REPEAT	NUMBER_OF_PLAYERS - 1
+    429  f427		       00		      .byte.b	$00	;|........|
+    430  f428		       00		      .byte.b	$00	;|........|
+    431  f429		       00		      .byte.b	$00	;|........|
+    432  f42a		       00		      .byte.b	$00	;|........|
+    433  f42b		       00		      .byte.b	$00	;|........|
+    434  f42c		       00		      .byte.b	$00	;|........|
+    435  f42d		       30		      .byte.b	$30	;|..XX....|
+    436  f42e		       00		      .byte.b	$00	;|........|
+    437  f42f		       02		      .byte.b	$02	;|......X.|
+    438  f430		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f431		       0c		      .byte.b	$0C	;|....XX..|
+    440  f432		       18		      .byte.b	$18	;|...XX...|
+    441  f433		       18		      .byte.b	$18	;|...XX...|
+    442  f434		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f435		       38		      .byte.b	$38	;|..XXX...|
+    444  f436		       38		      .byte.b	$38	;|..XXX...|
+    445  f437		       18		      .byte.b	$18	;|...XX...|
+    446  f438		       0c		      .byte.b	$0C	;|....XX..|
+    447  f439		       08		      .byte.b	$08	;|....X...|
+    448  f43a		       0c		      .byte.b	$0C	;|....XX..|
+    428  f43a					      REPEND
+    429  f43b		       00		      .byte.b	$00	;|........|
+    430  f43c		       00		      .byte.b	$00	;|........|
+    431  f43d		       00		      .byte.b	$00	;|........|
+    432  f43e		       00		      .byte.b	$00	;|........|
+    433  f43f		       00		      .byte.b	$00	;|........|
+    434  f440		       00		      .byte.b	$00	;|........|
+    435  f441		       30		      .byte.b	$30	;|..XX....|
+    436  f442		       00		      .byte.b	$00	;|........|
+    437  f443		       02		      .byte.b	$02	;|......X.|
+    438  f444		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f445		       0c		      .byte.b	$0C	;|....XX..|
+    440  f446		       18		      .byte.b	$18	;|...XX...|
+    441  f447		       18		      .byte.b	$18	;|...XX...|
+    442  f448		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f449		       38		      .byte.b	$38	;|..XXX...|
+    444  f44a		       38		      .byte.b	$38	;|..XXX...|
+    445  f44b		       18		      .byte.b	$18	;|...XX...|
+    446  f44c		       0c		      .byte.b	$0C	;|....XX..|
+    447  f44d		       08		      .byte.b	$08	;|....X...|
+    448  f44e		       0c		      .byte.b	$0C	;|....XX..|
+    428  f44e					      REPEND
+    429  f44f		       00		      .byte.b	$00	;|........|
+    430  f450		       00		      .byte.b	$00	;|........|
+    431  f451		       00		      .byte.b	$00	;|........|
+    432  f452		       00		      .byte.b	$00	;|........|
+    433  f453		       00		      .byte.b	$00	;|........|
+    434  f454		       00		      .byte.b	$00	;|........|
+    435  f455		       30		      .byte.b	$30	;|..XX....|
+    436  f456		       00		      .byte.b	$00	;|........|
+    437  f457		       02		      .byte.b	$02	;|......X.|
+    438  f458		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f459		       0c		      .byte.b	$0C	;|....XX..|
+    440  f45a		       18		      .byte.b	$18	;|...XX...|
+    441  f45b		       18		      .byte.b	$18	;|...XX...|
+    442  f45c		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f45d		       38		      .byte.b	$38	;|..XXX...|
+    444  f45e		       38		      .byte.b	$38	;|..XXX...|
+    445  f45f		       18		      .byte.b	$18	;|...XX...|
+    446  f460		       0c		      .byte.b	$0C	;|....XX..|
+    447  f461		       08		      .byte.b	$08	;|....X...|
+    448  f462		       0c		      .byte.b	$0C	;|....XX..|
+    428  f462					      REPEND
+    429  f463		       00		      .byte.b	$00	;|........|
+    430  f464		       00		      .byte.b	$00	;|........|
+    431  f465		       00		      .byte.b	$00	;|........|
+    432  f466		       00		      .byte.b	$00	;|........|
+    433  f467		       00		      .byte.b	$00	;|........|
+    434  f468		       00		      .byte.b	$00	;|........|
+    435  f469		       30		      .byte.b	$30	;|..XX....|
+    436  f46a		       00		      .byte.b	$00	;|........|
+    437  f46b		       02		      .byte.b	$02	;|......X.|
+    438  f46c		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f46d		       0c		      .byte.b	$0C	;|....XX..|
+    440  f46e		       18		      .byte.b	$18	;|...XX...|
+    441  f46f		       18		      .byte.b	$18	;|...XX...|
+    442  f470		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f471		       38		      .byte.b	$38	;|..XXX...|
+    444  f472		       38		      .byte.b	$38	;|..XXX...|
+    445  f473		       18		      .byte.b	$18	;|...XX...|
+    446  f474		       0c		      .byte.b	$0C	;|....XX..|
+    447  f475		       08		      .byte.b	$08	;|....X...|
+    448  f476		       0c		      .byte.b	$0C	;|....XX..|
+    428  f476					      REPEND
+    429  f477		       00		      .byte.b	$00	;|........|
+    430  f478		       00		      .byte.b	$00	;|........|
+    431  f479		       00		      .byte.b	$00	;|........|
+    432  f47a		       00		      .byte.b	$00	;|........|
+    433  f47b		       00		      .byte.b	$00	;|........|
+    434  f47c		       00		      .byte.b	$00	;|........|
+    435  f47d		       30		      .byte.b	$30	;|..XX....|
+    436  f47e		       00		      .byte.b	$00	;|........|
+    437  f47f		       02		      .byte.b	$02	;|......X.|
+    438  f480		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f481		       0c		      .byte.b	$0C	;|....XX..|
+    440  f482		       18		      .byte.b	$18	;|...XX...|
+    441  f483		       18		      .byte.b	$18	;|...XX...|
+    442  f484		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f485		       38		      .byte.b	$38	;|..XXX...|
+    444  f486		       38		      .byte.b	$38	;|..XXX...|
+    445  f487		       18		      .byte.b	$18	;|...XX...|
+    446  f488		       0c		      .byte.b	$0C	;|....XX..|
+    447  f489		       08		      .byte.b	$08	;|....X...|
+    448  f48a		       0c		      .byte.b	$0C	;|....XX..|
+    428  f48a					      REPEND
+    429  f48b		       00		      .byte.b	$00	;|........|
+    430  f48c		       00		      .byte.b	$00	;|........|
+    431  f48d		       00		      .byte.b	$00	;|........|
+    432  f48e		       00		      .byte.b	$00	;|........|
+    433  f48f		       00		      .byte.b	$00	;|........|
+    434  f490		       00		      .byte.b	$00	;|........|
+    435  f491		       30		      .byte.b	$30	;|..XX....|
+    436  f492		       00		      .byte.b	$00	;|........|
+    437  f493		       02		      .byte.b	$02	;|......X.|
+    438  f494		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f495		       0c		      .byte.b	$0C	;|....XX..|
+    440  f496		       18		      .byte.b	$18	;|...XX...|
+    441  f497		       18		      .byte.b	$18	;|...XX...|
+    442  f498		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f499		       38		      .byte.b	$38	;|..XXX...|
+    444  f49a		       38		      .byte.b	$38	;|..XXX...|
+    445  f49b		       18		      .byte.b	$18	;|...XX...|
+    446  f49c		       0c		      .byte.b	$0C	;|....XX..|
+    447  f49d		       08		      .byte.b	$08	;|....X...|
+    448  f49e		       0c		      .byte.b	$0C	;|....XX..|
+    428  f49e					      REPEND
+    429  f49f		       00		      .byte.b	$00	;|........|
+    430  f4a0		       00		      .byte.b	$00	;|........|
+    431  f4a1		       00		      .byte.b	$00	;|........|
+    432  f4a2		       00		      .byte.b	$00	;|........|
+    433  f4a3		       00		      .byte.b	$00	;|........|
+    434  f4a4		       00		      .byte.b	$00	;|........|
+    435  f4a5		       30		      .byte.b	$30	;|..XX....|
+    436  f4a6		       00		      .byte.b	$00	;|........|
+    437  f4a7		       02		      .byte.b	$02	;|......X.|
+    438  f4a8		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f4a9		       0c		      .byte.b	$0C	;|....XX..|
+    440  f4aa		       18		      .byte.b	$18	;|...XX...|
+    441  f4ab		       18		      .byte.b	$18	;|...XX...|
+    442  f4ac		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f4ad		       38		      .byte.b	$38	;|..XXX...|
+    444  f4ae		       38		      .byte.b	$38	;|..XXX...|
+    445  f4af		       18		      .byte.b	$18	;|...XX...|
+    446  f4b0		       0c		      .byte.b	$0C	;|....XX..|
+    447  f4b1		       08		      .byte.b	$08	;|....X...|
+    448  f4b2		       0c		      .byte.b	$0C	;|....XX..|
+    428  f4b2					      REPEND
+    429  f4b3		       00		      .byte.b	$00	;|........|
+    430  f4b4		       00		      .byte.b	$00	;|........|
+    431  f4b5		       00		      .byte.b	$00	;|........|
+    432  f4b6		       00		      .byte.b	$00	;|........|
+    433  f4b7		       00		      .byte.b	$00	;|........|
+    434  f4b8		       00		      .byte.b	$00	;|........|
+    435  f4b9		       30		      .byte.b	$30	;|..XX....|
+    436  f4ba		       00		      .byte.b	$00	;|........|
+    437  f4bb		       02		      .byte.b	$02	;|......X.|
+    438  f4bc		       3a		      .byte.b	$3A	;|..XXX.X.|
+    439  f4bd		       0c		      .byte.b	$0C	;|....XX..|
+    440  f4be		       18		      .byte.b	$18	;|...XX...|
+    441  f4bf		       18		      .byte.b	$18	;|...XX...|
+    442  f4c0		       3a		      .byte.b	$3A	;|..XXX.X.|
+    443  f4c1		       38		      .byte.b	$38	;|..XXX...|
+    444  f4c2		       38		      .byte.b	$38	;|..XXX...|
+    445  f4c3		       18		      .byte.b	$18	;|...XX...|
+    446  f4c4		       0c		      .byte.b	$0C	;|....XX..|
+    447  f4c5		       08		      .byte.b	$08	;|....X...|
+    448  f4c6		       0c		      .byte.b	$0C	;|....XX..|
+    449  f4c7					      REPEND
+    450  f4c7
+    451  f4d2					      org	AnimationFrame5 + KERNEL_HEIGHT - 1, 0
+    452  f4d2				   AnimationFrame6
+    453  f4d2					      REPEAT	NUMBER_OF_PLAYERS
+    454  f4d2		       00		      .byte.b	$00	;|........|
+    455  f4d3		       00		      .byte.b	$00	;|........|
+    456  f4d4		       00		      .byte.b	$00	;|........|
+    457  f4d5		       00		      .byte.b	$00	;|........|
+    458  f4d6		       00		      .byte.b	$00	;|........|
+    459  f4d7		       00		      .byte.b	$00	;|........|
+    460  f4d8		       40		      .byte.b	$40	;|.X......|
+    461  f4d9		       80		      .byte.b	$80	;|X.......|
+    462  f4da		       48		      .byte.b	$48	;|.X..X...|
+    463  f4db		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f4dc		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f4dd		       18		      .byte.b	$18	;|...XX...|
+    466  f4de		       18		      .byte.b	$18	;|...XX...|
+    467  f4df		       50		      .byte.b	$50	;|.X.X....|
+    468  f4e0		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f4e1		       58		      .byte.b	$58	;|.X.XX...|
+    470  f4e2		       38		      .byte.b	$38	;|..XXX...|
+    471  f4e3		       0c		      .byte.b	$0C	;|....XX..|
+    472  f4e4		       08		      .byte.b	$08	;|....X...|
+    473  f4e5		       0c		      .byte.b	$0C	;|....XX..|
+    453  f4e5					      REPEND
+    454  f4e6		       00		      .byte.b	$00	;|........|
+    455  f4e7		       00		      .byte.b	$00	;|........|
+    456  f4e8		       00		      .byte.b	$00	;|........|
+    457  f4e9		       00		      .byte.b	$00	;|........|
+    458  f4ea		       00		      .byte.b	$00	;|........|
+    459  f4eb		       00		      .byte.b	$00	;|........|
+    460  f4ec		       40		      .byte.b	$40	;|.X......|
+    461  f4ed		       80		      .byte.b	$80	;|X.......|
+    462  f4ee		       48		      .byte.b	$48	;|.X..X...|
+    463  f4ef		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f4f0		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f4f1		       18		      .byte.b	$18	;|...XX...|
+    466  f4f2		       18		      .byte.b	$18	;|...XX...|
+    467  f4f3		       50		      .byte.b	$50	;|.X.X....|
+    468  f4f4		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f4f5		       58		      .byte.b	$58	;|.X.XX...|
+    470  f4f6		       38		      .byte.b	$38	;|..XXX...|
+    471  f4f7		       0c		      .byte.b	$0C	;|....XX..|
+    472  f4f8		       08		      .byte.b	$08	;|....X...|
+    473  f4f9		       0c		      .byte.b	$0C	;|....XX..|
+    453  f4f9					      REPEND
+    454  f4fa		       00		      .byte.b	$00	;|........|
+    455  f4fb		       00		      .byte.b	$00	;|........|
+    456  f4fc		       00		      .byte.b	$00	;|........|
+    457  f4fd		       00		      .byte.b	$00	;|........|
+    458  f4fe		       00		      .byte.b	$00	;|........|
+    459  f4ff		       00		      .byte.b	$00	;|........|
+    460  f500		       40		      .byte.b	$40	;|.X......|
+    461  f501		       80		      .byte.b	$80	;|X.......|
+    462  f502		       48		      .byte.b	$48	;|.X..X...|
+    463  f503		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f504		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f505		       18		      .byte.b	$18	;|...XX...|
+    466  f506		       18		      .byte.b	$18	;|...XX...|
+    467  f507		       50		      .byte.b	$50	;|.X.X....|
+    468  f508		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f509		       58		      .byte.b	$58	;|.X.XX...|
+    470  f50a		       38		      .byte.b	$38	;|..XXX...|
+    471  f50b		       0c		      .byte.b	$0C	;|....XX..|
+    472  f50c		       08		      .byte.b	$08	;|....X...|
+    473  f50d		       0c		      .byte.b	$0C	;|....XX..|
+    453  f50d					      REPEND
+    454  f50e		       00		      .byte.b	$00	;|........|
+    455  f50f		       00		      .byte.b	$00	;|........|
+    456  f510		       00		      .byte.b	$00	;|........|
+    457  f511		       00		      .byte.b	$00	;|........|
+    458  f512		       00		      .byte.b	$00	;|........|
+    459  f513		       00		      .byte.b	$00	;|........|
+    460  f514		       40		      .byte.b	$40	;|.X......|
+    461  f515		       80		      .byte.b	$80	;|X.......|
+    462  f516		       48		      .byte.b	$48	;|.X..X...|
+    463  f517		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f518		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f519		       18		      .byte.b	$18	;|...XX...|
+    466  f51a		       18		      .byte.b	$18	;|...XX...|
+    467  f51b		       50		      .byte.b	$50	;|.X.X....|
+    468  f51c		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f51d		       58		      .byte.b	$58	;|.X.XX...|
+    470  f51e		       38		      .byte.b	$38	;|..XXX...|
+    471  f51f		       0c		      .byte.b	$0C	;|....XX..|
+    472  f520		       08		      .byte.b	$08	;|....X...|
+    473  f521		       0c		      .byte.b	$0C	;|....XX..|
+    453  f521					      REPEND
+    454  f522		       00		      .byte.b	$00	;|........|
+    455  f523		       00		      .byte.b	$00	;|........|
+    456  f524		       00		      .byte.b	$00	;|........|
+    457  f525		       00		      .byte.b	$00	;|........|
+    458  f526		       00		      .byte.b	$00	;|........|
+    459  f527		       00		      .byte.b	$00	;|........|
+    460  f528		       40		      .byte.b	$40	;|.X......|
+    461  f529		       80		      .byte.b	$80	;|X.......|
+    462  f52a		       48		      .byte.b	$48	;|.X..X...|
+    463  f52b		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f52c		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f52d		       18		      .byte.b	$18	;|...XX...|
+    466  f52e		       18		      .byte.b	$18	;|...XX...|
+    467  f52f		       50		      .byte.b	$50	;|.X.X....|
+    468  f530		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f531		       58		      .byte.b	$58	;|.X.XX...|
+    470  f532		       38		      .byte.b	$38	;|..XXX...|
+    471  f533		       0c		      .byte.b	$0C	;|....XX..|
+    472  f534		       08		      .byte.b	$08	;|....X...|
+    473  f535		       0c		      .byte.b	$0C	;|....XX..|
+    453  f535					      REPEND
+    454  f536		       00		      .byte.b	$00	;|........|
+    455  f537		       00		      .byte.b	$00	;|........|
+    456  f538		       00		      .byte.b	$00	;|........|
+    457  f539		       00		      .byte.b	$00	;|........|
+    458  f53a		       00		      .byte.b	$00	;|........|
+    459  f53b		       00		      .byte.b	$00	;|........|
+    460  f53c		       40		      .byte.b	$40	;|.X......|
+    461  f53d		       80		      .byte.b	$80	;|X.......|
+    462  f53e		       48		      .byte.b	$48	;|.X..X...|
+    463  f53f		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f540		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f541		       18		      .byte.b	$18	;|...XX...|
+    466  f542		       18		      .byte.b	$18	;|...XX...|
+    467  f543		       50		      .byte.b	$50	;|.X.X....|
+    468  f544		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f545		       58		      .byte.b	$58	;|.X.XX...|
+    470  f546		       38		      .byte.b	$38	;|..XXX...|
+    471  f547		       0c		      .byte.b	$0C	;|....XX..|
+    472  f548		       08		      .byte.b	$08	;|....X...|
+    473  f549		       0c		      .byte.b	$0C	;|....XX..|
+    453  f549					      REPEND
+    454  f54a		       00		      .byte.b	$00	;|........|
+    455  f54b		       00		      .byte.b	$00	;|........|
+    456  f54c		       00		      .byte.b	$00	;|........|
+    457  f54d		       00		      .byte.b	$00	;|........|
+    458  f54e		       00		      .byte.b	$00	;|........|
+    459  f54f		       00		      .byte.b	$00	;|........|
+    460  f550		       40		      .byte.b	$40	;|.X......|
+    461  f551		       80		      .byte.b	$80	;|X.......|
+    462  f552		       48		      .byte.b	$48	;|.X..X...|
+    463  f553		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f554		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f555		       18		      .byte.b	$18	;|...XX...|
+    466  f556		       18		      .byte.b	$18	;|...XX...|
+    467  f557		       50		      .byte.b	$50	;|.X.X....|
+    468  f558		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f559		       58		      .byte.b	$58	;|.X.XX...|
+    470  f55a		       38		      .byte.b	$38	;|..XXX...|
+    471  f55b		       0c		      .byte.b	$0C	;|....XX..|
+    472  f55c		       08		      .byte.b	$08	;|....X...|
+    473  f55d		       0c		      .byte.b	$0C	;|....XX..|
+    453  f55d					      REPEND
+    454  f55e		       00		      .byte.b	$00	;|........|
+    455  f55f		       00		      .byte.b	$00	;|........|
+    456  f560		       00		      .byte.b	$00	;|........|
+    457  f561		       00		      .byte.b	$00	;|........|
+    458  f562		       00		      .byte.b	$00	;|........|
+    459  f563		       00		      .byte.b	$00	;|........|
+    460  f564		       40		      .byte.b	$40	;|.X......|
+    461  f565		       80		      .byte.b	$80	;|X.......|
+    462  f566		       48		      .byte.b	$48	;|.X..X...|
+    463  f567		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f568		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f569		       18		      .byte.b	$18	;|...XX...|
+    466  f56a		       18		      .byte.b	$18	;|...XX...|
+    467  f56b		       50		      .byte.b	$50	;|.X.X....|
+    468  f56c		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f56d		       58		      .byte.b	$58	;|.X.XX...|
+    470  f56e		       38		      .byte.b	$38	;|..XXX...|
+    471  f56f		       0c		      .byte.b	$0C	;|....XX..|
+    472  f570		       08		      .byte.b	$08	;|....X...|
+    473  f571		       0c		      .byte.b	$0C	;|....XX..|
+    453  f571					      REPEND
+    454  f572		       00		      .byte.b	$00	;|........|
+    455  f573		       00		      .byte.b	$00	;|........|
+    456  f574		       00		      .byte.b	$00	;|........|
+    457  f575		       00		      .byte.b	$00	;|........|
+    458  f576		       00		      .byte.b	$00	;|........|
+    459  f577		       00		      .byte.b	$00	;|........|
+    460  f578		       40		      .byte.b	$40	;|.X......|
+    461  f579		       80		      .byte.b	$80	;|X.......|
+    462  f57a		       48		      .byte.b	$48	;|.X..X...|
+    463  f57b		       2c		      .byte.b	$2C	;|..X.XX..|
+    464  f57c		       1e		      .byte.b	$1E	;|...XXXX.|
+    465  f57d		       18		      .byte.b	$18	;|...XX...|
+    466  f57e		       18		      .byte.b	$18	;|...XX...|
+    467  f57f		       50		      .byte.b	$50	;|.X.X....|
+    468  f580		       5e		      .byte.b	$5E	;|.X.XXXX.|
+    469  f581		       58		      .byte.b	$58	;|.X.XX...|
+    470  f582		       38		      .byte.b	$38	;|..XXX...|
+    471  f583		       0c		      .byte.b	$0C	;|....XX..|
+    472  f584		       08		      .byte.b	$08	;|....X...|
+    473  f585		       0c		      .byte.b	$0C	;|....XX..|
+    474  f586					      REPEND
+    475  f586
+    476  f591					      org	AnimationFrame6 + KERNEL_HEIGHT - 1, 0
+    477  f591				   AnimationFrame7
+    478  f591					      REPEAT	NUMBER_OF_PLAYERS
+    479  f591		       00		      .byte.b	$00	;|........|
+    480  f592		       00		      .byte.b	$00	;|........|
+    481  f593		       00		      .byte.b	$00	;|........|
+    482  f594		       00		      .byte.b	$00	;|........|
+    483  f595		       00		      .byte.b	$00	;|........|
+    484  f596		       00		      .byte.b	$00	;|........|
+    485  f597		       80		      .byte.b	$80	;|X.......|
+    486  f598		       c0		      .byte.b	$C0	;|XX......|
+    487  f599		       20		      .byte.b	$20	;|..X.....|
+    488  f59a		       16		      .byte.b	$16	;|...X.XX.|
+    489  f59b		       0c		      .byte.b	$0C	;|....XX..|
+    490  f59c		       18		      .byte.b	$18	;|...XX...|
+    491  f59d		       18		      .byte.b	$18	;|...XX...|
+    492  f59e		       28		      .byte.b	$28	;|..X.X...|
+    493  f59f		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f5a0		       58		      .byte.b	$58	;|.X.XX...|
+    495  f5a1		       30		      .byte.b	$30	;|..XX....|
+    496  f5a2		       18		      .byte.b	$18	;|...XX...|
+    497  f5a3		       10		      .byte.b	$10	;|...X....|
+    498  f5a4		       18		      .byte.b	$18	;|...XX...|
+    478  f5a4					      REPEND
+    479  f5a5		       00		      .byte.b	$00	;|........|
+    480  f5a6		       00		      .byte.b	$00	;|........|
+    481  f5a7		       00		      .byte.b	$00	;|........|
+    482  f5a8		       00		      .byte.b	$00	;|........|
+    483  f5a9		       00		      .byte.b	$00	;|........|
+    484  f5aa		       00		      .byte.b	$00	;|........|
+    485  f5ab		       80		      .byte.b	$80	;|X.......|
+    486  f5ac		       c0		      .byte.b	$C0	;|XX......|
+    487  f5ad		       20		      .byte.b	$20	;|..X.....|
+    488  f5ae		       16		      .byte.b	$16	;|...X.XX.|
+    489  f5af		       0c		      .byte.b	$0C	;|....XX..|
+    490  f5b0		       18		      .byte.b	$18	;|...XX...|
+    491  f5b1		       18		      .byte.b	$18	;|...XX...|
+    492  f5b2		       28		      .byte.b	$28	;|..X.X...|
+    493  f5b3		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f5b4		       58		      .byte.b	$58	;|.X.XX...|
+    495  f5b5		       30		      .byte.b	$30	;|..XX....|
+    496  f5b6		       18		      .byte.b	$18	;|...XX...|
+    497  f5b7		       10		      .byte.b	$10	;|...X....|
+    498  f5b8		       18		      .byte.b	$18	;|...XX...|
+    478  f5b8					      REPEND
+    479  f5b9		       00		      .byte.b	$00	;|........|
+    480  f5ba		       00		      .byte.b	$00	;|........|
+    481  f5bb		       00		      .byte.b	$00	;|........|
+    482  f5bc		       00		      .byte.b	$00	;|........|
+    483  f5bd		       00		      .byte.b	$00	;|........|
+    484  f5be		       00		      .byte.b	$00	;|........|
+    485  f5bf		       80		      .byte.b	$80	;|X.......|
+    486  f5c0		       c0		      .byte.b	$C0	;|XX......|
+    487  f5c1		       20		      .byte.b	$20	;|..X.....|
+    488  f5c2		       16		      .byte.b	$16	;|...X.XX.|
+    489  f5c3		       0c		      .byte.b	$0C	;|....XX..|
+    490  f5c4		       18		      .byte.b	$18	;|...XX...|
+    491  f5c5		       18		      .byte.b	$18	;|...XX...|
+    492  f5c6		       28		      .byte.b	$28	;|..X.X...|
+    493  f5c7		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f5c8		       58		      .byte.b	$58	;|.X.XX...|
+    495  f5c9		       30		      .byte.b	$30	;|..XX....|
+    496  f5ca		       18		      .byte.b	$18	;|...XX...|
+    497  f5cb		       10		      .byte.b	$10	;|...X....|
+    498  f5cc		       18		      .byte.b	$18	;|...XX...|
+    478  f5cc					      REPEND
+    479  f5cd		       00		      .byte.b	$00	;|........|
+    480  f5ce		       00		      .byte.b	$00	;|........|
+    481  f5cf		       00		      .byte.b	$00	;|........|
+    482  f5d0		       00		      .byte.b	$00	;|........|
+    483  f5d1		       00		      .byte.b	$00	;|........|
+    484  f5d2		       00		      .byte.b	$00	;|........|
+    485  f5d3		       80		      .byte.b	$80	;|X.......|
+    486  f5d4		       c0		      .byte.b	$C0	;|XX......|
+    487  f5d5		       20		      .byte.b	$20	;|..X.....|
+    488  f5d6		       16		      .byte.b	$16	;|...X.XX.|
+    489  f5d7		       0c		      .byte.b	$0C	;|....XX..|
+    490  f5d8		       18		      .byte.b	$18	;|...XX...|
+    491  f5d9		       18		      .byte.b	$18	;|...XX...|
+    492  f5da		       28		      .byte.b	$28	;|..X.X...|
+    493  f5db		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f5dc		       58		      .byte.b	$58	;|.X.XX...|
+    495  f5dd		       30		      .byte.b	$30	;|..XX....|
+    496  f5de		       18		      .byte.b	$18	;|...XX...|
+    497  f5df		       10		      .byte.b	$10	;|...X....|
+    498  f5e0		       18		      .byte.b	$18	;|...XX...|
+    478  f5e0					      REPEND
+    479  f5e1		       00		      .byte.b	$00	;|........|
+    480  f5e2		       00		      .byte.b	$00	;|........|
+    481  f5e3		       00		      .byte.b	$00	;|........|
+    482  f5e4		       00		      .byte.b	$00	;|........|
+    483  f5e5		       00		      .byte.b	$00	;|........|
+    484  f5e6		       00		      .byte.b	$00	;|........|
+    485  f5e7		       80		      .byte.b	$80	;|X.......|
+    486  f5e8		       c0		      .byte.b	$C0	;|XX......|
+    487  f5e9		       20		      .byte.b	$20	;|..X.....|
+    488  f5ea		       16		      .byte.b	$16	;|...X.XX.|
+    489  f5eb		       0c		      .byte.b	$0C	;|....XX..|
+    490  f5ec		       18		      .byte.b	$18	;|...XX...|
+    491  f5ed		       18		      .byte.b	$18	;|...XX...|
+    492  f5ee		       28		      .byte.b	$28	;|..X.X...|
+    493  f5ef		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f5f0		       58		      .byte.b	$58	;|.X.XX...|
+    495  f5f1		       30		      .byte.b	$30	;|..XX....|
+    496  f5f2		       18		      .byte.b	$18	;|...XX...|
+    497  f5f3		       10		      .byte.b	$10	;|...X....|
+    498  f5f4		       18		      .byte.b	$18	;|...XX...|
+    478  f5f4					      REPEND
+    479  f5f5		       00		      .byte.b	$00	;|........|
+    480  f5f6		       00		      .byte.b	$00	;|........|
+    481  f5f7		       00		      .byte.b	$00	;|........|
+    482  f5f8		       00		      .byte.b	$00	;|........|
+    483  f5f9		       00		      .byte.b	$00	;|........|
+    484  f5fa		       00		      .byte.b	$00	;|........|
+    485  f5fb		       80		      .byte.b	$80	;|X.......|
+    486  f5fc		       c0		      .byte.b	$C0	;|XX......|
+    487  f5fd		       20		      .byte.b	$20	;|..X.....|
+    488  f5fe		       16		      .byte.b	$16	;|...X.XX.|
+    489  f5ff		       0c		      .byte.b	$0C	;|....XX..|
+    490  f600		       18		      .byte.b	$18	;|...XX...|
+    491  f601		       18		      .byte.b	$18	;|...XX...|
+    492  f602		       28		      .byte.b	$28	;|..X.X...|
+    493  f603		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f604		       58		      .byte.b	$58	;|.X.XX...|
+    495  f605		       30		      .byte.b	$30	;|..XX....|
+    496  f606		       18		      .byte.b	$18	;|...XX...|
+    497  f607		       10		      .byte.b	$10	;|...X....|
+    498  f608		       18		      .byte.b	$18	;|...XX...|
+    478  f608					      REPEND
+    479  f609		       00		      .byte.b	$00	;|........|
+    480  f60a		       00		      .byte.b	$00	;|........|
+    481  f60b		       00		      .byte.b	$00	;|........|
+    482  f60c		       00		      .byte.b	$00	;|........|
+    483  f60d		       00		      .byte.b	$00	;|........|
+    484  f60e		       00		      .byte.b	$00	;|........|
+    485  f60f		       80		      .byte.b	$80	;|X.......|
+    486  f610		       c0		      .byte.b	$C0	;|XX......|
+    487  f611		       20		      .byte.b	$20	;|..X.....|
+    488  f612		       16		      .byte.b	$16	;|...X.XX.|
+    489  f613		       0c		      .byte.b	$0C	;|....XX..|
+    490  f614		       18		      .byte.b	$18	;|...XX...|
+    491  f615		       18		      .byte.b	$18	;|...XX...|
+    492  f616		       28		      .byte.b	$28	;|..X.X...|
+    493  f617		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f618		       58		      .byte.b	$58	;|.X.XX...|
+    495  f619		       30		      .byte.b	$30	;|..XX....|
+    496  f61a		       18		      .byte.b	$18	;|...XX...|
+    497  f61b		       10		      .byte.b	$10	;|...X....|
+    498  f61c		       18		      .byte.b	$18	;|...XX...|
+    478  f61c					      REPEND
+    479  f61d		       00		      .byte.b	$00	;|........|
+    480  f61e		       00		      .byte.b	$00	;|........|
+    481  f61f		       00		      .byte.b	$00	;|........|
+    482  f620		       00		      .byte.b	$00	;|........|
+    483  f621		       00		      .byte.b	$00	;|........|
+    484  f622		       00		      .byte.b	$00	;|........|
+    485  f623		       80		      .byte.b	$80	;|X.......|
+    486  f624		       c0		      .byte.b	$C0	;|XX......|
+    487  f625		       20		      .byte.b	$20	;|..X.....|
+    488  f626		       16		      .byte.b	$16	;|...X.XX.|
+    489  f627		       0c		      .byte.b	$0C	;|....XX..|
+    490  f628		       18		      .byte.b	$18	;|...XX...|
+    491  f629		       18		      .byte.b	$18	;|...XX...|
+    492  f62a		       28		      .byte.b	$28	;|..X.X...|
+    493  f62b		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f62c		       58		      .byte.b	$58	;|.X.XX...|
+    495  f62d		       30		      .byte.b	$30	;|..XX....|
+    496  f62e		       18		      .byte.b	$18	;|...XX...|
+    497  f62f		       10		      .byte.b	$10	;|...X....|
+    498  f630		       18		      .byte.b	$18	;|...XX...|
+    478  f630					      REPEND
+    479  f631		       00		      .byte.b	$00	;|........|
+    480  f632		       00		      .byte.b	$00	;|........|
+    481  f633		       00		      .byte.b	$00	;|........|
+    482  f634		       00		      .byte.b	$00	;|........|
+    483  f635		       00		      .byte.b	$00	;|........|
+    484  f636		       00		      .byte.b	$00	;|........|
+    485  f637		       80		      .byte.b	$80	;|X.......|
+    486  f638		       c0		      .byte.b	$C0	;|XX......|
+    487  f639		       20		      .byte.b	$20	;|..X.....|
+    488  f63a		       16		      .byte.b	$16	;|...X.XX.|
+    489  f63b		       0c		      .byte.b	$0C	;|....XX..|
+    490  f63c		       18		      .byte.b	$18	;|...XX...|
+    491  f63d		       18		      .byte.b	$18	;|...XX...|
+    492  f63e		       28		      .byte.b	$28	;|..X.X...|
+    493  f63f		       5c		      .byte.b	$5C	;|.X.XXX..|
+    494  f640		       58		      .byte.b	$58	;|.X.XX...|
+    495  f641		       30		      .byte.b	$30	;|..XX....|
+    496  f642		       18		      .byte.b	$18	;|...XX...|
+    497  f643		       10		      .byte.b	$10	;|...X....|
+    498  f644		       18		      .byte.b	$18	;|...XX...|
+    499  f645					      REPEND
+    500  f645
+    501  f650					      org	AnimationFrame7 + KERNEL_HEIGHT - 1, 0
+    502  f650				   AnimationFrame8
+    503  f650					      REPEAT	NUMBER_OF_PLAYERS
+    504  f650		       00		      .byte.b	$00	;|........|
+    505  f651		       00		      .byte.b	$00	;|........|
+    506  f652		       00		      .byte.b	$00	;|........|
+    507  f653		       00		      .byte.b	$00	;|........|
+    508  f654		       00		      .byte.b	$00	;|........|
+    509  f655		       00		      .byte.b	$00	;|........|
+    510  f656		       00		      .byte.b	$00	;|........|
+    511  f657		       80		      .byte.b	$80	;|X.......|
+    512  f658		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f659		       22		      .byte.b	$22	;|..X...X.|
+    514  f65a		       12		      .byte.b	$12	;|...X..X.|
+    515  f65b		       0c		      .byte.b	$0C	;|....XX..|
+    516  f65c		       18		      .byte.b	$18	;|...XX...|
+    517  f65d		       30		      .byte.b	$30	;|..XX....|
+    518  f65e		       58		      .byte.b	$58	;|.X.XX...|
+    519  f65f		       50		      .byte.b	$50	;|.X.X....|
+    520  f660		       30		      .byte.b	$30	;|..XX....|
+    521  f661		       18		      .byte.b	$18	;|...XX...|
+    522  f662		       10		      .byte.b	$10	;|...X....|
+    523  f663		       18		      .byte.b	$18	;|...XX...|
+    503  f663					      REPEND
+    504  f664		       00		      .byte.b	$00	;|........|
+    505  f665		       00		      .byte.b	$00	;|........|
+    506  f666		       00		      .byte.b	$00	;|........|
+    507  f667		       00		      .byte.b	$00	;|........|
+    508  f668		       00		      .byte.b	$00	;|........|
+    509  f669		       00		      .byte.b	$00	;|........|
+    510  f66a		       00		      .byte.b	$00	;|........|
+    511  f66b		       80		      .byte.b	$80	;|X.......|
+    512  f66c		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f66d		       22		      .byte.b	$22	;|..X...X.|
+    514  f66e		       12		      .byte.b	$12	;|...X..X.|
+    515  f66f		       0c		      .byte.b	$0C	;|....XX..|
+    516  f670		       18		      .byte.b	$18	;|...XX...|
+    517  f671		       30		      .byte.b	$30	;|..XX....|
+    518  f672		       58		      .byte.b	$58	;|.X.XX...|
+    519  f673		       50		      .byte.b	$50	;|.X.X....|
+    520  f674		       30		      .byte.b	$30	;|..XX....|
+    521  f675		       18		      .byte.b	$18	;|...XX...|
+    522  f676		       10		      .byte.b	$10	;|...X....|
+    523  f677		       18		      .byte.b	$18	;|...XX...|
+    503  f677					      REPEND
+    504  f678		       00		      .byte.b	$00	;|........|
+    505  f679		       00		      .byte.b	$00	;|........|
+    506  f67a		       00		      .byte.b	$00	;|........|
+    507  f67b		       00		      .byte.b	$00	;|........|
+    508  f67c		       00		      .byte.b	$00	;|........|
+    509  f67d		       00		      .byte.b	$00	;|........|
+    510  f67e		       00		      .byte.b	$00	;|........|
+    511  f67f		       80		      .byte.b	$80	;|X.......|
+    512  f680		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f681		       22		      .byte.b	$22	;|..X...X.|
+    514  f682		       12		      .byte.b	$12	;|...X..X.|
+    515  f683		       0c		      .byte.b	$0C	;|....XX..|
+    516  f684		       18		      .byte.b	$18	;|...XX...|
+    517  f685		       30		      .byte.b	$30	;|..XX....|
+    518  f686		       58		      .byte.b	$58	;|.X.XX...|
+    519  f687		       50		      .byte.b	$50	;|.X.X....|
+    520  f688		       30		      .byte.b	$30	;|..XX....|
+    521  f689		       18		      .byte.b	$18	;|...XX...|
+    522  f68a		       10		      .byte.b	$10	;|...X....|
+    523  f68b		       18		      .byte.b	$18	;|...XX...|
+    503  f68b					      REPEND
+    504  f68c		       00		      .byte.b	$00	;|........|
+    505  f68d		       00		      .byte.b	$00	;|........|
+    506  f68e		       00		      .byte.b	$00	;|........|
+    507  f68f		       00		      .byte.b	$00	;|........|
+    508  f690		       00		      .byte.b	$00	;|........|
+    509  f691		       00		      .byte.b	$00	;|........|
+    510  f692		       00		      .byte.b	$00	;|........|
+    511  f693		       80		      .byte.b	$80	;|X.......|
+    512  f694		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f695		       22		      .byte.b	$22	;|..X...X.|
+    514  f696		       12		      .byte.b	$12	;|...X..X.|
+    515  f697		       0c		      .byte.b	$0C	;|....XX..|
+    516  f698		       18		      .byte.b	$18	;|...XX...|
+    517  f699		       30		      .byte.b	$30	;|..XX....|
+    518  f69a		       58		      .byte.b	$58	;|.X.XX...|
+    519  f69b		       50		      .byte.b	$50	;|.X.X....|
+    520  f69c		       30		      .byte.b	$30	;|..XX....|
+    521  f69d		       18		      .byte.b	$18	;|...XX...|
+    522  f69e		       10		      .byte.b	$10	;|...X....|
+    523  f69f		       18		      .byte.b	$18	;|...XX...|
+    503  f69f					      REPEND
+    504  f6a0		       00		      .byte.b	$00	;|........|
+    505  f6a1		       00		      .byte.b	$00	;|........|
+    506  f6a2		       00		      .byte.b	$00	;|........|
+    507  f6a3		       00		      .byte.b	$00	;|........|
+    508  f6a4		       00		      .byte.b	$00	;|........|
+    509  f6a5		       00		      .byte.b	$00	;|........|
+    510  f6a6		       00		      .byte.b	$00	;|........|
+    511  f6a7		       80		      .byte.b	$80	;|X.......|
+    512  f6a8		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f6a9		       22		      .byte.b	$22	;|..X...X.|
+    514  f6aa		       12		      .byte.b	$12	;|...X..X.|
+    515  f6ab		       0c		      .byte.b	$0C	;|....XX..|
+    516  f6ac		       18		      .byte.b	$18	;|...XX...|
+    517  f6ad		       30		      .byte.b	$30	;|..XX....|
+    518  f6ae		       58		      .byte.b	$58	;|.X.XX...|
+    519  f6af		       50		      .byte.b	$50	;|.X.X....|
+    520  f6b0		       30		      .byte.b	$30	;|..XX....|
+    521  f6b1		       18		      .byte.b	$18	;|...XX...|
+    522  f6b2		       10		      .byte.b	$10	;|...X....|
+    523  f6b3		       18		      .byte.b	$18	;|...XX...|
+    503  f6b3					      REPEND
+    504  f6b4		       00		      .byte.b	$00	;|........|
+    505  f6b5		       00		      .byte.b	$00	;|........|
+    506  f6b6		       00		      .byte.b	$00	;|........|
+    507  f6b7		       00		      .byte.b	$00	;|........|
+    508  f6b8		       00		      .byte.b	$00	;|........|
+    509  f6b9		       00		      .byte.b	$00	;|........|
+    510  f6ba		       00		      .byte.b	$00	;|........|
+    511  f6bb		       80		      .byte.b	$80	;|X.......|
+    512  f6bc		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f6bd		       22		      .byte.b	$22	;|..X...X.|
+    514  f6be		       12		      .byte.b	$12	;|...X..X.|
+    515  f6bf		       0c		      .byte.b	$0C	;|....XX..|
+    516  f6c0		       18		      .byte.b	$18	;|...XX...|
+    517  f6c1		       30		      .byte.b	$30	;|..XX....|
+    518  f6c2		       58		      .byte.b	$58	;|.X.XX...|
+    519  f6c3		       50		      .byte.b	$50	;|.X.X....|
+    520  f6c4		       30		      .byte.b	$30	;|..XX....|
+    521  f6c5		       18		      .byte.b	$18	;|...XX...|
+    522  f6c6		       10		      .byte.b	$10	;|...X....|
+    523  f6c7		       18		      .byte.b	$18	;|...XX...|
+    503  f6c7					      REPEND
+    504  f6c8		       00		      .byte.b	$00	;|........|
+    505  f6c9		       00		      .byte.b	$00	;|........|
+    506  f6ca		       00		      .byte.b	$00	;|........|
+    507  f6cb		       00		      .byte.b	$00	;|........|
+    508  f6cc		       00		      .byte.b	$00	;|........|
+    509  f6cd		       00		      .byte.b	$00	;|........|
+    510  f6ce		       00		      .byte.b	$00	;|........|
+    511  f6cf		       80		      .byte.b	$80	;|X.......|
+    512  f6d0		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f6d1		       22		      .byte.b	$22	;|..X...X.|
+    514  f6d2		       12		      .byte.b	$12	;|...X..X.|
+    515  f6d3		       0c		      .byte.b	$0C	;|....XX..|
+    516  f6d4		       18		      .byte.b	$18	;|...XX...|
+    517  f6d5		       30		      .byte.b	$30	;|..XX....|
+    518  f6d6		       58		      .byte.b	$58	;|.X.XX...|
+    519  f6d7		       50		      .byte.b	$50	;|.X.X....|
+    520  f6d8		       30		      .byte.b	$30	;|..XX....|
+    521  f6d9		       18		      .byte.b	$18	;|...XX...|
+    522  f6da		       10		      .byte.b	$10	;|...X....|
+    523  f6db		       18		      .byte.b	$18	;|...XX...|
+    503  f6db					      REPEND
+    504  f6dc		       00		      .byte.b	$00	;|........|
+    505  f6dd		       00		      .byte.b	$00	;|........|
+    506  f6de		       00		      .byte.b	$00	;|........|
+    507  f6df		       00		      .byte.b	$00	;|........|
+    508  f6e0		       00		      .byte.b	$00	;|........|
+    509  f6e1		       00		      .byte.b	$00	;|........|
+    510  f6e2		       00		      .byte.b	$00	;|........|
+    511  f6e3		       80		      .byte.b	$80	;|X.......|
+    512  f6e4		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f6e5		       22		      .byte.b	$22	;|..X...X.|
+    514  f6e6		       12		      .byte.b	$12	;|...X..X.|
+    515  f6e7		       0c		      .byte.b	$0C	;|....XX..|
+    516  f6e8		       18		      .byte.b	$18	;|...XX...|
+    517  f6e9		       30		      .byte.b	$30	;|..XX....|
+    518  f6ea		       58		      .byte.b	$58	;|.X.XX...|
+    519  f6eb		       50		      .byte.b	$50	;|.X.X....|
+    520  f6ec		       30		      .byte.b	$30	;|..XX....|
+    521  f6ed		       18		      .byte.b	$18	;|...XX...|
+    522  f6ee		       10		      .byte.b	$10	;|...X....|
+    523  f6ef		       18		      .byte.b	$18	;|...XX...|
+    503  f6ef					      REPEND
+    504  f6f0		       00		      .byte.b	$00	;|........|
+    505  f6f1		       00		      .byte.b	$00	;|........|
+    506  f6f2		       00		      .byte.b	$00	;|........|
+    507  f6f3		       00		      .byte.b	$00	;|........|
+    508  f6f4		       00		      .byte.b	$00	;|........|
+    509  f6f5		       00		      .byte.b	$00	;|........|
+    510  f6f6		       00		      .byte.b	$00	;|........|
+    511  f6f7		       80		      .byte.b	$80	;|X.......|
+    512  f6f8		       c3		      .byte.b	$C3	;|XX....XX|
+    513  f6f9		       22		      .byte.b	$22	;|..X...X.|
+    514  f6fa		       12		      .byte.b	$12	;|...X..X.|
+    515  f6fb		       0c		      .byte.b	$0C	;|....XX..|
+    516  f6fc		       18		      .byte.b	$18	;|...XX...|
+    517  f6fd		       30		      .byte.b	$30	;|..XX....|
+    518  f6fe		       58		      .byte.b	$58	;|.X.XX...|
+    519  f6ff		       50		      .byte.b	$50	;|.X.X....|
+    520  f700		       30		      .byte.b	$30	;|..XX....|
+    521  f701		       18		      .byte.b	$18	;|...XX...|
+    522  f702		       10		      .byte.b	$10	;|...X....|
+    523  f703		       18		      .byte.b	$18	;|...XX...|
+    524  f704					      REPEND
+    525  f704
+    526  f70e					      org	AnimationFrame8 + KERNEL_HEIGHT - 2, 0
+    527  f70e				   HorizPosP0
+    528  f70e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    529  f712		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    530  f716		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    531  f71a		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    532  f71e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    533  f722		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    534  f726		       70 70 20 00	      .byte.b	HMOVE_L7,HMOVE_L7,HMOVE_L2,HMOVE_0
+    535  f72a		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    536  f72e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    537  f732		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    538  f736		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    539  f73a		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    540  f73e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    541  f742		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    542  f746		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    543  f74a		       00 00 00 80	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_R8
+    544  f74e		       80 80 80 00	      .byte.b	HMOVE_R8,HMOVE_R8,HMOVE_R8,HMOVE_0
+    545  f752		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    546  f756		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    547  f75a		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    548  f75e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    549  f762		       70 70 20 00	      .byte.b	HMOVE_L7,HMOVE_L7,HMOVE_L2,HMOVE_0
+    550  f766		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    551  f76a		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    552  f76e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    553  f772		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    554  f776		       70 70 20 00	      .byte.b	HMOVE_L7,HMOVE_L7,HMOVE_L2,HMOVE_0
+    555  f77a		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    556  f77e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    557  f782		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    558  f786		       00 00 00 80	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_R8
+    559  f78a		       80 80 80 00	      .byte.b	HMOVE_R8,HMOVE_R8,HMOVE_R8,HMOVE_0
+    560  f78e		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    561  f792		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    562  f796		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    563  f79a		       00 00 c0 80	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_R4,HMOVE_R8
+    564  f79e		       80 80 80 00	      .byte.b	HMOVE_R8,HMOVE_R8,HMOVE_R8,HMOVE_0
+    565  f7a2		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    566  f7a6		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    567  f7aa		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    568  f7ae		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    569  f7b2		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    570  f7b6		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    571  f7ba		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    572  f7be		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    573  f7c2		       00 60 60 60	      .byte.b	HMOVE_0,HMOVE_L6,HMOVE_L6,HMOVE_L6
+    574  f7c6		       60 60 70 00	      .byte.b	HMOVE_L6,HMOVE_L6,HMOVE_L7,HMOVE_0
+    575  f7ca		       00 00 00 	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0
+    576  f7cd
+    577  f7cd				   HorizPosP1
+    578  f7cd		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    579  f7d1		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    580  f7d5		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    581  f7d9		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    582  f7dd		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    583  f7e1		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    584  f7e5		       00 b0 b0 00	      .byte.b	HMOVE_0,HMOVE_R5,HMOVE_R5,HMOVE_0
+    585  f7e9		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    586  f7ed		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    587  f7f1		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    588  f7f5		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    589  f7f9		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    590  f7fd		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    591  f801		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    592  f805		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    593  f809		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    594  f80d		       00 00 50 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_L5,HMOVE_0
+    595  f811		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    596  f815		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    597  f819		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    598  f81d		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    599  f821		       00 00 b0 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_R5,HMOVE_0
+    600  f825		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    601  f829		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    602  f82d		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    603  f831		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    604  f835		       00 00 50 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_L5,HMOVE_0
+    605  f839		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    606  f83d		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    607  f841		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    608  f845		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    609  f849		       00 00 b0 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_R5,HMOVE_0
+    610  f84d		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    611  f851		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    612  f855		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    613  f859		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    614  f85d		       00 00 50 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_L5,HMOVE_0
+    615  f861		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    616  f865		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    617  f869		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    618  f86d		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    619  f871		       00 00 50 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_L5,HMOVE_0
+    620  f875		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    621  f879		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    622  f87d		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    623  f881		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    624  f885		       00 00 00 00	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0,HMOVE_0
+    625  f889		       00 00 00 	      .byte.b	HMOVE_0,HMOVE_0,HMOVE_0
+    626  f88c
+    627  f88c				   CopiesOfGRP0
+    628  f88c					      REPEAT	67
+    629  f88c		       00		      .byte.b	ONE_COPY
+    628  f88c					      REPEND
+    629  f88d		       00		      .byte.b	ONE_COPY
+    628  f88d					      REPEND
+    629  f88e		       00		      .byte.b	ONE_COPY
+    628  f88e					      REPEND
+    629  f88f		       00		      .byte.b	ONE_COPY
+    628  f88f					      REPEND
+    629  f890		       00		      .byte.b	ONE_COPY
+    628  f890					      REPEND
+    629  f891		       00		      .byte.b	ONE_COPY
+    628  f891					      REPEND
+    629  f892		       00		      .byte.b	ONE_COPY
+    628  f892					      REPEND
+    629  f893		       00		      .byte.b	ONE_COPY
+    628  f893					      REPEND
+    629  f894		       00		      .byte.b	ONE_COPY
+    628  f894					      REPEND
+    629  f895		       00		      .byte.b	ONE_COPY
+    628  f895					      REPEND
+    629  f896		       00		      .byte.b	ONE_COPY
+    628  f896					      REPEND
+    629  f897		       00		      .byte.b	ONE_COPY
+    628  f897					      REPEND
+    629  f898		       00		      .byte.b	ONE_COPY
+    628  f898					      REPEND
+    629  f899		       00		      .byte.b	ONE_COPY
+    628  f899					      REPEND
+    629  f89a		       00		      .byte.b	ONE_COPY
+    628  f89a					      REPEND
+    629  f89b		       00		      .byte.b	ONE_COPY
+    628  f89b					      REPEND
+    629  f89c		       00		      .byte.b	ONE_COPY
+    628  f89c					      REPEND
+    629  f89d		       00		      .byte.b	ONE_COPY
+    628  f89d					      REPEND
+    629  f89e		       00		      .byte.b	ONE_COPY
+    628  f89e					      REPEND
+    629  f89f		       00		      .byte.b	ONE_COPY
+    628  f89f					      REPEND
+    629  f8a0		       00		      .byte.b	ONE_COPY
+    628  f8a0					      REPEND
+    629  f8a1		       00		      .byte.b	ONE_COPY
+    628  f8a1					      REPEND
+    629  f8a2		       00		      .byte.b	ONE_COPY
+    628  f8a2					      REPEND
+    629  f8a3		       00		      .byte.b	ONE_COPY
+    628  f8a3					      REPEND
+    629  f8a4		       00		      .byte.b	ONE_COPY
+    628  f8a4					      REPEND
+    629  f8a5		       00		      .byte.b	ONE_COPY
+    628  f8a5					      REPEND
+    629  f8a6		       00		      .byte.b	ONE_COPY
+    628  f8a6					      REPEND
+    629  f8a7		       00		      .byte.b	ONE_COPY
+    628  f8a7					      REPEND
+    629  f8a8		       00		      .byte.b	ONE_COPY
+    628  f8a8					      REPEND
+    629  f8a9		       00		      .byte.b	ONE_COPY
+    628  f8a9					      REPEND
+    629  f8aa		       00		      .byte.b	ONE_COPY
+    628  f8aa					      REPEND
+    629  f8ab		       00		      .byte.b	ONE_COPY
+    628  f8ab					      REPEND
+    629  f8ac		       00		      .byte.b	ONE_COPY
+    628  f8ac					      REPEND
+    629  f8ad		       00		      .byte.b	ONE_COPY
+    628  f8ad					      REPEND
+    629  f8ae		       00		      .byte.b	ONE_COPY
+    628  f8ae					      REPEND
+    629  f8af		       00		      .byte.b	ONE_COPY
+    628  f8af					      REPEND
+    629  f8b0		       00		      .byte.b	ONE_COPY
+    628  f8b0					      REPEND
+    629  f8b1		       00		      .byte.b	ONE_COPY
+    628  f8b1					      REPEND
+    629  f8b2		       00		      .byte.b	ONE_COPY
+    628  f8b2					      REPEND
+    629  f8b3		       00		      .byte.b	ONE_COPY
+    628  f8b3					      REPEND
+    629  f8b4		       00		      .byte.b	ONE_COPY
+    628  f8b4					      REPEND
+    629  f8b5		       00		      .byte.b	ONE_COPY
+    628  f8b5					      REPEND
+    629  f8b6		       00		      .byte.b	ONE_COPY
+    628  f8b6					      REPEND
+    629  f8b7		       00		      .byte.b	ONE_COPY
+    628  f8b7					      REPEND
+    629  f8b8		       00		      .byte.b	ONE_COPY
+    628  f8b8					      REPEND
+    629  f8b9		       00		      .byte.b	ONE_COPY
+    628  f8b9					      REPEND
+    629  f8ba		       00		      .byte.b	ONE_COPY
+    628  f8ba					      REPEND
+    629  f8bb		       00		      .byte.b	ONE_COPY
+    628  f8bb					      REPEND
+    629  f8bc		       00		      .byte.b	ONE_COPY
+    628  f8bc					      REPEND
+    629  f8bd		       00		      .byte.b	ONE_COPY
+    628  f8bd					      REPEND
+    629  f8be		       00		      .byte.b	ONE_COPY
+    628  f8be					      REPEND
+    629  f8bf		       00		      .byte.b	ONE_COPY
+    628  f8bf					      REPEND
+    629  f8c0		       00		      .byte.b	ONE_COPY
+    628  f8c0					      REPEND
+    629  f8c1		       00		      .byte.b	ONE_COPY
+    628  f8c1					      REPEND
+    629  f8c2		       00		      .byte.b	ONE_COPY
+    628  f8c2					      REPEND
+    629  f8c3		       00		      .byte.b	ONE_COPY
+    628  f8c3					      REPEND
+    629  f8c4		       00		      .byte.b	ONE_COPY
+    628  f8c4					      REPEND
+    629  f8c5		       00		      .byte.b	ONE_COPY
+    628  f8c5					      REPEND
+    629  f8c6		       00		      .byte.b	ONE_COPY
+    628  f8c6					      REPEND
+    629  f8c7		       00		      .byte.b	ONE_COPY
+    628  f8c7					      REPEND
+    629  f8c8		       00		      .byte.b	ONE_COPY
+    628  f8c8					      REPEND
+    629  f8c9		       00		      .byte.b	ONE_COPY
+    628  f8c9					      REPEND
+    629  f8ca		       00		      .byte.b	ONE_COPY
+    628  f8ca					      REPEND
+    629  f8cb		       00		      .byte.b	ONE_COPY
+    628  f8cb					      REPEND
+    629  f8cc		       00		      .byte.b	ONE_COPY
+    628  f8cc					      REPEND
+    629  f8cd		       00		      .byte.b	ONE_COPY
+    628  f8cd					      REPEND
+    629  f8ce		       00		      .byte.b	ONE_COPY
+    630  f8cf					      REPEND
+    631  f8cf
+    632  f8cf					      REPEAT	15
+    633  f8cf		       02		      .byte.b	TWO_MED_COPIES
+    632  f8cf					      REPEND
+    633  f8d0		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d0					      REPEND
+    633  f8d1		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d1					      REPEND
+    633  f8d2		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d2					      REPEND
+    633  f8d3		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d3					      REPEND
+    633  f8d4		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d4					      REPEND
+    633  f8d5		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d5					      REPEND
+    633  f8d6		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d6					      REPEND
+    633  f8d7		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d7					      REPEND
+    633  f8d8		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d8					      REPEND
+    633  f8d9		       02		      .byte.b	TWO_MED_COPIES
+    632  f8d9					      REPEND
+    633  f8da		       02		      .byte.b	TWO_MED_COPIES
+    632  f8da					      REPEND
+    633  f8db		       02		      .byte.b	TWO_MED_COPIES
+    632  f8db					      REPEND
+    633  f8dc		       02		      .byte.b	TWO_MED_COPIES
+    632  f8dc					      REPEND
+    633  f8dd		       02		      .byte.b	TWO_MED_COPIES
+    634  f8de					      REPEND
+    635  f8de
+    636  f8de					      REPEAT	5
+    637  f8de		       00		      .byte.b	ONE_COPY
+    636  f8de					      REPEND
+    637  f8df		       00		      .byte.b	ONE_COPY
+    636  f8df					      REPEND
+    637  f8e0		       00		      .byte.b	ONE_COPY
+    636  f8e0					      REPEND
+    637  f8e1		       00		      .byte.b	ONE_COPY
+    636  f8e1					      REPEND
+    637  f8e2		       00		      .byte.b	ONE_COPY
+    638  f8e3					      REPEND
+    639  f8e3
+    640  f8e3					      REPEAT	15
+    641  f8e3		       01		      .byte.b	TWO_COPIES
+    640  f8e3					      REPEND
+    641  f8e4		       01		      .byte.b	TWO_COPIES
+    640  f8e4					      REPEND
+    641  f8e5		       01		      .byte.b	TWO_COPIES
+    640  f8e5					      REPEND
+    641  f8e6		       01		      .byte.b	TWO_COPIES
+    640  f8e6					      REPEND
+    641  f8e7		       01		      .byte.b	TWO_COPIES
+    640  f8e7					      REPEND
+    641  f8e8		       01		      .byte.b	TWO_COPIES
+    640  f8e8					      REPEND
+    641  f8e9		       01		      .byte.b	TWO_COPIES
+    640  f8e9					      REPEND
+    641  f8ea		       01		      .byte.b	TWO_COPIES
+    640  f8ea					      REPEND
+    641  f8eb		       01		      .byte.b	TWO_COPIES
+    640  f8eb					      REPEND
+    641  f8ec		       01		      .byte.b	TWO_COPIES
+    640  f8ec					      REPEND
+    641  f8ed		       01		      .byte.b	TWO_COPIES
+    640  f8ed					      REPEND
+    641  f8ee		       01		      .byte.b	TWO_COPIES
+    640  f8ee					      REPEND
+    641  f8ef		       01		      .byte.b	TWO_COPIES
+    640  f8ef					      REPEND
+    641  f8f0		       01		      .byte.b	TWO_COPIES
+    640  f8f0					      REPEND
+    641  f8f1		       01		      .byte.b	TWO_COPIES
+    642  f8f2					      REPEND
+    643  f8f2
+    644  f8f2					      REPEAT	25
+    645  f8f2		       00		      .byte.b	ONE_COPY
+    644  f8f2					      REPEND
+    645  f8f3		       00		      .byte.b	ONE_COPY
+    644  f8f3					      REPEND
+    645  f8f4		       00		      .byte.b	ONE_COPY
+    644  f8f4					      REPEND
+    645  f8f5		       00		      .byte.b	ONE_COPY
+    644  f8f5					      REPEND
+    645  f8f6		       00		      .byte.b	ONE_COPY
+    644  f8f6					      REPEND
+    645  f8f7		       00		      .byte.b	ONE_COPY
+    644  f8f7					      REPEND
+    645  f8f8		       00		      .byte.b	ONE_COPY
+    644  f8f8					      REPEND
+    645  f8f9		       00		      .byte.b	ONE_COPY
+    644  f8f9					      REPEND
+    645  f8fa		       00		      .byte.b	ONE_COPY
+    644  f8fa					      REPEND
+    645  f8fb		       00		      .byte.b	ONE_COPY
+    644  f8fb					      REPEND
+    645  f8fc		       00		      .byte.b	ONE_COPY
+    644  f8fc					      REPEND
+    645  f8fd		       00		      .byte.b	ONE_COPY
+    644  f8fd					      REPEND
+    645  f8fe		       00		      .byte.b	ONE_COPY
+    644  f8fe					      REPEND
+    645  f8ff		       00		      .byte.b	ONE_COPY
+    644  f8ff					      REPEND
+    645  f900		       00		      .byte.b	ONE_COPY
+    644  f900					      REPEND
+    645  f901		       00		      .byte.b	ONE_COPY
+    644  f901					      REPEND
+    645  f902		       00		      .byte.b	ONE_COPY
+    644  f902					      REPEND
+    645  f903		       00		      .byte.b	ONE_COPY
+    644  f903					      REPEND
+    645  f904		       00		      .byte.b	ONE_COPY
+    644  f904					      REPEND
+    645  f905		       00		      .byte.b	ONE_COPY
+    644  f905					      REPEND
+    645  f906		       00		      .byte.b	ONE_COPY
+    644  f906					      REPEND
+    645  f907		       00		      .byte.b	ONE_COPY
+    644  f907					      REPEND
+    645  f908		       00		      .byte.b	ONE_COPY
+    644  f908					      REPEND
+    645  f909		       00		      .byte.b	ONE_COPY
+    644  f909					      REPEND
+    645  f90a		       00		      .byte.b	ONE_COPY
+    646  f90b					      REPEND
+    647  f90b
+    648  f90b					      REPEAT	15
+    649  f90b		       02		      .byte.b	TWO_MED_COPIES
+    648  f90b					      REPEND
+    649  f90c		       02		      .byte.b	TWO_MED_COPIES
+    648  f90c					      REPEND
+    649  f90d		       02		      .byte.b	TWO_MED_COPIES
+    648  f90d					      REPEND
+    649  f90e		       02		      .byte.b	TWO_MED_COPIES
+    648  f90e					      REPEND
+    649  f90f		       02		      .byte.b	TWO_MED_COPIES
+    648  f90f					      REPEND
+    649  f910		       02		      .byte.b	TWO_MED_COPIES
+    648  f910					      REPEND
+    649  f911		       02		      .byte.b	TWO_MED_COPIES
+    648  f911					      REPEND
+    649  f912		       02		      .byte.b	TWO_MED_COPIES
+    648  f912					      REPEND
+    649  f913		       02		      .byte.b	TWO_MED_COPIES
+    648  f913					      REPEND
+    649  f914		       02		      .byte.b	TWO_MED_COPIES
+    648  f914					      REPEND
+    649  f915		       02		      .byte.b	TWO_MED_COPIES
+    648  f915					      REPEND
+    649  f916		       02		      .byte.b	TWO_MED_COPIES
+    648  f916					      REPEND
+    649  f917		       02		      .byte.b	TWO_MED_COPIES
+    648  f917					      REPEND
+    649  f918		       02		      .byte.b	TWO_MED_COPIES
+    648  f918					      REPEND
+    649  f919		       02		      .byte.b	TWO_MED_COPIES
+    650  f91a					      REPEND
+    651  f91a
+    652  f91a					      REPEAT	23
+    653  f91a		       00		      .byte.b	ONE_COPY
+    652  f91a					      REPEND
+    653  f91b		       00		      .byte.b	ONE_COPY
+    652  f91b					      REPEND
+    653  f91c		       00		      .byte.b	ONE_COPY
+    652  f91c					      REPEND
+    653  f91d		       00		      .byte.b	ONE_COPY
+    652  f91d					      REPEND
+    653  f91e		       00		      .byte.b	ONE_COPY
+    652  f91e					      REPEND
+    653  f91f		       00		      .byte.b	ONE_COPY
+    652  f91f					      REPEND
+    653  f920		       00		      .byte.b	ONE_COPY
+    652  f920					      REPEND
+    653  f921		       00		      .byte.b	ONE_COPY
+    652  f921					      REPEND
+    653  f922		       00		      .byte.b	ONE_COPY
+    652  f922					      REPEND
+    653  f923		       00		      .byte.b	ONE_COPY
+    652  f923					      REPEND
+    653  f924		       00		      .byte.b	ONE_COPY
+    652  f924					      REPEND
+    653  f925		       00		      .byte.b	ONE_COPY
+    652  f925					      REPEND
+    653  f926		       00		      .byte.b	ONE_COPY
+    652  f926					      REPEND
+    653  f927		       00		      .byte.b	ONE_COPY
+    652  f927					      REPEND
+    653  f928		       00		      .byte.b	ONE_COPY
+    652  f928					      REPEND
+    653  f929		       00		      .byte.b	ONE_COPY
+    652  f929					      REPEND
+    653  f92a		       00		      .byte.b	ONE_COPY
+    652  f92a					      REPEND
+    653  f92b		       00		      .byte.b	ONE_COPY
+    652  f92b					      REPEND
+    653  f92c		       00		      .byte.b	ONE_COPY
+    652  f92c					      REPEND
+    653  f92d		       00		      .byte.b	ONE_COPY
+    652  f92d					      REPEND
+    653  f92e		       00		      .byte.b	ONE_COPY
+    652  f92e					      REPEND
+    653  f92f		       00		      .byte.b	ONE_COPY
+    652  f92f					      REPEND
+    653  f930		       00		      .byte.b	ONE_COPY
+    654  f931					      REPEND
+    655  f931
+    656  f931					      REPEAT	18
+    657  f931		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f931					      REPEND
+    657  f932		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f932					      REPEND
+    657  f933		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f933					      REPEND
+    657  f934		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f934					      REPEND
+    657  f935		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f935					      REPEND
+    657  f936		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f936					      REPEND
+    657  f937		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f937					      REPEND
+    657  f938		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f938					      REPEND
+    657  f939		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f939					      REPEND
+    657  f93a		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f93a					      REPEND
+    657  f93b		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f93b					      REPEND
+    657  f93c		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f93c					      REPEND
+    657  f93d		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f93d					      REPEND
+    657  f93e		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f93e					      REPEND
+    657  f93f		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f93f					      REPEND
+    657  f940		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f940					      REPEND
+    657  f941		       04		      .byte.b	TWO_WIDE_COPIES
+    656  f941					      REPEND
+    657  f942		       04		      .byte.b	TWO_WIDE_COPIES
+    658  f943					      REPEND
+    659  f943
+    660  f943					      REPEAT	8
+    661  f943		       00		      .byte.b	ONE_COPY
+    660  f943					      REPEND
+    661  f944		       00		      .byte.b	ONE_COPY
+    660  f944					      REPEND
+    661  f945		       00		      .byte.b	ONE_COPY
+    660  f945					      REPEND
+    661  f946		       00		      .byte.b	ONE_COPY
+    660  f946					      REPEND
+    661  f947		       00		      .byte.b	ONE_COPY
+    660  f947					      REPEND
+    661  f948		       00		      .byte.b	ONE_COPY
+    660  f948					      REPEND
+    661  f949		       00		      .byte.b	ONE_COPY
+    660  f949					      REPEND
+    661  f94a		       00		      .byte.b	ONE_COPY
+    662  f94b					      REPEND
+    663  f94b
+    664  f94b				   CopiesOfGRP1
+    665  f94b					      REPEAT	26
+    666  f94b		       00		      .byte.b	ONE_COPY
+    665  f94b					      REPEND
+    666  f94c		       00		      .byte.b	ONE_COPY
+    665  f94c					      REPEND
+    666  f94d		       00		      .byte.b	ONE_COPY
+    665  f94d					      REPEND
+    666  f94e		       00		      .byte.b	ONE_COPY
+    665  f94e					      REPEND
+    666  f94f		       00		      .byte.b	ONE_COPY
+    665  f94f					      REPEND
+    666  f950		       00		      .byte.b	ONE_COPY
+    665  f950					      REPEND
+    666  f951		       00		      .byte.b	ONE_COPY
+    665  f951					      REPEND
+    666  f952		       00		      .byte.b	ONE_COPY
+    665  f952					      REPEND
+    666  f953		       00		      .byte.b	ONE_COPY
+    665  f953					      REPEND
+    666  f954		       00		      .byte.b	ONE_COPY
+    665  f954					      REPEND
+    666  f955		       00		      .byte.b	ONE_COPY
+    665  f955					      REPEND
+    666  f956		       00		      .byte.b	ONE_COPY
+    665  f956					      REPEND
+    666  f957		       00		      .byte.b	ONE_COPY
+    665  f957					      REPEND
+    666  f958		       00		      .byte.b	ONE_COPY
+    665  f958					      REPEND
+    666  f959		       00		      .byte.b	ONE_COPY
+    665  f959					      REPEND
+    666  f95a		       00		      .byte.b	ONE_COPY
+    665  f95a					      REPEND
+    666  f95b		       00		      .byte.b	ONE_COPY
+    665  f95b					      REPEND
+    666  f95c		       00		      .byte.b	ONE_COPY
+    665  f95c					      REPEND
+    666  f95d		       00		      .byte.b	ONE_COPY
+    665  f95d					      REPEND
+    666  f95e		       00		      .byte.b	ONE_COPY
+    665  f95e					      REPEND
+    666  f95f		       00		      .byte.b	ONE_COPY
+    665  f95f					      REPEND
+    666  f960		       00		      .byte.b	ONE_COPY
+    665  f960					      REPEND
+    666  f961		       00		      .byte.b	ONE_COPY
+    665  f961					      REPEND
+    666  f962		       00		      .byte.b	ONE_COPY
+    665  f962					      REPEND
+    666  f963		       00		      .byte.b	ONE_COPY
+    665  f963					      REPEND
+    666  f964		       00		      .byte.b	ONE_COPY
+    667  f965					      REPEND
+    668  f965
+    669  f965					      REPEAT	16
+    670  f965		       02		      .byte.b	TWO_MED_COPIES
+    669  f965					      REPEND
+    670  f966		       02		      .byte.b	TWO_MED_COPIES
+    669  f966					      REPEND
+    670  f967		       02		      .byte.b	TWO_MED_COPIES
+    669  f967					      REPEND
+    670  f968		       02		      .byte.b	TWO_MED_COPIES
+    669  f968					      REPEND
+    670  f969		       02		      .byte.b	TWO_MED_COPIES
+    669  f969					      REPEND
+    670  f96a		       02		      .byte.b	TWO_MED_COPIES
+    669  f96a					      REPEND
+    670  f96b		       02		      .byte.b	TWO_MED_COPIES
+    669  f96b					      REPEND
+    670  f96c		       02		      .byte.b	TWO_MED_COPIES
+    669  f96c					      REPEND
+    670  f96d		       02		      .byte.b	TWO_MED_COPIES
+    669  f96d					      REPEND
+    670  f96e		       02		      .byte.b	TWO_MED_COPIES
+    669  f96e					      REPEND
+    670  f96f		       02		      .byte.b	TWO_MED_COPIES
+    669  f96f					      REPEND
+    670  f970		       02		      .byte.b	TWO_MED_COPIES
+    669  f970					      REPEND
+    670  f971		       02		      .byte.b	TWO_MED_COPIES
+    669  f971					      REPEND
+    670  f972		       02		      .byte.b	TWO_MED_COPIES
+    669  f972					      REPEND
+    670  f973		       02		      .byte.b	TWO_MED_COPIES
+    669  f973					      REPEND
+    670  f974		       02		      .byte.b	TWO_MED_COPIES
+    671  f975					      REPEND
+    672  f975
+    673  f975					      REPEAT	64
+    674  f975		       00		      .byte.b	ONE_COPY
+    673  f975					      REPEND
+    674  f976		       00		      .byte.b	ONE_COPY
+    673  f976					      REPEND
+    674  f977		       00		      .byte.b	ONE_COPY
+    673  f977					      REPEND
+    674  f978		       00		      .byte.b	ONE_COPY
+    673  f978					      REPEND
+    674  f979		       00		      .byte.b	ONE_COPY
+    673  f979					      REPEND
+    674  f97a		       00		      .byte.b	ONE_COPY
+    673  f97a					      REPEND
+    674  f97b		       00		      .byte.b	ONE_COPY
+    673  f97b					      REPEND
+    674  f97c		       00		      .byte.b	ONE_COPY
+    673  f97c					      REPEND
+    674  f97d		       00		      .byte.b	ONE_COPY
+    673  f97d					      REPEND
+    674  f97e		       00		      .byte.b	ONE_COPY
+    673  f97e					      REPEND
+    674  f97f		       00		      .byte.b	ONE_COPY
+    673  f97f					      REPEND
+    674  f980		       00		      .byte.b	ONE_COPY
+    673  f980					      REPEND
+    674  f981		       00		      .byte.b	ONE_COPY
+    673  f981					      REPEND
+    674  f982		       00		      .byte.b	ONE_COPY
+    673  f982					      REPEND
+    674  f983		       00		      .byte.b	ONE_COPY
+    673  f983					      REPEND
+    674  f984		       00		      .byte.b	ONE_COPY
+    673  f984					      REPEND
+    674  f985		       00		      .byte.b	ONE_COPY
+    673  f985					      REPEND
+    674  f986		       00		      .byte.b	ONE_COPY
+    673  f986					      REPEND
+    674  f987		       00		      .byte.b	ONE_COPY
+    673  f987					      REPEND
+    674  f988		       00		      .byte.b	ONE_COPY
+    673  f988					      REPEND
+    674  f989		       00		      .byte.b	ONE_COPY
+    673  f989					      REPEND
+    674  f98a		       00		      .byte.b	ONE_COPY
+    673  f98a					      REPEND
+    674  f98b		       00		      .byte.b	ONE_COPY
+    673  f98b					      REPEND
+    674  f98c		       00		      .byte.b	ONE_COPY
+    673  f98c					      REPEND
+    674  f98d		       00		      .byte.b	ONE_COPY
+    673  f98d					      REPEND
+    674  f98e		       00		      .byte.b	ONE_COPY
+    673  f98e					      REPEND
+    674  f98f		       00		      .byte.b	ONE_COPY
+    673  f98f					      REPEND
+    674  f990		       00		      .byte.b	ONE_COPY
+    673  f990					      REPEND
+    674  f991		       00		      .byte.b	ONE_COPY
+    673  f991					      REPEND
+    674  f992		       00		      .byte.b	ONE_COPY
+    673  f992					      REPEND
+    674  f993		       00		      .byte.b	ONE_COPY
+    673  f993					      REPEND
+    674  f994		       00		      .byte.b	ONE_COPY
+    673  f994					      REPEND
+    674  f995		       00		      .byte.b	ONE_COPY
+    673  f995					      REPEND
+    674  f996		       00		      .byte.b	ONE_COPY
+    673  f996					      REPEND
+    674  f997		       00		      .byte.b	ONE_COPY
+    673  f997					      REPEND
+    674  f998		       00		      .byte.b	ONE_COPY
+    673  f998					      REPEND
+    674  f999		       00		      .byte.b	ONE_COPY
+    673  f999					      REPEND
+    674  f99a		       00		      .byte.b	ONE_COPY
+    673  f99a					      REPEND
+    674  f99b		       00		      .byte.b	ONE_COPY
+    673  f99b					      REPEND
+    674  f99c		       00		      .byte.b	ONE_COPY
+    673  f99c					      REPEND
+    674  f99d		       00		      .byte.b	ONE_COPY
+    673  f99d					      REPEND
+    674  f99e		       00		      .byte.b	ONE_COPY
+    673  f99e					      REPEND
+    674  f99f		       00		      .byte.b	ONE_COPY
+    673  f99f					      REPEND
+    674  f9a0		       00		      .byte.b	ONE_COPY
+    673  f9a0					      REPEND
+    674  f9a1		       00		      .byte.b	ONE_COPY
+    673  f9a1					      REPEND
+    674  f9a2		       00		      .byte.b	ONE_COPY
+    673  f9a2					      REPEND
+    674  f9a3		       00		      .byte.b	ONE_COPY
+    673  f9a3					      REPEND
+    674  f9a4		       00		      .byte.b	ONE_COPY
+    673  f9a4					      REPEND
+    674  f9a5		       00		      .byte.b	ONE_COPY
+    673  f9a5					      REPEND
+    674  f9a6		       00		      .byte.b	ONE_COPY
+    673  f9a6					      REPEND
+    674  f9a7		       00		      .byte.b	ONE_COPY
+    673  f9a7					      REPEND
+    674  f9a8		       00		      .byte.b	ONE_COPY
+    673  f9a8					      REPEND
+    674  f9a9		       00		      .byte.b	ONE_COPY
+    673  f9a9					      REPEND
+    674  f9aa		       00		      .byte.b	ONE_COPY
+    673  f9aa					      REPEND
+    674  f9ab		       00		      .byte.b	ONE_COPY
+    673  f9ab					      REPEND
+    674  f9ac		       00		      .byte.b	ONE_COPY
+    673  f9ac					      REPEND
+    674  f9ad		       00		      .byte.b	ONE_COPY
+    673  f9ad					      REPEND
+    674  f9ae		       00		      .byte.b	ONE_COPY
+    673  f9ae					      REPEND
+    674  f9af		       00		      .byte.b	ONE_COPY
+    673  f9af					      REPEND
+    674  f9b0		       00		      .byte.b	ONE_COPY
+    673  f9b0					      REPEND
+    674  f9b1		       00		      .byte.b	ONE_COPY
+    673  f9b1					      REPEND
+    674  f9b2		       00		      .byte.b	ONE_COPY
+    673  f9b2					      REPEND
+    674  f9b3		       00		      .byte.b	ONE_COPY
+    673  f9b3					      REPEND
+    674  f9b4		       00		      .byte.b	ONE_COPY
+    675  f9b5					      REPEND
+    676  f9b5
+    677  f9b5					      REPEAT	16
+    678  f9b5		       02		      .byte.b	TWO_MED_COPIES
+    677  f9b5					      REPEND
+    678  f9b6		       02		      .byte.b	TWO_MED_COPIES
+    677  f9b6					      REPEND
+    678  f9b7		       02		      .byte.b	TWO_MED_COPIES
+    677  f9b7					      REPEND
+    678  f9b8		       02		      .byte.b	TWO_MED_COPIES
+    677  f9b8					      REPEND
+    678  f9b9		       02		      .byte.b	TWO_MED_COPIES
+    677  f9b9					      REPEND
+    678  f9ba		       02		      .byte.b	TWO_MED_COPIES
+    677  f9ba					      REPEND
+    678  f9bb		       02		      .byte.b	TWO_MED_COPIES
+    677  f9bb					      REPEND
+    678  f9bc		       02		      .byte.b	TWO_MED_COPIES
+    677  f9bc					      REPEND
+    678  f9bd		       02		      .byte.b	TWO_MED_COPIES
+    677  f9bd					      REPEND
+    678  f9be		       02		      .byte.b	TWO_MED_COPIES
+    677  f9be					      REPEND
+    678  f9bf		       02		      .byte.b	TWO_MED_COPIES
+    677  f9bf					      REPEND
+    678  f9c0		       02		      .byte.b	TWO_MED_COPIES
+    677  f9c0					      REPEND
+    678  f9c1		       02		      .byte.b	TWO_MED_COPIES
+    677  f9c1					      REPEND
+    678  f9c2		       02		      .byte.b	TWO_MED_COPIES
+    677  f9c2					      REPEND
+    678  f9c3		       02		      .byte.b	TWO_MED_COPIES
+    677  f9c3					      REPEND
+    678  f9c4		       02		      .byte.b	TWO_MED_COPIES
+    679  f9c5					      REPEND
+    680  f9c5
+    681  f9c5					      REPEAT	70
+    682  f9c5		       00		      .byte.b	ONE_COPY
+    681  f9c5					      REPEND
+    682  f9c6		       00		      .byte.b	ONE_COPY
+    681  f9c6					      REPEND
+    682  f9c7		       00		      .byte.b	ONE_COPY
+    681  f9c7					      REPEND
+    682  f9c8		       00		      .byte.b	ONE_COPY
+    681  f9c8					      REPEND
+    682  f9c9		       00		      .byte.b	ONE_COPY
+    681  f9c9					      REPEND
+    682  f9ca		       00		      .byte.b	ONE_COPY
+    681  f9ca					      REPEND
+    682  f9cb		       00		      .byte.b	ONE_COPY
+    681  f9cb					      REPEND
+    682  f9cc		       00		      .byte.b	ONE_COPY
+    681  f9cc					      REPEND
+    682  f9cd		       00		      .byte.b	ONE_COPY
+    681  f9cd					      REPEND
+    682  f9ce		       00		      .byte.b	ONE_COPY
+    681  f9ce					      REPEND
+    682  f9cf		       00		      .byte.b	ONE_COPY
+    681  f9cf					      REPEND
+    682  f9d0		       00		      .byte.b	ONE_COPY
+    681  f9d0					      REPEND
+    682  f9d1		       00		      .byte.b	ONE_COPY
+    681  f9d1					      REPEND
+    682  f9d2		       00		      .byte.b	ONE_COPY
+    681  f9d2					      REPEND
+    682  f9d3		       00		      .byte.b	ONE_COPY
+    681  f9d3					      REPEND
+    682  f9d4		       00		      .byte.b	ONE_COPY
+    681  f9d4					      REPEND
+    682  f9d5		       00		      .byte.b	ONE_COPY
+    681  f9d5					      REPEND
+    682  f9d6		       00		      .byte.b	ONE_COPY
+    681  f9d6					      REPEND
+    682  f9d7		       00		      .byte.b	ONE_COPY
+    681  f9d7					      REPEND
+    682  f9d8		       00		      .byte.b	ONE_COPY
+    681  f9d8					      REPEND
+    682  f9d9		       00		      .byte.b	ONE_COPY
+    681  f9d9					      REPEND
+    682  f9da		       00		      .byte.b	ONE_COPY
+    681  f9da					      REPEND
+    682  f9db		       00		      .byte.b	ONE_COPY
+    681  f9db					      REPEND
+    682  f9dc		       00		      .byte.b	ONE_COPY
+    681  f9dc					      REPEND
+    682  f9dd		       00		      .byte.b	ONE_COPY
+    681  f9dd					      REPEND
+    682  f9de		       00		      .byte.b	ONE_COPY
+    681  f9de					      REPEND
+    682  f9df		       00		      .byte.b	ONE_COPY
+    681  f9df					      REPEND
+    682  f9e0		       00		      .byte.b	ONE_COPY
+    681  f9e0					      REPEND
+    682  f9e1		       00		      .byte.b	ONE_COPY
+    681  f9e1					      REPEND
+    682  f9e2		       00		      .byte.b	ONE_COPY
+    681  f9e2					      REPEND
+    682  f9e3		       00		      .byte.b	ONE_COPY
+    681  f9e3					      REPEND
+    682  f9e4		       00		      .byte.b	ONE_COPY
+    681  f9e4					      REPEND
+    682  f9e5		       00		      .byte.b	ONE_COPY
+    681  f9e5					      REPEND
+    682  f9e6		       00		      .byte.b	ONE_COPY
+    681  f9e6					      REPEND
+    682  f9e7		       00		      .byte.b	ONE_COPY
+    681  f9e7					      REPEND
+    682  f9e8		       00		      .byte.b	ONE_COPY
+    681  f9e8					      REPEND
+    682  f9e9		       00		      .byte.b	ONE_COPY
+    681  f9e9					      REPEND
+    682  f9ea		       00		      .byte.b	ONE_COPY
+    681  f9ea					      REPEND
+    682  f9eb		       00		      .byte.b	ONE_COPY
+    681  f9eb					      REPEND
+    682  f9ec		       00		      .byte.b	ONE_COPY
+    681  f9ec					      REPEND
+    682  f9ed		       00		      .byte.b	ONE_COPY
+    681  f9ed					      REPEND
+    682  f9ee		       00		      .byte.b	ONE_COPY
+    681  f9ee					      REPEND
+    682  f9ef		       00		      .byte.b	ONE_COPY
+    681  f9ef					      REPEND
+    682  f9f0		       00		      .byte.b	ONE_COPY
+    681  f9f0					      REPEND
+    682  f9f1		       00		      .byte.b	ONE_COPY
+    681  f9f1					      REPEND
+    682  f9f2		       00		      .byte.b	ONE_COPY
+    681  f9f2					      REPEND
+    682  f9f3		       00		      .byte.b	ONE_COPY
+    681  f9f3					      REPEND
+    682  f9f4		       00		      .byte.b	ONE_COPY
+    681  f9f4					      REPEND
+    682  f9f5		       00		      .byte.b	ONE_COPY
+    681  f9f5					      REPEND
+    682  f9f6		       00		      .byte.b	ONE_COPY
+    681  f9f6					      REPEND
+    682  f9f7		       00		      .byte.b	ONE_COPY
+    681  f9f7					      REPEND
+    682  f9f8		       00		      .byte.b	ONE_COPY
+    681  f9f8					      REPEND
+    682  f9f9		       00		      .byte.b	ONE_COPY
+    681  f9f9					      REPEND
+    682  f9fa		       00		      .byte.b	ONE_COPY
+    681  f9fa					      REPEND
+    682  f9fb		       00		      .byte.b	ONE_COPY
+    681  f9fb					      REPEND
+    682  f9fc		       00		      .byte.b	ONE_COPY
+    681  f9fc					      REPEND
+    682  f9fd		       00		      .byte.b	ONE_COPY
+    681  f9fd					      REPEND
+    682  f9fe		       00		      .byte.b	ONE_COPY
+    681  f9fe					      REPEND
+    682  f9ff		       00		      .byte.b	ONE_COPY
+    681  f9ff					      REPEND
+    682  fa00		       00		      .byte.b	ONE_COPY
+    681  fa00					      REPEND
+    682  fa01		       00		      .byte.b	ONE_COPY
+    681  fa01					      REPEND
+    682  fa02		       00		      .byte.b	ONE_COPY
+    681  fa02					      REPEND
+    682  fa03		       00		      .byte.b	ONE_COPY
+    681  fa03					      REPEND
+    682  fa04		       00		      .byte.b	ONE_COPY
+    681  fa04					      REPEND
+    682  fa05		       00		      .byte.b	ONE_COPY
+    681  fa05					      REPEND
+    682  fa06		       00		      .byte.b	ONE_COPY
+    681  fa06					      REPEND
+    682  fa07		       00		      .byte.b	ONE_COPY
+    681  fa07					      REPEND
+    682  fa08		       00		      .byte.b	ONE_COPY
+    681  fa08					      REPEND
+    682  fa09		       00		      .byte.b	ONE_COPY
+    681  fa09					      REPEND
+    682  fa0a		       00		      .byte.b	ONE_COPY
+    683  fa0b					      REPEND
+    684  fa0b
+    685  fa0b				   RedPlayerColors
+    686  fa0b					      REPEAT	NUMBER_OF_PLAYERS
+    687  fa0b		       00		      .byte.b	BLACK
+    688  fa0c		       00		      .byte.b	BLACK
+    689  fa0d		       00		      .byte.b	BLACK
+    690  fa0e		       00		      .byte.b	BLACK
+    691  fa0f		       00		      .byte.b	BLACK
+    692  fa10		       00		      .byte.b	BLACK
+    693  fa11		       0a		      .byte.b	WHITE
+    694  fa12		       0a		      .byte.b	WHITE
+    695  fa13		       0a		      .byte.b	WHITE
+    696  fa14		       0a		      .byte.b	WHITE
+    697  fa15		       0a		      .byte.b	WHITE
+    698  fa16		       0a		      .byte.b	WHITE
+    699  fa17		       36		      .byte.b	RED
+    700  fa18		       36		      .byte.b	RED
+    701  fa19		       36		      .byte.b	RED
+    702  fa1a		       36		      .byte.b	RED
+    703  fa1b		       36		      .byte.b	RED
+    704  fa1c		       0a		      .byte.b	WHITE
+    705  fa1d		       0a		      .byte.b	WHITE
+    706  fa1e		       0a		      .byte.b	WHITE
+    686  fa1e					      REPEND
+    687  fa1f		       00		      .byte.b	BLACK
+    688  fa20		       00		      .byte.b	BLACK
+    689  fa21		       00		      .byte.b	BLACK
+    690  fa22		       00		      .byte.b	BLACK
+    691  fa23		       00		      .byte.b	BLACK
+    692  fa24		       00		      .byte.b	BLACK
+    693  fa25		       0a		      .byte.b	WHITE
+    694  fa26		       0a		      .byte.b	WHITE
+    695  fa27		       0a		      .byte.b	WHITE
+    696  fa28		       0a		      .byte.b	WHITE
+    697  fa29		       0a		      .byte.b	WHITE
+    698  fa2a		       0a		      .byte.b	WHITE
+    699  fa2b		       36		      .byte.b	RED
+    700  fa2c		       36		      .byte.b	RED
+    701  fa2d		       36		      .byte.b	RED
+    702  fa2e		       36		      .byte.b	RED
+    703  fa2f		       36		      .byte.b	RED
+    704  fa30		       0a		      .byte.b	WHITE
+    705  fa31		       0a		      .byte.b	WHITE
+    706  fa32		       0a		      .byte.b	WHITE
+    686  fa32					      REPEND
+    687  fa33		       00		      .byte.b	BLACK
+    688  fa34		       00		      .byte.b	BLACK
+    689  fa35		       00		      .byte.b	BLACK
+    690  fa36		       00		      .byte.b	BLACK
+    691  fa37		       00		      .byte.b	BLACK
+    692  fa38		       00		      .byte.b	BLACK
+    693  fa39		       0a		      .byte.b	WHITE
+    694  fa3a		       0a		      .byte.b	WHITE
+    695  fa3b		       0a		      .byte.b	WHITE
+    696  fa3c		       0a		      .byte.b	WHITE
+    697  fa3d		       0a		      .byte.b	WHITE
+    698  fa3e		       0a		      .byte.b	WHITE
+    699  fa3f		       36		      .byte.b	RED
+    700  fa40		       36		      .byte.b	RED
+    701  fa41		       36		      .byte.b	RED
+    702  fa42		       36		      .byte.b	RED
+    703  fa43		       36		      .byte.b	RED
+    704  fa44		       0a		      .byte.b	WHITE
+    705  fa45		       0a		      .byte.b	WHITE
+    706  fa46		       0a		      .byte.b	WHITE
+    686  fa46					      REPEND
+    687  fa47		       00		      .byte.b	BLACK
+    688  fa48		       00		      .byte.b	BLACK
+    689  fa49		       00		      .byte.b	BLACK
+    690  fa4a		       00		      .byte.b	BLACK
+    691  fa4b		       00		      .byte.b	BLACK
+    692  fa4c		       00		      .byte.b	BLACK
+    693  fa4d		       0a		      .byte.b	WHITE
+    694  fa4e		       0a		      .byte.b	WHITE
+    695  fa4f		       0a		      .byte.b	WHITE
+    696  fa50		       0a		      .byte.b	WHITE
+    697  fa51		       0a		      .byte.b	WHITE
+    698  fa52		       0a		      .byte.b	WHITE
+    699  fa53		       36		      .byte.b	RED
+    700  fa54		       36		      .byte.b	RED
+    701  fa55		       36		      .byte.b	RED
+    702  fa56		       36		      .byte.b	RED
+    703  fa57		       36		      .byte.b	RED
+    704  fa58		       0a		      .byte.b	WHITE
+    705  fa59		       0a		      .byte.b	WHITE
+    706  fa5a		       0a		      .byte.b	WHITE
+    686  fa5a					      REPEND
+    687  fa5b		       00		      .byte.b	BLACK
+    688  fa5c		       00		      .byte.b	BLACK
+    689  fa5d		       00		      .byte.b	BLACK
+    690  fa5e		       00		      .byte.b	BLACK
+    691  fa5f		       00		      .byte.b	BLACK
+    692  fa60		       00		      .byte.b	BLACK
+    693  fa61		       0a		      .byte.b	WHITE
+    694  fa62		       0a		      .byte.b	WHITE
+    695  fa63		       0a		      .byte.b	WHITE
+    696  fa64		       0a		      .byte.b	WHITE
+    697  fa65		       0a		      .byte.b	WHITE
+    698  fa66		       0a		      .byte.b	WHITE
+    699  fa67		       36		      .byte.b	RED
+    700  fa68		       36		      .byte.b	RED
+    701  fa69		       36		      .byte.b	RED
+    702  fa6a		       36		      .byte.b	RED
+    703  fa6b		       36		      .byte.b	RED
+    704  fa6c		       0a		      .byte.b	WHITE
+    705  fa6d		       0a		      .byte.b	WHITE
+    706  fa6e		       0a		      .byte.b	WHITE
+    686  fa6e					      REPEND
+    687  fa6f		       00		      .byte.b	BLACK
+    688  fa70		       00		      .byte.b	BLACK
+    689  fa71		       00		      .byte.b	BLACK
+    690  fa72		       00		      .byte.b	BLACK
+    691  fa73		       00		      .byte.b	BLACK
+    692  fa74		       00		      .byte.b	BLACK
+    693  fa75		       0a		      .byte.b	WHITE
+    694  fa76		       0a		      .byte.b	WHITE
+    695  fa77		       0a		      .byte.b	WHITE
+    696  fa78		       0a		      .byte.b	WHITE
+    697  fa79		       0a		      .byte.b	WHITE
+    698  fa7a		       0a		      .byte.b	WHITE
+    699  fa7b		       36		      .byte.b	RED
+    700  fa7c		       36		      .byte.b	RED
+    701  fa7d		       36		      .byte.b	RED
+    702  fa7e		       36		      .byte.b	RED
+    703  fa7f		       36		      .byte.b	RED
+    704  fa80		       0a		      .byte.b	WHITE
+    705  fa81		       0a		      .byte.b	WHITE
+    706  fa82		       0a		      .byte.b	WHITE
+    686  fa82					      REPEND
+    687  fa83		       00		      .byte.b	BLACK
+    688  fa84		       00		      .byte.b	BLACK
+    689  fa85		       00		      .byte.b	BLACK
+    690  fa86		       00		      .byte.b	BLACK
+    691  fa87		       00		      .byte.b	BLACK
+    692  fa88		       00		      .byte.b	BLACK
+    693  fa89		       0a		      .byte.b	WHITE
+    694  fa8a		       0a		      .byte.b	WHITE
+    695  fa8b		       0a		      .byte.b	WHITE
+    696  fa8c		       0a		      .byte.b	WHITE
+    697  fa8d		       0a		      .byte.b	WHITE
+    698  fa8e		       0a		      .byte.b	WHITE
+    699  fa8f		       36		      .byte.b	RED
+    700  fa90		       36		      .byte.b	RED
+    701  fa91		       36		      .byte.b	RED
+    702  fa92		       36		      .byte.b	RED
+    703  fa93		       36		      .byte.b	RED
+    704  fa94		       0a		      .byte.b	WHITE
+    705  fa95		       0a		      .byte.b	WHITE
+    706  fa96		       0a		      .byte.b	WHITE
+    686  fa96					      REPEND
+    687  fa97		       00		      .byte.b	BLACK
+    688  fa98		       00		      .byte.b	BLACK
+    689  fa99		       00		      .byte.b	BLACK
+    690  fa9a		       00		      .byte.b	BLACK
+    691  fa9b		       00		      .byte.b	BLACK
+    692  fa9c		       00		      .byte.b	BLACK
+    693  fa9d		       0a		      .byte.b	WHITE
+    694  fa9e		       0a		      .byte.b	WHITE
+    695  fa9f		       0a		      .byte.b	WHITE
+    696  faa0		       0a		      .byte.b	WHITE
+    697  faa1		       0a		      .byte.b	WHITE
+    698  faa2		       0a		      .byte.b	WHITE
+    699  faa3		       36		      .byte.b	RED
+    700  faa4		       36		      .byte.b	RED
+    701  faa5		       36		      .byte.b	RED
+    702  faa6		       36		      .byte.b	RED
+    703  faa7		       36		      .byte.b	RED
+    704  faa8		       0a		      .byte.b	WHITE
+    705  faa9		       0a		      .byte.b	WHITE
+    706  faaa		       0a		      .byte.b	WHITE
+    686  faaa					      REPEND
+    687  faab		       00		      .byte.b	BLACK
+    688  faac		       00		      .byte.b	BLACK
+    689  faad		       00		      .byte.b	BLACK
+    690  faae		       00		      .byte.b	BLACK
+    691  faaf		       00		      .byte.b	BLACK
+    692  fab0		       00		      .byte.b	BLACK
+    693  fab1		       0a		      .byte.b	WHITE
+    694  fab2		       0a		      .byte.b	WHITE
+    695  fab3		       0a		      .byte.b	WHITE
+    696  fab4		       0a		      .byte.b	WHITE
+    697  fab5		       0a		      .byte.b	WHITE
+    698  fab6		       0a		      .byte.b	WHITE
+    699  fab7		       36		      .byte.b	RED
+    700  fab8		       36		      .byte.b	RED
+    701  fab9		       36		      .byte.b	RED
+    702  faba		       36		      .byte.b	RED
+    703  fabb		       36		      .byte.b	RED
+    704  fabc		       0a		      .byte.b	WHITE
+    705  fabd		       0a		      .byte.b	WHITE
+    706  fabe		       0a		      .byte.b	WHITE
+    707  fabf					      REPEND
+    708  fabf
+    709  faca					      org	RedPlayerColors + KERNEL_HEIGHT - 1, 0
+    710  faca				   BluePlayerColors
+    711  faca					      REPEAT	NUMBER_OF_PLAYERS
+    712  faca		       00		      .byte.b	BLACK
+    713  facb		       00		      .byte.b	BLACK
+    714  facc		       00		      .byte.b	BLACK
+    715  facd		       00		      .byte.b	BLACK
+    716  face		       00		      .byte.b	BLACK
+    717  facf		       00		      .byte.b	BLACK
+    718  fad0		       16		      .byte.b	BLUE
+    719  fad1		       16		      .byte.b	BLUE
+    720  fad2		       16		      .byte.b	BLUE
+    721  fad3		       16		      .byte.b	BLUE
+    722  fad4		       16		      .byte.b	BLUE
+    723  fad5		       16		      .byte.b	BLUE
+    724  fad6		       64		      .byte.b	LT_GREEN
+    725  fad7		       64		      .byte.b	LT_GREEN
+    726  fad8		       64		      .byte.b	LT_GREEN
+    727  fad9		       64		      .byte.b	LT_GREEN
+    728  fada		       64		      .byte.b	LT_GREEN
+    729  fadb		       0a		      .byte.b	WHITE
+    730  fadc		       0a		      .byte.b	WHITE
+    731  fadd		       0a		      .byte.b	WHITE
+    711  fadd					      REPEND
+    712  fade		       00		      .byte.b	BLACK
+    713  fadf		       00		      .byte.b	BLACK
+    714  fae0		       00		      .byte.b	BLACK
+    715  fae1		       00		      .byte.b	BLACK
+    716  fae2		       00		      .byte.b	BLACK
+    717  fae3		       00		      .byte.b	BLACK
+    718  fae4		       16		      .byte.b	BLUE
+    719  fae5		       16		      .byte.b	BLUE
+    720  fae6		       16		      .byte.b	BLUE
+    721  fae7		       16		      .byte.b	BLUE
+    722  fae8		       16		      .byte.b	BLUE
+    723  fae9		       16		      .byte.b	BLUE
+    724  faea		       64		      .byte.b	LT_GREEN
+    725  faeb		       64		      .byte.b	LT_GREEN
+    726  faec		       64		      .byte.b	LT_GREEN
+    727  faed		       64		      .byte.b	LT_GREEN
+    728  faee		       64		      .byte.b	LT_GREEN
+    729  faef		       0a		      .byte.b	WHITE
+    730  faf0		       0a		      .byte.b	WHITE
+    731  faf1		       0a		      .byte.b	WHITE
+    711  faf1					      REPEND
+    712  faf2		       00		      .byte.b	BLACK
+    713  faf3		       00		      .byte.b	BLACK
+    714  faf4		       00		      .byte.b	BLACK
+    715  faf5		       00		      .byte.b	BLACK
+    716  faf6		       00		      .byte.b	BLACK
+    717  faf7		       00		      .byte.b	BLACK
+    718  faf8		       16		      .byte.b	BLUE
+    719  faf9		       16		      .byte.b	BLUE
+    720  fafa		       16		      .byte.b	BLUE
+    721  fafb		       16		      .byte.b	BLUE
+    722  fafc		       16		      .byte.b	BLUE
+    723  fafd		       16		      .byte.b	BLUE
+    724  fafe		       64		      .byte.b	LT_GREEN
+    725  faff		       64		      .byte.b	LT_GREEN
+    726  fb00		       64		      .byte.b	LT_GREEN
+    727  fb01		       64		      .byte.b	LT_GREEN
+    728  fb02		       64		      .byte.b	LT_GREEN
+    729  fb03		       0a		      .byte.b	WHITE
+    730  fb04		       0a		      .byte.b	WHITE
+    731  fb05		       0a		      .byte.b	WHITE
+    711  fb05					      REPEND
+    712  fb06		       00		      .byte.b	BLACK
+    713  fb07		       00		      .byte.b	BLACK
+    714  fb08		       00		      .byte.b	BLACK
+    715  fb09		       00		      .byte.b	BLACK
+    716  fb0a		       00		      .byte.b	BLACK
+    717  fb0b		       00		      .byte.b	BLACK
+    718  fb0c		       16		      .byte.b	BLUE
+    719  fb0d		       16		      .byte.b	BLUE
+    720  fb0e		       16		      .byte.b	BLUE
+    721  fb0f		       16		      .byte.b	BLUE
+    722  fb10		       16		      .byte.b	BLUE
+    723  fb11		       16		      .byte.b	BLUE
+    724  fb12		       64		      .byte.b	LT_GREEN
+    725  fb13		       64		      .byte.b	LT_GREEN
+    726  fb14		       64		      .byte.b	LT_GREEN
+    727  fb15		       64		      .byte.b	LT_GREEN
+    728  fb16		       64		      .byte.b	LT_GREEN
+    729  fb17		       0a		      .byte.b	WHITE
+    730  fb18		       0a		      .byte.b	WHITE
+    731  fb19		       0a		      .byte.b	WHITE
+    711  fb19					      REPEND
+    712  fb1a		       00		      .byte.b	BLACK
+    713  fb1b		       00		      .byte.b	BLACK
+    714  fb1c		       00		      .byte.b	BLACK
+    715  fb1d		       00		      .byte.b	BLACK
+    716  fb1e		       00		      .byte.b	BLACK
+    717  fb1f		       00		      .byte.b	BLACK
+    718  fb20		       16		      .byte.b	BLUE
+    719  fb21		       16		      .byte.b	BLUE
+    720  fb22		       16		      .byte.b	BLUE
+    721  fb23		       16		      .byte.b	BLUE
+    722  fb24		       16		      .byte.b	BLUE
+    723  fb25		       16		      .byte.b	BLUE
+    724  fb26		       64		      .byte.b	LT_GREEN
+    725  fb27		       64		      .byte.b	LT_GREEN
+    726  fb28		       64		      .byte.b	LT_GREEN
+    727  fb29		       64		      .byte.b	LT_GREEN
+    728  fb2a		       64		      .byte.b	LT_GREEN
+    729  fb2b		       0a		      .byte.b	WHITE
+    730  fb2c		       0a		      .byte.b	WHITE
+    731  fb2d		       0a		      .byte.b	WHITE
+    711  fb2d					      REPEND
+    712  fb2e		       00		      .byte.b	BLACK
+    713  fb2f		       00		      .byte.b	BLACK
+    714  fb30		       00		      .byte.b	BLACK
+    715  fb31		       00		      .byte.b	BLACK
+    716  fb32		       00		      .byte.b	BLACK
+    717  fb33		       00		      .byte.b	BLACK
+    718  fb34		       16		      .byte.b	BLUE
+    719  fb35		       16		      .byte.b	BLUE
+    720  fb36		       16		      .byte.b	BLUE
+    721  fb37		       16		      .byte.b	BLUE
+    722  fb38		       16		      .byte.b	BLUE
+    723  fb39		       16		      .byte.b	BLUE
+    724  fb3a		       64		      .byte.b	LT_GREEN
+    725  fb3b		       64		      .byte.b	LT_GREEN
+    726  fb3c		       64		      .byte.b	LT_GREEN
+    727  fb3d		       64		      .byte.b	LT_GREEN
+    728  fb3e		       64		      .byte.b	LT_GREEN
+    729  fb3f		       0a		      .byte.b	WHITE
+    730  fb40		       0a		      .byte.b	WHITE
+    731  fb41		       0a		      .byte.b	WHITE
+    711  fb41					      REPEND
+    712  fb42		       00		      .byte.b	BLACK
+    713  fb43		       00		      .byte.b	BLACK
+    714  fb44		       00		      .byte.b	BLACK
+    715  fb45		       00		      .byte.b	BLACK
+    716  fb46		       00		      .byte.b	BLACK
+    717  fb47		       00		      .byte.b	BLACK
+    718  fb48		       16		      .byte.b	BLUE
+    719  fb49		       16		      .byte.b	BLUE
+    720  fb4a		       16		      .byte.b	BLUE
+    721  fb4b		       16		      .byte.b	BLUE
+    722  fb4c		       16		      .byte.b	BLUE
+    723  fb4d		       16		      .byte.b	BLUE
+    724  fb4e		       64		      .byte.b	LT_GREEN
+    725  fb4f		       64		      .byte.b	LT_GREEN
+    726  fb50		       64		      .byte.b	LT_GREEN
+    727  fb51		       64		      .byte.b	LT_GREEN
+    728  fb52		       64		      .byte.b	LT_GREEN
+    729  fb53		       0a		      .byte.b	WHITE
+    730  fb54		       0a		      .byte.b	WHITE
+    731  fb55		       0a		      .byte.b	WHITE
+    711  fb55					      REPEND
+    712  fb56		       00		      .byte.b	BLACK
+    713  fb57		       00		      .byte.b	BLACK
+    714  fb58		       00		      .byte.b	BLACK
+    715  fb59		       00		      .byte.b	BLACK
+    716  fb5a		       00		      .byte.b	BLACK
+    717  fb5b		       00		      .byte.b	BLACK
+    718  fb5c		       16		      .byte.b	BLUE
+    719  fb5d		       16		      .byte.b	BLUE
+    720  fb5e		       16		      .byte.b	BLUE
+    721  fb5f		       16		      .byte.b	BLUE
+    722  fb60		       16		      .byte.b	BLUE
+    723  fb61		       16		      .byte.b	BLUE
+    724  fb62		       64		      .byte.b	LT_GREEN
+    725  fb63		       64		      .byte.b	LT_GREEN
+    726  fb64		       64		      .byte.b	LT_GREEN
+    727  fb65		       64		      .byte.b	LT_GREEN
+    728  fb66		       64		      .byte.b	LT_GREEN
+    729  fb67		       0a		      .byte.b	WHITE
+    730  fb68		       0a		      .byte.b	WHITE
+    731  fb69		       0a		      .byte.b	WHITE
+    711  fb69					      REPEND
+    712  fb6a		       00		      .byte.b	BLACK
+    713  fb6b		       00		      .byte.b	BLACK
+    714  fb6c		       00		      .byte.b	BLACK
+    715  fb6d		       00		      .byte.b	BLACK
+    716  fb6e		       00		      .byte.b	BLACK
+    717  fb6f		       00		      .byte.b	BLACK
+    718  fb70		       16		      .byte.b	BLUE
+    719  fb71		       16		      .byte.b	BLUE
+    720  fb72		       16		      .byte.b	BLUE
+    721  fb73		       16		      .byte.b	BLUE
+    722  fb74		       16		      .byte.b	BLUE
+    723  fb75		       16		      .byte.b	BLUE
+    724  fb76		       64		      .byte.b	LT_GREEN
+    725  fb77		       64		      .byte.b	LT_GREEN
+    726  fb78		       64		      .byte.b	LT_GREEN
+    727  fb79		       64		      .byte.b	LT_GREEN
+    728  fb7a		       64		      .byte.b	LT_GREEN
+    729  fb7b		       0a		      .byte.b	WHITE
+    730  fb7c		       0a		      .byte.b	WHITE
+    731  fb7d		       0a		      .byte.b	WHITE
+    732  fb7e					      REPEND
+    733  fb7e
+    734  fffc					      org	$FFFC, 0
+    735  fffc		       00 f0		      .word.w	Start
+    736  fffe		       00 00		      .byte.b	$00,00

@@ -1,0 +1,157 @@
+Line 1: added processor 6502 heading
+Line 2: changed * to ; for comments
+Line 3: changed * to ; for comments
+Line 3: commented out non-executable string
+Line 4: changed * to ; for comments
+Line 5: changed * to ; for comments
+Line 5: commented out non-executable string
+Line 6: changed * to ; for comments
+Line 6: commented out non-executable string
+Line 7: changed * to ; for comments
+Line 7: commented out non-executable string
+Line 8: changed * to ; for comments
+Line 9: changed * to ; for comments
+Line 16: changed * to ; for comments
+Line 20: commented out non-executable string
+Line 21: commented out non-executable string
+Line 22: converted quote ' to "
+Line 22: commented out non-executable string
+Line 24: converted low bit operator
+Line 26: converted high bit operator
+Line 29: commented out non-executable string
+Line 32: changed * to ; for comments
+Line 32: commented out non-executable string
+Line 33: changed * to ; for comments
+Line 33: commented out non-executable string
+Line 34: changed * to ; for comments
+Line 34: commented out non-executable string
+Line 35: changed * to ; for comments
+Line 36: changed * to ; for comments
+Line 37: changed * to ; for comments
+Line 38: changed * to ; for comments
+Line 39: changed * to ; for comments
+Line 40: changed * to ; for comments
+Line 41: changed * to ; for comments
+Line 42: changed * to ; for comments
+Line 45: converted quote ' to "
+Line 45: commented out non-executable string
+Line 50: commented out non-executable string
+Line 64: commented out non-executable string
+Line 76: commented out non-executable string
+Line 77: commented out non-executable string
+Line 88: commented out non-executable string
+Line 89: commented out non-executable string
+Line 117: converted high bit operator
+Line 123: converted low bit operator
+Line 133: commented out non-executable string
+Line 134: commented out non-executable string
+Line 140: commented out non-executable string
+Line 144: commented out non-executable string
+Line 147: commented out non-executable string
+Line 148: changed * to ; for comments
+Line 151: commented out non-executable string
+Line 153: commented out non-executable string
+Line 163: commented out non-executable string
+Line 166: changed * to ; for comments
+Line 176: changed * to ; for comments
+Line 179: commented out non-executable string
+Line 181: commented out non-executable string
+Line 188: converted quote ' to "
+Line 188: commented out non-executable string
+Line 188: converted high bit operator
+Line 191: commented out non-executable string
+Line 194: commented out non-executable string
+Line 199: commented out non-executable string
+Line 203: changed * to ; for comments
+Line 207: commented out non-executable string
+Line 208: commented out non-executable string
+Line 213: commented out non-executable string
+Line 221: changed * to ; for comments
+Line 224: commented out non-executable string
+Line 224: converted low bit operator
+Line 225: commented out non-executable string
+Line 226: converted high bit operator
+Line 231: commented out non-executable string
+Line 232: commented out non-executable string
+Line 237: converted high bit operator
+Line 241: changed * to ; for comments
+Line 242: changed * to ; for comments
+Line 242: commented out non-executable string
+Line 243: changed * to ; for comments
+Line 243: commented out non-executable string
+Line 244: changed * to ; for comments
+Line 244: commented out non-executable string
+Line 245: changed * to ; for comments
+Line 245: commented out non-executable string
+Line 246: changed * to ; for comments
+Line 246: commented out non-executable string
+Line 247: changed * to ; for comments
+Line 251: converted quote ' to "
+Line 251: commented out non-executable string
+Line 252: commented out non-executable string
+Line 255: commented out non-executable string
+Line 258: changed * to ; for comments
+Line 258: commented out non-executable string
+Line 275: commented out non-executable string
+Line 276: commented out non-executable string
+Line 277: commented out non-executable string
+Line 278: commented out non-executable string
+Line 281: commented out non-executable string
+Line 283: commented out non-executable string
+Line 284: converted quote ' to "
+Line 284: commented out non-executable string
+Line 288: converted quote ' to "
+Line 288: commented out non-executable string
+Line 289: commented out non-executable string
+Line 291: changed * to ; for comments
+Line 291: commented out non-executable string
+Line 292: commented out non-executable string
+Line 296: commented out non-executable string
+Line 303: commented out non-executable string
+Line 305: changed * to ; for comments
+Line 307: commented out non-executable string
+Line 311: commented out non-executable string
+Line 316: changed * to ; for comments
+Line 317: changed * to ; for comments
+Line 317: commented out non-executable string
+Line 318: changed * to ; for comments
+Line 319: changed * to ; for comments
+Line 319: commented out non-executable string
+Line 320: changed * to ; for comments
+Line 320: commented out non-executable string
+Line 321: changed * to ; for comments
+Line 321: commented out non-executable string
+Line 322: changed * to ; for comments
+Line 322: commented out non-executable string
+Line 323: changed * to ; for comments
+Line 325: commented out non-executable string
+Line 326: commented out non-executable string
+Line 328: commented out non-executable string
+Line 331: commented out non-executable string
+Line 332: commented out non-executable string
+Line 333: commented out non-executable string
+Line 334: changed * to ; for comments
+Line 334: commented out non-executable string
+Line 335: commented out non-executable string
+Line 337: commented out non-executable string
+Line 338: commented out non-executable string
+Line 343: commented out non-executable string
+Line 345: commented out non-executable string
+Line 353: changed * to ; for comments
+Line 353: commented out non-executable string
+Line 354: changed * to ; for comments
+Line 355: changed * to ; for comments
+Line 356: changed * to ; for comments
+Line 357: changed * to ; for comments
+Line 358: changed * to ; for comments
+Line 362: commented out non-executable string
+Line 363: commented out non-executable string
+Line 375: changed * to ; for comments
+Line 380: commented out non-executable string
+Line 381: commented out non-executable string
+Line 382: commented out non-executable string
+Line 383: commented out non-executable string
+Line 386: commented out non-executable string
+Line 389: commented out non-executable string
+Line 391: commented out non-executable string
+Line 399: commented out non-executable string

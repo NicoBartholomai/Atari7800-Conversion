@@ -1,0 +1,31 @@
+--- Symbol List (sorted by symbol)
+AVAROBIN                 0000 ????         (R )
+BLOWUP                   0000 ????         (R )
+CHKDEATH                 0000 ????         (R )
+CHKRACK                  0000 ????         (R )
+CHKSTATE                 0000 ????         (R )
+COLLISON                 0000 ????         (R )
+CTRL                     0000 ????         (R )
+DDMOVE                   0000 ????         (R )
+DETHWISH                 0000 ????         (R )
+DOCODE                   00a4 ????             
+DOCODE2                  00aa ????             
+DOCODE4                  00d6 ????             
+DOFALL                   00ca ????         (R )
+EATVEG                   0000 ????         (R )
+FALL                     0000 ????         (R )
+FRMCNT                   0000 ????         (R )
+GENDPL                   0000 ????         (R )
+HEADER                   0000              (R )
+INIT                     0000 ????         (R )
+MAIN                     0080 ????             
+MONSTERS                 0000 ????         (R )
+PLAYGAME                 009f ????         (R )
+PLAYTITL                 009c ????             
+RACKTIME                 0000 ????         (R )
+STACK                    0000 ????         (R )
+SYNCFRAM                 0000 ????         (R )
+TITLEPAG                 0000 ????         (R )
+WAIT1FRM                 00d8 ????         (R )
+WAITVBL                  0000 ????         (R )
+--- End of Symbol List.

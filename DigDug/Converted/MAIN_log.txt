@@ -1,0 +1,57 @@
+Line 1: added processor 6502 heading
+Line 2: changed * to ; for comments
+Line 4: changed * to ; for comments
+Line 4: commented out non-executable string
+Line 6: changed * to ; for comments
+Line 7: changed * to ; for comments
+Line 11: commented out non-executable string
+Line 17: commented out non-executable string
+Line 20: commented out non-executable string
+Line 22: commented out non-executable string
+Line 23: commented out non-executable string
+Line 24: commented out non-executable string
+Line 26: commented out non-executable string
+Line 36: changed * to ; for comments
+Line 37: changed * to ; for comments
+Line 38: changed * to ; for comments
+Line 39: changed * to ; for comments
+Line 40: changed * to ; for comments
+Line 41: changed * to ; for comments
+Line 42: changed * to ; for comments
+Line 43: changed * to ; for comments
+Line 44: changed * to ; for comments
+Line 45: changed * to ; for comments
+Line 47: commented out non-executable string
+Line 54: commented out non-executable string
+Line 55: commented out non-executable string
+Line 56: commented out non-executable string
+Line 57: commented out non-executable string
+Line 58: commented out non-executable string
+Line 59: commented out non-executable string
+Line 62: changed * to ; for comments
+Line 62: commented out non-executable string
+Line 63: changed * to ; for comments
+Line 68: commented out non-executable string
+Line 70: commented out non-executable string
+Line 71: commented out non-executable string
+Line 72: changed * to ; for comments
+Line 73: commented out non-executable string
+Line 74: commented out non-executable string
+Line 76: commented out non-executable string
+Line 77: commented out non-executable string
+Line 78: commented out non-executable string
+Line 81: changed * to ; for comments
+Line 81: commented out non-executable string
+Line 82: changed * to ; for comments
+Line 83: changed * to ; for comments
+Line 84: changed * to ; for comments
+Line 85: changed * to ; for comments
+Line 86: changed * to ; for comments
+Line 87: changed * to ; for comments
+Line 88: changed * to ; for comments
+Line 89: changed * to ; for comments
+Line 90: changed * to ; for comments
+Line 92: changed * to ; for comments
+Line 93: changed * to ; for comments
+Line 94: changed * to ; for comments
+Line 95: changed * to ; for comments
