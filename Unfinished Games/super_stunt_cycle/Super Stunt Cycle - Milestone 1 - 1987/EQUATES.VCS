@@ -1,8 +1,0 @@
-
-MAXGAME =	2
-;******************
-;OTHER EQUATES
-;*****************
-OVRTIM	= 	$24
-KXLINE	=	$26
-FUDGE	=	$5
