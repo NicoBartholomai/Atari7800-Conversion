@@ -1,0 +1,162 @@
+--- Symbol List (sorted by symbol)
+0.clear                  f007              (R )
+0.coarseMovePlayers      f06e              (R )
+0.incrementGameTimer1    f046              (R )
+0.incrementGameTimer3    f038              (R )
+0.incrementGameTimer4    f02c              (R )
+0.resetGameTimer3        f042              (R )
+0.setColorPointers       f052              (R )
+0.setGameTimer4          f036              (R )
+0.vblankWait             f081              (R )
+1.kernelLoop             f0a3              (R )
+1.wait                   f0d6              (R )
+2.nextFrame              f0ff              (R )
+2.wait                   f0e6              (R )
+ANIMATION_FRAMES         0008              (R )
+animationFrame           008e              (R )
+AnimationFrame1          f117              (R )
+AnimationFrame2          f1d6              (R )
+AnimationFrame3          f295              (R )
+AnimationFrame4          f354              (R )
+AnimationFrame5          f413              (R )
+AnimationFrame6          f4d2              (R )
+AnimationFrame7          f591              (R )
+AnimationFrame8          f650              (R )
+AUDC0                    0015                  
+AUDC1                    0016                  
+AUDF0                    0017                  
+AUDF1                    0018                  
+AUDV0                    0019                  
+AUDV1                    001a                  
+BLACK                    0000              (R )
+BLUE                     0016              (R )
+BluePlayerColors         faca              (R )
+colorPointers            008a              (R )
+ColorPointerTbl          f102              (R )
+COLUBK                   0009              (R )
+COLUP0                   0006              (R )
+COLUP1                   0007              (R )
+COLUPF                   0008              (R )
+CopiesOfGRP0             f88c              (R )
+CopiesOfGRP1             f94b              (R )
+CTRLPF                   000a              (R )
+CXBLPF                   0006                  
+CXCLR                    002c                  
+CXM0FB                   0004                  
+CXM0P                    0000                  
+CXM1FB                   0005                  
+CXM1P                    0001                  
+CXP0FB                   0002                  
+CXP1FB                   0003                  
+CXPPMM                   0007                  
+DOUBLE_SIZE              0005                  
+ENABL                    001f                  
+ENAM0                    001d                  
+ENAM1                    001e                  
+GameCalc                 f04c              (R )
+gameTimer1               0080              (R )
+gameTimer2               0081              (R )
+gameTimer3               0082              (R )
+gameTimer4               0083              (R )
+GREEN                    00c4              (R )
+GRP0                     001b              (R )
+GRP1                     001c              (R )
+HiPlayerTable            f10e              (R )
+HMBL                     0024                  
+HMCLR                    002b              (R )
+HMM0                     0022                  
+HMM1                     0023                  
+HMOVE                    002a              (R )
+HMOVE_0                  0000              (R )
+HMOVE_L1                 0010                  
+HMOVE_L2                 0020              (R )
+HMOVE_L3                 0030                  
+HMOVE_L4                 0040              (R )
+HMOVE_L5                 0050              (R )
+HMOVE_L6                 0060              (R )
+HMOVE_L7                 0070              (R )
+HMOVE_R1                 00f0                  
+HMOVE_R2                 00e0                  
+HMOVE_R3                 00d0                  
+HMOVE_R4                 00c0              (R )
+HMOVE_R5                 00b0              (R )
+HMOVE_R6                 00a0              (R )
+HMOVE_R7                 0090                  
+HMOVE_R8                 0080              (R )
+HMP0                     0020              (R )
+HMP1                     0021              (R )
+HorizPosP0               f70e              (R )
+HorizPosP1               f7cd              (R )
+INPT0                    0008                  
+INPT1                    0009                  
+INPT2                    000a                  
+INPT3                    000b                  
+INPT4                    000c                  
+INPT5                    000d                  
+INTIM                    0284              (R )
+Kernel                   f093                  
+KERNEL_HEIGHT            00c0              (R )
+KERNEL_TIME              00e4              (R )
+LowPlayerTable           f106              (R )
+LT_GREEN                 0064              (R )
+MainLoop                 f00c              (R )
+NO_REFLECT               0000                  
+NUMBER_OF_PLAYERS        0009              (R )
+NUSIZ0                   0004              (R )
+NUSIZ1                   0005              (R )
+ONE_COPY                 0000              (R )
+Overscan                 f0db                  
+OVERSCAN_TIME            0022              (R )
+PF0                      000d                  
+PF1                      000e                  
+PF2                      000f              (R )
+player0ColorPointers     008a              (R )
+player0Pointer           0086              (R )
+player1ColorPointers     008c              (R )
+player1Pointer           0088              (R )
+PLAYER_HEIGHT            0014                  
+PlayerGraphics           f117                  
+QUAD_SIZE                0007                  
+RED                      0036              (R )
+RedPlayerColors          fa0b              (R )
+REFLECT                  0008              (R )
+REFP0                    000b                  
+REFP1                    000c              (R )
+RESBL                    0014                  
+RESM0                    0012                  
+RESM1                    0013                  
+RESMP0                   0028                  
+RESMP1                   0029                  
+RESP0                    0010              (R )
+RESP1                    0011              (R )
+RSYNC                    0003                  
+Start                    f000              (R )
+SWACNT                   0281                  
+SWBCNT                   0283                  
+SWCHA                    0280                  
+SWCHB                    0282              (R )
+T1024T                   0297                  
+THREE_COPIES             0003                  
+THREE_MED_COPIES         0006                  
+TIA_BASE_ADDRESS         0000              (R )
+TIA_BASE_READ_ADDRESS    0000              (R )
+TIA_BASE_WRITE_ADDRESS   0000              (R )
+TIM1T                    0294                  
+TIM64T                   0296              (R )
+TIM8T                    0295                  
+TIMINT                   0285                  
+TWO_COPIES               0001              (R )
+TWO_MED_COPIES           0002              (R )
+TWO_WIDE_COPIES          0004              (R )
+VBLANK                   0001              (R )
+VBLANK_TIME              002d              (R )
+vcs.h                    0000 ????         (R )
+VDELBL                   0027                  
+VDELP0                   0025                  
+VDELP1                   0026                  
+VERSION_VCS              0069                  
+VerticalSync             f00c                  
+VSYNC                    0000              (R )
+WHITE                    000a              (R )
+WSYNC                    0002              (R )
+--- End of Symbol List.

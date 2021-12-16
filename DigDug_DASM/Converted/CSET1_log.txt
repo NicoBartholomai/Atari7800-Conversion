@@ -1,0 +1,718 @@
+Line 1: added processor 6502 heading
+Line 2: changed * to ; for comments
+Line 3: changed * to ; for comments
+Line 5: changed * to ; for comments
+Line 5: commented out non-executable string
+Line 6: changed * to ; for comments
+Line 6: commented out non-executable string
+Line 7: changed * to ; for comments
+Line 7: commented out non-executable string
+Line 9: changed * to ; for comments
+Line 11: commented out non-executable string
+Line 13: converted DB opcode to DC.B
+Line 14: converted DB opcode to DC.B
+Line 15: converted DB opcode to DC.B
+Line 16: converted DB opcode to DC.B
+Line 16: commented out non-executable string
+Line 17: converted DB opcode to DC.B
+Line 17: commented out non-executable string
+Line 18: converted DB opcode to DC.B
+Line 18: commented out non-executable string
+Line 19: converted DB opcode to DC.B
+Line 19: commented out non-executable string
+Line 20: converted DB opcode to DC.B
+Line 21: converted DB opcode to DC.B
+Line 21: commented out non-executable string
+Line 23: converted DB opcode to DC.B
+Line 23: commented out non-executable string
+Line 24: converted DB opcode to DC.B
+Line 25: converted DB opcode to DC.B
+Line 26: converted DB opcode to DC.B
+Line 26: commented out non-executable string
+Line 28: converted DB opcode to DC.B
+Line 28: commented out non-executable string
+Line 30: converted DB opcode to DC.B
+Line 30: commented out non-executable string
+Line 31: converted DB opcode to DC.B
+Line 31: commented out non-executable string
+Line 32: converted DB opcode to DC.B
+Line 32: commented out non-executable string
+Line 33: converted DB opcode to DC.B
+Line 33: commented out non-executable string
+Line 35: converted DB opcode to DC.B
+Line 35: commented out non-executable string
+Line 36: converted DB opcode to DC.B
+Line 36: commented out non-executable string
+Line 37: converted DB opcode to DC.B
+Line 38: converted DB opcode to DC.B
+Line 39: converted DB opcode to DC.B
+Line 40: converted DB opcode to DC.B
+Line 41: converted DB opcode to DC.B
+Line 41: commented out non-executable string
+Line 43: converted DB opcode to DC.B
+Line 43: commented out non-executable string
+Line 44: converted DB opcode to DC.B
+Line 44: commented out non-executable string
+Line 45: converted DB opcode to DC.B
+Line 45: commented out non-executable string
+Line 46: converted DB opcode to DC.B
+Line 46: commented out non-executable string
+Line 47: converted DB opcode to DC.B
+Line 47: commented out non-executable string
+Line 49: converted DB opcode to DC.B
+Line 49: commented out non-executable string
+Line 50: converted DB opcode to DC.B
+Line 50: commented out non-executable string
+Line 51: converted DB opcode to DC.B
+Line 51: commented out non-executable string
+Line 52: converted DB opcode to DC.B
+Line 52: commented out non-executable string
+Line 55: commented out non-executable string
+Line 57: converted DB opcode to DC.B
+Line 58: converted DB opcode to DC.B
+Line 59: converted DB opcode to DC.B
+Line 60: converted DB opcode to DC.B
+Line 60: commented out non-executable string
+Line 61: converted DB opcode to DC.B
+Line 61: commented out non-executable string
+Line 62: converted DB opcode to DC.B
+Line 62: commented out non-executable string
+Line 63: converted DB opcode to DC.B
+Line 63: commented out non-executable string
+Line 64: converted DB opcode to DC.B
+Line 65: converted DB opcode to DC.B
+Line 65: commented out non-executable string
+Line 67: converted DB opcode to DC.B
+Line 67: commented out non-executable string
+Line 68: converted DB opcode to DC.B
+Line 69: converted DB opcode to DC.B
+Line 70: converted DB opcode to DC.B
+Line 70: commented out non-executable string
+Line 72: converted DB opcode to DC.B
+Line 72: commented out non-executable string
+Line 74: converted DB opcode to DC.B
+Line 74: commented out non-executable string
+Line 75: converted DB opcode to DC.B
+Line 75: commented out non-executable string
+Line 76: converted DB opcode to DC.B
+Line 76: commented out non-executable string
+Line 77: converted DB opcode to DC.B
+Line 77: commented out non-executable string
+Line 79: converted DB opcode to DC.B
+Line 79: commented out non-executable string
+Line 80: converted DB opcode to DC.B
+Line 80: commented out non-executable string
+Line 81: converted DB opcode to DC.B
+Line 82: converted DB opcode to DC.B
+Line 83: converted DB opcode to DC.B
+Line 84: converted DB opcode to DC.B
+Line 85: converted DB opcode to DC.B
+Line 85: commented out non-executable string
+Line 87: converted DB opcode to DC.B
+Line 87: commented out non-executable string
+Line 88: converted DB opcode to DC.B
+Line 88: commented out non-executable string
+Line 89: converted DB opcode to DC.B
+Line 89: commented out non-executable string
+Line 90: converted DB opcode to DC.B
+Line 90: commented out non-executable string
+Line 91: converted DB opcode to DC.B
+Line 91: commented out non-executable string
+Line 93: converted DB opcode to DC.B
+Line 93: commented out non-executable string
+Line 94: converted DB opcode to DC.B
+Line 94: commented out non-executable string
+Line 95: converted DB opcode to DC.B
+Line 95: commented out non-executable string
+Line 96: converted DB opcode to DC.B
+Line 96: commented out non-executable string
+Line 99: commented out non-executable string
+Line 101: converted DB opcode to DC.B
+Line 102: converted DB opcode to DC.B
+Line 103: converted DB opcode to DC.B
+Line 104: converted DB opcode to DC.B
+Line 104: commented out non-executable string
+Line 105: converted DB opcode to DC.B
+Line 105: commented out non-executable string
+Line 106: converted DB opcode to DC.B
+Line 106: commented out non-executable string
+Line 107: converted DB opcode to DC.B
+Line 107: commented out non-executable string
+Line 108: converted DB opcode to DC.B
+Line 109: converted DB opcode to DC.B
+Line 109: commented out non-executable string
+Line 111: converted DB opcode to DC.B
+Line 111: commented out non-executable string
+Line 112: converted DB opcode to DC.B
+Line 113: converted DB opcode to DC.B
+Line 114: converted DB opcode to DC.B
+Line 114: commented out non-executable string
+Line 116: converted DB opcode to DC.B
+Line 116: commented out non-executable string
+Line 118: converted DB opcode to DC.B
+Line 118: commented out non-executable string
+Line 119: converted DB opcode to DC.B
+Line 119: commented out non-executable string
+Line 120: converted DB opcode to DC.B
+Line 120: commented out non-executable string
+Line 121: converted DB opcode to DC.B
+Line 121: commented out non-executable string
+Line 124: converted DB opcode to DC.B
+Line 124: commented out non-executable string
+Line 125: converted DB opcode to DC.B
+Line 125: commented out non-executable string
+Line 126: converted DB opcode to DC.B
+Line 127: converted DB opcode to DC.B
+Line 128: converted DB opcode to DC.B
+Line 129: converted DB opcode to DC.B
+Line 130: converted DB opcode to DC.B
+Line 130: commented out non-executable string
+Line 132: converted DB opcode to DC.B
+Line 132: commented out non-executable string
+Line 133: converted DB opcode to DC.B
+Line 133: commented out non-executable string
+Line 134: converted DB opcode to DC.B
+Line 134: commented out non-executable string
+Line 135: converted DB opcode to DC.B
+Line 135: commented out non-executable string
+Line 136: converted DB opcode to DC.B
+Line 136: commented out non-executable string
+Line 138: converted DB opcode to DC.B
+Line 138: commented out non-executable string
+Line 139: converted DB opcode to DC.B
+Line 139: commented out non-executable string
+Line 140: converted DB opcode to DC.B
+Line 140: commented out non-executable string
+Line 141: converted DB opcode to DC.B
+Line 141: commented out non-executable string
+Line 144: commented out non-executable string
+Line 146: converted DB opcode to DC.B
+Line 147: converted DB opcode to DC.B
+Line 148: converted DB opcode to DC.B
+Line 149: converted DB opcode to DC.B
+Line 149: commented out non-executable string
+Line 150: converted DB opcode to DC.B
+Line 150: commented out non-executable string
+Line 151: converted DB opcode to DC.B
+Line 151: commented out non-executable string
+Line 152: converted DB opcode to DC.B
+Line 152: commented out non-executable string
+Line 153: converted DB opcode to DC.B
+Line 154: converted DB opcode to DC.B
+Line 154: commented out non-executable string
+Line 156: converted DB opcode to DC.B
+Line 156: commented out non-executable string
+Line 157: converted DB opcode to DC.B
+Line 158: converted DB opcode to DC.B
+Line 159: converted DB opcode to DC.B
+Line 159: commented out non-executable string
+Line 161: converted DB opcode to DC.B
+Line 161: commented out non-executable string
+Line 163: converted DB opcode to DC.B
+Line 163: commented out non-executable string
+Line 164: converted DB opcode to DC.B
+Line 164: commented out non-executable string
+Line 165: converted DB opcode to DC.B
+Line 165: commented out non-executable string
+Line 166: converted DB opcode to DC.B
+Line 166: commented out non-executable string
+Line 168: converted DB opcode to DC.B
+Line 168: commented out non-executable string
+Line 169: converted DB opcode to DC.B
+Line 169: commented out non-executable string
+Line 170: converted DB opcode to DC.B
+Line 171: converted DB opcode to DC.B
+Line 172: converted DB opcode to DC.B
+Line 173: converted DB opcode to DC.B
+Line 174: converted DB opcode to DC.B
+Line 174: commented out non-executable string
+Line 176: converted DB opcode to DC.B
+Line 176: commented out non-executable string
+Line 177: converted DB opcode to DC.B
+Line 177: commented out non-executable string
+Line 178: converted DB opcode to DC.B
+Line 178: commented out non-executable string
+Line 179: converted DB opcode to DC.B
+Line 179: commented out non-executable string
+Line 180: converted DB opcode to DC.B
+Line 180: commented out non-executable string
+Line 182: converted DB opcode to DC.B
+Line 182: commented out non-executable string
+Line 183: converted DB opcode to DC.B
+Line 183: commented out non-executable string
+Line 184: converted DB opcode to DC.B
+Line 184: commented out non-executable string
+Line 185: converted DB opcode to DC.B
+Line 185: commented out non-executable string
+Line 188: commented out non-executable string
+Line 190: converted DB opcode to DC.B
+Line 191: converted DB opcode to DC.B
+Line 192: converted DB opcode to DC.B
+Line 193: converted DB opcode to DC.B
+Line 193: commented out non-executable string
+Line 194: converted DB opcode to DC.B
+Line 194: commented out non-executable string
+Line 195: converted DB opcode to DC.B
+Line 195: commented out non-executable string
+Line 196: converted DB opcode to DC.B
+Line 196: commented out non-executable string
+Line 197: converted DB opcode to DC.B
+Line 198: converted DB opcode to DC.B
+Line 198: commented out non-executable string
+Line 200: converted DB opcode to DC.B
+Line 200: commented out non-executable string
+Line 201: converted DB opcode to DC.B
+Line 202: converted DB opcode to DC.B
+Line 203: converted DB opcode to DC.B
+Line 203: commented out non-executable string
+Line 205: converted DB opcode to DC.B
+Line 205: commented out non-executable string
+Line 207: converted DB opcode to DC.B
+Line 207: commented out non-executable string
+Line 208: converted DB opcode to DC.B
+Line 208: commented out non-executable string
+Line 209: converted DB opcode to DC.B
+Line 209: commented out non-executable string
+Line 210: converted DB opcode to DC.B
+Line 210: commented out non-executable string
+Line 212: converted DB opcode to DC.B
+Line 212: commented out non-executable string
+Line 213: converted DB opcode to DC.B
+Line 213: commented out non-executable string
+Line 214: converted DB opcode to DC.B
+Line 215: converted DB opcode to DC.B
+Line 216: converted DB opcode to DC.B
+Line 217: converted DB opcode to DC.B
+Line 218: converted DB opcode to DC.B
+Line 218: commented out non-executable string
+Line 220: converted DB opcode to DC.B
+Line 220: commented out non-executable string
+Line 221: converted DB opcode to DC.B
+Line 221: commented out non-executable string
+Line 222: converted DB opcode to DC.B
+Line 222: commented out non-executable string
+Line 223: converted DB opcode to DC.B
+Line 223: commented out non-executable string
+Line 224: converted DB opcode to DC.B
+Line 224: commented out non-executable string
+Line 226: converted DB opcode to DC.B
+Line 226: commented out non-executable string
+Line 227: converted DB opcode to DC.B
+Line 227: commented out non-executable string
+Line 228: converted DB opcode to DC.B
+Line 228: commented out non-executable string
+Line 229: converted DB opcode to DC.B
+Line 229: commented out non-executable string
+Line 232: commented out non-executable string
+Line 234: converted DB opcode to DC.B
+Line 235: converted DB opcode to DC.B
+Line 236: converted DB opcode to DC.B
+Line 237: converted DB opcode to DC.B
+Line 237: commented out non-executable string
+Line 238: converted DB opcode to DC.B
+Line 238: commented out non-executable string
+Line 239: converted DB opcode to DC.B
+Line 239: commented out non-executable string
+Line 240: converted DB opcode to DC.B
+Line 240: commented out non-executable string
+Line 241: converted DB opcode to DC.B
+Line 242: converted DB opcode to DC.B
+Line 242: commented out non-executable string
+Line 244: converted DB opcode to DC.B
+Line 244: commented out non-executable string
+Line 245: converted DB opcode to DC.B
+Line 246: converted DB opcode to DC.B
+Line 247: converted DB opcode to DC.B
+Line 247: commented out non-executable string
+Line 249: converted DB opcode to DC.B
+Line 249: commented out non-executable string
+Line 251: converted DB opcode to DC.B
+Line 251: commented out non-executable string
+Line 252: converted DB opcode to DC.B
+Line 252: commented out non-executable string
+Line 253: converted DB opcode to DC.B
+Line 253: commented out non-executable string
+Line 254: converted DB opcode to DC.B
+Line 254: commented out non-executable string
+Line 256: converted DB opcode to DC.B
+Line 256: commented out non-executable string
+Line 257: converted DB opcode to DC.B
+Line 257: commented out non-executable string
+Line 258: converted DB opcode to DC.B
+Line 259: converted DB opcode to DC.B
+Line 260: converted DB opcode to DC.B
+Line 261: converted DB opcode to DC.B
+Line 262: converted DB opcode to DC.B
+Line 262: commented out non-executable string
+Line 264: converted DB opcode to DC.B
+Line 264: commented out non-executable string
+Line 265: converted DB opcode to DC.B
+Line 265: commented out non-executable string
+Line 266: converted DB opcode to DC.B
+Line 266: commented out non-executable string
+Line 267: converted DB opcode to DC.B
+Line 267: commented out non-executable string
+Line 268: converted DB opcode to DC.B
+Line 268: commented out non-executable string
+Line 270: converted DB opcode to DC.B
+Line 270: commented out non-executable string
+Line 271: converted DB opcode to DC.B
+Line 271: commented out non-executable string
+Line 272: converted DB opcode to DC.B
+Line 272: commented out non-executable string
+Line 273: converted DB opcode to DC.B
+Line 273: commented out non-executable string
+Line 276: commented out non-executable string
+Line 278: converted DB opcode to DC.B
+Line 279: converted DB opcode to DC.B
+Line 280: converted DB opcode to DC.B
+Line 281: converted DB opcode to DC.B
+Line 281: commented out non-executable string
+Line 282: converted DB opcode to DC.B
+Line 282: commented out non-executable string
+Line 283: converted DB opcode to DC.B
+Line 283: commented out non-executable string
+Line 284: converted DB opcode to DC.B
+Line 284: commented out non-executable string
+Line 285: converted DB opcode to DC.B
+Line 286: converted DB opcode to DC.B
+Line 286: commented out non-executable string
+Line 288: converted DB opcode to DC.B
+Line 288: commented out non-executable string
+Line 289: converted DB opcode to DC.B
+Line 290: converted DB opcode to DC.B
+Line 291: converted DB opcode to DC.B
+Line 291: commented out non-executable string
+Line 293: converted DB opcode to DC.B
+Line 293: commented out non-executable string
+Line 295: converted DB opcode to DC.B
+Line 295: commented out non-executable string
+Line 296: converted DB opcode to DC.B
+Line 296: commented out non-executable string
+Line 297: converted DB opcode to DC.B
+Line 297: commented out non-executable string
+Line 298: converted DB opcode to DC.B
+Line 298: commented out non-executable string
+Line 300: converted DB opcode to DC.B
+Line 300: commented out non-executable string
+Line 301: converted DB opcode to DC.B
+Line 301: commented out non-executable string
+Line 302: converted DB opcode to DC.B
+Line 303: converted DB opcode to DC.B
+Line 304: converted DB opcode to DC.B
+Line 305: converted DB opcode to DC.B
+Line 306: converted DB opcode to DC.B
+Line 306: commented out non-executable string
+Line 308: converted DB opcode to DC.B
+Line 308: commented out non-executable string
+Line 309: converted DB opcode to DC.B
+Line 309: commented out non-executable string
+Line 310: converted DB opcode to DC.B
+Line 310: commented out non-executable string
+Line 311: converted DB opcode to DC.B
+Line 311: commented out non-executable string
+Line 312: converted DB opcode to DC.B
+Line 312: commented out non-executable string
+Line 314: converted DB opcode to DC.B
+Line 314: commented out non-executable string
+Line 315: converted DB opcode to DC.B
+Line 315: commented out non-executable string
+Line 316: converted DB opcode to DC.B
+Line 316: commented out non-executable string
+Line 317: converted DB opcode to DC.B
+Line 317: commented out non-executable string
+Line 320: commented out non-executable string
+Line 322: converted DB opcode to DC.B
+Line 323: converted DB opcode to DC.B
+Line 324: converted DB opcode to DC.B
+Line 325: converted DB opcode to DC.B
+Line 325: commented out non-executable string
+Line 326: converted DB opcode to DC.B
+Line 326: commented out non-executable string
+Line 327: converted DB opcode to DC.B
+Line 327: commented out non-executable string
+Line 328: converted DB opcode to DC.B
+Line 328: commented out non-executable string
+Line 329: converted DB opcode to DC.B
+Line 330: converted DB opcode to DC.B
+Line 330: commented out non-executable string
+Line 332: converted DB opcode to DC.B
+Line 332: commented out non-executable string
+Line 333: converted DB opcode to DC.B
+Line 334: converted DB opcode to DC.B
+Line 335: converted DB opcode to DC.B
+Line 335: commented out non-executable string
+Line 337: converted DB opcode to DC.B
+Line 337: commented out non-executable string
+Line 339: converted DB opcode to DC.B
+Line 339: commented out non-executable string
+Line 340: converted DB opcode to DC.B
+Line 340: commented out non-executable string
+Line 341: converted DB opcode to DC.B
+Line 341: commented out non-executable string
+Line 342: converted DB opcode to DC.B
+Line 342: commented out non-executable string
+Line 344: converted DB opcode to DC.B
+Line 344: commented out non-executable string
+Line 345: converted DB opcode to DC.B
+Line 345: commented out non-executable string
+Line 346: converted DB opcode to DC.B
+Line 347: converted DB opcode to DC.B
+Line 348: converted DB opcode to DC.B
+Line 349: converted DB opcode to DC.B
+Line 350: converted DB opcode to DC.B
+Line 350: commented out non-executable string
+Line 352: converted DB opcode to DC.B
+Line 352: commented out non-executable string
+Line 353: converted DB opcode to DC.B
+Line 353: commented out non-executable string
+Line 354: converted DB opcode to DC.B
+Line 354: commented out non-executable string
+Line 355: converted DB opcode to DC.B
+Line 355: commented out non-executable string
+Line 356: converted DB opcode to DC.B
+Line 356: commented out non-executable string
+Line 358: converted DB opcode to DC.B
+Line 358: commented out non-executable string
+Line 359: converted DB opcode to DC.B
+Line 359: commented out non-executable string
+Line 360: converted DB opcode to DC.B
+Line 360: commented out non-executable string
+Line 361: converted DB opcode to DC.B
+Line 361: commented out non-executable string
+Line 364: commented out non-executable string
+Line 366: converted DB opcode to DC.B
+Line 367: converted DB opcode to DC.B
+Line 368: converted DB opcode to DC.B
+Line 369: converted DB opcode to DC.B
+Line 369: commented out non-executable string
+Line 370: converted DB opcode to DC.B
+Line 370: commented out non-executable string
+Line 371: converted DB opcode to DC.B
+Line 371: commented out non-executable string
+Line 372: converted DB opcode to DC.B
+Line 372: commented out non-executable string
+Line 373: converted DB opcode to DC.B
+Line 374: converted DB opcode to DC.B
+Line 374: commented out non-executable string
+Line 376: converted DB opcode to DC.B
+Line 376: commented out non-executable string
+Line 377: converted DB opcode to DC.B
+Line 378: converted DB opcode to DC.B
+Line 379: converted DB opcode to DC.B
+Line 379: commented out non-executable string
+Line 381: converted DB opcode to DC.B
+Line 381: commented out non-executable string
+Line 383: converted DB opcode to DC.B
+Line 383: commented out non-executable string
+Line 384: converted DB opcode to DC.B
+Line 384: commented out non-executable string
+Line 385: converted DB opcode to DC.B
+Line 385: commented out non-executable string
+Line 386: converted DB opcode to DC.B
+Line 386: commented out non-executable string
+Line 388: converted DB opcode to DC.B
+Line 388: commented out non-executable string
+Line 389: converted DB opcode to DC.B
+Line 389: commented out non-executable string
+Line 390: converted DB opcode to DC.B
+Line 391: converted DB opcode to DC.B
+Line 392: converted DB opcode to DC.B
+Line 393: converted DB opcode to DC.B
+Line 394: converted DB opcode to DC.B
+Line 394: commented out non-executable string
+Line 396: converted DB opcode to DC.B
+Line 396: commented out non-executable string
+Line 397: converted DB opcode to DC.B
+Line 397: commented out non-executable string
+Line 398: converted DB opcode to DC.B
+Line 398: commented out non-executable string
+Line 399: converted DB opcode to DC.B
+Line 399: commented out non-executable string
+Line 400: converted DB opcode to DC.B
+Line 400: commented out non-executable string
+Line 402: converted DB opcode to DC.B
+Line 402: commented out non-executable string
+Line 403: converted DB opcode to DC.B
+Line 403: commented out non-executable string
+Line 404: converted DB opcode to DC.B
+Line 404: commented out non-executable string
+Line 405: converted DB opcode to DC.B
+Line 405: commented out non-executable string
+Line 408: commented out non-executable string
+Line 410: converted DB opcode to DC.B
+Line 411: converted DB opcode to DC.B
+Line 412: converted DB opcode to DC.B
+Line 413: converted DB opcode to DC.B
+Line 413: commented out non-executable string
+Line 414: converted DB opcode to DC.B
+Line 414: commented out non-executable string
+Line 415: converted DB opcode to DC.B
+Line 415: commented out non-executable string
+Line 416: converted DB opcode to DC.B
+Line 416: commented out non-executable string
+Line 417: converted DB opcode to DC.B
+Line 418: converted DB opcode to DC.B
+Line 418: commented out non-executable string
+Line 420: converted DB opcode to DC.B
+Line 420: commented out non-executable string
+Line 421: converted DB opcode to DC.B
+Line 422: converted DB opcode to DC.B
+Line 423: converted DB opcode to DC.B
+Line 423: commented out non-executable string
+Line 425: converted DB opcode to DC.B
+Line 425: commented out non-executable string
+Line 427: converted DB opcode to DC.B
+Line 427: commented out non-executable string
+Line 428: converted DB opcode to DC.B
+Line 428: commented out non-executable string
+Line 429: converted DB opcode to DC.B
+Line 429: commented out non-executable string
+Line 430: converted DB opcode to DC.B
+Line 430: commented out non-executable string
+Line 432: converted DB opcode to DC.B
+Line 432: commented out non-executable string
+Line 433: converted DB opcode to DC.B
+Line 433: commented out non-executable string
+Line 434: converted DB opcode to DC.B
+Line 435: converted DB opcode to DC.B
+Line 436: converted DB opcode to DC.B
+Line 437: converted DB opcode to DC.B
+Line 438: converted DB opcode to DC.B
+Line 438: commented out non-executable string
+Line 440: converted DB opcode to DC.B
+Line 440: commented out non-executable string
+Line 441: converted DB opcode to DC.B
+Line 441: commented out non-executable string
+Line 442: converted DB opcode to DC.B
+Line 442: commented out non-executable string
+Line 443: converted DB opcode to DC.B
+Line 443: commented out non-executable string
+Line 444: converted DB opcode to DC.B
+Line 444: commented out non-executable string
+Line 446: converted DB opcode to DC.B
+Line 446: commented out non-executable string
+Line 447: converted DB opcode to DC.B
+Line 447: commented out non-executable string
+Line 448: converted DB opcode to DC.B
+Line 448: commented out non-executable string
+Line 449: converted DB opcode to DC.B
+Line 449: commented out non-executable string
+Line 452: commented out non-executable string
+Line 454: converted DB opcode to DC.B
+Line 455: converted DB opcode to DC.B
+Line 456: converted DB opcode to DC.B
+Line 457: converted DB opcode to DC.B
+Line 457: commented out non-executable string
+Line 458: converted DB opcode to DC.B
+Line 458: commented out non-executable string
+Line 459: converted DB opcode to DC.B
+Line 459: commented out non-executable string
+Line 460: converted DB opcode to DC.B
+Line 460: commented out non-executable string
+Line 461: converted DB opcode to DC.B
+Line 462: converted DB opcode to DC.B
+Line 462: commented out non-executable string
+Line 464: converted DB opcode to DC.B
+Line 464: commented out non-executable string
+Line 465: converted DB opcode to DC.B
+Line 466: converted DB opcode to DC.B
+Line 467: converted DB opcode to DC.B
+Line 467: commented out non-executable string
+Line 469: converted DB opcode to DC.B
+Line 469: commented out non-executable string
+Line 471: converted DB opcode to DC.B
+Line 471: commented out non-executable string
+Line 472: converted DB opcode to DC.B
+Line 472: commented out non-executable string
+Line 473: converted DB opcode to DC.B
+Line 473: commented out non-executable string
+Line 474: converted DB opcode to DC.B
+Line 474: commented out non-executable string
+Line 476: converted DB opcode to DC.B
+Line 476: commented out non-executable string
+Line 477: converted DB opcode to DC.B
+Line 477: commented out non-executable string
+Line 478: converted DB opcode to DC.B
+Line 479: converted DB opcode to DC.B
+Line 480: converted DB opcode to DC.B
+Line 481: converted DB opcode to DC.B
+Line 482: converted DB opcode to DC.B
+Line 482: commented out non-executable string
+Line 484: converted DB opcode to DC.B
+Line 484: commented out non-executable string
+Line 485: converted DB opcode to DC.B
+Line 485: commented out non-executable string
+Line 486: converted DB opcode to DC.B
+Line 486: commented out non-executable string
+Line 487: converted DB opcode to DC.B
+Line 487: commented out non-executable string
+Line 488: converted DB opcode to DC.B
+Line 488: commented out non-executable string
+Line 490: converted DB opcode to DC.B
+Line 490: commented out non-executable string
+Line 491: converted DB opcode to DC.B
+Line 491: commented out non-executable string
+Line 492: converted DB opcode to DC.B
+Line 492: commented out non-executable string
+Line 493: converted DB opcode to DC.B
+Line 493: commented out non-executable string
+Line 496: commented out non-executable string
+Line 498: converted DB opcode to DC.B
+Line 499: converted DB opcode to DC.B
+Line 500: converted DB opcode to DC.B
+Line 501: converted DB opcode to DC.B
+Line 501: commented out non-executable string
+Line 502: converted DB opcode to DC.B
+Line 502: commented out non-executable string
+Line 503: converted DB opcode to DC.B
+Line 503: commented out non-executable string
+Line 504: converted DB opcode to DC.B
+Line 504: commented out non-executable string
+Line 505: converted DB opcode to DC.B
+Line 506: converted DB opcode to DC.B
+Line 506: commented out non-executable string
+Line 508: converted DB opcode to DC.B
+Line 508: commented out non-executable string
+Line 509: converted DB opcode to DC.B
+Line 510: converted DB opcode to DC.B
+Line 511: converted DB opcode to DC.B
+Line 511: commented out non-executable string
+Line 513: converted DB opcode to DC.B
+Line 513: commented out non-executable string
+Line 515: converted DB opcode to DC.B
+Line 515: commented out non-executable string
+Line 516: converted DB opcode to DC.B
+Line 516: commented out non-executable string
+Line 517: converted DB opcode to DC.B
+Line 517: commented out non-executable string
+Line 518: converted DB opcode to DC.B
+Line 518: commented out non-executable string
+Line 520: converted DB opcode to DC.B
+Line 520: commented out non-executable string
+Line 521: converted DB opcode to DC.B
+Line 521: commented out non-executable string
+Line 522: converted DB opcode to DC.B
+Line 523: converted DB opcode to DC.B
+Line 524: converted DB opcode to DC.B
+Line 525: converted DB opcode to DC.B
+Line 526: converted DB opcode to DC.B
+Line 526: commented out non-executable string
+Line 528: converted DB opcode to DC.B
+Line 528: commented out non-executable string
+Line 529: converted DB opcode to DC.B
+Line 529: commented out non-executable string
+Line 530: converted DB opcode to DC.B
+Line 530: commented out non-executable string
+Line 531: converted DB opcode to DC.B
+Line 531: commented out non-executable string
+Line 532: converted DB opcode to DC.B
+Line 532: commented out non-executable string
+Line 534: converted DB opcode to DC.B
+Line 534: commented out non-executable string
+Line 535: converted DB opcode to DC.B
+Line 535: commented out non-executable string
+Line 536: converted DB opcode to DC.B
+Line 536: commented out non-executable string
+Line 537: converted DB opcode to DC.B
+Line 537: commented out non-executable string

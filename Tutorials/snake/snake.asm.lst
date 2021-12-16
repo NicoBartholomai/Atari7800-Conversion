@@ -1,0 +1,456 @@
+------- FILE snake.asm LEVEL 1 PASS 1
+      1  0000 ????						;  ___ 	  _	   __ ___  __ ___
+      2  0000 ????						; / __|_ _  __ _| |_____ / /| __|/  \_  )
+      3  0000 ????						; \__ \ ' \/ _` | / / -_) _ \__ \ () / /
+      4  0000 ????						; |___/_||_\__,_|_\_\___\___/___/\__/___|
+      5  0000 ????
+      6  0000 ????						; Change direction: W A S D
+      7  0000 ????
+snake.asm (8): error: Unknown Mnemonic 'appleL'.
+      8  0000 ????			   define     appleL	$00	; screen location of apple, low byte
+snake.asm (9): error: Unknown Mnemonic 'appleH'.
+      9  0000 ????			   define     appleH	$01	; screen location of apple, high byte
+snake.asm (10): error: Unknown Mnemonic 'snakeHeadL'.
+     10  0000 ????			   define     snakeHeadL	$10	; screen location of snake head, low byte
+snake.asm (11): error: Unknown Mnemonic 'snakeHeadH'.
+     11  0000 ????			   define     snakeHeadH	$11	; screen location of snake head, high byte
+snake.asm (12): error: Unknown Mnemonic 'snakeBodyStart'.
+     12  0000 ????			   define     snakeBodyStart	$12	; start of snake body byte pairs
+snake.asm (13): error: Unknown Mnemonic 'snakeDirection'.
+     13  0000 ????			   define     snakeDirection	$02	; direction (possible values are below)
+snake.asm (14): error: Unknown Mnemonic 'snakeLength'.
+     14  0000 ????			   define     snakeLength	$03	; snake length, in bytes
+     15  0000 ????
+     16  0000 ????						; Directions (each using a separate bit)
+snake.asm (17): error: Unknown Mnemonic 'movingUp'.
+     17  0000 ????			   define     movingUp	1
+snake.asm (18): error: Unknown Mnemonic 'movingRight'.
+     18  0000 ????			   define     movingRight	2
+snake.asm (19): error: Unknown Mnemonic 'movingDown'.
+     19  0000 ????			   define     movingDown	4
+snake.asm (20): error: Unknown Mnemonic 'movingLeft'.
+     20  0000 ????			   define     movingLeft	8
+     21  0000 ????
+     22  0000 ????						; ASCII values of keys controlling the snake
+snake.asm (23): error: Unknown Mnemonic 'ASCII_w'.
+     23  0000 ????			   define     ASCII_w	$77
+snake.asm (24): error: Unknown Mnemonic 'ASCII_a'.
+     24  0000 ????			   define     ASCII_a	$61
+snake.asm (25): error: Unknown Mnemonic 'ASCII_s'.
+     25  0000 ????			   define     ASCII_s	$73
+snake.asm (26): error: Unknown Mnemonic 'ASCII_d'.
+     26  0000 ????			   define     ASCII_d	$64
+     27  0000 ????
+     28  0000 ????						; System variables
+snake.asm (29): error: Unknown Mnemonic 'sysRandom'.
+     29  0000 ????			   define     sysRandom	$fe
+snake.asm (30): error: Unknown Mnemonic 'sysLastKey'.
+     30  0000 ????			   define     sysLastKey	$ff
+     31  0000 ????
+     32  0000 ????
+snake.asm (33): error: Unknown Mnemonic 'jsr'.
+     33  0000 ????				      jsr	init
+snake.asm (34): error: Unknown Mnemonic 'jsr'.
+     34  0000 ????				      jsr	loop
+     35  0000 ????
+     36  0000 ????			   init
+snake.asm (37): error: Unknown Mnemonic 'jsr'.
+     37  0000 ????				      jsr	initSnake
+snake.asm (38): error: Unknown Mnemonic 'jsr'.
+     38  0000 ????				      jsr	generateApplePosition
+snake.asm (39): error: Unknown Mnemonic 'rts'.
+     39  0000 ????				      rts
+     40  0000 ????
+     41  0000 ????
+     42  0000 ????			   initSnake
+snake.asm (43): error: Unknown Mnemonic 'lda'.
+     43  0000 ????				      lda	#movingRight	;start direction
+snake.asm (44): error: Unknown Mnemonic 'sta'.
+     44  0000 ????				      sta	snakeDirection
+     45  0000 ????
+snake.asm (46): error: Unknown Mnemonic 'lda'.
+     46  0000 ????				      lda	#4	;start length (2 segments)
+snake.asm (47): error: Unknown Mnemonic 'sta'.
+     47  0000 ????				      sta	snakeLength
+     48  0000 ????
+snake.asm (49): error: Unknown Mnemonic 'lda'.
+     49  0000 ????				      lda	#$11
+snake.asm (50): error: Unknown Mnemonic 'sta'.
+     50  0000 ????				      sta	snakeHeadL
+     51  0000 ????
+snake.asm (52): error: Unknown Mnemonic 'lda'.
+     52  0000 ????				      lda	#$10
+snake.asm (53): error: Unknown Mnemonic 'sta'.
+     53  0000 ????				      sta	snakeBodyStart
+     54  0000 ????
+snake.asm (55): error: Unknown Mnemonic 'lda'.
+     55  0000 ????				      lda	#$0f
+snake.asm (56): error: Unknown Mnemonic 'sta'.
+     56  0000 ????				      sta	$14	; body segment 1
+     57  0000 ????
+snake.asm (58): error: Unknown Mnemonic 'lda'.
+     58  0000 ????				      lda	#$04
+snake.asm (59): error: Unknown Mnemonic 'sta'.
+     59  0000 ????				      sta	snakeHeadH
+snake.asm (60): error: Unknown Mnemonic 'sta'.
+     60  0000 ????				      sta	$13	; body segment 1
+snake.asm (61): error: Unknown Mnemonic 'sta'.
+     61  0000 ????				      sta	$15	; body segment 2
+snake.asm (62): error: Unknown Mnemonic 'rts'.
+     62  0000 ????				      rts
+     63  0000 ????
+     64  0000 ????
+     65  0000 ????			   generateApplePosition
+     66  0000 ????						;load a new random byte into $00
+snake.asm (67): error: Unknown Mnemonic 'lda'.
+     67  0000 ????				      lda	sysRandom
+snake.asm (68): error: Unknown Mnemonic 'sta'.
+     68  0000 ????				      sta	appleL
+     69  0000 ????
+     70  0000 ????						;load a new random number from 2 to 5 into $01
+snake.asm (71): error: Unknown Mnemonic 'lda'.
+     71  0000 ????				      lda	sysRandom
+snake.asm (72): error: Unknown Mnemonic 'and'.
+     72  0000 ????				      and	#$03	;mask out lowest 2 bits
+snake.asm (73): error: Unknown Mnemonic 'clc'.
+     73  0000 ????				      clc
+snake.asm (74): error: Unknown Mnemonic 'adc'.
+     74  0000 ????				      adc	#2
+snake.asm (75): error: Unknown Mnemonic 'sta'.
+     75  0000 ????				      sta	appleH
+     76  0000 ????
+snake.asm (77): error: Unknown Mnemonic 'rts'.
+     77  0000 ????				      rts
+     78  0000 ????
+     79  0000 ????
+     80  0000 ????			   loop
+snake.asm (81): error: Unknown Mnemonic 'jsr'.
+     81  0000 ????				      jsr	readKeys
+snake.asm (82): error: Unknown Mnemonic 'jsr'.
+     82  0000 ????				      jsr	checkCollision
+snake.asm (83): error: Unknown Mnemonic 'jsr'.
+     83  0000 ????				      jsr	updateSnake
+snake.asm (84): error: Unknown Mnemonic 'jsr'.
+     84  0000 ????				      jsr	drawApple
+snake.asm (85): error: Unknown Mnemonic 'jsr'.
+     85  0000 ????				      jsr	drawSnake
+snake.asm (86): error: Unknown Mnemonic 'jsr'.
+     86  0000 ????				      jsr	spinWheels
+snake.asm (87): error: Unknown Mnemonic 'jmp'.
+     87  0000 ????				      jmp	loop
+     88  0000 ????
+     89  0000 ????
+     90  0000 ????			   readKeys
+snake.asm (91): error: Unknown Mnemonic 'lda'.
+     91  0000 ????				      lda	sysLastKey
+snake.asm (92): error: Unknown Mnemonic 'cmp'.
+     92  0000 ????				      cmp	#ASCII_w
+snake.asm (93): error: Unknown Mnemonic 'beq'.
+     93  0000 ????				      beq	upKey
+snake.asm (94): error: Unknown Mnemonic 'cmp'.
+     94  0000 ????				      cmp	#ASCII_d
+snake.asm (95): error: Unknown Mnemonic 'beq'.
+     95  0000 ????				      beq	rightKey
+snake.asm (96): error: Unknown Mnemonic 'cmp'.
+     96  0000 ????				      cmp	#ASCII_s
+snake.asm (97): error: Unknown Mnemonic 'beq'.
+     97  0000 ????				      beq	downKey
+snake.asm (98): error: Unknown Mnemonic 'cmp'.
+     98  0000 ????				      cmp	#ASCII_a
+snake.asm (99): error: Unknown Mnemonic 'beq'.
+     99  0000 ????				      beq	leftKey
+snake.asm (100): error: Unknown Mnemonic 'rts'.
+    100  0000 ????				      rts
+    101  0000 ????			   upKey
+snake.asm (102): error: Unknown Mnemonic 'lda'.
+    102  0000 ????				      lda	#movingDown
+snake.asm (103): error: Unknown Mnemonic 'bit'.
+    103  0000 ????				      bit	snakeDirection
+snake.asm (104): error: Unknown Mnemonic 'bne'.
+    104  0000 ????				      bne	illegalMove
+    105  0000 ????
+snake.asm (106): error: Unknown Mnemonic 'lda'.
+    106  0000 ????				      lda	#movingUp
+snake.asm (107): error: Unknown Mnemonic 'sta'.
+    107  0000 ????				      sta	snakeDirection
+snake.asm (108): error: Unknown Mnemonic 'rts'.
+    108  0000 ????				      rts
+    109  0000 ????			   rightKey
+snake.asm (110): error: Unknown Mnemonic 'lda'.
+    110  0000 ????				      lda	#movingLeft
+snake.asm (111): error: Unknown Mnemonic 'bit'.
+    111  0000 ????				      bit	snakeDirection
+snake.asm (112): error: Unknown Mnemonic 'bne'.
+    112  0000 ????				      bne	illegalMove
+    113  0000 ????
+snake.asm (114): error: Unknown Mnemonic 'lda'.
+    114  0000 ????				      lda	#movingRight
+snake.asm (115): error: Unknown Mnemonic 'sta'.
+    115  0000 ????				      sta	snakeDirection
+snake.asm (116): error: Unknown Mnemonic 'rts'.
+    116  0000 ????				      rts
+    117  0000 ????			   downKey
+snake.asm (118): error: Unknown Mnemonic 'lda'.
+    118  0000 ????				      lda	#movingUp
+snake.asm (119): error: Unknown Mnemonic 'bit'.
+    119  0000 ????				      bit	snakeDirection
+snake.asm (120): error: Unknown Mnemonic 'bne'.
+    120  0000 ????				      bne	illegalMove
+    121  0000 ????
+snake.asm (122): error: Unknown Mnemonic 'lda'.
+    122  0000 ????				      lda	#movingDown
+snake.asm (123): error: Unknown Mnemonic 'sta'.
+    123  0000 ????				      sta	snakeDirection
+snake.asm (124): error: Unknown Mnemonic 'rts'.
+    124  0000 ????				      rts
+    125  0000 ????			   leftKey
+snake.asm (126): error: Unknown Mnemonic 'lda'.
+    126  0000 ????				      lda	#movingRight
+snake.asm (127): error: Unknown Mnemonic 'bit'.
+    127  0000 ????				      bit	snakeDirection
+snake.asm (128): error: Unknown Mnemonic 'bne'.
+    128  0000 ????				      bne	illegalMove
+    129  0000 ????
+snake.asm (130): error: Unknown Mnemonic 'lda'.
+    130  0000 ????				      lda	#movingLeft
+snake.asm (131): error: Unknown Mnemonic 'sta'.
+    131  0000 ????				      sta	snakeDirection
+snake.asm (132): error: Unknown Mnemonic 'rts'.
+    132  0000 ????				      rts
+    133  0000 ????			   illegalMove
+snake.asm (134): error: Unknown Mnemonic 'rts'.
+    134  0000 ????				      rts
+    135  0000 ????
+    136  0000 ????
+    137  0000 ????			   checkCollision
+snake.asm (138): error: Unknown Mnemonic 'jsr'.
+    138  0000 ????				      jsr	checkAppleCollision
+snake.asm (139): error: Unknown Mnemonic 'jsr'.
+    139  0000 ????				      jsr	checkSnakeCollision
+snake.asm (140): error: Unknown Mnemonic 'rts'.
+    140  0000 ????				      rts
+    141  0000 ????
+    142  0000 ????
+    143  0000 ????			   checkAppleCollision
+snake.asm (144): error: Unknown Mnemonic 'lda'.
+    144  0000 ????				      lda	appleL
+snake.asm (145): error: Unknown Mnemonic 'cmp'.
+    145  0000 ????				      cmp	snakeHeadL
+snake.asm (146): error: Unknown Mnemonic 'bne'.
+    146  0000 ????				      bne	doneCheckingAppleCollision
+snake.asm (147): error: Unknown Mnemonic 'lda'.
+    147  0000 ????				      lda	appleH
+snake.asm (148): error: Unknown Mnemonic 'cmp'.
+    148  0000 ????				      cmp	snakeHeadH
+snake.asm (149): error: Unknown Mnemonic 'bne'.
+    149  0000 ????				      bne	doneCheckingAppleCollision
+    150  0000 ????
+    151  0000 ????						;eat apple
+snake.asm (152): error: Unknown Mnemonic 'inc'.
+    152  0000 ????				      inc	snakeLength
+snake.asm (153): error: Unknown Mnemonic 'inc'.
+    153  0000 ????				      inc	snakeLength	;increase length
+snake.asm (154): error: Unknown Mnemonic 'jsr'.
+    154  0000 ????				      jsr	generateApplePosition
+    155  0000 ????			   doneCheckingAppleCollision
+snake.asm (156): error: Unknown Mnemonic 'rts'.
+    156  0000 ????				      rts
+    157  0000 ????
+    158  0000 ????
+    159  0000 ????			   checkSnakeCollision
+snake.asm (160): error: Unknown Mnemonic 'ldx'.
+    160  0000 ????				      ldx	#2	;start with second segment
+    161  0000 ????			   snakeCollisionLoop
+snake.asm (162): error: Unknown Mnemonic 'lda'.
+    162  0000 ????				      lda	snakeHeadL,x
+snake.asm (163): error: Unknown Mnemonic 'cmp'.
+    163  0000 ????				      cmp	snakeHeadL
+snake.asm (164): error: Unknown Mnemonic 'bne'.
+    164  0000 ????				      bne	continueCollisionLoop
+    165  0000 ????
+    166  0000 ????			   maybeCollided
+snake.asm (167): error: Unknown Mnemonic 'lda'.
+    167  0000 ????				      lda	snakeHeadH,x
+snake.asm (168): error: Unknown Mnemonic 'cmp'.
+    168  0000 ????				      cmp	snakeHeadH
+snake.asm (169): error: Unknown Mnemonic 'beq'.
+    169  0000 ????				      beq	didCollide
+    170  0000 ????
+    171  0000 ????			   continueCollisionLoop
+snake.asm (172): error: Unknown Mnemonic 'inx'.
+    172  0000 ????				      inx
+snake.asm (173): error: Unknown Mnemonic 'inx'.
+    173  0000 ????				      inx
+snake.asm (174): error: Unknown Mnemonic 'cpx'.
+    174  0000 ????				      cpx	snakeLength	;got to last section with no collision
+snake.asm (175): error: Unknown Mnemonic 'beq'.
+    175  0000 ????				      beq	didntCollide
+snake.asm (176): error: Unknown Mnemonic 'jmp'.
+    176  0000 ????				      jmp	snakeCollisionLoop
+    177  0000 ????
+    178  0000 ????			   didCollide
+snake.asm (179): error: Unknown Mnemonic 'jmp'.
+    179  0000 ????				      jmp	gameOver
+    180  0000 ????			   didntCollide
+snake.asm (181): error: Unknown Mnemonic 'rts'.
+    181  0000 ????				      rts
+    182  0000 ????
+    183  0000 ????
+    184  0000 ????			   updateSnake
+snake.asm (185): error: Unknown Mnemonic 'ldx'.
+    185  0000 ????				      ldx	snakeLength
+snake.asm (186): error: Unknown Mnemonic 'dex'.
+    186  0000 ????				      dex
+snake.asm (187): error: Unknown Mnemonic 'txa'.
+    187  0000 ????				      txa
+    188  0000 ????			   updateloop
+snake.asm (189): error: Unknown Mnemonic 'lda'.
+    189  0000 ????				      lda	snakeHeadL,x
+snake.asm (190): error: Unknown Mnemonic 'sta'.
+    190  0000 ????				      sta	snakeBodyStart,x
+snake.asm (191): error: Unknown Mnemonic 'dex'.
+    191  0000 ????				      dex
+snake.asm (192): error: Unknown Mnemonic 'bpl'.
+    192  0000 ????				      bpl	updateloop
+    193  0000 ????
+snake.asm (194): error: Unknown Mnemonic 'lda'.
+    194  0000 ????				      lda	snakeDirection
+snake.asm (195): error: Unknown Mnemonic 'lsr'.
+    195  0000 ????				      lsr
+snake.asm (196): error: Unknown Mnemonic 'bcs'.
+    196  0000 ????				      bcs	up
+snake.asm (197): error: Unknown Mnemonic 'lsr'.
+    197  0000 ????				      lsr
+snake.asm (198): error: Unknown Mnemonic 'bcs'.
+    198  0000 ????				      bcs	right
+snake.asm (199): error: Unknown Mnemonic 'lsr'.
+    199  0000 ????				      lsr
+snake.asm (200): error: Unknown Mnemonic 'bcs'.
+    200  0000 ????				      bcs	down
+snake.asm (201): error: Unknown Mnemonic 'lsr'.
+    201  0000 ????				      lsr
+snake.asm (202): error: Unknown Mnemonic 'bcs'.
+    202  0000 ????				      bcs	left
+    203  0000 ????			   up
+snake.asm (204): error: Unknown Mnemonic 'lda'.
+    204  0000 ????				      lda	snakeHeadL
+snake.asm (205): error: Unknown Mnemonic 'sec'.
+    205  0000 ????				      sec
+snake.asm (206): error: Unknown Mnemonic 'sbc'.
+    206  0000 ????				      sbc	#$20
+snake.asm (207): error: Unknown Mnemonic 'sta'.
+    207  0000 ????				      sta	snakeHeadL
+snake.asm (208): error: Unknown Mnemonic 'bcc'.
+    208  0000 ????				      bcc	upup
+snake.asm (209): error: Unknown Mnemonic 'rts'.
+    209  0000 ????				      rts
+    210  0000 ????			   upup
+snake.asm (211): error: Unknown Mnemonic 'dec'.
+    211  0000 ????				      dec	snakeHeadH
+snake.asm (212): error: Unknown Mnemonic 'lda'.
+    212  0000 ????				      lda	#$1
+snake.asm (213): error: Unknown Mnemonic 'cmp'.
+    213  0000 ????				      cmp	snakeHeadH
+snake.asm (214): error: Unknown Mnemonic 'beq'.
+    214  0000 ????				      beq	collision
+snake.asm (215): error: Unknown Mnemonic 'rts'.
+    215  0000 ????				      rts
+    216  0000 ????			   right
+snake.asm (217): error: Unknown Mnemonic 'inc'.
+    217  0000 ????				      inc	snakeHeadL
+snake.asm (218): error: Unknown Mnemonic 'lda'.
+    218  0000 ????				      lda	#$1f
+snake.asm (219): error: Unknown Mnemonic 'bit'.
+    219  0000 ????				      bit	snakeHeadL
+snake.asm (220): error: Unknown Mnemonic 'beq'.
+    220  0000 ????				      beq	collision
+snake.asm (221): error: Unknown Mnemonic 'rts'.
+    221  0000 ????				      rts
+    222  0000 ????			   down
+snake.asm (223): error: Unknown Mnemonic 'lda'.
+    223  0000 ????				      lda	snakeHeadL
+snake.asm (224): error: Unknown Mnemonic 'clc'.
+    224  0000 ????				      clc
+snake.asm (225): error: Unknown Mnemonic 'adc'.
+    225  0000 ????				      adc	#$20
+snake.asm (226): error: Unknown Mnemonic 'sta'.
+    226  0000 ????				      sta	snakeHeadL
+snake.asm (227): error: Unknown Mnemonic 'bcs'.
+    227  0000 ????				      bcs	downdown
+snake.asm (228): error: Unknown Mnemonic 'rts'.
+    228  0000 ????				      rts
+    229  0000 ????			   downdown
+snake.asm (230): error: Unknown Mnemonic 'inc'.
+    230  0000 ????				      inc	snakeHeadH
+snake.asm (231): error: Unknown Mnemonic 'lda'.
+    231  0000 ????				      lda	#$6
+snake.asm (232): error: Unknown Mnemonic 'cmp'.
+    232  0000 ????				      cmp	snakeHeadH
+snake.asm (233): error: Unknown Mnemonic 'beq'.
+    233  0000 ????				      beq	collision
+snake.asm (234): error: Unknown Mnemonic 'rts'.
+    234  0000 ????				      rts
+    235  0000 ????			   left
+snake.asm (236): error: Unknown Mnemonic 'dec'.
+    236  0000 ????				      dec	snakeHeadL
+snake.asm (237): error: Unknown Mnemonic 'lda'.
+    237  0000 ????				      lda	snakeHeadL
+snake.asm (238): error: Unknown Mnemonic 'and'.
+    238  0000 ????				      and	#$1f
+snake.asm (239): error: Unknown Mnemonic 'cmp'.
+    239  0000 ????				      cmp	#$1f
+snake.asm (240): error: Unknown Mnemonic 'beq'.
+    240  0000 ????				      beq	collision
+snake.asm (241): error: Unknown Mnemonic 'rts'.
+    241  0000 ????				      rts
+    242  0000 ????			   collision
+snake.asm (243): error: Unknown Mnemonic 'jmp'.
+    243  0000 ????				      jmp	gameOver
+    244  0000 ????
+    245  0000 ????
+    246  0000 ????			   drawApple
+snake.asm (247): error: Unknown Mnemonic 'ldy'.
+    247  0000 ????				      ldy	#0
+snake.asm (248): error: Unknown Mnemonic 'lda'.
+    248  0000 ????				      lda	sysRandom
+snake.asm (249): error: Unknown Mnemonic 'sta'.
+    249  0000 ????				      sta	(appleL),y
+snake.asm (250): error: Unknown Mnemonic 'rts'.
+    250  0000 ????				      rts
+    251  0000 ????
+    252  0000 ????
+    253  0000 ????			   drawSnake
+snake.asm (254): error: Unknown Mnemonic 'ldx'.
+    254  0000 ????				      ldx	snakeLength
+snake.asm (255): error: Unknown Mnemonic 'lda'.
+    255  0000 ????				      lda	#0
+snake.asm (256): error: Unknown Mnemonic 'sta'.
+    256  0000 ????				      sta	(snakeHeadL,x)	; erase end of tail
+    257  0000 ????
+snake.asm (258): error: Unknown Mnemonic 'ldx'.
+    258  0000 ????				      ldx	#0
+snake.asm (259): error: Unknown Mnemonic 'lda'.
+    259  0000 ????				      lda	#1
+snake.asm (260): error: Unknown Mnemonic 'sta'.
+    260  0000 ????				      sta	(snakeHeadL,x)	; paint head
+snake.asm (261): error: Unknown Mnemonic 'rts'.
+    261  0000 ????				      rts
+    262  0000 ????
+    263  0000 ????
+    264  0000 ????			   spinWheels
+snake.asm (265): error: Unknown Mnemonic 'ldx'.
+    265  0000 ????				      ldx	#0
+    266  0000 ????			   spinloop
+snake.asm (267): error: Unknown Mnemonic 'nop'.
+    267  0000 ????				      nop
+snake.asm (268): error: Unknown Mnemonic 'nop'.
+    268  0000 ????				      nop
+snake.asm (269): error: Unknown Mnemonic 'dex'.
+    269  0000 ????				      dex
+snake.asm (270): error: Unknown Mnemonic 'bne'.
+    270  0000 ????				      bne	spinloop
+snake.asm (271): error: Unknown Mnemonic 'rts'.
+    271  0000 ????				      rts
+    272  0000 ????
+    273  0000 ????
+    274  0000 ????			   gameOver

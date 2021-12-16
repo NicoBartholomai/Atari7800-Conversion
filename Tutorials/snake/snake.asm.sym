@@ -1,0 +1,35 @@
+--- Symbol List (sorted by symbol)
+checkAppleCollision      0000 ????             
+checkCollision           0000 ????             
+checkSnakeCollision      0000 ????             
+collision                0000 ????             
+continueCollisionLoop    0000 ????             
+didCollide               0000 ????             
+didntCollide             0000 ????             
+doneCheckingAppleCollision 0000 ????             
+down                     0000 ????             
+downdown                 0000 ????             
+downKey                  0000 ????             
+drawApple                0000 ????             
+drawSnake                0000 ????             
+gameOver                 0000 ????             
+generateApplePosition    0000 ????             
+illegalMove              0000 ????             
+init                     0000 ????             
+initSnake                0000 ????             
+left                     0000 ????             
+leftKey                  0000 ????             
+loop                     0000 ????             
+maybeCollided            0000 ????             
+readKeys                 0000 ????             
+right                    0000 ????             
+rightKey                 0000 ????             
+snakeCollisionLoop       0000 ????             
+spinloop                 0000 ????             
+spinWheels               0000 ????             
+up                       0000 ????             
+updateloop               0000 ????             
+updateSnake              0000 ????             
+upKey                    0000 ????             
+upup                     0000 ????             
+--- End of Symbol List.
