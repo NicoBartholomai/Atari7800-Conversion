@@ -1,11 +1,4 @@
    LIST OFF
-; ***  R E D  V S  B L U E  ***
-; Copyright 1981 Atari, Inc.
-; Programmer: Tod Frye
-
-; Analyzed, labeled and commented
-;  by Dennis Debro
-; Last Update: 25.11.2003
 
    processor 6502
    include vcs.h
@@ -128,11 +121,7 @@ VerticalSync
    lda SWCHB                        ; read the console switches
    ror
    ror
-
-; The following is a too complicated time cycle which has no affect on the
-; ROM execution. I assume it was here to control the animation frame rate
-; but it's not needed. Removing it doesn't alter the animation rate.
-
+   
    bcs .resetGameTimer3             ; carry bit holds select state
 
    lda gameTimer3
