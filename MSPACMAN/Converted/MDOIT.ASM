@@ -1,3 +1,4 @@
+	processor 6502 
 JE
 LMARIAOS
 LMSDEF
@@ -48,3 +49,4 @@ R:1:MS.Z
 
 
 J^^MUP
+END

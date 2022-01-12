@@ -1,3 +1,4 @@
+	processor 6502 
 FILL      MACRO   ADDR,DATA,COUNT        ;THIS FILLS AN AREA WITH A CONSTANT
           LDA     &DATA
           LDX     &COUNT
@@ -13,23 +14,24 @@ L&INDX    LDA     &ADDR2-1,X
           BNE     L&INDX
           ENDM
 PFILL     MACRO   ADDR,DATA,PAGENUM      ;THIS FILLS A NUMBER OF PAGES
-          LDA     #H(&ADDR)              ;TEMP0 AND TEMP1 ARE USED
+          LDA     #>&ADDR;              ;TEMP0 AND TEMP1 ARE USED
           STA     TEMP1
-          LDA     #L(&ADDR)
+          LDA     #<&ADDR
           STA     TEMP0
           LDA     &DATA
           LDX     &PAGENUM
           JSR     PFILLIT
           ENDM
 PLOAD     MACRO   ADDR,ADDR2,PAGENUM     ;THIS LOADS A NUMBER OF PAGES
-          LDA     #H(&ADDR)              ;TEMP0 - TEMP3 ARE USED
+          LDA     #>&ADDR;              ;TEMP0 - TEMP3 ARE USED
           STA     TEMP1
-          LDA     #L(&ADDR)
+          LDA     #<&ADDR
           STA     TEMP0
-          LDA     #H(&ADDR2)
+          LDA     #>&ADDR2
           STA     TEMP3
-          LDA     #L(&ADDR2)
+          LDA     #<&ADDR2
           STA     TEMP2
           LDX     &PAGENUM
           JSR     PLOADIT
           ENDM
+END

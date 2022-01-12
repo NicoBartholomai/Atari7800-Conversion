@@ -1,15 +1,16 @@
-*
-* INTRSECT.S      PAC-FRUIT AND PAC-MONSTER INTERSECT ROUTINES
-*
+	processor 6502 
+;*
+;* INTRSECT.S      PAC-FRUIT AND PAC-MONSTER INTERSECT ROUTINES
+;*
 
-* PFINTR          PAC-FRUIT INTERSECT ROUTINE
-*         IN:
-*         USES:
+;* PFINTR          PAC-FRUIT INTERSECT ROUTINE
+;*         IN:
+;*         USES:
 
 PFINTR
-          LDA     FENABLE                ;MAKE SURE FRUIT ON
+          LDA     FENABLE;                ;MAKE SURE FRUIT ON
           BEQ     PFIEND
-          LDA     FSCORE                 ;MAKE SURE FRUIT NOT SCORE
+          LDA     FSCORE;                 ;MAKE SURE FRUIT NOT SCORE
           BNE     PFIEND
 
           LDA     PHPOS
@@ -20,7 +21,7 @@ PFINTR
           LDA     #0
           SEC
           SBC     TEMP0
-          STA     TEMP0                  ; TEMP0 = ABS(PHPOS-FHPOS)
+          STA     TEMP0;                  ; TEMP0 = ABS(PHPOS-FHPOS)
 PFINTR1   CMP     #$06
           BCS     PFIEND
 
@@ -32,7 +33,7 @@ PFINTR1   CMP     #$06
           LDA     #0
           SEC
           SBC     TEMP1
-          STA     TEMP1                  ; TEMP1 = ABS(PVPOS-FVPOS)
+          STA     TEMP1;                  ; TEMP1 = ABS(PVPOS-FVPOS)
 PFINTR2   LDY     TEMP0
           CMP     INTRSECT,Y
           BCS     PFIEND
@@ -47,9 +48,9 @@ PFINTR2   LDY     TEMP0
 
 PFIEND    RTS
 
-* PMINTR          PAC-MONSTER INTERSECT ROUTINE
-*         IN:
-*         USES:
+;* PMINTR          PAC-MONSTER INTERSECT ROUTINE
+;*         IN:
+;*         USES:
 
 PMINTR
           LDX     #3
@@ -62,7 +63,7 @@ PMILOOP
           LDA     #0
           SEC
           SBC     TEMP0
-          STA     TEMP0                  ; TEMP0 = ABS(PHPOS-MHPOS)
+          STA     TEMP0;                  ; TEMP0 = ABS(PHPOS-MHPOS)
 PMINTR1   CMP     #$06
           BCS     PMIEND
 
@@ -74,7 +75,7 @@ PMINTR1   CMP     #$06
           LDA     #0
           SEC
           SBC     TEMP1
-          STA     TEMP1                  ; TEMP1 = ABS(PVPOS-MVPOS)
+          STA     TEMP1;                  ; TEMP1 = ABS(PVPOS-MVPOS)
 PMINTR2   LDY     TEMP0
           CMP     INTRSECT,Y
           BCS     PMIEND
@@ -102,9 +103,9 @@ PMIEND    DEX
           BPL     PMILOOP
           RTS
 
-*
-* MONDEATH        -MONSTER DEATH CODE
-*         IN      X IS MONSTER NUMBER
+;*
+;* MONDEATH        -MONSTER DEATH CODE
+;*         IN      X IS MONSTER NUMBER
 
 MONDEATH
           JSR     SCORSTMP
@@ -145,8 +146,9 @@ DEATHEND
           LDX     TEMP16
           RTS
 
-INTRSECT  DB      $05,$04,$03,$02,$01,$00
-MONSCORH  DB      $00,$00,$00,$01
-MONSCORL  DB      $20,$40,$80,$60
-FRTSCORH  DB      $00,$00,$00,$00,$00,$01,$02,$05
-FRTSCORL  DB      $05,$10,$20,$50,$70,$00,$00,$00
+INTRSECT  DC.B      $05,$04,$03,$02,$01,$00
+MONSCORH  DC.B      $00,$00,$00,$01
+MONSCORL  DC.B      $20,$40,$80,$60
+FRTSCORH  DC.B      $00,$00,$00,$00,$00,$01,$02,$05
+FRTSCORL  DC.B      $05,$10,$20,$50,$70,$00,$00,$00
+END

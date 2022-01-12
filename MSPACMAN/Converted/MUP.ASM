@@ -1,3 +1,4 @@
+	processor 6502 
 JS
 ^L
 SW1
@@ -38,3 +39,4 @@ ena
 
 ir
 SEPC#MAIN
+END
