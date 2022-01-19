@@ -398,5 +398,3 @@ EDZONE0   DC.B      $03,$04,$03,$03
 EDZONE1   DC.B      $19,$19,$16,$1A
 EDCOL0    DC.B      $01,$01,$01,$01
 EDCOL1    DC.B      $1A,$1A,$1A,$1A
-
-END

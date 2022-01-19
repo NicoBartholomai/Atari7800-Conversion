@@ -4,7 +4,7 @@
 ;*                 FIRST FILE TO BE LOADED TO MAKE SURE ALL GRAPHICS ON EVEN
 ;*                 CHARACTERS
 
-          ASEG
+          ;ASEG <-- Im not sure what this does so Im removing it - Nico
 
           ORG     $C000;                  ; CART STARTS AT C000
 
@@ -351,5 +351,3 @@ CLAPBRDU  DC.B      $00,$03,$00,$0C,$00,$30,$00,$F0,$03,$33,$0C,$3C  ;UP C0
           DC.B      $33,$30,$C3,$C0,$C3,$00,$CC,$00,$F0,$00,$C0,$00
           DC.B      $00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00  ;UP C2
           DC.B      $00,$00,$F0,$00,$30,$00,$3C,$00,$30,$00,$C0,$00
-
-END

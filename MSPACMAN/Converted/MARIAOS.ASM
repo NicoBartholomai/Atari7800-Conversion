@@ -84,5 +84,3 @@ INTIM     EQU     $284;                   ;INTERVAL TIMER IN
 TIM8T     EQU     $295;                   ;TIMER 8T WRITE OUT
 TIM64T    EQU     $296;                   ;TIMER 64T WRITE OUT
 TIM64TI   EQU     $29E;                   ;INTERRUPT TIMER 64T
-
-END

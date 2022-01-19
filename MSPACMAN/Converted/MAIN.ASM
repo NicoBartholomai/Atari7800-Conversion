@@ -220,5 +220,3 @@ DOMENU    LDX     #STACKPTR;              ;DO THE MENU
 DOATRACT  LDX     #STACKPTR;              ;GO TO ATTRACT MODE
           TXS
           JMP     ATTRACT
-
-END

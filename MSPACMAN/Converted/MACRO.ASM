@@ -34,4 +34,3 @@ PLOAD     MACRO   ADDR,ADDR2,PAGENUM     ;THIS LOADS A NUMBER OF PAGES
           LDX     &PAGENUM
           JSR     PLOADIT
           ENDM
-END

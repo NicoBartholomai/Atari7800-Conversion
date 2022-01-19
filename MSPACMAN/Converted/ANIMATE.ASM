@@ -7,8 +7,15 @@
 ANIMATE   STA     ANWHICH;                ;STORE WHICH ANIMATION
           JSR     CLEARTUN
           JSR     CLRSCRN;                ;TURN OFF INDICATORS
-          PFILL   SCREEN,#$00,#$04       ;ERASE SCREEN
-;*         JSR     LOADDLST;               ;RE-LOAD DISPLAY LIST
+
+          LDA     #>SCREEN;              ;Clear screen
+          STA     TEMP1
+          LDA     #<SCREEN
+          STA     TEMP0
+          LDA     $00
+          LDX     $04
+          JSR     PFILLIT
+          JSR     LOADDLST;               ;RE-LOAD DISPLAY LIST
 
           LDA     #WHITE;                 ;SET UP COLOR FOR WORDS
           LDY     #$18
@@ -23,7 +30,13 @@ ANLOOP0   STA     P0C3,Y
           JSR     ANITUNE;                ;START TUNE
           JSR     ANIWORDS;               ;PUT UP ACT
 
-          PFILL   SCREEN,#$00,#$04       ;ERASE SCREEN
+          LDA     #>SCREEN;              ;Clear screen
+          STA     TEMP1
+          LDA     #<SCREEN
+          STA     TEMP0
+          LDA     $00
+          LDX     $04
+          JSR     PFILLIT
 
           LDX     ANWHICH
           LDA     ANASTART,X;             ;GET OFFSET INTO ANIMATION DATA
@@ -319,8 +332,8 @@ ACTDNH    DC.B      $0E+LEFTSIDE,$16+LEFTSIDE,$1E+LEFTSIDE
 ACTBASV   DC.B      $55,$55,$55;            ;VERTICAL POSITONS
 ACTUPV    DC.B      $4A,$42,$3A
 ACTDNV    DC.B      $51,$51,$51
-ACTBASSL  DC.B      <CLAPBRD,<CLAPBRD+24,<CLAPBRD+48    ;STAMP LOW BYTE
-ACTUPSL   DC.B      <CLAPBRDU,<CLAPBRDU+24,<CLAPBRDU+48
+ACTBASSL  DC.B      <CLAPBRD,<(CLAPBRD+24),<(CLAPBRD+48)   ;STAMP LOW BYTE
+ACTUPSL   DC.B      <CLAPBRDU,<(CLAPBRDU+24),<(CLAPBRDU+48)
 ACTDNSL   DC.B      <CLAPBRDD,<CLAPBRDD+24,<CLAPBRDD+48
 ACTBASSH  DC.B      >CLAPBRD,>CLAPBRD+24,>CLAPBRD+48    ;STAMP HI BYTE
 ACTUPSH   DC.B      >CLAPBRDU,>CLAPBRDU+24,>CLAPBRDU+48
@@ -535,5 +548,3 @@ ANANMOVE  DC.B      0,0,0,0,0,0,0,0;                ;0 MOVEMENTS FOR ANIMATIONS
           DC.B      0,1,0,-1,0,1,0,-1;              ;10
           DC.B      0,0,1,0,0,0,-1,0;               ;18
 
-
-END

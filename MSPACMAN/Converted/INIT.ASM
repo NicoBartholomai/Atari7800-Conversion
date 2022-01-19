@@ -4,7 +4,7 @@
 
 ;*  DO THE INITIALIZATION NEEDED AT THE VERY MINIMUM.
 STRTINIT  JSR     ZERORAM;                ;ZERO RAM, TURN OFF DISPLAY
-          FILL    $40,#0,#$60;            ;NULL OUT LOWER PART OF PAGE ZERO
+          DC.B    $40,#0,#$60;            ;NULL OUT LOWER PART OF PAGE ZERO
           JSR     ZEROSCOR
 
           LDX     #$1F;                   ;RANDOMIZE SEED
@@ -400,7 +400,7 @@ LOADFONT  LDA     #<MSFONT;             ;SET UP TEMP0 FOR READS FROM FONT
           STA     TEMP4;                  ;  GET $60 CHARACTERS FROM FONT
           LDY     #$00
 
-LFLOOP    LDA     #>STAMPS+$500        ;SET HI BYTE OF WRITE
+LFLOOP    LDA     #>(STAMPS+$500)       ;SET HI BYTE OF WRITE
           STA     TEMP3
           LDX     #$05;                   ;INNER LOOP IS SIX BIG (SIZE OF CHAR)
 LFLOOP0   LDA     (TEMP0),Y;              ;READ FROM FONT
@@ -517,7 +517,7 @@ LIFOUT    RTS
 
 
 ;*  THIS ROUTINE DOES THE WORK FOR THE FRUIT AND PAC WRITING ROUTINES
-LIBODY    LDA     #>STAMPS+$500        ;SET TEMP8 TO DESTINATION
+LIBODY    LDA     #>(STAMPS+$500)        ;SET TEMP8 TO DESTINATION
           STA     TEMP9
           LDA     TEMP0;                  ;SET (TEMP2) TO POINT TO SECOND PART
           CLC
@@ -640,4 +640,3 @@ INITSCOR  DC.B      $00,$00,$00,$00,$09,$99
 ;*  MAPPING OF FRUIT TO PALETTE AND STAMP
 FRTPAL    DC.B      $60,$60,$80,$A0,$60,$60,$C0,$20
 FRTSTMP   DC.B      $FC,$F8,$F4,$F0,$EC,$E8,$E4,$E0
-END

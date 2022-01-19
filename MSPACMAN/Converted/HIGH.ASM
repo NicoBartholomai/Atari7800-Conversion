@@ -136,5 +136,3 @@ HSCTEMP   DC.B      $80,$01;                ;ID NUMBER AND TRAILING ZERO
 HSCMS     DC.B      $1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D
           DC.B      $0C,$12,$1D,$0F,$00,$02,$1C,$0C,$00,$0D  ;MS PAC-MAN
           DC.B      $1D,$1D,$1D,$1D,$1D,$1D,$1D,$1D
-
-END

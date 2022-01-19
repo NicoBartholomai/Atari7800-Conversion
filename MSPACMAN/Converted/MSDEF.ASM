@@ -397,4 +397,3 @@ STACKPTR  EQU     $FF;                    ;WHERE STACK IS ON PAGE 1
 ;*
 GRAPHON   EQU     $48;                    ;CTL VALUE FOR NORMAL GRAPHICS
 GRAPHOFF  EQU     $FF;                    ;CTL VALUE FOR GRAPHICS OFF
-END
