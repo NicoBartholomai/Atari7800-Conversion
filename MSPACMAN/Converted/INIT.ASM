@@ -4,7 +4,7 @@
 
 ;*  DO THE INITIALIZATION NEEDED AT THE VERY MINIMUM.
 STRTINIT  JSR     ZERORAM;                ;ZERO RAM, TURN OFF DISPLAY
-          DC.B    $40,#0,#$60;            ;NULL OUT LOWER PART OF PAGE ZERO
+    FILL $40,#0,#$60            ;NULL OUT LOWER PART OF PAGE ZERO
           JSR     ZEROSCOR
 
           LDX     #$1F;                   ;RANDOMIZE SEED
@@ -458,9 +458,9 @@ LFLOOP1   STA     MSADDR,X
 
 
 ;*  THIS ROUTINE LOADS THE BITMAPS FOR THE INDICATORS AND SETS UP FRUIT INDS
-LOADINDS  LDA     #<MSCHAR+48;          ;TEMP0 IS START OF MS PAC
+LOADINDS  LDA     #<(MSCHAR+48);          ;TEMP0 IS START OF MS PAC
           STA     TEMP0
-          LDA     #>MSCHAR+48
+          LDA     #>(MSCHAR+48)
           STA     TEMP1
           LDA     #$28
           STA     TEMP4

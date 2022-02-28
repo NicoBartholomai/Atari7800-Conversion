@@ -8,13 +8,14 @@ ANIMATE   STA     ANWHICH;                ;STORE WHICH ANIMATION
           JSR     CLEARTUN
           JSR     CLRSCRN;                ;TURN OFF INDICATORS
 
-          LDA     #>SCREEN;              ;Clear screen
-          STA     TEMP1
-          LDA     #<SCREEN
-          STA     TEMP0
-          LDA     $00
-          LDX     $04
-          JSR     PFILLIT
+        ;   LDA     #>SCREEN;              ;Clear screen
+        ;   STA     TEMP1
+        ;   LDA     #<SCREEN
+        ;   STA     TEMP0
+        ;   LDA     $00
+        ;   LDX     $04
+        ;   JSR     PFILLIT
+          PFILL   SCREEN,#$00,#$04        ;ERASE SCREEN
           JSR     LOADDLST;               ;RE-LOAD DISPLAY LIST
 
           LDA     #WHITE;                 ;SET UP COLOR FOR WORDS
@@ -30,13 +31,14 @@ ANLOOP0   STA     P0C3,Y
           JSR     ANITUNE;                ;START TUNE
           JSR     ANIWORDS;               ;PUT UP ACT
 
-          LDA     #>SCREEN;              ;Clear screen
-          STA     TEMP1
-          LDA     #<SCREEN
-          STA     TEMP0
-          LDA     $00
-          LDX     $04
-          JSR     PFILLIT
+        ;   LDA     #>SCREEN;              ;Clear screen
+        ;   STA     TEMP1
+        ;   LDA     #<SCREEN
+        ;   STA     TEMP0
+        ;   LDA     $00
+        ;   LDX     $04
+        ;   JSR     PFILLIT
+          PFILL   SCREEN,#$00,#$04        ;ERASE SCREEN
 
           LDX     ANWHICH
           LDA     ANASTART,X;             ;GET OFFSET INTO ANIMATION DATA
@@ -334,10 +336,10 @@ ACTUPV    DC.B      $4A,$42,$3A
 ACTDNV    DC.B      $51,$51,$51
 ACTBASSL  DC.B      <CLAPBRD,<(CLAPBRD+24),<(CLAPBRD+48)   ;STAMP LOW BYTE
 ACTUPSL   DC.B      <CLAPBRDU,<(CLAPBRDU+24),<(CLAPBRDU+48)
-ACTDNSL   DC.B      <CLAPBRDD,<CLAPBRDD+24,<CLAPBRDD+48
-ACTBASSH  DC.B      >CLAPBRD,>CLAPBRD+24,>CLAPBRD+48    ;STAMP HI BYTE
-ACTUPSH   DC.B      >CLAPBRDU,>CLAPBRDU+24,>CLAPBRDU+48
-ACTDNSH   DC.B      >CLAPBRDD,>CLAPBRDD+24,>CLAPBRDD+48
+ACTDNSL   DC.B      <CLAPBRDD,<(CLAPBRDD+24),<(CLAPBRDD+48)
+ACTBASSH  DC.B      >CLAPBRD,>(CLAPBRD+24),>(CLAPBRD+48)    ;STAMP HI BYTE
+ACTUPSH   DC.B      >CLAPBRDU,>(CLAPBRDU+24),>(CLAPBRDU+48)
+ACTDNSH   DC.B      >CLAPBRDD,>(CLAPBRDD+24),>(CLAPBRDD+48)
 
 
 ;*  OFFSET TABLES FROM CHARACTER INDEX TO OFFSET

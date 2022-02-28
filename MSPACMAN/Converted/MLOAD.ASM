@@ -2,54 +2,61 @@
 
  	    SEG     ROM
 HEADER  ORG     $0000
-        DC.B    1  ; 0   Header version     - 1 byte
-        DC.B    "ATARI7800"     ; 1..16  "ATARI7800   "  - 16 bytes
-        DS      7,32
-        ; DC.B    "Test"; 17..48 Cart title      - 32 bytes
-        DS      HEADER+49-.,0
-		; Hack of changing the 256->code line to the $00,$00,$80,$00 code line
-		; added by Aaron Lanterman, 9/4/2020, to stop assembler from complaining...
-		; Basically, I'm telling it you have a 32K cartridge, but that doesn't
-		; seem to break the emulator (at least)
-		DC.B    $00,$00,$80,$00;
-        ;DC.B    $00,$00,256->code,$00; 49..52 data length      - 4 bytes
-        DC.B    $00,$00  ; 53..54 cart type      - 2 bytes
-    ;    bit 0 - pokey at $4000
-    ;    bit 1 - supergame bank switched
-    ;    bit 2 - supergame ram at $4000
-    ;    bit 3 - rom at $4000
-    ;    bit 4 - bank 6 at $4000
-    ;    bit 5 - supergame banked ram
-    ;    bit 6 - pokey at $450
-    ;    bit 7 - mirror ram at $4000
-    ;    bit 8-15 - Special
+    ;Begin Header
+    DC.B 3  ; header version 3
+    ; Version 3 requires zero filling, dasm defaults to 1's so this must be manually added.
+    DC.B "ATARI7800"    ; Atari 7800 magic text
+    DS 7, 32            ; magic text must be 16 bytes
+    DC.B "Ms. Pac-Man"
+    DS 21, 32           ; name must be 32 bytes
+    ; DS HEADER+49-., 0   ; name must be 32 bytes ; todo double check this
+    ; DC.B $00, $00,256->ROMTOP,$00 ; rom size without header - 4 bytes
+    ; DC.B $00, $00, $3F, $7E ; rom size without header - 4bytes
+    DC.B $00, $00, $FF, $00 ; rom size without header - 4bytes
+    
+    DC.B $00, $00; cart type - 2 bytes
+    ;    bit  0 - pokey at 4000
+    ;    bit  1 - supergame bank switched
+    ;    bit  2 - supergame ram at $4000
+    ;    bit  3 - rom at $4000
+    ;    bit  4 - bank 6 at $4000
+    ;    bit  5 - supergame banked ram
+    ;    bit  6 - pokey at $450
+    ;    bit  7 - mirror ram at $4000
+    ;    bit  8 - activision banking
+    ;    bit  9 - absolute banking
+    ;    bit 10 - pokey at $440
+    ;    bit 11 - ym2151 at $461/462
+    ;    bit 12 - souper
+    ;    bit 13 - bankset
+    ;    bit 14-15 - Special
     ;   0 = Normal cart
-        DC.B    1  ; 55   controller 1 type  - 1 byte
-        DC.B    1  ; 56   controller 2 type  - 1 byte
-    ;    0 = None
-    ;    1 = Joystick
-    ;    2 = Light Gun
-        DC.B    0  ; 57 0 = NTSC 1 = PA
-        DC.B    0  ; 58   Save data peripheral - 1 byte (version 2)
+    
+    DC.B $01, $01; controller types (1b per controller) - 2 bytes, 1 = normal
+    ;    0=None, 1=joystick, 2=lightgun, 3=paddle, 4=trakball, 5=2600-stick
+    ;    6=driving, 7=keypad, 8=st-mouse, 9=amiga-mouse
+    
+    DC.B $00; TV type; bit0 = 0:NTSC,1:PAL bit1 = 0:component,1:composite
+    
+    DC.B $00; Save data peripheral - 1 byte (version 2)
     ;    0 = None / unknown (default)
     ;    1 = High Score Cart (HSC)
     ;    2 = SaveKey
-        ORG     HEADER+63
-        DC.B    0  ; 63   Expansion module
-    ;    0 = No expansion module (default on all currently released games)
-    ;    1 = Expansion module required
-        ORG     $80     ; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
-        DC.B    "ACTUAL CART DATA STARTS HERE"
-; ; end of header code for the simulator added by Aaron Lanterman
 
-    include "MARIAOS.ASM"
-    include "MSDEF.ASM"
-    include "MSCHAR.ASM"
+    DS 4, 0 ; reserved
+    DC.B $00; Expansion Module; bit 0    = XM
+
+    DS 36, 0 ; reserved
+    DC.B "ACTUAL CART DATA STARTS HERE" ; magic end header text
+
+    include "MARIAOS.ASM" ; this checks out
+    include "MSDEF.ASM"   ; this also checks out
+    include "MSCHAR.ASM"  ; checks out
     align 2
-    include "MAIN.ASM"
-    include "INIT.ASM"
+    include "MAIN.ASM"      ;some differences
+    include "INIT.ASM"      ; also some differences
     align 2
-    include "MSMOVE.ASM"
+    include "MSMOVE.ASM"  
     include "FRUIT.ASM"
     align 2
     include "MONSTER.ASM"
@@ -75,6 +82,7 @@ HEADER  ORG     $0000
     include "END.ASM"
     align 2
     include "MACRO.ASM"
+    align 2
 
  ; I'm pretty sure these are all of the files you would need to use
 
