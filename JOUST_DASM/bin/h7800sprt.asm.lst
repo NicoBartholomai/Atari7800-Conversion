@@ -1,0 +1,480 @@
+------- FILE h7800sprt.asm LEVEL 1 PASS 2
+      1  10000 ????						; Atari 7800 sprite sample
+      2  10000 ????						; Written by Daniel Boris (dboris@home.com)
+      3  10000 ????						;
+      4  10000 ????						; Assemble with DASM
+      5  10000 ????						;
+      6  10000 ????
+      7  10000 ????				       processor	6502
+      8  10000 ????
+      9  10000 ????						; ************ Hardware Adresses ***************************
+     10  10000 ????
+     11  10000 ????		00 01	    INPTCTRL   equ	$01	;Input control
+     12  10000 ????		00 15	    AUDC0      equ	$15	;Audio Control Channel 0
+     13  10000 ????		00 16	    AUDC1      equ	$16	;Audio Control Channel 1
+     14  10000 ????		00 17	    AUDF0      equ	$17	;Audio Frequency Channel 0
+     15  10000 ????		00 18	    AUDF1      equ	$18	;Audio Frequency Channel 1
+     16  10000 ????		00 19	    AUDV0      equ	$19	;Audio Volume Channel 0
+     17  10000 ????		00 1a	    AUDV1      equ	$1A	;Audio Volume Channel 1
+     18  10000 ????		00 08	    INPT0      equ	$08	;Paddle Control Input 0
+     19  10000 ????		00 09	    INPT1      equ	$09	;Paddle Control Input 1
+     20  10000 ????		00 0a	    INPT2      equ	$0A	;Paddle Control Input 2
+     21  10000 ????		00 0b	    INPT3      equ	$0B	;Paddle Control Input 3
+     22  10000 ????		00 0c	    INPT4      equ	$0C	;Player 0 Fire Button Input
+     23  10000 ????		00 0d	    INPT5      equ	$0D	;Player 1 Fire Button Input
+     24  10000 ????
+     25  10000 ????		00 20	    BACKGRND   equ	$20	;Background Color
+     26  10000 ????		00 21	    P0C1       equ	$21	;Palette 0 - Color 1
+     27  10000 ????		00 22	    P0C2       equ	$22	;Palette 0 - Color 2
+     28  10000 ????		00 23	    P0C3       equ	$23	;Palette 0 - Color 3
+     29  10000 ????		00 20	    WSYNC      equ	$20	;Wait For Sync
+     30  10000 ????		00 21	    P1C1       equ	$21	;Palette 1 - Color 1
+     31  10000 ????		00 22	    P1C2       equ	$22	;Palette 1 - Color 2
+     32  10000 ????		00 23	    P1C3       equ	$23	;Palette 1 - Color 3
+     33  10000 ????		00 28	    MSTAT      equ	$28	;Maria Status
+     34  10000 ????		00 29	    P2C1       equ	$29	;Palette 2 - Color 1
+     35  10000 ????		00 2a	    P2C2       equ	$2A	;Palette 2 - Color 2
+     36  10000 ????		00 2b	    P2C3       equ	$2B	;Palette 2 - Color 3
+     37  10000 ????		00 2c	    DPPH       equ	$2C	;Display List List Pointer High
+     38  10000 ????		00 2d	    P3C1       equ	$2D	;Palette 3 - Color 1
+     39  10000 ????		00 2e	    P3C2       equ	$2E	;Palette 3 - Color 2
+     40  10000 ????		00 2f	    P3C3       equ	$2F	;Palette 3 - Color 3
+     41  10000 ????		00 30	    DPPL       equ	$30	;Display List List Pointer Low
+     42  10000 ????		00 31	    P4C1       equ	$31	;Palette 4 - Color 1
+     43  10000 ????		00 32	    P4C2       equ	$32	;Palette 4 - Color 2
+     44  10000 ????		00 33	    P4C3       equ	$33	;Palette 4 - Color 3
+     45  10000 ????		00 34	    CHARBASE   equ	$34	;Character Base Address
+     46  10000 ????		00 35	    P5C1       equ	$35	;Palette 5 - Color 1
+     47  10000 ????		00 36	    P5C2       equ	$36	;Palette 5 - Color 2
+     48  10000 ????		00 37	    P5C3       equ	$37	;Palette 5 - Color 3
+     49  10000 ????		00 38	    OFFSET     equ	$38	;Unused - Store zero here
+     50  10000 ????		00 39	    P6C1       equ	$39	;Palette 6 - Color 1
+     51  10000 ????		00 3a	    P6C2       equ	$3A	;Palette 6 - Color 2
+     52  10000 ????		00 3b	    P6C3       equ	$3B	;Palette 6 - Color 3
+     53  10000 ????		00 3c	    CTRL       equ	$3C	;Maria Control Register
+     54  10000 ????		00 3d	    P7C1       equ	$3D	;Palette 7 - Color 1
+     55  10000 ????		00 3e	    P7C2       equ	$3E	;Palette 7 - Color 2
+     56  10000 ????		00 3f	    P7C3       equ	$3F	;Palette 7 - Color 3
+     57  10000 ????
+     58  10000 ????		02 80	    SWCHA      equ	$280	;P0, P1 Joystick Directional Input
+     59  10000 ????		02 82	    SWCHB      equ	$282	;Console Switches
+     60  10000 ????		02 81	    CTLSWA     equ	$281	;I/O Control for SCHWA
+     61  10000 ????		02 83	    CTLSWB     equ	$283	;I/O Control for SCHWB
+     62  10000 ????
+     63 U0051 ????				      SEG.U	data
+     64 U0051 ????
+     65 U0051 ????
+     66 U0051 ????						;******* Vairables ********************************
+     67 U0051 ????
+     68 U0040					      org	$40
+     69 U0040
+     70 U0040		       00	   xpos       ds.b	1	;X Position of sprite
+     71 U0041		       00	   ypos       ds.b	1	;Y Position of sprite
+     72 U0042		       00	   temp       ds.b	1
+     73 U0043		       00 00	   dlpnt      ds.w	1
+     74 U0045		       00 00 00 00*dlend      ds.b	12	;Index of end of each DL
+     75 U0051
+     76  10000 ????				       SEG	ROM
+     77  10000 ????						;HEADER  ORG	  ROMTOP-128
+     78  7f80				   HEADER     ORG	$7F80	;did this manually
+     79  7f80		       03		      DC.B	3	; 0   Header version	  - 1 byte
+     80  7f81		       41 54 41 52*	      DC.B	"ATARI7800"	; 1..16  "ATARI7800   "  - 16 bytes
+     81  7f8a		       20 20 20 20*	      DS	7,32
+     82  7f91		       30 31 32 33*	      DC.B	"01234567890123"	; 17..48 Cart title	  - 32 bytes
+     83  7f9f		       00 00 00 00*	      DS	HEADER+49-.,0
+     84  7fb1		       00 00 80 00	      DC.B	$00,$00,256->ROMTOP,$00	; 49..52 data length	   - 4 bytes
+     85  7fb5		       00 00		      DC.B	$00,$00	; 53..54 cart type	 - 2 bytes
+     86  7fb7							;    bit  0 - pokey at 4000
+     87  7fb7							;    bit  1 - supergame bank switched
+     88  7fb7							;    bit  2 - supergame ram at $4000
+     89  7fb7							;    bit  3 - rom at $4000
+     90  7fb7							;    bit  4 - bank 6 at $4000
+     91  7fb7							;    bit  5 - supergame banked ram
+     92  7fb7							;    bit  6 - pokey at $450
+     93  7fb7							;    bit  7 - mirror ram at $4000
+     94  7fb7							;    bit  8 - activision banking
+     95  7fb7							;    bit  9 - absolute banking
+     96  7fb7							;    bit 10 - pokey at $440
+     97  7fb7							;    bit 11 - ym2151 at $461/462
+     98  7fb7							;    bit 12 - souper
+     99  7fb7							;    bit 13-15 - Special
+    100  7fb7							;   0 = Normal cart
+    101  7fb7		       01		      DC.B	1	; 55	controller 1 type  - 1 byte
+    102  7fb8		       01		      DC.B	1	; 56	controller 2 type  - 1 byte
+    103  7fb9							;    0 = None
+    104  7fb9							;    1 = Joystick
+    105  7fb9							;    2 = Light Gun
+    106  7fb9		       00		      DC.B	0	; 57	bit0 = 0:NTSC,1:PAL bit1 = 0:component,1:composite
+    107  7fba		       00		      DC.B	0	; 58	Save data peripheral - 1 byte (version 2)
+    108  7fbb							;    0 = None / unknown (default)
+    109  7fbb							;    1 = High Score Cart (HSC)
+    110  7fbb							;    2 = SaveKey
+    111  7fbf					      ORG	HEADER+63
+    112  7fbf		       00		      DC.B	0	; 63	Expansion module
+    113  7fc0							;    0 = No expansion module (default on all currently released games)
+    114  7fc0							;    1 = Expansion module required
+    115  7fe4					      ORG	HEADER+100	; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
+    116  7fe4		       41 43 54 55*	      DC.B	"ACTUAL CART DATA STARTS HERE"
+    117  8000
+    118  8000							;**********************************************************
+    119  8000
+    120  8000							;	SEG code
+    121  8000
+    122  8000				   ROMTOP     org	$8000	;Start of code
+    123  8000
+    124  8000				   START
+    125  8000		       78		      sei		;Disable interrupts
+    126  8001		       d8		      cld		;Clear decimal mode
+    127  8002
+    128  8002
+    129  8002							;******** Atari recommended startup procedure
+    130  8002
+    131  8002		       a9 07		      lda	#$07
+    132  8004		       85 01		      sta	INPTCTRL	;Lock into 7800 mode
+    133  8006		       a9 7f		      lda	#$7F
+    134  8008		       85 3c		      sta	CTRL	;Disable DMA
+    135  800a		       a9 00		      lda	#$00
+    136  800c		       85 38		      sta	OFFSET
+    137  800e		       85 01		      sta	INPTCTRL
+    138  8010		       a2 ff		      ldx	#$FF	;Reset stack pointer
+    139  8012		       9a		      txs
+    140  8013
+    141  8013							;************** Clear zero page and hardware ******
+    142  8013
+    143  8013		       a2 40		      ldx	#$40
+    144  8015		       a9 00		      lda	#$00
+    145  8017				   crloop1
+    146  8017		       95 00		      sta	$00,x	;Clear zero page
+    147  8019		       9d 00 01 	      sta	$100,x	;Clear page 1
+    148  801c		       e8		      inx
+    149  801d		       d0 f8		      bne	crloop1
+    150  801f
+    151  801f							;************* Clear RAM **************************
+    152  801f
+    153  801f		       a0 00		      ldy	#$00	;Clear Ram
+    154  8021		       a9 18		      lda	#$18	;Start at $1800
+    155  8023		       85 81		      sta	$81
+    156  8025		       a9 00		      lda	#$00
+    157  8027		       85 80		      sta	$80
+    158  8029				   crloop3
+    159  8029		       a9 00		      lda	#$00
+    160  802b		       91 80		      sta	($80),y	;Store data
+    161  802d		       c8		      iny		;Next byte
+    162  802e		       d0 f9		      bne	crloop3	;Branch if not done page
+    163  8030		       e6 81		      inc	$81	;Next page
+    164  8032		       a5 81		      lda	$81
+    165  8034		       c9 20		      cmp	#$20	;End at $1FFF
+    166  8036		       d0 f1		      bne	crloop3	;Branch if not
+    167  8038
+    168  8038		       a0 00		      ldy	#$00	;Clear Ram
+    169  803a		       a9 22		      lda	#$22	;Start at $2200
+    170  803c		       85 81		      sta	$81
+    171  803e		       a9 00		      lda	#$00
+    172  8040		       85 80		      sta	$80
+    173  8042				   crloop4
+    174  8042		       a9 00		      lda	#$00
+    175  8044		       91 80		      sta	($80),y	;Store data
+    176  8046		       c8		      iny		;Next byte
+    177  8047		       d0 f9		      bne	crloop4	;Branch if not done page
+    178  8049		       e6 81		      inc	$81	;Next page
+    179  804b		       a5 81		      lda	$81
+    180  804d		       c9 27		      cmp	#$27	;End at $27FF
+    181  804f		       d0 f1		      bne	crloop4	;Branch if not
+    182  8051
+    183  8051		       a2 00		      ldx	#$00
+    184  8053		       a9 00		      lda	#$00
+    185  8055				   crloop5		;Clear 2100-213F
+    186  8055		       9d 00 21 	      sta	$2100,x
+    187  8058		       e8		      inx
+    188  8059		       e0 40		      cpx	#$40
+    189  805b		       d0 f8		      bne	crloop5
+    190  805d
+    191  805d							;************* Build DLL *******************
+    192  805d
+    193  805d							; 20 blank lines
+    194  805d
+    195  805d		       a2 00		      ldx	#$00
+    196  805f		       a9 4f		      lda	#$4F	;16 lines
+    197  8061		       9d 00 18 	      sta	$1800,x
+    198  8064		       e8		      inx
+    199  8065		       a9 21		      lda	#$21	;$2100 = blank DL
+    200  8067		       9d 00 18 	      sta	$1800,x
+    201  806a		       e8		      inx
+    202  806b		       a9 00		      lda	#$00
+    203  806d		       9d 00 18 	      sta	$1800,x
+    204  8070		       e8		      inx
+    205  8071		       a9 44		      lda	#$44	;4 lines
+    206  8073		       9d 00 18 	      sta	$1800,x
+    207  8076		       e8		      inx
+    208  8077		       a9 21		      lda	#$21
+    209  8079		       9d 00 18 	      sta	$1800,x
+    210  807c		       e8		      inx
+    211  807d		       a9 00		      lda	#$00
+    212  807f		       9d 00 18 	      sta	$1800,x
+    213  8082		       e8		      inx
+    214  8083
+    215  8083							; 192 mode lines divided into 12 regions
+    216  8083
+    217  8083		       a0 00		      ldy	#$00
+    218  8085				   DLLloop2
+    219  8085		       a9 4f		      lda	#$4F	;16 lines
+    220  8087		       9d 00 18 	      sta	$1800,x
+    221  808a		       e8		      inx
+    222  808b		       b9 b7 81 	      lda	DLPOINTH,y
+    223  808e		       9d 00 18 	      sta	$1800,x
+    224  8091		       e8		      inx
+    225  8092		       b9 c3 81 	      lda	DLPOINTL,y
+    226  8095		       9d 00 18 	      sta	$1800,x
+    227  8098		       e8		      inx
+    228  8099		       c8		      iny
+    229  809a		       c0 0d		      cpy	#$0D	;12 DLL entries
+    230  809c		       d0 e7		      bne	DLLloop2
+    231  809e
+    232  809e
+    233  809e							; 26 blank lines
+    234  809e
+    235  809e		       a9 4f		      lda	#$4F	;16 lines
+    236  80a0		       9d 00 18 	      sta	$1800,x
+    237  80a3		       e8		      inx
+    238  80a4		       a9 21		      lda	#$21	;$2100 = blank DL
+    239  80a6		       9d 00 18 	      sta	$1800,x
+    240  80a9		       e8		      inx
+    241  80aa		       a9 00		      lda	#$00
+    242  80ac		       9d 00 18 	      sta	$1800,x
+    243  80af		       e8		      inx
+    244  80b0		       a9 4a		      lda	#$4A	;10 lines
+    245  80b2		       9d 00 18 	      sta	$1800,x
+    246  80b5		       e8		      inx
+    247  80b6		       a9 21		      lda	#$21
+    248  80b8		       9d 00 18 	      sta	$1800,x
+    249  80bb		       e8		      inx
+    250  80bc		       a9 00		      lda	#$00
+    251  80be		       9d 00 18 	      sta	$1800,x
+    252  80c1
+    253  80c1
+    254  80c1							;***************** Setup Maria Registers ****************
+    255  80c1
+    256  80c1		       a9 18		      lda	#$18	;DLL at $1800
+    257  80c3		       85 2c		      sta	DPPH
+    258  80c5		       a9 00		      lda	#$00
+    259  80c7		       85 30		      sta	DPPL
+    260  80c9		       a9 18		      lda	#$18	;Setup Palette 0
+    261  80cb		       85 21		      sta	P0C1
+    262  80cd		       a9 38		      lda	#$38
+    263  80cf		       85 22		      sta	P0C2
+    264  80d1		       a9 58		      lda	#$58
+    265  80d3		       85 23		      sta	P0C3
+    266  80d5		       a9 43		      lda	#$43	;Enable DMA
+    267  80d7		       85 3c		      sta	CTRL
+    268  80d9		       a9 00		      lda	#$00	;Setup ports to read mode
+    269  80db		       8d 81 02 	      sta	CTLSWA
+    270  80de		       8d 83 02 	      sta	CTLSWB
+    271  80e1
+    272  80e1		       a9 40		      lda	#$40	;Set initial X position of sprite
+    273  80e3		       85 40		      sta	xpos
+    274  80e5
+    275  80e5				   mainloop
+    276  80e5		       a5 28		      lda	MSTAT	;Wait for VBLANK
+    277  80e7		       29 80		      and	#$80
+    278  80e9		       f0 fa		      beq	mainloop
+    279  80eb
+    280  80eb		       ad 80 02 	      lda	SWCHA	;Read stick
+    281  80ee		       29 80		      and	#$80	;Pushed Right?
+    282  80f0		       d0 05		      bne	skip1
+    283  80f2		       a6 40		      ldx	xpos	;Move sprite to right
+    284  80f4		       e8		      inx
+    285  80f5		       86 40		      stx	xpos
+    286  80f7				   skip1
+    287  80f7		       ad 80 02 	      lda	SWCHA	;Read stick
+    288  80fa		       29 40		      and	#$40	;Pushed Left?
+    289  80fc		       d0 05		      bne	skip2
+    290  80fe		       a6 40		      ldx	xpos	;Move sprite to left
+    291  8100		       ca		      dex
+    292  8101		       86 40		      stx	xpos
+    293  8103				   skip2
+    294  8103		       ad 80 02 	      lda	SWCHA	;Read stick
+    295  8106		       29 20		      and	#$20	;Pushed Down?
+    296  8108		       d0 09		      bne	skip3
+    297  810a		       a6 41		      ldx	ypos	;Move sprite down
+    298  810c		       e0 b0		      cpx	#176
+    299  810e		       f0 03		      beq	skip3	;Don't move if we are at the bottom
+    300  8110		       e8		      inx
+    301  8111		       86 41		      stx	ypos
+    302  8113				   skip3
+    303  8113		       ad 80 02 	      lda	SWCHA	;Read stick
+    304  8116		       29 10		      and	#$10	;Pushed Up?
+    305  8118		       d0 07		      bne	skip4
+    306  811a		       a6 41		      ldx	ypos	;Move sprite up
+    307  811c		       f0 03		      beq	skip4	;Don't move if we are at the top
+    308  811e		       ca		      dex
+    309  811f		       86 41		      stx	ypos
+    310  8121				   skip4
+    311  8121
+    312  8121							;********************** reset DL ends ******************
+    313  8121
+    314  8121		       a2 0c		      ldx	#$0C
+    315  8123		       a9 00		      lda	#$00
+    316  8125				   dlclearloop
+    317  8125		       ca		      dex
+    318  8126		       95 45		      sta	dlend,x
+    319  8128		       d0 fb		      bne	dlclearloop
+    320  812a
+    321  812a
+    322  812a							;******************** build DL entries *********************
+    323  812a
+    324  812a		       a5 41		      lda	ypos	;Get Y position
+    325  812c		       29 f0		      and	#$F0
+    326  812e		       4a		      lsr		;Divide by 16
+    327  812f		       4a		      lsr
+    328  8130		       4a		      lsr
+    329  8131		       4a		      lsr
+    330  8132		       aa		      tax
+    331  8133		       bd c3 81 	      lda	DLPOINTL,x	;Get pointer to DL that this sprite starts in
+    332  8136		       85 43		      sta	dlpnt
+    333  8138		       bd b7 81 	      lda	DLPOINTH,x
+    334  813b		       85 44		      sta	dlpnt+1
+    335  813d
+    336  813d							;Create DL entry for upper part of sprite
+    337  813d
+    338  813d		       b4 45		      ldy	dlend,x	;Get the index to the end of this DL
+    339  813f		       a9 00		      lda	#$00
+    340  8141		       91 43		      sta	(dlpnt),y	;Low byte of data address
+    341  8143		       c8		      iny
+    342  8144		       a9 40		      lda	#$40	;Mode 320x1
+    343  8146		       91 43		      sta	(dlpnt),y
+    344  8148		       c8		      iny
+    345  8149		       a5 41		      lda	ypos
+    346  814b		       29 0f		      and	#$0F
+    347  814d		       09 a0		      ora	#$a0
+    348  814f		       91 43		      sta	(dlpnt),y
+    349  8151		       c8		      iny
+    350  8152		       a9 1f		      lda	#$1F	;Palette 0, 1 byte wide
+    351  8154		       91 43		      sta	(dlpnt),y
+    352  8156		       c8		      iny
+    353  8157		       a5 40		      lda	xpos	;Horizontal position
+    354  8159		       91 43		      sta	(dlpnt),y
+    355  815b		       94 45		      sty	dlend,x
+    356  815d
+    357  815d		       a5 41		      lda	ypos
+    358  815f		       29 0f		      and	#$0F	;See if sprite is entirely within this region
+    359  8161		       f0 32		      beq	doneDL	;branch if it is
+    360  8163
+    361  8163							;Create DL entry for lower part of sprite 
+    362  8163
+    363  8163		       e8		      inx		;Next region
+    364  8164		       bd c3 81 	      lda	DLPOINTL,x	;Get pointer to next DL
+    365  8167		       85 43		      sta	dlpnt
+    366  8169		       bd b7 81 	      lda	DLPOINTH,x
+    367  816c		       85 44		      sta	dlpnt+1
+    368  816e		       b4 45		      ldy	dlend,x	;Get the index to the end of this DL
+    369  8170		       a9 00		      lda	#$00
+    370  8172		       91 43		      sta	(dlpnt),y
+    371  8174		       c8		      iny
+    372  8175		       a9 40		      lda	#$40	;Mode 320x1
+    373  8177		       91 43		      sta	(dlpnt),y
+    374  8179		       c8		      iny
+    375  817a		       a5 41		      lda	ypos
+    376  817c		       29 0f		      and	#$0F
+    377  817e		       49 0f		      eor	#$0F
+    378  8180		       85 42		      sta	temp
+    379  8182		       a9 a0		      lda	#$a0
+    380  8184		       18		      clc
+    381  8185		       e5 42		      sbc	temp
+    382  8187		       91 43		      sta	(dlpnt),y
+    383  8189		       c8		      iny
+    384  818a		       a9 1f		      lda	#$1F	;Palette 0, 1 byte wide
+    385  818c		       91 43		      sta	(dlpnt),y
+    386  818e		       c8		      iny
+    387  818f		       a5 40		      lda	xpos	;Horizontal position
+    388  8191		       91 43		      sta	(dlpnt),y
+    389  8193		       94 45		      sty	dlend,x
+    390  8195				   doneDL
+    391  8195
+    392  8195							;************** add DL end entry on each DL *****************************
+    393  8195
+    394  8195		       a2 0c		      ldx	#$0C
+    395  8197				   dlendloop
+    396  8197		       ca		      dex
+    397  8198		       bd c3 81 	      lda	DLPOINTL,x
+    398  819b		       85 43		      sta	dlpnt
+    399  819d		       bd b7 81 	      lda	DLPOINTH,x
+    400  81a0		       85 44		      sta	dlpnt+1
+    401  81a2		       b4 45		      ldy	dlend,x
+    402  81a4		       c8		      iny
+    403  81a5		       a9 00		      lda	#$00
+    404  81a7		       91 43		      sta	(dlpnt),y
+    405  81a9		       8a		      txa
+    406  81aa		       d0 eb		      bne	dlendloop
+    407  81ac
+    408  81ac				   vbloop
+    409  81ac		       a5 28		      lda	MSTAT	;Wait for VBLANK to end
+    410  81ae		       29 80		      and	#$80
+    411  81b0		       d0 fa		      bne	vbloop
+    412  81b2
+    413  81b2		       4c e5 80 	      jmp	mainloop	;Loop
+    414  81b5
+    415  81b5				   redraw
+    416  81b5
+    417  81b5
+    418  81b5				   NMI
+    419  81b5		       40		      RTI
+    420  81b6
+    421  81b6				   IRQ
+    422  81b6		       40		      RTI
+    423  81b7
+    424  81b7
+    425  81b7							;Pointers to the DLs
+    426  81b7
+    427  81b7				   DLPOINTH
+    428  81b7		       22 22 22 22*	      .byte.b	$22,$22,$22,$22,$23,$23,$23,$23,$24,$24,$24,$24
+    429  81c3				   DLPOINTL
+    430  81c3		       00 40 80 c0*	      .byte.b	$00,$40,$80,$C0,$00,$40,$80,$C0,$00,$40,$80,$C0
+    431  81cf
+    432  81cf
+    433  81cf
+    434  81cf
+    435  81cf							;************** Graphic Data *****************************
+    436  a000					      org	$a000
+    437  a000		       3c		      .byte.b	%00111100
+    438  a100					      org	$a100
+    439  a100		       3c		      .byte.b	%00111100
+    440  a200					      org	$a200
+    441  a200		       7e		      .byte.b	%01111110
+    442  a300					      org	$a300
+    443  a300		       7e		      .byte.b	%01111110
+    444  a400					      org	$a400
+    445  a400		       c3		      .byte.b	%11000011
+    446  a500					      org	$a500
+    447  a500		       bd		      .byte.b	%10111101
+    448  a600					      org	$a600
+    449  a600		       ff		      .byte.b	%11111111
+    450  a700					      org	$a700
+    451  a700		       ff		      .byte.b	%11111111
+    452  a800					      org	$a800
+    453  a800		       ff		      .byte.b	%11111111
+    454  a900					      org	$a900
+    455  a900		       99		      .byte.b	%10011001
+    456  aa00					      org	$aA00
+    457  aa00		       99		      .byte.b	%10011001
+    458  ab00					      org	$aB00
+    459  ab00		       ff		      .byte.b	%11111111
+    460  ac00					      org	$aC00
+    461  ac00		       7e		      .byte.b	%01111110
+    462  ad00					      org	$aD00
+    463  ad00		       7e		      .byte.b	%01111110
+    464  ae00					      org	$aE00
+    465  ae00		       c3		      .byte.b	%11000011
+    466  af00					      org	$aF00
+    467  af00		       c3		      .byte.b	%11000011
+    468  af01
+    469  af01
+    470  af01							;************** Cart reset vector **************************
+    471  af01
+    472  fff8					      org	$fff8
+    473  fff8		       ff		      .byte.b	$FF	;Region verification
+    474  fff9		       87		      .byte.b	$87	;ROM start $4000
+    475  fffa		       b5 81		      .word.w	#NMI
+    476  fffc		       00 80		      .word.w	#START
+    477  fffe		       b6 81		      .word.w	#IRQ
+    478  10000
+    479  10000

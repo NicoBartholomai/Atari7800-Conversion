@@ -1,0 +1,518 @@
+--- Symbol List (sorted by symbol)
+ANEGG                    d2f8              (R )
+ANEGG1                   d391              (R )
+ANOTHX                   d252              (R )
+ARF                      da1f              (R )
+ARNDINC                  d61d              (R )
+AROO                     da08              (R )
+AROUND                   d630              (R )
+ASPEED                   00da                  
+ATTRACT                  0089              (R )
+AUDC0                    0015              (R )
+AUDC1                    0016                  
+AUDF0                    0017              (R )
+AUDF1                    0018                  
+AUDV0                    0019              (R )
+AUDV1                    001a              (R )
+BIRTH1ST                 000d              (R )
+BIRTHAN                  00e8                  
+BIRTHSND                 0007                  
+BIRTHTIM                 00ea                  
+BITLP                    d04f              (R )
+BITMAP                   d021              (R )
+BITMAPPL                 d023              (R )
+BLANK                    de50              (R )
+BNCEFRQ                  d463              (R )
+BNCEVOL                  d4b6              (R )
+BNCSOUND                 0003                  
+BOTCNT                   00f6              (R )
+BOTDEX                   00a0              (R )
+BRADKLDG                 d284              (R )
+BRTHFRQ                  d43d              (R )
+BRTHITIM                 0005                  
+BRTHVOL                  d4b9              (R )
+BSTAND                   dc59              (R )
+BWLOOP                   d3f1              (R )
+CFIGINDX                 00b5              (R )
+CHK1BOT                  d1c0              (R )
+CHK2BOT                  d1e0              (R )
+CMP10                    da02              (R )
+CMP10A                   da19              (R )
+COLOR0                   00a4              (R )
+COLOR1                   00a7              (R )
+COLORCNT                 00ac              (R )
+COLORTAB                 dcd9              (R )
+COLUBK                   0009                  
+COLUP0                   0006              (R )
+COLUP1                   0007              (R )
+COLUPF                   0008              (R )
+COPY0                    df96              (R )
+COPY1                    df9d              (R )
+COPY2                    dfa3              (R )
+COPY3                    dfa9              (R )
+COPY4                    dfaf              (R )
+COPY5                    dfb5              (R )
+CPWAIT                   db42              (R )
+CROSS                    d12a                  
+CTLSWA                   0281                  
+CTLSWB                   0283                  
+CTRLPF                   000a              (R )
+CXBLPF                   0036                  
+CXCLR                    002c                  
+CXM0FB                   0034                  
+CXM0P                    0030                  
+CXM1FB                   0035                  
+CXM1P                    0031                  
+CXP0FB                   0032                  
+CXP1FB                   0033                  
+CXPPMM                   0037                  
+DDP                      d57c              (R )
+DEPNUM                   00f3              (R )
+DLOAD                    d080              (R )
+DOAFF                    dbfc              (R )
+DOALT                    db62                  
+DOAP0                    d571              (R )
+DOASET                   db81              (R )
+DOBANKD                  dff5                  
+DOBITM                   dafa              (R )
+DOBITMAP                 d9e6              (R )
+DOBLNK                   da16              (R )
+DOBOT                    d1f4              (R )
+DOBOT2                   d205              (R )
+DOBOTM                   d1f2              (R )
+DOCHEK                   d2db              (R )
+DODP0PP1                 d6c7              (R )
+DOENM                    d2fc              (R )
+DOENM1                   d395              (R )
+DOIT0                    d952              (R )
+DOIT0A                   d951              (R )
+DOIT1                    d940              (R )
+DOIT1A                   d93f              (R )
+DOIT2                    d92c              (R )
+DOIT3                    d91b              (R )
+DOIT4                    d8f7              (R )
+DOLOAD                   d0ac              (R )
+DOLOW                    d158              (R )
+DOMID                    d1aa              (R )
+DOMID2                   d1cc              (R )
+DONE                     d21b              (R )
+DONE3                    d766              (R )
+DONE30A                  d834              (R )
+DONE31A                  d69c              (R )
+DONEP0                   d337              (R )
+DONEP1                   d3d0              (R )
+DOP0                     d2ad              (R )
+DOP1                     d345              (R )
+DOPICK                   dc3a              (R )
+DOPP0DP1                 d791              (R )
+DOREST                   d175              (R )
+DOSND                    d0b0                  
+DOTOP                    d150              (R )
+DOTOP2                   d198              (R )
+DOWHT                    d374              (R )
+DP0DP1                   d6f8              (R )
+DP0DP1PF                 d796              (R )
+DP0PP1                   d7cd              (R )
+DP0PP1PF                 d867              (R )
+DPFPP0                   d606              (R )
+DPP0DP1                  d860              (R )
+DUR                      dcbb              (R )
+DWNVMAX                  0002                  
+EATEGFRQ                 d42b              (R )
+EATEGG                   000e                  
+EATEGVOL                 d4c1              (R )
+EGG                      ddec              (R )
+EGGHHFRQ                 d47c              (R )
+EGGHHVOL                 d480              (R )
+EGGHTCH                  000d              (R )
+EGGO                     00e0                  
+EGGSCORE                 00e6                  
+EIGHT                    de40                  
+ELOAD                    d257              (R )
+ENABL                    001f                  
+ENAM0                    001d                  
+ENAM1                    001e                  
+ENDD                     dcbb                  
+ENDDC                    dcf7                  
+ENDDD                    de00                  
+ENDDE                    df00                  
+ENDDF                    dfec                  
+ENDKERN                  d8c2              (R )
+ENDLOAD                  d4dc                  
+ENDRAM                   00fc                  
+ENDSND                   d11d              (R )
+ENDSOUND                 d42b                  
+ENDSTAMP                 de00                  
+ENEMA                    00ec              (R )
+ENMYCOL                  d2e5              (R )
+EXP0SNUM                 0007                  
+EXP2SNP1                 000a                  
+EXPLFRQ                  d444              (R )
+EXPLVOL                  d491              (R )
+EXTRAMAN                 000f              (R )
+EXTRFRQ                  d484              (R )
+EXTRVOL                  d4cf              (R )
+FBFRAC                   0080                  
+FILLP                    d138              (R )
+FIVE                     de28                  
+FLAPFRQ                  d4b1              (R )
+FLAPVOL                  d488              (R )
+FLPSOUND                 0002                  
+FLYFEFCP                 0004                  
+FLYFEFST                 0005              (R )
+FOOBAR                   d6b1              (R )
+FORCE0                   d30a              (R )
+FORCE1                   d3a3              (R )
+FOUR                     de20                  
+FRMCNT                   0080              (R )
+GAMEOVER                 dbab              (R )
+GAMETYPE                 00fa              (R )
+GBEF                     dc13              (R )
+GBEFM                    dc0f              (R )
+GEN2                     00d0              (R )
+GENERALS                 00d2              (R )
+GLADRAG                  00fb              (R )
+GMINIT                   dc77              (R )
+GOBANKF                  dff2              (R )
+GOINP0                   d5fb              (R )
+GONEITIM                 00ee                  
+GOTOP0                   d789              (R )
+GPENTRY                  db56                  
+GRP0                     001b              (R )
+GRP1                     001c              (R )
+HALFWAY                  d8b1              (R )
+HEADER                   0000              (R )
+HEIGHT                   0005              (R )
+HISCORE                  0083              (R )
+HMBL                     0024                  
+HMCLR                    002b              (R )
+HMM0                     0022                  
+HMM1                     0023                  
+HMOVE                    002a              (R )
+HMP0                     0020              (R )
+HMP1                     0021              (R )
+HTABLE                   df0f              (R )
+INFP0                    00aa              (R )
+INFP1                    00ad              (R )
+INITRAM                  d00a              (R )
+INPT0                    0038                  
+INPT1                    0039                  
+INPT2                    003a                  
+INPT3                    003b                  
+INPT4                    003c              (R )
+INPT5                    003d              (R )
+INTIM                    0284              (R )
+ISTA2B1                  000d                  
+ISTA2SLD                 000b                  
+ISTA2WLK                 0005                  
+ISTATB1                  00f0                  
+ITITI                    0004              (R )
+JDONE                    d195              (R )
+JKERN                    d3f6                  
+KERNAL                   d4f6              (R )
+LABEL                    d28c              (R )
+LDYINDX                  d08d              (R )
+LENGTH                   d3f9              (R )
+LFTABL                   d41c              (R )
+LIFLUP                   da3c              (R )
+LINECNT                  00ab              (R )
+LIVES                    0081              (R )
+LIVES0                   dfbc              (R )
+LIVES1                   d415              (R )
+LMOSTPXL                 0001                  
+LOGO0                    de54              (R )
+LOGO1                    de70              (R )
+LOGO2                    de8d              (R )
+LOGO3                    deaa              (R )
+LOGO4                    dec7              (R )
+LOGO5                    dee3              (R )
+LOOP                     d259              (R )
+LOOPER                   d8b8              (R )
+LOWBYTE                  d408              (R )
+LOWER                    006c              (R )
+LOWSCORE                 0087              (R )
+LTERYSPD                 0004                  
+LTERYTYP                 008c                  
+LVTABL                   dcca              (R )
+MAJKLDG                  d091              (R )
+MAXSDLAY                 0008                  
+MAXWDLAY                 000c                  
+MIDCNT                   00f5              (R )
+MIDDEX                   009e              (R )
+MIDSCORE                 0085              (R )
+MINBIT                   d042              (R )
+MORE                     d77b              (R )
+MPTR                     00b3              (R )
+MTABLE                   d7be              (R )
+MTINDX                   df00              (R )
+NEWFRAME                 db51              (R )
+NEXT0                    d945              (R )
+NEXT1                    d92f              (R )
+NEXT2                    d920              (R )
+NEXT3                    d8fa              (R )
+NINE                     de48                  
+NO0                      d737              (R )
+NO0A                     d832              (R )
+NO1                      d764              (R )
+NO1A                     d69a              (R )
+NOALT                    db6e              (R )
+NOAXE                    db7c              (R )
+NOBITM                   dafd              (R )
+NOEGGH                   d0a6              (R )
+NOEND                    d5ec              (R )
+NOINCM                   d7a6              (R )
+NOINCMK                  d7b9              (R )
+NOMORE                   d955              (R )
+NONTED                   d8ec              (R )
+NOPE                     d15e              (R )
+NOPE1                    d164              (R )
+NORST                    db9e              (R )
+NOTED                    d90f                  
+NOTEST                   d739              (R )
+NOTHING                  d8dc              (R )
+NOTSOUND                 0000                  
+NULL                     d121              (R )
+NUSIZ0                   0004              (R )
+NUSIZ1                   0005              (R )
+NXTP0                    d6be              (R )
+NXTP1                    d859              (R )
+OEXT0                    d9c6              (R )
+OEXT1                    d9b1              (R )
+OEXT2                    d99e              (R )
+OEXT3                    d98d              (R )
+OHMY                     d60f              (R )
+ONE                      de08                  
+OOIT0                    d9d2              (R )
+OOIT1                    d9c1              (R )
+OOIT2                    d9ac              (R )
+OOIT3                    d999              (R )
+OOIT4                    d98a              (R )
+OOMORE                   d9d5              (R )
+ORON                     dc00              (R )
+P015                     dc60              (R )
+P018                     dc67              (R )
+P019                     dc5c              (R )
+P020                     dc68              (R )
+P050                     dc68              (R )
+P0CNT                    00a2              (R )
+P0HPOS                   009c              (R )
+P0LOADLP                 d2b4              (R )
+P0VOFF                   00b1              (R )
+P0VTBL                   0096              (R )
+P1CNT                    00a3              (R )
+P1HPOS                   009f              (R )
+P1LOADLP                 d34c              (R )
+P1VOFF                   00b2              (R )
+P1VTBL                   0099              (R )
+PDEATH                   000f              (R )
+PDETHSTM                 0003                  
+PDETHTIM                 00ea                  
+PDTHSNUM                 00e8              (R )
+PF                       dfc3              (R )
+PF0                      000d                  
+PF1                      000e              (R )
+PF10K                    d883              (R )
+PF1IN                    d7b2              (R )
+PF1OK                    d6ec              (R )
+PF1ST                    d629              (R )
+PF2                      000f              (R )
+PFCOLOR1                 0028              (R )
+PFCOLOR2                 0026              (R )
+PFCOLOR3                 0024              (R )
+PFCOLOR4                 0022              (R )
+PGONE                    000e              (R )
+PGONETIM                 00ea                  
+PICKSTP                  dc16              (R )
+PLAY0                    d250              (R )
+PLAYCOL                  00aa              (R )
+PLDLP                    d23b              (R )
+POOPP1PF                 d609              (R )
+POS0                     d5d6              (R )
+POS0A                    d672              (R )
+POS1                     d5c0              (R )
+POS1A                    d80a              (R )
+PP0DP1                   d635              (R )
+PP0DP1PF                 d6d0              (R )
+PP0PP1                   d57f              (R )
+PP0PP1PF                 d60d                  
+PREVIOUS                 00b2              (R )
+PS0                      d54e              (R )
+PS1                      d53c              (R )
+PTR0                     008c              (R )
+PTR0H                    008d              (R )
+PTR1                     008e              (R )
+PTR1H                    008f              (R )
+PTR2                     0090              (R )
+PTR2H                    0091              (R )
+PTR3                     0092              (R )
+PTR3H                    0093              (R )
+PTR4                     0094              (R )
+PTR4H                    0095              (R )
+PTR5                     0096              (R )
+PTR5H                    0097              (R )
+RACKNUM                  008a              (R )
+REFP0                    000b              (R )
+REFP1                    000c              (R )
+REGULAR                  dc32              (R )
+RESBL                    0014                  
+RESM0                    0012                  
+RESM1                    0013                  
+RESMP0                   0028                  
+RESMP1                   0029                  
+RESP0                    0010              (R )
+RESP1                    0011              (R )
+RESTLOAD                 d29f              (R )
+RETURN                   d977              (R )
+REXPL0                   dd8c              (R )
+REXPL1                   dd9e              (R )
+REXPL2                   ddb2              (R )
+RMSTCPXL                 007f                  
+RMSTSPXL                 007e                  
+ROMTOP                   dffc              (R )
+RSKID                    dd53              (R )
+RSYNC                    0003                  
+RTERYSPD                 0000                  
+RTERYTYP                 000c                  
+RTERYWDN                 ddd8              (R )
+RTERYWUP                 ddc6              (R )
+RWALK0                   dd03              (R )
+RWALK1                   dd17              (R )
+RWALK2                   dd2b              (R )
+RWALK3                   dd3f              (R )
+RWINGDWN                 dd67              (R )
+RWINGUP                  dd7b              (R )
+SCNTRLI0                 00a4              (R )
+SCNTRLI1                 00a5              (R )
+SCNTRLS                  dce8              (R )
+SCOREZIP                 db96              (R )
+SCRCHFRQ                 d468              (R )
+SCREETCH                 000b              (R )
+SELCHK                   dbc4              (R )
+SELHIT                   dbd1              (R )
+SETDN                    d1a2              (R )
+SETUP                    d210              (R )
+SETUPLP                  d210              (R )
+SEVEN                    de38                  
+SHIELD                   000b              (R )
+SHLDFRQ                  d44e              (R )
+SHLDITIM                 0035                  
+SHLDSEC                  00e8                  
+SHLDSND                  0008              (R )
+SHLDTIM                  00ea                  
+SIX                      de30                  
+SIXER                    dc66                  
+SKDSOUND                 0004              (R )
+SKIDFRQ                  d49a              (R )
+SNDEXIT                  d12a              (R )
+SNDINDX0                 00ef              (R )
+SNDINDX1                 00f0                  
+SNDRIVER                 d0ac                  
+SNDSKP10                 d0d0              (R )
+SNDSKP29                 d125              (R )
+SNDSKP30                 d127              (R )
+SNDTIM0                  00ed              (R )
+SNDTIM1                  00ee                  
+SNDTYP0                  00f1              (R )
+SNDTYP1                  00f2              (R )
+SOUNDLP                  d0b8              (R )
+SOUNDS                   d42b              (R )
+SPECFLO                  d18b                  
+SPECIAL                  d185              (R )
+SPECIAL2                 d18d              (R )
+SPEED                    00d4              (R )
+SQUISH                   d88f              (R )
+SQUISHER                 d891              (R )
+ST2ONLY                  d909              (R )
+STAMP0                   0090              (R )
+STAMP1                   0093              (R )
+START                    d003              (R )
+STAT2                    00ce              (R )
+STATES                   00c6              (R )
+STNS0                    d651              (R )
+STNS1                    d7eb              (R )
+STNSIZ0                  d599              (R )
+STNSIZ1                  d5af              (R )
+STNZ0                    d519              (R )
+STNZ1                    d52b              (R )
+STPR0                    da0b              (R )
+STPR1                    da22              (R )
+STPSHLDS                 0009              (R )
+STPSKDSN                 0005              (R )
+STRTKERN                 d509              (R )
+STUFFIT                  d276              (R )
+STVOL                    d106              (R )
+STY1                     dc8a              (R )
+STYPOS1                  dbfe              (R )
+SUCKER                   d917                  
+SWCHA                    0280                  
+SWCHB                    0282              (R )
+TEDDY                    d4d5              (R )
+TEMP0                    00b0              (R )
+TEMP1                    00b1              (R )
+TEMP2                    00b2              (R )
+TEMP3                    00b3              (R )
+TEMP4                    008d                  
+TEMPM4FC                 008c                  
+TERYCNT                  00f7                  
+TERYFLAG                 0060                  
+TERYTIME                 00f8              (R )
+THREE                    de18                  
+TIEDFRQ                  d439              (R )
+TIEDVOL                  d48d              (R )
+TIESOUND                 000a              (R )
+TIM64T                   0296              (R )
+TIM8T                    0295                  
+TIMER                    008b              (R )
+TITIMNDX                 00f9              (R )
+TOGGLE                   dbed              (R )
+TOPCNT                   00f4              (R )
+TOPDEX                   009c              (R )
+TOPNOTB                  d8a5              (R )
+TOPSCNUM                 00bf                  
+TOPYMIDN                 d8ac              (R )
+TTLKERN                  da74              (R )
+TWO                      de10                  
+TYPE                     00c8              (R )
+UNINC                    d6e0              (R )
+UNINCM                   d6f3              (R )
+UNINCMX                  d88a              (R )
+UNINCX                   d877              (R )
+UPPER                    0034              (R )
+UPVMAX                   00fd                  
+USE0                     d27e              (R )
+USE1                     d288              (R )
+USETYPE1                 d37e              (R )
+USEYCOL                  d302              (R )
+USEYCOL1                 d39b              (R )
+VBLANK                   0001              (R )
+VBRTHFRQ                 d457              (R )
+VBRTHSND                 000c              (R )
+VDELBL                   0027                  
+VDELP0                   0025              (R )
+VDELP1                   0026              (R )
+VOL4                     d087              (R )
+VOL7                     d08b              (R )
+VSYNC                    0000                  
+VWLOOP                   db4a              (R )
+WAITLP                   dae4              (R )
+WALKER                   dc4e                  
+WALKFRQ                  d494              (R )
+WALKVOL                  d497              (R )
+WASTCAS                  d6cb              (R )
+WASTE0                   d863              (R )
+WASTE101                 d60c              (R )
+WASTE102                 d60a              (R )
+WASTE303                 d866              (R )
+WASTEDD                  d794              (R )
+WDN                      dc66              (R )
+WLKSOUND                 0001                  
+WSYNC                    0002              (R )
+WUP                      dc67              (R )
+XPLSOUND                 0006                  
+XPOS                     00b6              (R )
+YPOSINT                  00be              (R )
+YVELFRAC                 00ea              (R )
+YVELINT                  00e8              (R )
+ZERO                     de00              (R )
+ZONECNT                  00b4              (R )
+--- End of Symbol List.

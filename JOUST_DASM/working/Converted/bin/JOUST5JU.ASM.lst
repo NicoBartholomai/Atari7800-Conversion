@@ -1,0 +1,2362 @@
+------- FILE JOUST5JU.ASM LEVEL 1 PASS 2
+      1  dffe					      processor	6502
+      2  dffe ????						;*	    2600    JOUST;	       JULY05.S
+      3  dffe ????
+      4  dffe ????						;*;*;*;*;*;*	;*     ;*     ;*;*;*;*	  ;*	  ;*	;*;*;*;*    ;*;*;*;*;*;*     ;*     ;*	;*;*;*;*;*
+      5  dffe ????						;*	   ;*	  ;*	;*    ;*   ;*;*     ;*	 ;*    ;*   ;*; 	 ;*;*	;*;*  ;*
+      6  dffe ????						;*	   ;*	  ;*	;*    ;*   ;* ;*    ;*	 ;*	   ;*;		;* ;* ;* ;*  ;*
+      7  dffe ????						;*	   ;*;*;*;*;*;*;*    ;*;*;*;*;*;*   ;*	;*   ;*   ;*	    ;*;*;*;*;*	    ;*	;*  ;*	;*;*;*;*
+      8  dffe ????						;*	   ;*	  ;*	;*    ;*   ;*	;*  ;*	 ;*  ;*;*;*;*  ;*;	    ;*	   ;*  ;*
+      9  dffe ????						;*	   ;*	  ;*	;*    ;*   ;*	 ;* ;*	 ;*    ;*   ;*; 	 ;*	;*  ;*
+     10  dffe ????						;*;*;*;*;*;*	;*     ;*    ;*    ;*	;*     ;*;*    ;*;*;*;*    ;*;*;*;*;*;*     ;*	   ;*  ;*;*;*;*;*
+     11  dffe ????
+     12  dffe ????
+     13  dffe ????						;THIS IS THE NECESSARY PROLOG FOR STELLA (TIA) CODE
+     14  dffe ????
+     15  dffe ????						;  PIA AND TIMER (6532) LOCATIONS
+     16  dffe ????
+     17  dffe ????	       02 80	   SWCHA      EQU	$280	;PO, P1 JOYSTICKS
+     18  dffe ????	       02 82	   SWCHB      EQU	$282	;CONSOLE SWITCHES
+     19  dffe ????	       02 81	   CTLSWA     EQU	$281
+     20  dffe ????	       02 83	   CTLSWB     EQU	$283
+     21  dffe ????	       02 84	   INTIM      EQU	$284	;INTERVAL TIMER IN
+     22  dffe ????	       02 95	   TIM8T      EQU	$295	;TIMER 8T WRITE OUT
+     23  dffe ????	       02 96	   TIM64T     EQU	$296	;TIMER 64T WRITE OUT
+     24  dffe ????
+     25  dffe ????						;  STELLA (TIA) REGISTER ADDRESSES
+     26  dffe ????
+     27  dffe ????	       00 00	   VSYNC      EQU	$00	;BIT	     1	VERTICAL SYNC SET-CLR
+     28  dffe ????	       00 01	   VBLANK     EQU	$01	;BIT	     1	VERTICAL BLANK SET-CLR
+     29  dffe ????	       00 02	   WSYNC      EQU	$02	;STROBE	WAIT FOR HORIZ BLANK
+     30  dffe ????	       00 03	   RSYNC      EQU	$03	;STROBE	RESET HORIZ SYNC COUNTER
+     31  dffe ????	       00 04	   NUSIZ0     EQU	$04	;BITS	 54 210 NUMBER-SIZE PLAYER/MISSILE 0
+     32  dffe ????	       00 05	   NUSIZ1     EQU	$05	;BITS	 54 210 NUMBER-SIZE PLAYER/MISSILE 1
+     33  dffe ????	       00 06	   COLUP0     EQU	$06	;BITS 7654321	COLOR(4)-LUM(3) PLAYER 0
+     34  dffe ????	       00 07	   COLUP1     EQU	$07	;BITS 7654321	COLOR(4)-LUM(3) PLAYER 1
+     35  dffe ????	       00 08	   COLUPF     EQU	$08	;BITS 7654321	COLOR(4)-LUM(3) PLAYFIELD
+     36  dffe ????	       00 09	   COLUBK     EQU	$09	;BITS 7654321	COLOR(4)-LUM(3) BACKGROUND
+     37  dffe ????	       00 0a	   CTRLPF     EQU	$0A	;BITS 7 54 210 PLAYFIELD CONTROL
+     38  dffe ????	       00 0b	   REFP0      EQU	$0B	;BIT	   3	REFLECT PLAYER 0
+     39  dffe ????	       00 0c	   REFP1      EQU	$0C	;BIT	   3	REFLECT PLAYER 1
+     40  dffe ????	       00 0d	   PF0	      EQU	$0D	;BITS 7654	PLAYFIELD REG BYTE 0
+     41  dffe ????	       00 0e	   PF1	      EQU	$0E	;BITS ALL	PLAYFIELD REG BYTE 1
+     42  dffe ????	       00 0f	   PF2	      EQU	$0F	;BITS ALL	PLAYFIELD REG BYTE 2
+     43  dffe ????	       00 10	   RESP0      EQU	$10	;STROBE	RESET PLAYER 0
+     44  dffe ????	       00 11	   RESP1      EQU	$11	;STROBE	RESET PLAYER 1
+     45  dffe ????	       00 12	   RESM0      EQU	$12	;STROBE	RESET MISSILE 0
+     46  dffe ????	       00 13	   RESM1      EQU	$13	;STROBE	RESET MISSILE 1
+     47  dffe ????	       00 14	   RESBL      EQU	$14	;STROBE	RESET BALL
+     48  dffe ????	       00 15	   AUDC0      EQU	$15	;BITS	   3210 AUDIO CONTROL 0
+     49  dffe ????	       00 16	   AUDC1      EQU	$16	;BITS	   3210 AUDIO CONTROL 1
+     50  dffe ????	       00 17	   AUDF0      EQU	$17	;BITS	   3210 AUDIO FREQUENCY 0
+     51  dffe ????	       00 18	   AUDF1      EQU	$18	;BITS	   3210 AUDIO FREQUENCY 1
+     52  dffe ????	       00 19	   AUDV0      EQU	$19	;BITS	   3210 AUDIO VOLUME 0
+     53  dffe ????	       00 1a	   AUDV1      EQU	$1A	;BITS	   3210 AUDIO VOLUME 1
+     54  dffe ????	       00 1b	   GRP0       EQU	$1B	;BITS ALL	GRAPHICS FOR PLAYER 0
+     55  dffe ????	       00 1c	   GRP1       EQU	$1C	;BITS ALL	GRAPHICS FOR PLAYER 1
+     56  dffe ????	       00 1d	   ENAM0      EQU	$1D	;BIT	     1	ENABLE MISSILE 0
+     57  dffe ????	       00 1e	   ENAM1      EQU	$1E	;BIT	     1	ENABLE MISSILE 1
+     58  dffe ????	       00 1f	   ENABL      EQU	$1F	;BIT	     1	ENABLE BALL
+     59  dffe ????	       00 20	   HMP0       EQU	$20	;BITS 7654	HORIZ MOTION PLAYER 0
+     60  dffe ????	       00 21	   HMP1       EQU	$21	;BITS 7654	HORIZ MOTION PLAYER 1
+     61  dffe ????	       00 22	   HMM0       EQU	$22	;BITS 7654	HORIZ MOTION MISSILE 0
+     62  dffe ????	       00 23	   HMM1       EQU	$23	;BITS 7654	HORIZ MOTION MISSILE 1
+     63  dffe ????	       00 24	   HMBL       EQU	$24	;BITS 7654	HORIZ MOTION BALL
+     64  dffe ????	       00 25	   VDELP0     EQU	$25	;BIT	      0 VERTICAL DELAY PLAYER 0
+     65  dffe ????	       00 26	   VDELP1     EQU	$26	;BIT	      0 VERTICAL DELAY PLAYER 1
+     66  dffe ????	       00 27	   VDELBL     EQU	$27	;BIT	      0 VERTICAL DELAY BALL
+     67  dffe ????	       00 28	   RESMP0     EQU	$28	;BIT	     1	RESET MISSILE TO PLAYER 0
+     68  dffe ????	       00 29	   RESMP1     EQU	$29	;BIT	     1	RESET MISSILE TO PLAYER 1
+     69  dffe ????	       00 2a	   HMOVE      EQU	$2A	;STROBE	ACT ON HORIZ MOTION
+     70  dffe ????	       00 2b	   HMCLR      EQU	$2B	;STROBE	CLEAR ALL HM REGISTERS
+     71  dffe ????	       00 2c	   CXCLR      EQU	$2C	;STROBE	CLEAR ALL COLLISION LATCHES
+     72  dffe ????	       00 30	   CXM0P      EQU	$30	;	     ;READ ADDRESSES BITS 6 + 7 ONLY
+     73  dffe ????	       00 31	   CXM1P      EQU	$31
+     74  dffe ????	       00 32	   CXP0FB     EQU	$32
+     75  dffe ????	       00 33	   CXP1FB     EQU	$33
+     76  dffe ????	       00 34	   CXM0FB     EQU	$34
+     77  dffe ????	       00 35	   CXM1FB     EQU	$35
+     78  dffe ????	       00 36	   CXBLPF     EQU	$36
+     79  dffe ????	       00 37	   CXPPMM     EQU	$37
+     80  dffe ????	       00 38	   INPT0      EQU	$38
+     81  dffe ????	       00 39	   INPT1      EQU	$39
+     82  dffe ????	       00 3a	   INPT2      EQU	$3A
+     83  dffe ????	       00 3b	   INPT3      EQU	$3B
+     84  dffe ????	       00 3c	   INPT4      EQU	$3C
+     85  dffe ????	       00 3d	   INPT5      EQU	$3D
+     86  dffe ????
+     87  dffe ????						;*;*;*;*;*;*;*;*;*;*;*;*   CONSTANTS	;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+     88  dffe ????	       00 28	   PFCOLOR1   EQU	$28
+     89  dffe ????	       00 26	   PFCOLOR2   EQU	$26
+     90  dffe ????	       00 24	   PFCOLOR3   EQU	$24
+     91  dffe ????	       00 22	   PFCOLOR4   EQU	$22
+     92  dffe ????	       00 05	   HEIGHT     EQU	5
+     93  dffe ????	       00 34	   UPPER      EQU	$34	;		      ;UPPER ZONE BOUNDARY
+     94  dffe ????	       00 6c	   LOWER      EQU	$6C	;		      ;LOWER ZONE BOUNDARY
+     95  dffe ????
+     96  dffe ????				      SEG	ROM
+     97  0000				   HEADER     ORG	$0
+     98  0000							;HEADER  ORG	  ROMTOP-128
+     99  0000		       03		      DC.B	3	; 0   Header version	  - 1 byte
+    100  0001		       41 54 41 52*	      DC.B	"ATARI7800"	; 1..16  "ATARI7800   "  - 16 bytes
+    101  000a		       20 20 20 20*	      DS	7,32
+    102  0011		       59 6f 75 72*	      DC.B	"Your Name Here"	; 17..48 Cart title	  - 32 bytes
+    103  001f		       00 00 00 00*	      DS	HEADER+49-.,0
+    104  0031		       00 00 21 00	      DC.B	$00,$00,256-> ROMTOP,$00	; 49..52 data length	   - 4 bytes
+    105  0035		       00 00		      DC.B	$00,$00	; 53..54 cart type	 - 2 bytes
+    106  0037							;    bit  0 - pokey at 4000
+    107  0037							;    bit  1 - supergame bank switched
+    108  0037							;    bit  2 - supergame ram at $4000
+    109  0037							;    bit  3 - rom at $4000
+    110  0037							;    bit  4 - bank 6 at $4000
+    111  0037							;    bit  5 - supergame banked ram
+    112  0037							;    bit  6 - pokey at $450
+    113  0037							;    bit  7 - mirror ram at $4000
+    114  0037							;    bit  8 - activision banking
+    115  0037							;    bit  9 - absolute banking
+    116  0037							;    bit 10 - pokey at $440
+    117  0037							;    bit 11 - ym2151 at $461/462
+    118  0037							;    bit 12 - souper
+    119  0037							;    bit 13 - bankset
+    120  0037							;    bit 14-15 - Special
+    121  0037							;   0 = Normal cart
+    122  0037		       01		      DC.B	1	; 55	controller 1 type  - 1 byte
+    123  0038		       01		      DC.B	1	; 56	controller 2 type  - 1 byte
+    124  0039							;    0=None, 1=joystick, 2=lightgun, 3=paddle, 4=trakball, 5=2600-stick
+    125  0039							;    6=driving, 7=keypad, 8=st-mouse, 9=amiga-mouse
+    126  0039
+    127  0039		       00		      DC.B	0	; 57	bit0 = 0:NTSC,1:PAL bit1 = 0:component,1:composite
+    128  003a		       00		      DC.B	0	; 58	Save data peripheral - 1 byte (version 2)
+    129  003b							;    0 = None / unknown (default)
+    130  003b							;    1 = High Score Cart (HSC)
+    131  003b							;    2 = SaveKey
+    132  003f					      ORG	HEADER+63
+    133  003f		       00		      DC.B	0	; 63	Expansion module
+    134  0040							;    0 = No expansion module (default on all currently released games)
+    135  0040							;    1 = Expansion module required
+    136  0064					      ORG	HEADER+100	; 100..127 "ACTUAL CART DATA STARTS HERE" - 28 bytes
+    137  0064		       41 43 54 55*	      DC.B	"ACTUAL CART DATA STARTS HERE"
+    138  0080
+    139  0080
+    140  0080
+    141  0080							;ZERO PAGE RAM
+    142  0080					      ORG	$0080
+    143  0080		       00	   FRMCNT     DS	1
+    144  0081		       00 00	   LIVES      DS	2
+    145  0083		       00 00	   HISCORE    DS	2
+    146  0085		       00 00	   MIDSCORE   DS	2
+    147  0087		       00 00	   LOWSCORE   DS	2
+    148  0089		       00	   ATTRACT    DS	1	;			;FOR NOW BIT 7 AUTOPLAY BIT 6 FOR
+    149  008a							;				 ;SHOW TITLE
+    150  008a							;				 ;BOTTOM 5 BITS FOR DEBOUNCE COUNTER
+    151  008a		       00	   RACKNUM    DS	1
+    152  008b		       00	   TIMER      DS	1
+    153  008c		       00	   PTR0       DS	1
+    154  008c		       00 8c	   TEMPM4FC   EQU	PTR0
+    155  008d		       00	   PTR0H      DS	1
+    156  008d		       00 8d	   TEMP4      EQU	PTR0H
+    157  008e		       00	   PTR1       DS	1
+    158  008f		       00	   PTR1H      DS	1
+    159  0090		       00 00 00    STAMP0     DS	3	;			;ALSO  PTR2-PTR3H
+    160  0090		       00 90	   PTR2       EQU	STAMP0
+    161  0090		       00 91	   PTR2H      EQU	STAMP0+1
+    162  0090		       00 92	   PTR3       EQU	STAMP0+2
+    163  0093		       00 00 00    STAMP1     DS	3	;			;ALSO  PTR4-PTR5H
+    164  0093		       00 93	   PTR3H      EQU	STAMP1
+    165  0093		       00 94	   PTR4       EQU	STAMP1+1
+    166  0093		       00 95	   PTR4H      EQU	STAMP1+2
+    167  0096		       00 00 00    P0VTBL     DS	3
+    168  0096		       00 96	   PTR5       EQU	P0VTBL
+    169  0096		       00 97	   PTR5H      EQU	P0VTBL+1
+    170  0099		       00 00 00    P1VTBL     DS	3
+    171  009c		       00 00 00    P0HPOS     DS	3
+    172  009f		       00 00 00    P1HPOS     DS	3
+    173  00a2							;THESE REDEFINE P0HPOS THRU P1HPOS   AS TEMPS FOR CROSSING ROUTINE
+    174  00a2		       00 9c	   TOPDEX     EQU	P0HPOS
+    175  00a2		       00 9e	   MIDDEX     EQU	P0HPOS+2
+    176  00a2		       00 a0	   BOTDEX     EQU	P1HPOS+1
+    177  00a2		       00	   P0CNT      DS	1
+    178  00a3		       00	   P1CNT      DS	1
+    179  00a4		       00 00 00    COLOR0     DS	3
+    180  00a4		       00 a4	   SCNTRLI0   EQU	COLOR0+0	;		 SOUND CONTROL INPUT 0
+    181  00a4		       00 a5	   SCNTRLI1   EQU	COLOR0+1	;		 SOUND CONTROL INPUT 1
+    182  00a7		       00 00 00    COLOR1     DS	3
+    183  00aa		       00 00 00    INFP0      DS	3
+    184  00aa		       00 aa	   PLAYCOL    EQU	INFP0	;		    ;COLOR OF JOUST BITMAP
+    185  00aa		       00 ab	   LINECNT    EQU	INFP0+1	;		  ;NUMBER OF LINES DOWN THAT BITMAP
+    186  00ad							;				 ;STARTS
+    187  00ad		       00 ac	   COLORCNT   EQU	INFP0+2	;		  ;INDEX INTO COLOR ROT TABLE
+    188  00ad		       00 00 00    INFP1      DS	3
+    189  00b0		       00	   TEMP0      DS	1
+    190  00b1		       00	   TEMP1      DS	1
+    191  00b1		       00 b1	   P0VOFF     EQU	TEMP1
+    192  00b2		       00	   TEMP2      DS	1
+    193  00b2		       00 b2	   P1VOFF     EQU	TEMP2
+    194  00b2		       00 b2	   PREVIOUS   EQU	TEMP2
+    195  00b3		       00	   TEMP3      DS	1
+    196  00b3		       00 b3	   MPTR       EQU	TEMP3
+    197  00b4		       00	   ZONECNT    DS	1
+    198  00b5		       00	   CFIGINDX   DS	1	;			INDEX INTO CLIFF CONFIGURATIONS
+    199  00b6		       00 00 00 00*XPOS       DS	8	;			X POSSITION FOR ALL MOVABLE OBJECTS
+    200  00be		       00 00 00 00*YPOSINT    DS	8	;			INTEGER Y " "	"   "	    "
+    201  00c6		       00 00	   STATES     DS	2	;			;BIT  7        FACING
+    202  00c8							;				 ;BIT	6	WALKING FOR PLAYERS
+    203  00c8							;				 ;BIT	 5	FLY/SKID FOR PLAYERS
+    204  00c8							;				 ;		FOR NON-WALKING PLAYERS
+    205  00c8							;				 ;BITS	 54	ANIMATION # FOR PLAYERS
+    206  00c8							;				 ;		WALKING
+    207  00c8							;TYPE MUST FOLLOW STATES
+    208  00c8		       00 00 00 00*TYPE       DS	6	;			;BOTTOME NYBBLE,ENEMY  TYPE
+    209  00ce		       00 00	   STAT2      DS	2	;			X VELOCITY AND GONE DEATH.... CODES
+    210  00d0		       00 00	   GEN2       DS	2	;			EFFECTIVENESS/DELAY TIMER FOR PLAYERS
+    211  00d2
+    212  00d2		       00 00	   GENERALS   DS	2	;			;BITS 76543210 PLAYER Y POSSITION FRAC
+    213  00d4		       00 00 00 00*SPEED      DS	6
+    214  00da							;				 ;		IF FLYING
+    215  00da							;				 ;BITS	    210 CLIFF NUMBER
+    216  00da							;				 ;BITS 7	BUTTON MEMORY FOR W/S
+    217  00da		       00 00 00 00*ASPEED     DS	6	;			;VERTICAL SPEED
+    218  00e0		       00 00 00 00*EGGO       DS	6
+    219  00e6		       00 00	   EGGSCORE   DS	2
+    220  00e8		       00 00	   YVELINT    DS	2	;			PLAYER Y VELOCITY INTEGER
+    221  00e8		       00 e8	   PDTHSNUM   EQU	YVELINT
+    222  00e8		       00 e8	   BIRTHAN    EQU	YVELINT	;		  BIRTH ANIMATION COUNTER
+    223  00e8		       00 e8	   SHLDSEC    EQU	YVELINT	;		  SHEILD SECOND
+    224  00ea		       00 00	   YVELFRAC   DS	2	;			PLAYER Y VELOCITY FRAC
+    225  00ea		       00 ea	   PDETHTIM   EQU	YVELFRAC
+    226  00ea		       00 ea	   SHLDTIM    EQU	YVELFRAC	;		 SHEILD TIMER
+    227  00ea		       00 ea	   PGONETIM   EQU	YVELFRAC	;		 PLAYER GONE TIMER
+    228  00ea		       00 ea	   BIRTHTIM   EQU	YVELFRAC	;		 BIRTH TIMER
+    229  00ec		       00	   ENEMA      DS	1	;			;NUMBER OF ENEMIES
+    230  00ed
+    231  00ed
+    232  00ed
+    233  00ed		       00	   SNDTIM0    DS	1	;			TIMER	SOUND 0
+    234  00ee		       00	   SNDTIM1    DS	1	;			TIMER	SOUND 1
+    235  00ef		       00	   SNDINDX0   DS	1	;			SOUND INDEX 0
+    236  00f0		       00	   SNDINDX1   DS	1	;			SOUND INDEX 1
+    237  00f1		       00	   SNDTYP0    DS	1	;			;SOUND TYPE 0
+    238  00f2		       00	   SNDTYP1    DS	1	;			;SOUND TYPE 1
+    239  00f3		       00	   DEPNUM     DS	1	;			;NUMBER OF ENEMIES DEPLOYED
+    240  00f4		       00	   TOPCNT     DS	1
+    241  00f5		       00	   MIDCNT     DS	1
+    242  00f6		       00	   BOTCNT     DS	1
+    243  00f7
+    244  00f7		       00	   TERYCNT    DS	1	;			NUMBER OF TERRIES CURRENTLY OUT
+    245  00f8		       00	   TERYTIME   DS	1	;			TIMER FOR TERRY DEPLOYMENT
+    246  00f9		       00	   TITIMNDX   DS	1	;			INDEX INTO INITIAL TERRY TIMES TABLE
+    247  00fa		       00	   GAMETYPE   DS	1	;			;BIT 0 FOR 1 OR 2 PLAYERS
+    248  00fb							;				 ;BIT 1 FOR REGULAR OR BONZO
+    249  00fb		       00	   GLADRAG    DS	1	;			;GLADIATOR, SURVIVAL, TEAM FLAGS
+    250  00fc							;				 ;BIT 7 FOR GLADIATOR
+    251  00fc							;				 ;BIT 6 FOR SURVIVAL, TEAM
+    252  00fc							;*	    THESE CONSTANTS ARE THE BITS PATTERNS RETURNED BY PMOTION FOR SOUNDS
+    253  00fc
+    254  00fc		       00 00	   NOTSOUND   EQU	0
+    255  00fc		       00 01	   WLKSOUND   EQU	1
+    256  00fc		       00 02	   FLPSOUND   EQU	2
+    257  00fc		       00 03	   BNCSOUND   EQU	3
+    258  00fc		       00 04	   SKDSOUND   EQU	4
+    259  00fc		       00 05	   STPSKDSN   EQU	5
+    260  00fc		       00 06	   XPLSOUND   EQU	6
+    261  00fc		       00 07	   BIRTHSND   EQU	7
+    262  00fc		       00 08	   SHLDSND    EQU	8
+    263  00fc		       00 09	   STPSHLDS   EQU	9
+    264  00fc		       00 0a	   TIESOUND   EQU	10
+    265  00fc		       00 0b	   SCREETCH   EQU	11
+    266  00fc		       00 0c	   VBRTHSND   EQU	12
+    267  00fc		       00 0d	   EGGHTCH    EQU	13
+    268  00fc		       00 0e	   EATEGG     EQU	14
+    269  00fc		       00 0f	   EXTRAMAN   EQU	15
+    270  00fc
+    271  00fc
+    272  00fc							;*	    THESE ARE THE CONSTANTS RELATIVE TO PLAYER DEATH AND EXPLOIN ANIMATION
+    273  00fc
+    274  00fc		       00 03	   PDETHSTM   EQU	3
+    275  00fc		       00 0b	   SHIELD     EQU	11
+    276  00fc		       00 0d	   BIRTH1ST   EQU	13
+    277  00fc		       00 0e	   PGONE      EQU	14
+    278  00fc		       00 0f	   PDEATH     EQU	15
+    279  00fc		       00 07	   EXP0SNUM   EQU	7
+    280  00fc		       00 0a	   EXP2SNP1   EQU	10
+    281  00fc		       00 f0	   ISTATB1    EQU	$F0
+    282  00fc		       00 0d	   ISTA2B1    EQU	$0D
+    283  00fc		       00 0b	   ISTA2SLD   EQU	$0B
+    284  00fc		       00 05	   ISTA2WLK   EQU	$05
+    285  00fc
+    286  00fc		       00 35	   SHLDITIM   EQU	53
+    287  00fc		       00 05	   BRTHITIM   EQU	5
+    288  00fc		       00 ee	   GONEITIM   EQU	$EE
+    289  00fc
+    290  00fc							;*	    THE FOLLOWING EQUIVILENCES ARE THE UP AND DOWN TERMINAL VELOCITIES
+    291  00fc							;*		    ONLY THE INTEGER PART OF THE VELOCITY IS CHECKED; THEREFORE
+    292  00fc							;*		    THE FOLLOWING ARE THE INTEGER TERMINAL VELOCITIES
+    293  00fc
+    294  00fc		       00 fd	   UPVMAX     EQU	$FD
+    295  00fc		       00 02	   DWNVMAX    EQU	$2
+    296  00fc
+    297  00fc							;*	    THE FOLLOWING CONSTANTS ARE THE BOUNDS ON LEGAL X VALUES FOR A STAMP.
+    298  00fc							;*		    THERE ARE TWO RIGHTS, SET AND COMPARE.
+    299  00fc
+    300  00fc		       00 01	   LMOSTPXL   EQU	1
+    301  00fc		       00 7e	   RMSTSPXL   EQU	126
+    302  00fc		       00 7f	   RMSTCPXL   EQU	127
+    303  00fc
+    304  00fc							;*	    THE FOLLOWING CONSTANT IS THE TOP OF SCREEN COMPARISON NUMBER
+    305  00fc		       00 bf	   TOPSCNUM   EQU	191
+    306  00fc
+    307  00fc							;*	    TERRY CONSTANTS
+    308  00fc
+    309  00fc		       00 60	   TERYFLAG   EQU	$60	;		      TELLS BADGUY TO DEPLOY TERRY AT FLAG
+    310  00fc		       00 8c	   LTERYTYP   EQU	$8C	;		      INITIAL TYPE FOR A LEFT TERRY
+    311  00fc		       00 0c	   RTERYTYP   EQU	$0C	;		      INITIAL TYPE FOR A RIGHT TERRY
+    312  00fc		       00 04	   LTERYSPD   EQU	4	;			INITIAL LEFT TERRY SPEED
+    313  00fc		       00 00	   RTERYSPD   EQU	0	;			INITIAL RIGHT TERRY SPEED
+    314  00fc		       00 04	   ITITI      EQU	4	;			INITIAL TERRY INITIAL TIME INDEX
+    315  00fc
+    316  00fc							;*	    THE FOLLOWING ARE BOUNDS FOR DELAY FOR WALK/SKID
+    317  00fc
+    318  00fc		       00 0c	   MAXWDLAY   EQU	12	;		       MAXIMUM WALK DELAY
+    319  00fc		       00 08	   MAXSDLAY   EQU	8	;			MAXIMUM SKID DELAY
+    320  00fc
+    321  00fc							;*	    THIS IS THE FLYING CLIFF TOP BOUNCE Y FRACTION
+    322  00fc
+    323  00fc		       00 80	   FBFRAC     EQU	$80
+    324  00fc
+    325  00fc							;*	    THE FOLLOWING ARE THE NUMBERS TO SET TO ALLOW AND TEST FOR HAPPENING
+    326  00fc							;*		    FIRST EFFECTIVE FLYING FRAME.  THESE GO IN DELAY/EFFECT.
+    327  00fc
+    328  00fc		       00 05	   FLYFEFST   EQU	5
+    329  00fc		       00 04	   FLYFEFCP   EQU	4
+    330  00fc
+    331  00fc				   ENDRAM
+    332  d000					      ORG	$D000
+    333  d000		       ea		      NOP
+    334  d001		       ea		      NOP
+    335  d002		       ea		      NOP
+    336  d003		       78	   START      SEI
+    337  d004		       d8		      CLD
+    338  d005		       a2 ff		      LDX	#$FF
+    339  d007		       9a		      TXS
+    340  d008		       a9 00		      LDA	#0
+    341  d00a		       95 02	   INITRAM    STA	WSYNC,X
+    342  d00c		       ca		      DEX
+    343  d00d		       d0 fb		      BNE	INITRAM
+    344  d00f
+    345  d00f
+    346  d00f		       a9 c0		      LDA	#$C0
+    347  d011		       85 89		      STA	ATTRACT
+    348  d013		       a9 01		      LDA	#1
+    349  d015		       85 fa		      STA	GAMETYPE
+    350  d017		       20 77 dc 	      JSR	GMINIT
+    351  d01a		       a9 1d		      LDA	#29
+    352  d01c		       85 ab		      STA	LINECNT
+    353  d01e
+    354  d01e		       4c 51 db 	      JMP	NEWFRAME
+    355  d021							;*;*;*;*;*;*;*;*;*;*;*
+    356  d021
+    357  d021
+    358  d021							;POSITION PLAYERS FOR BITMAP
+    359  d021		       85 02	   BITMAP     STA	WSYNC
+    360  d023		       a9 03	   BITMAPPL   LDA	#3	;		       ;2
+    361  d025		       85 26		      STA	VDELP1	;		   ;5
+    362  d027		       85 04		      STA	NUSIZ0	;		   ;8
+    363  d029		       85 05		      STA	NUSIZ1	;		   ;11
+    364  d02b		       a9 00		      LDA	#0	;		       ;13
+    365  d02d		       85 1b		      STA	GRP0	;		     ;16
+    366  d02f		       85 1c		      STA	GRP1	;		     ;19
+    367  d031		       85 1b		      STA	GRP0	;		     ;22
+    368  d033		       a2 40		      LDX	#$40	;		     ;24
+    369  d035		       86 20		      STX	HMP0	;		     ;27
+    370  d037		       a9 50		      LDA	#$50	;		     ;29
+    371  d039		       85 21		      STA	HMP1	;		     ;32
+    372  d03b		       ea		      NOP		;			      ;34
+    373  d03c		       ea		      NOP		;			      ;36
+    374  d03d		       ea		      NOP		;			      ;38
+    375  d03e		       85 10		      STA	RESP0	;		    ;41
+    376  d040		       85 11		      STA	RESP1	;		    ;44
+    377  d042		       84 b0	   MINBIT     STY	TEMP0	;		    ;47
+    378  d044		       b1 8c		      LDA	(PTR0),Y	;		 ;52
+    379  d046		       85 1b		      STA	GRP0	;		     ;55
+    380  d048		       b1 94		      LDA	(PTR4),Y	;		 ;60
+    381  d04a		       aa		      TAX		;			      ;62
+    382  d04b		       85 02		      STA	WSYNC	;		    ;65
+    383  d04d		       85 2a		      STA	HMOVE	;		    ;3
+    384  d04f		       b1 8e	   BITLP      LDA	(PTR1),Y	;		 ;8
+    385  d051		       85 1c		      STA	GRP1	;		     ;11
+    386  d053		       b1 90		      LDA	(PTR2),Y	;		 ;16
+    387  d055		       85 1b		      STA	GRP0	;		     ;19
+    388  d057		       b1 92		      LDA	(PTR3),Y	;		 ;24
+    389  d059		       85 b2		      STA	PREVIOUS	;		 ;27
+    390  d05b		       b1 96		      LDA	(PTR5),Y	;		 ;32
+    391  d05d		       a8		      TAY		;			      ;34
+    392  d05e		       a5 b2		      LDA	PREVIOUS	;		 ;37
+    393  d060		       c6 b0		      DEC	TEMP0	;		   ;42
+    394  d062		       85 1c		      STA	GRP1	;		     ;45
+    395  d064		       86 1b		      STX	GRP0	;		     ;48
+    396  d066		       84 1c		      STY	GRP1	;		     ;51
+    397  d068		       85 1b		      STA	GRP0	;		     ;54
+    398  d06a		       a4 b0		      LDY	TEMP0	;		   ;57
+    399  d06c		       b1 8c		      LDA	(PTR0),Y	;		 ;62
+    400  d06e		       85 1b		      STA	GRP0	;		     ;65
+    401  d070		       b1 94		      LDA	(PTR4),Y	;		 ;70
+    402  d072		       aa		      TAX		;			      ;72
+    403  d073		       98		      TYA		;			      ;74
+    404  d074		       ea		      NOP		;			      ;76
+    405  d075		       10 d8		      BPL	BITLP	;		    ;2 (3)
+    406  d077		       a9 00		      LDA	#0	;		       ;4
+    407  d079		       85 1b		      STA	GRP0	;		     ;7
+    408  d07b		       85 1c		      STA	GRP1	;		     ;10
+    409  d07d		       85 1b		      STA	GRP0	;		     ;13
+    410  d07f		       60		      RTS		;			      ;19
+    411  d080
+    412  d080				   DLOAD
+    413  d080		       24 89		      BIT	ATTRACT
+    414  d082		       50 28		      BVC	DOLOAD
+    415  d084		       4c f1 d3 	      JMP	BWLOOP
+    416  d087
+    417  d087		       a9 04	   VOL4       LDA	#4	;		       ;PLEASE DON"T LET THESE START A PAGE!!
+    418  d089		       d0 02		      BNE	LDYINDX
+    419  d08b		       a9 07	   VOL7       LDA	#7
+    420  d08d		       b4 ef	   LDYINDX    LDY	SNDINDX0,X
+    421  d08f
+    422  d08f		       10 75		      BPL	STVOL
+    423  d091
+    424  d091				   MAJKLDG
+    425  d091		       84 b1		      STY	TEMP1
+    426  d093		       b5 ef		      LDA	SNDINDX0,X
+    427  d095		       29 03		      AND	#3
+    428  d097		       85 b0		      STA	TEMP0
+    429  d099		       b5 ef		      LDA	SNDINDX0,X
+    430  d09b		       4a		      LSR
+    431  d09c		       4a		      LSR
+    432  d09d		       a8		      TAY
+    433  d09e		       a5 b1		      LDA	TEMP1
+    434  d0a0		       c9 0d		      CMP	#EGGHTCH
+    435  d0a2		       d0 02		      BNE	NOEGGH
+    436  d0a4		       a4 b0		      LDY	TEMP0
+    437  d0a6		       b1 8c	   NOEGGH     LDA	(PTR0),Y
+    438  d0a8		       a4 b0		      LDY	TEMP0
+    439  d0aa		       10 5a		      BPL	STVOL
+    440  d0ac
+    441  d0ac				   DOLOAD
+    442  d0ac
+    443  d0ac				   SNDRIVER
+    444  d0ac		       24 89		      BIT	ATTRACT
+    445  d0ae		       30 7a		      BMI	SNDEXIT
+    446  d0b0
+    447  d0b0				   DOSND
+    448  d0b0		       a9 d4		      LDA	#>SOUNDS
+    449  d0b2		       85 8d		      STA	PTR0H
+    450  d0b4		       85 8f		      STA	PTR1H
+    451  d0b6		       a2 01		      LDX	#1
+    452  d0b8				   SOUNDLP
+    453  d0b8		       b5 a4		      LDA	SCNTRLI0,X	;	       IF SOUND CONTROL >= CURRENT SOUND
+    454  d0ba		       d5 f1		      CMP	SNDTYP0,X	;		THEN INITIATE SOUND OF SOUND CONTROL
+    455  d0bc		       90 12		      BCC	SNDSKP10	;		 ELSE DO CURRENT SOUND
+    456  d0be
+    457  d0be		       95 f1		      STA	SNDTYP0,X
+    458  d0c0		       a8		      TAY
+    459  d0c1		       b9 ba dc 	      LDA	DUR-1,Y
+    460  d0c4		       95 ed		      STA	SNDTIM0,X
+    461  d0c6		       b9 e7 dc 	      LDA	SCNTRLS-1,Y
+    462  d0c9		       95 15		      STA	AUDC0,X
+    463  d0cb		       b9 f8 d3 	      LDA	LENGTH-1,Y
+    464  d0ce		       95 ef		      STA	SNDINDX0,X
+    465  d0d0
+    466  d0d0				   SNDSKP10
+    467  d0d0		       b4 f1		      LDY	SNDTYP0,X
+    468  d0d2		       f0 4d		      BEQ	NULL
+    469  d0d4		       c0 05		      CPY	#STPSKDSN
+    470  d0d6		       f0 49		      BEQ	NULL
+    471  d0d8		       c0 09		      CPY	#STPSHLDS
+    472  d0da		       f0 45		      BEQ	NULL
+    473  d0dc
+    474  d0dc
+    475  d0dc		       b9 1b d4 	      LDA	LFTABL-1,Y
+    476  d0df		       85 8e		      STA	PTR1
+    477  d0e1
+    478  d0e1		       c0 08		      CPY	#SHLDSND
+    479  d0e3		       f0 a2		      BEQ	VOL4
+    480  d0e5		       c0 0c		      CPY	#VBRTHSND
+    481  d0e7		       f0 9e		      BEQ	VOL4
+    482  d0e9		       c0 04		      CPY	#SKDSOUND
+    483  d0eb		       f0 9e		      BEQ	VOL7
+    484  d0ed		       c0 0b		      CPY	#SCREETCH
+    485  d0ef		       f0 9a		      BEQ	VOL7
+    486  d0f1
+    487  d0f1		       b9 c9 dc 	      LDA	LVTABL-1,Y
+    488  d0f4		       85 8c		      STA	PTR0
+    489  d0f6
+    490  d0f6		       c0 0a		      CPY	#TIESOUND
+    491  d0f8		       f0 97		      BEQ	MAJKLDG
+    492  d0fa		       c0 0f		      CPY	#EXTRAMAN
+    493  d0fc		       f0 93		      BEQ	MAJKLDG
+    494  d0fe		       c0 0d		      CPY	#EGGHTCH
+    495  d100		       f0 8f		      BEQ	MAJKLDG
+    496  d102
+    497  d102		       b4 ef		      LDY	SNDINDX0,X
+    498  d104		       b1 8c		      LDA	(PTR0),Y
+    499  d106		       95 19	   STVOL      STA	AUDV0,X
+    500  d108
+    501  d108		       b1 8e		      LDA	(PTR1),Y
+    502  d10a		       95 17		      STA	AUDF0,X
+    503  d10c
+    504  d10c		       d6 ed		      DEC	SNDTIM0,X
+    505  d10e		       10 17		      BPL	SNDSKP30
+    506  d110		       d6 ef		      DEC	SNDINDX0,X
+    507  d112		       30 09		      BMI	ENDSND
+    508  d114
+    509  d114		       b4 f1		      LDY	SNDTYP0,X
+    510  d116		       b9 ba dc 	      LDA	DUR-1,Y
+    511  d119		       95 ed		      STA	SNDTIM0,X
+    512  d11b		       10 0a		      BPL	SNDSKP30
+    513  d11d
+    514  d11d
+    515  d11d		       a9 00	   ENDSND     LDA	#0
+    516  d11f		       f0 04		      BEQ	SNDSKP29
+    517  d121		       a9 00	   NULL       LDA	#0
+    518  d123		       95 19		      STA	AUDV0,X
+    519  d125		       95 f1	   SNDSKP29   STA	SNDTYP0,X
+    520  d127
+    521  d127		       ca	   SNDSKP30   DEX
+    522  d128		       10 8e		      BPL	SOUNDLP
+    523  d12a				   SNDEXIT
+    524  d12a
+    525  d12a							;ZONE CROSSING CODE
+    526  d12a							;TTHIS SETS BITS IN ENEMY SPEED BYTE FOR POSSIBILITY OF UP OR DOWN
+    527  d12a							;ZONE CROSSING.  BIT 7 IS UP, BIT 6 IS DOWN.  OBJECTS IN THE TOP ZONE
+    528  d12a							;WILL HAVE THEIR UP BITS ALWAYS ON, OBJECTS IN THE BOTTOM ZONE WILL HAVE THEIR
+    529  d12a							;DOWN BITS ALWAYS ON
+    530  d12a							;THIS ROUTINE NEEDS NINE BYTES OF TEMPS, CONTIGUOUS IF POSSIBLE. THIS SHOULD
+    531  d12a							;NOT BE A PROBLEM
+    532  d12a
+    533  d12a							;THE TEMPS ARE
+    534  d12a							;TOPCNT, MIDCNT, BOTCNT   (1 BYTE EACH)
+    535  d12a							;TOPDEX, MIDDEX, BOTDEX   (2 BYTES EACH)
+    536  d12a
+    537  d12a				   CROSS
+    538  d12a		       24 f3		      BIT	DEPNUM	;		   ;DONT RUN THIS UNTIL ALL ENEMIES ARE
+    539  d12c		       10 67		      BPL	JDONE	;		    ;OUT
+    540  d12e		       a9 00		      LDA	#0
+    541  d130		       85 f4		      STA	TOPCNT
+    542  d132		       85 f5		      STA	MIDCNT
+    543  d134		       85 f6		      STA	BOTCNT
+    544  d136
+    545  d136		       a2 05		      LDX	#5
+    546  d138		       b5 c8	   FILLP      LDA	TYPE,X
+    547  d13a		       29 0f		      AND	#$0F
+    548  d13c		       f0 26		      BEQ	NOPE1
+    549  d13e
+    550  d13e		       b5 c0		      LDA	YPOSINT+2,X
+    551  d140		       c9 38		      CMP	#UPPER+4
+    552  d142		       90 0c		      BCC	DOTOP
+    553  d144		       c9 70		      CMP	#LOWER+4
+    554  d146		       b0 10		      BCS	DOLOW
+    555  d148							;				 ;OTHERWISE IN MIDDLE
+    556  d148		       a4 f5		      LDY	MIDCNT
+    557  d14a		       96 9e		      STX	MIDDEX,Y
+    558  d14c		       e6 f5		      INC	MIDCNT
+    559  d14e		       d0 0e		      BNE	NOPE
+    560  d150
+    561  d150		       a4 f4	   DOTOP      LDY	TOPCNT
+    562  d152		       96 9c		      STX	TOPDEX,Y
+    563  d154		       e6 f4		      INC	TOPCNT
+    564  d156		       d0 06		      BNE	NOPE
+    565  d158
+    566  d158		       a4 f6	   DOLOW      LDY	BOTCNT
+    567  d15a		       96 a0		      STX	BOTDEX,Y
+    568  d15c		       e6 f6		      INC	BOTCNT
+    569  d15e
+    570  d15e		       b5 d4	   NOPE       LDA	SPEED,X
+    571  d160		       29 3f		      AND	#$3F
+    572  d162		       95 d4		      STA	SPEED,X
+    573  d164		       ca	   NOPE1      DEX
+    574  d165		       10 d1		      BPL	FILLP
+    575  d167
+    576  d167		       a9 01		      LDA	#1
+    577  d169		       c5 f4		      CMP	TOPCNT
+    578  d16b		       d0 08		      BNE	DOREST
+    579  d16d		       c5 f5		      CMP	MIDCNT
+    580  d16f		       d0 04		      BNE	DOREST
+    581  d171		       c5 f6		      CMP	BOTCNT
+    582  d173		       f0 10		      BEQ	SPECIAL
+    583  d175
+    584  d175				   DOREST
+    585  d175		       a6 f4		      LDX	TOPCNT
+    586  d177		       f0 31		      BEQ	DOMID
+    587  d179		       e0 02		      CPX	#2
+    588  d17b		       f0 1b		      BEQ	DOTOP2
+    589  d17d
+    590  d17d		       a5 f5		      LDA	MIDCNT
+    591  d17f		       c9 02		      CMP	#2
+    592  d181		       f0 27		      BEQ	DOMID
+    593  d183		       d0 1d		      BNE	SETDN
+    594  d185
+    595  d185
+    596  d185				   SPECIAL
+    597  d185		       a6 9e		      LDX	MIDDEX	;		   ;1-1-1 CASE	  ALL GO DOWN
+    598  d187		       b5 d4		      LDA	SPEED,X
+    599  d189		       09 40		      ORA	#$40
+    600  d18b		       95 d4	   SPECFLO    STA	SPEED,X
+    601  d18d		       a6 9c	   SPECIAL2   LDX	TOPDEX
+    602  d18f		       b5 d4		      LDA	SPEED,X
+    603  d191		       09 40		      ORA	#$40
+    604  d193		       95 d4		      STA	SPEED,X
+    605  d195		       4c 1b d2    JDONE      JMP	DONE
+    606  d198
+    607  d198				   DOTOP2
+    608  d198		       a5 f5		      LDA	MIDCNT
+    609  d19a		       d0 0e		      BNE	DOMID
+    610  d19c
+    611  d19c		       a5 f6		      LDA	BOTCNT
+    612  d19e		       c9 02		      CMP	#2
+    613  d1a0		       f0 eb		      BEQ	SPECIAL2
+    614  d1a2
+    615  d1a2
+    616  d1a2				   SETDN
+    617  d1a2		       a6 9c		      LDX	TOPDEX
+    618  d1a4		       b5 d4		      LDA	SPEED,X
+    619  d1a6		       09 40		      ORA	#$40
+    620  d1a8		       95 d4		      STA	SPEED,X
+    621  d1aa
+    622  d1aa				   DOMID
+    623  d1aa		       a6 f5		      LDX	MIDCNT
+    624  d1ac		       f0 46		      BEQ	DOBOT
+    625  d1ae		       e0 02		      CPX	#2
+    626  d1b0		       f0 1a		      BEQ	DOMID2
+    627  d1b2
+    628  d1b2		       a5 f4		      LDA	TOPCNT
+    629  d1b4		       a6 9e		      LDX	MIDDEX	;		   ;SHOULD BE ZEROTH ONE
+    630  d1b6		       c9 02		      CMP	#2
+    631  d1b8		       f0 06		      BEQ	CHK1BOT
+    632  d1ba		       b5 d4		      LDA	SPEED,X
+    633  d1bc		       09 80		      ORA	#$80
+    634  d1be		       95 d4		      STA	SPEED,X
+    635  d1c0		       a5 f6	   CHK1BOT    LDA	BOTCNT
+    636  d1c2		       c9 02		      CMP	#2
+    637  d1c4		       f0 2e		      BEQ	DOBOT
+    638  d1c6		       b5 d4		      LDA	SPEED,X
+    639  d1c8		       09 40		      ORA	#$40
+    640  d1ca		       d0 26		      BNE	DOBOTM
+    641  d1cc
+    642  d1cc				   DOMID2
+    643  d1cc		       a6 9e		      LDX	MIDDEX
+    644  d1ce		       a5 f4		      LDA	TOPCNT
+    645  d1d0		       d0 0e		      BNE	CHK2BOT
+    646  d1d2		       b5 d4		      LDA	SPEED,X
+    647  d1d4		       09 80		      ORA	#$80
+    648  d1d6		       95 d4		      STA	SPEED,X
+    649  d1d8		       a6 9f		      LDX	MIDDEX+1
+    650  d1da		       b5 d4		      LDA	SPEED,X
+    651  d1dc		       09 80		      ORA	#$80
+    652  d1de		       95 d4		      STA	SPEED,X
+    653  d1e0		       a5 f6	   CHK2BOT    LDA	BOTCNT
+    654  d1e2		       d0 10		      BNE	DOBOT
+    655  d1e4		       a6 9e		      LDX	MIDDEX
+    656  d1e6		       b5 d4		      LDA	SPEED,X
+    657  d1e8		       09 40		      ORA	#$40
+    658  d1ea		       95 d4		      STA	SPEED,X
+    659  d1ec		       a6 9f		      LDX	MIDDEX+1
+    660  d1ee		       b5 d4		      LDA	SPEED,X
+    661  d1f0		       09 40		      ORA	#$40
+    662  d1f2		       95 d4	   DOBOTM     STA	SPEED,X
+    663  d1f4
+    664  d1f4
+    665  d1f4				   DOBOT
+    666  d1f4		       a4 f6		      LDY	BOTCNT
+    667  d1f6		       f0 23		      BEQ	DONE
+    668  d1f8		       c0 02		      CPY	#2
+    669  d1fa		       f0 09		      BEQ	DOBOT2
+    670  d1fc
+    671  d1fc		       88		      DEY		;			      ;Y NOW IS 0
+    672  d1fd		       a5 f5		      LDA	MIDCNT
+    673  d1ff		       c9 02		      CMP	#2
+    674  d201		       f0 18		      BEQ	DONE
+    675  d203		       d0 0b		      BNE	SETUP
+    676  d205
+    677  d205				   DOBOT2
+    678  d205		       a5 f5		      LDA	MIDCNT
+    679  d207		       d0 12		      BNE	DONE
+    680  d209		       a0 01		      LDY	#1
+    681  d20b		       a5 f4		      LDA	TOPCNT
+    682  d20d		       f0 01		      BEQ	SETUP
+    683  d20f		       88		      DEY
+    684  d210
+    685  d210				   SETUP
+    686  d210		       b6 a0	   SETUPLP    LDX	BOTDEX,Y
+    687  d212		       b5 d4		      LDA	SPEED,X
+    688  d214		       09 80		      ORA	#$80
+    689  d216		       95 d4		      STA	SPEED,X
+    690  d218		       88		      DEY
+    691  d219		       10 f5		      BPL	SETUPLP
+    692  d21b
+    693  d21b				   DONE
+    694  d21b		       ad 82 02 	      LDA	SWCHB
+    695  d21e		       29 08		      AND	#8
+    696  d220		       85 b3		      STA	TEMP3
+    697  d222
+    698  d222		       a9 00		      LDA	#0
+    699  d224		       85 96		      STA	P0VTBL
+    700  d226		       85 99		      STA	P1VTBL
+    701  d228		       85 97		      STA	P0VTBL+1
+    702  d22a		       85 9a		      STA	P1VTBL+1
+    703  d22c		       85 98		      STA	P0VTBL+2
+    704  d22e		       85 9b		      STA	P1VTBL+2
+    705  d230
+    706  d230		       85 a2		      STA	P0CNT
+    707  d232		       85 a3		      STA	P1CNT
+    708  d234
+    709  d234		       a5 80		      LDA	FRMCNT
+    710  d236		       4a		      LSR
+    711  d237		       90 1e		      BCC	ELOAD
+    712  d239
+    713  d239		       a2 01		      LDX	#1
+    714  d23b		       b5 ce	   PLDLP      LDA	STAT2,X
+    715  d23d		       c9 0e		      CMP	#PGONE
+    716  d23f		       f0 11		      BEQ	ANOTHX
+    717  d241		       b5 b6		      LDA	XPOS,X
+    718  d243		       c9 7a		      CMP	#$7A
+    719  d245		       b0 0b		      BCS	ANOTHX
+    720  d247		       f6 a2		      INC	P0CNT,X
+    721  d249		       8a		      TXA
+    722  d24a		       f0 04		      BEQ	PLAY0
+    723  d24c		       85 99		      STA	P1VTBL
+    724  d24e		       d0 02		      BNE	ANOTHX
+    725  d250		       85 96	   PLAY0      STA	P0VTBL
+    726  d252		       ca	   ANOTHX     DEX
+    727  d253		       10 e6		      BPL	PLDLP
+    728  d255		       30 48		      BMI	RESTLOAD
+    729  d257
+    730  d257		       a0 07	   ELOAD      LDY	#7
+    731  d259		       b9 c6 00    LOOP       LDA	TYPE-2,Y
+    732  d25c		       29 0f		      AND	#$0F
+    733  d25e		       f0 2c		      BEQ	LABEL
+    734  d260
+    735  d260		       b9 b6 00 	      LDA	XPOS,Y
+    736  d263		       c9 7a		      CMP	#$7A
+    737  d265		       b0 25		      BCS	LABEL
+    738  d267		       b9 be 00 	      LDA	YPOSINT,Y
+    739  d26a		       c9 34		      CMP	#UPPER
+    740  d26c		       a2 02		      LDX	#2
+    741  d26e		       90 06		      BCC	STUFFIT
+    742  d270		       ca		      DEX
+    743  d271		       c9 6c		      CMP	#LOWER
+    744  d273		       90 01		      BCC	STUFFIT
+    745  d275		       ca		      DEX
+    746  d276
+    747  d276				   STUFFIT
+    748  d276		       8a		      TXA
+    749  d277		       4a		      LSR
+    750  d278		       b0 0a		      BCS	BRADKLDG
+    751  d27a		       b5 96		      LDA	P0VTBL,X
+    752  d27c		       d0 0a		      BNE	USE1
+    753  d27e		       94 96	   USE0       STY	P0VTBL,X
+    754  d280		       e6 a2		      INC	P0CNT
+    755  d282		       d0 08		      BNE	LABEL
+    756  d284
+    757  d284		       b5 99	   BRADKLDG   LDA	P1VTBL,X
+    758  d286		       d0 f6		      BNE	USE0
+    759  d288
+    760  d288		       94 99	   USE1       STY	P1VTBL,X
+    761  d28a		       e6 a3		      INC	P1CNT
+    762  d28c		       88	   LABEL      DEY
+    763  d28d		       c0 01		      CPY	#1
+    764  d28f		       d0 c8		      BNE	LOOP
+    765  d291
+    766  d291		       a9 96		      LDA	#<P0VTBL
+    767  d293		       85 8c		      STA	PTR0
+    768  d295		       88		      DEY		;			      ;Y GOES FROM 1 TO 0
+    769  d296		       84 8d		      STY	PTR0H
+    770  d298		       a9 99		      LDA	#<P1VTBL
+    771  d29a		       85 8e		      STA	PTR1
+    772  d29c		       4c 8f d8 	      JMP	SQUISH
+    773  d29f
+    774  d29f				   RESTLOAD
+    775  d29f		       a4 a2		      LDY	P0CNT
+    776  d2a1		       d0 0a		      BNE	DOP0
+    777  d2a3		       84 9c		      STY	P0HPOS
+    778  d2a5		       88		      DEY
+    779  d2a6		       84 96		      STY	P0VTBL
+    780  d2a8		       84 b1		      STY	P0VOFF
+    781  d2aa		       4c 37 d3 	      JMP	DONEP0
+    782  d2ad
+    783  d2ad		       88	   DOP0       DEY
+    784  d2ae		       84 a2		      STY	P0CNT
+    785  d2b0		       a9 00		      LDA	#0
+    786  d2b2		       85 b4		      STA	ZONECNT
+    787  d2b4
+    788  d2b4		       84 b2	   P0LOADLP   STY	PREVIOUS
+    789  d2b6		       a9 00		      LDA	#0
+    790  d2b8		       99 aa 00 	      STA	INFP0,Y
+    791  d2bb		       b6 96		      LDX	P0VTBL,Y	;		 ;THIS IS INDEX OF HIGHEST ONE
+    792  d2bd
+    793  d2bd		       20 16 dc 	      JSR	PICKSTP
+    794  d2c0
+    795  d2c0		       99 90 00 	      STA	STAMP0,Y
+    796  d2c3
+    797  d2c3		       b4 b6		      LDY	XPOS,X
+    798  d2c5		       b9 0f df 	      LDA	HTABLE,Y
+    799  d2c8		       a4 b2		      LDY	PREVIOUS
+    800  d2ca		       99 9c 00 	      STA	P0HPOS,Y
+    801  d2cd
+    802  d2cd		       e0 02		      CPX	#2
+    803  d2cf		       b0 14		      BCS	ENMYCOL
+    804  d2d1
+    805  d2d1		       b5 ce		      LDA	STAT2,X
+    806  d2d3
+    807  d2d3		       c9 0d		      CMP	#BIRTH1ST
+    808  d2d5		       f0 04		      BEQ	DOCHEK
+    809  d2d7		       c9 0b		      CMP	#SHIELD
+    810  d2d9		       d0 27		      BNE	USEYCOL
+    811  d2db
+    812  d2db		       a5 80	   DOCHEK     LDA	FRMCNT
+    813  d2dd		       29 08		      AND	#8
+    814  d2df		       f0 21		      BEQ	USEYCOL
+    815  d2e1		       a9 0e		      LDA	#$0E
+    816  d2e3		       d0 25		      BNE	FORCE0
+    817  d2e5
+    818  d2e5		       b5 c6	   ENMYCOL    LDA	TYPE-2,X
+    819  d2e7		       29 0c		      AND	#$0C
+    820  d2e9		       f0 11		      BEQ	DOENM
+    821  d2eb		       c9 04		      CMP	#4
+    822  d2ed		       f0 09		      BEQ	ANEGG
+    823  d2ef
+    824  d2ef		       a9 80		      LDA	#$80
+    825  d2f1		       99 aa 00 	      STA	INFP0,Y
+    826  d2f4		       a0 06		      LDY	#6	;		       ;OTHERWISE, A TERRY
+    827  d2f6		       d0 0a		      BNE	USEYCOL
+    828  d2f8		       a0 05	   ANEGG      LDY	#5
+    829  d2fa		       d0 06		      BNE	USEYCOL
+    830  d2fc		       b5 c6	   DOENM      LDA	TYPE-2,X
+    831  d2fe		       29 03		      AND	#$03
+    832  d300		       a8		      TAY
+    833  d301		       c8		      INY
+    834  d302		       98	   USEYCOL    TYA
+    835  d303		       18		      CLC
+    836  d304		       65 b3		      ADC	TEMP3
+    837  d306		       a8		      TAY
+    838  d307		       b9 d9 dc 	      LDA	COLORTAB,Y
+    839  d30a		       a4 b2	   FORCE0     LDY	PREVIOUS
+    840  d30c		       99 a4 00 	      STA	COLOR0,Y
+    841  d30f
+    842  d30f		       b5 c6		      LDA	STATES,X
+    843  d311		       29 80		      AND	#$80
+    844  d313		       4a		      LSR
+    845  d314		       4a		      LSR
+    846  d315		       4a		      LSR
+    847  d316		       4a		      LSR
+    848  d317		       19 aa 00 	      ORA	INFP0,Y
+    849  d31a		       99 aa 00 	      STA	INFP0,Y
+    850  d31d
+    851  d31d		       b5 be		      LDA	YPOSINT,X
+    852  d31f		       4a		      LSR
+    853  d320		       4a		      LSR
+    854  d321		       aa		      TAX
+    855  d322		       e8		      INX
+    856  d323		       18		      CLC
+    857  d324		       69 06		      ADC	#6
+    858  d326		       48		      PHA
+    859  d327		       8a		      TXA
+    860  d328		       38		      SEC
+    861  d329		       e5 b4		      SBC	ZONECNT
+    862  d32b		       99 96 00 	      STA	P0VTBL,Y
+    863  d32e		       68		      PLA
+    864  d32f		       85 b4		      STA	ZONECNT
+    865  d331
+    866  d331		       88		      DEY
+    867  d332		       30 03		      BMI	DONEP0
+    868  d334		       4c b4 d2 	      JMP	P0LOADLP
+    869  d337
+    870  d337				   DONEP0
+    871  d337
+    872  d337		       a4 a3		      LDY	P1CNT
+    873  d339		       d0 0a		      BNE	DOP1
+    874  d33b		       84 9f		      STY	P1HPOS
+    875  d33d		       88		      DEY
+    876  d33e		       84 99		      STY	P1VTBL
+    877  d340		       84 b2		      STY	P1VOFF
+    878  d342		       4c d0 d3 	      JMP	DONEP1
+    879  d345
+    880  d345		       88	   DOP1       DEY
+    881  d346		       84 a3		      STY	P1CNT
+    882  d348		       a9 00		      LDA	#0
+    883  d34a		       85 b4		      STA	ZONECNT
+    884  d34c
+    885  d34c		       84 b2	   P1LOADLP   STY	PREVIOUS
+    886  d34e		       a9 00		      LDA	#0
+    887  d350		       99 ad 00 	      STA	INFP1,Y
+    888  d353		       b6 99		      LDX	P1VTBL,Y	;		 ;THIS IS INDEX OF HIGHEST ONE
+    889  d355
+    890  d355		       20 16 dc 	      JSR	PICKSTP
+    891  d358
+    892  d358		       99 93 00 	      STA	STAMP1,Y
+    893  d35b
+    894  d35b		       b4 b6		      LDY	XPOS,X
+    895  d35d		       b9 0f df 	      LDA	HTABLE,Y
+    896  d360		       a4 b2		      LDY	PREVIOUS
+    897  d362		       99 9f 00 	      STA	P1HPOS,Y
+    898  d365
+    899  d365		       e0 02		      CPX	#2
+    900  d367		       b0 15		      BCS	USETYPE1
+    901  d369		       c8		      INY
+    902  d36a		       b5 ce		      LDA	STAT2,X
+    903  d36c
+    904  d36c		       c9 0d		      CMP	#BIRTH1ST
+    905  d36e		       f0 04		      BEQ	DOWHT
+    906  d370		       c9 0b		      CMP	#SHIELD
+    907  d372		       d0 27		      BNE	USEYCOL1
+    908  d374
+    909  d374		       a5 80	   DOWHT      LDA	FRMCNT
+    910  d376		       29 04		      AND	#4
+    911  d378		       f0 21		      BEQ	USEYCOL1
+    912  d37a		       a9 0e		      LDA	#$0E
+    913  d37c		       d0 25		      BNE	FORCE1
+    914  d37e		       b5 c6	   USETYPE1   LDA	TYPE-2,X
+    915  d380		       29 0c		      AND	#$0C
+    916  d382		       f0 11		      BEQ	DOENM1
+    917  d384		       c9 04		      CMP	#4
+    918  d386		       f0 09		      BEQ	ANEGG1
+    919  d388
+    920  d388		       a9 80		      LDA	#$80
+    921  d38a		       99 ad 00 	      STA	INFP1,Y
+    922  d38d		       a0 06		      LDY	#6	;		       ;OTHERWISE, A TERRY
+    923  d38f		       d0 0a		      BNE	USEYCOL1
+    924  d391		       a0 05	   ANEGG1     LDY	#5
+    925  d393		       d0 06		      BNE	USEYCOL1
+    926  d395		       b5 c6	   DOENM1     LDA	TYPE-2,X
+    927  d397		       29 03		      AND	#$03
+    928  d399		       a8		      TAY
+    929  d39a		       c8		      INY
+    930  d39b		       98	   USEYCOL1   TYA
+    931  d39c		       18		      CLC
+    932  d39d		       65 b3		      ADC	TEMP3
+    933  d39f		       a8		      TAY
+    934  d3a0		       b9 d9 dc 	      LDA	COLORTAB,Y
+    935  d3a3		       a4 b2	   FORCE1     LDY	PREVIOUS
+    936  d3a5		       99 a7 00 	      STA	COLOR1,Y
+    937  d3a8
+    938  d3a8		       b5 c6		      LDA	STATES,X
+    939  d3aa		       29 80		      AND	#$80
+    940  d3ac		       4a		      LSR
+    941  d3ad		       4a		      LSR
+    942  d3ae		       4a		      LSR
+    943  d3af		       4a		      LSR
+    944  d3b0		       19 ad 00 	      ORA	INFP1,Y
+    945  d3b3		       99 ad 00 	      STA	INFP1,Y
+    946  d3b6
+    947  d3b6		       b5 be		      LDA	YPOSINT,X
+    948  d3b8		       4a		      LSR
+    949  d3b9		       4a		      LSR
+    950  d3ba		       aa		      TAX
+    951  d3bb		       e8		      INX
+    952  d3bc		       18		      CLC
+    953  d3bd		       69 06		      ADC	#6
+    954  d3bf		       48		      PHA
+    955  d3c0		       8a		      TXA
+    956  d3c1		       38		      SEC
+    957  d3c2		       e5 b4		      SBC	ZONECNT
+    958  d3c4		       99 99 00 	      STA	P1VTBL,Y
+    959  d3c7		       68		      PLA
+    960  d3c8		       85 b4		      STA	ZONECNT
+    961  d3ca
+    962  d3ca		       88		      DEY
+    963  d3cb		       30 03		      BMI	DONEP1
+    964  d3cd		       4c 4c d3 	      JMP	P1LOADLP
+    965  d3d0
+    966  d3d0				   DONEP1
+    967  d3d0
+    968  d3d0		       a9 28		      LDA	#40
+    969  d3d2		       85 b4		      STA	ZONECNT
+    970  d3d4		       a6 a2		      LDX	P0CNT
+    971  d3d6		       b5 96		      LDA	P0VTBL,X
+    972  d3d8		       85 b1		      STA	P0VOFF
+    973  d3da		       a6 a3		      LDX	P1CNT
+    974  d3dc		       b5 99		      LDA	P1VTBL,X
+    975  d3de		       85 b2		      STA	P1VOFF
+    976  d3e0
+    977  d3e0		       a6 b5		      LDX	CFIGINDX
+    978  d3e2		       bd 00 df 	      LDA	MTINDX,X
+    979  d3e5		       85 b3		      STA	MPTR
+    980  d3e7
+    981  d3e7		       a9 dd		      LDA	#>RWALK0
+    982  d3e9		       85 8d		      STA	PTR0H
+    983  d3eb		       85 8f		      STA	PTR1H
+    984  d3ed		       a9 01		      LDA	#1
+    985  d3ef		       85 25		      STA	VDELP0
+    986  d3f1
+    987  d3f1
+    988  d3f1		       ad 84 02    BWLOOP     LDA	INTIM
+    989  d3f4		       d0 fb		      BNE	BWLOOP
+    990  d3f6		       4c f6 d4    JKERN      JMP	KERNAL
+    991  d3f9
+    992  d3f9		       00 04 04 17*LENGTH     DC.B	0,4,4,23,0,9,7,21,0,15,19,12,11,13,23
+    993  d408
+    994  d408		       03 17 2b 3f*LOWBYTE    DC.B	<RWALK0,<RWALK1,<RWALK2,<RWALK3,<RSKID
+    995  d40d		       7b 67 8c 9e*	      DC.B	<RWINGUP,<RWINGDWN,<REXPL0,<REXPL1,<REXPL2
+    996  d412		       c6 d8 ec 	      DC.B	<RTERYWUP,<RTERYWDN,<EGG
+    997  d415
+    998  d415		       d2 95 95 95*LIVES1     DC.B	$D2,$95,$95,$95,$95,$95,$95
+    999  d41c
+   1000  d41c
+   1001  d41c		       94	   LFTABL     DC.B	<WALKFRQ
+   1002  d41d		       b1 63		      DC.B	<FLAPFRQ,<BNCEFRQ
+   1003  d41f		       9a 21		      DC.B	<SKIDFRQ,<NULL
+   1004  d421		       44 3d		      DC.B	<EXPLFRQ,<BRTHFRQ
+   1005  d423		       4e 21		      DC.B	<SHLDFRQ,<NULL
+   1006  d425		       39		      DC.B	<TIEDFRQ
+   1007  d426		       68 57		      DC.B	<SCRCHFRQ,<VBRTHFRQ
+   1008  d428		       7c 2b		      DC.B	<EGGHHFRQ,<EATEGFRQ
+   1009  d42a		       84		      DC.B	<EXTRFRQ
+   1010  d42b
+   1011  d42b				   ENDSOUND
+   1012  d42b
+   1013  d42b				   SOUNDS
+   1014  d42b		       0c 0d 0e 0f*EATEGFRQ   DC.B	$C,$D,$E,$F,$10,$11,$12,$13,$15,$17,$19,$1B,$1D,$1F
+   1015  d439		       12 11 10 0f TIEDFRQ    DC.B	$12,$11,$10,$0F
+   1016  d43d		       10 1d 00 11*BRTHFRQ    DC.B	$10,$1D,$00,$11,$1E,$00,$12
+   1017  d444							;				 ;THESE TWO ARE CONNECTED
+   1018  d444		       1f 1e 1d 1b*EXPLFRQ    DC.B	$1F,$1E,$1D,$1B,$19,$17,$15,$13,$11
+   1019  d44d		       0f		      DC.B	$F
+   1020  d44e		       0b 0c 0d 0e*SHLDFRQ    DC.B	$0B,$0C,$0D,$0E,$0F,$10,$11,$12
+   1021  d456		       13		      DC.B	$13	;		      ;THESE TWO ARE CONNECTED
+   1022  d457		       14 15 16 17*VBRTHFRQ   DC.B	$14,$15,$16,$17,$18,$19,$1A,$1B
+   1023  d45f		       1c 1d 1e 1f	      DC.B	$1C,$1D,$1E,$1F
+   1024  d463		       1f 0d 0c 0b BNCEFRQ    DC.B	$1F,$D,$C,$B	;	     ;THESE TWO ARE CONNECTED
+   1025  d467		       0a		      DC.B	$A
+   1026  d468
+   1027  d468		       0f 0f 0f 0e*SCRCHFRQ   DC.B	$F,$F,$F,$E,$E,$D,$C,$B,$A,$9,$8,$7,$6,$6,$6,$6,$6,$6
+   1028  d47a		       06 06		      DC.B	$6,$6
+   1029  d47c
+   1030  d47c		       00 03 07 09 EGGHHFRQ   DC.B	0,3,7,9
+   1031  d480		       00 07 06 05 EGGHHVOL   DC.B	0,7,6,5
+   1032  d484		       16 11 0e 0c EXTRFRQ    DC.B	$16,$11,$E,$C
+   1033  d488
+   1034  d488		       02 03 05 06 FLAPVOL    DC.B	2,3,5,6
+   1035  d48c		       03		      DC.B	3
+   1036  d48d		       02 04 06 08 TIEDVOL    DC.B	2,4,6,8
+   1037  d491		       01 02 03    EXPLVOL    DC.B	1,2,3
+   1038  d494		       04 05 06    WALKFRQ    DC.B	4,5,6
+   1039  d497		       07 08 09    WALKVOL    DC.B	7,8,9
+   1040  d49a							;				 ;THESE TWO ARE CONNECTED
+   1041  d49a		       19 1b 1c 1a*SKIDFRQ    DC.B	$19,$1B,$1C,$1A,$18,$1B,$17,$19,$1A,$19,$1C,$18
+   1042  d4a6		       1a 17 19 1c*	      DC.B	$1A,$17,$19,$1C,$1A,$17,$1B,$19,$18,$19,$1B
+   1043  d4b1		       18 18 18 18 FLAPFRQ    DC.B	$18,$18,$18,$18	;THESE TWO ARE CONNECTED
+   1044  d4b5		       18		      DC.B	$18
+   1045  d4b6		       06 06 06    BNCEVOL    DC.B	6,6,6	;		    ;THESE TWO ARE CONNECTED
+   1046  d4b9		       06 06 00 06*BRTHVOL    DC.B	6,6,0,6,6,0,6
+   1047  d4c0		       06		      DC.B	6
+   1048  d4c1
+   1049  d4c1		       02 03 04 04*EATEGVOL   DC.B	2,3,4,4,5,5,6,7,8,9,$A,$A,$B,$B
+   1050  d4cf		       02 04 06 07*EXTRVOL    DC.B	2,4,6,7,9,$B
+   1051  d4d5
+   1052  d4d5		       38 6c 6c 7c*TEDDY      DC.B	$38,$6C,$6C,$7C,$54,$BA,$C6
+   1053  d4dc
+   1054  d4dc				   ENDLOAD
+   1055  d4dc
+   1056  d4f6					      ORG	$D4F6
+   1057  d4f6
+   1058  d4f6		       85 02	   KERNAL     STA	WSYNC
+   1059  d4f8		       a9 00		      LDA	#0	;		       ;2
+   1060  d4fa		       85 01		      STA	VBLANK	;		   ;5
+   1061  d4fc		       a9 e2		      LDA	#$E2	;		     ;17 ONLY FOR TITLE PAGE
+   1062  d4fe		       8d 96 02 	      STA	TIM64T	;		   ;21
+   1063  d501		       24 89		      BIT	ATTRACT	;		  ;8
+   1064  d503		       50 04		      BVC	STRTKERN	;		 ;12/13
+   1065  d505		       ea		      NOP
+   1066  d506		       4c 74 da 	      JMP	TTLKERN	;		  ;15
+   1067  d509
+   1068  d509				   STRTKERN
+   1069  d509
+   1070  d509		       a6 a2		      LDX	P0CNT	;		    ;16
+   1071  d50b		       b5 90		      LDA	STAMP0,X	;		 ;20
+   1072  d50d		       85 8c		      STA	PTR0	;		     ;23
+   1073  d50f		       a0 00		      LDY	#0	;		       ;32
+   1074  d511		       b5 aa		      LDA	INFP0,X	;		  ;36
+   1075  d513		       85 0b		      STA	REFP0	;		    ;39
+   1076  d515		       10 02		      BPL	STNZ0	;		    ;41/42
+   1077  d517		       a0 05		      LDY	#5	;		       ;43
+   1078  d519		       84 04	   STNZ0      STY	NUSIZ0	;		   ;46
+   1079  d51b		       a6 a3		      LDX	P1CNT	;		    ;49
+   1080  d51d		       b5 93		      LDA	STAMP1,X	;		 ;53
+   1081  d51f		       85 8e		      STA	PTR1	;		     ;56
+   1082  d521		       a0 00		      LDY	#0	;		       ;58
+   1083  d523		       b5 ad		      LDA	INFP1,X	;		  ;62
+   1084  d525		       85 0c		      STA	REFP1	;		    ;65
+   1085  d527		       10 02		      BPL	STNZ1	;		    ;67/68
+   1086  d529		       a0 05		      LDY	#5	;		       ;69
+   1087  d52b		       84 05	   STNZ1      STY	NUSIZ1	;		   ;72
+   1088  d52d		       85 02		      STA	WSYNC	;		    ;75
+   1089  d52f							;RASTER 2
+   1090  d52f		       b5 a7		      LDA	COLOR1,X	;		 ;4
+   1091  d531		       85 07		      STA	COLUP1	;		   ;7
+   1092  d533		       b5 9f		      LDA	P1HPOS,X	;		 ;11
+   1093  d535		       a6 a2		      LDX	P0CNT	;		    ;14
+   1094  d537		       85 21		      STA	HMP1	;		     ;17
+   1095  d539		       29 0f		      AND	#$F	;		      ;19
+   1096  d53b		       a8		      TAY		;			      ;21
+   1097  d53c		       88	   PS1	      DEY		;			      ;23
+   1098  d53d		       10 fd		      BPL	PS1	;		      ;25/26
+   1099  d53f		       85 11		      STA	RESP1	;		    ;28---->68
+   1100  d541		       85 02		      STA	WSYNC	;		    ;71
+   1101  d543							;RASTER 3
+   1102  d543		       c6 b1		      DEC	P0VOFF	;		   ;5
+   1103  d545		       c6 b4		      DEC	ZONECNT	;		  ;10
+   1104  d547		       b5 9c		      LDA	P0HPOS,X	;		 ;14
+   1105  d549		       85 20		      STA	HMP0	;		     ;17
+   1106  d54b		       29 0f		      AND	#$F	;		      ;19
+   1107  d54d		       a8		      TAY		;			      ;21
+   1108  d54e		       88	   PS0	      DEY		;			      ;23
+   1109  d54f		       10 fd		      BPL	PS0	;		      ;25/26
+   1110  d551		       85 10		      STA	RESP0	;		    ;28--->68
+   1111  d553		       85 02		      STA	WSYNC	;		    ;71
+   1112  d555							;RASTER 4
+   1113  d555		       85 2a		      STA	HMOVE	;		    ;3
+   1114  d557		       a9 05		      LDA	#5	;		       ;5
+   1115  d559		       85 0a		      STA	CTRLPF	;		   ;8
+   1116  d55b		       b5 a4		      LDA	COLOR0,X	;		 ;12
+   1117  d55d		       85 06		      STA	COLUP0	;		   ;15
+   1118  d55f		       a9 05		      LDA	#HEIGHT	;		  ;17
+   1119  d561		       c8		      INY		;			      ;19
+   1120  d562		       a6 b1		      LDX	P0VOFF	;		   ;22
+   1121  d564		       85 2b		      STA	HMCLR	;		    ;25
+   1122  d566		       f0 09		      BEQ	DOAP0	;		    ;27/28
+   1123  d568		       c6 b2		      DEC	P1VOFF	;		   ;32
+   1124  d56a		       d0 13		      BNE	PP0PP1	;		   ;34/35
+   1125  d56c		       85 b2		      STA	P1VOFF	;		   ;37
+   1126  d56e
+   1127  d56e		       4c 35 d6 	      JMP	PP0DP1	;		   ;40
+   1128  d571		       85 b1	   DOAP0      STA	P0VOFF	;		   ;31
+   1129  d573		       c6 b2		      DEC	P1VOFF	;		   ;36
+   1130  d575		       d0 05		      BNE	DDP	;		      ;38/39
+   1131  d577		       85 b2		      STA	P1VOFF	;		   ;41
+   1132  d579		       4c f8 d6 	      JMP	DP0DP1	;		   ;44
+   1133  d57c		       4c cd d7    DDP	      JMP	DP0PP1	;		   ;42
+   1134  d57f
+   1135  d57f
+   1136  d57f							;POSITION BOTH
+   1137  d57f							;RASTER1
+   1138  d57f		       85 02	   PP0PP1     STA	WSYNC
+   1139  d581		       a9 28		      LDA	#PFCOLOR1	;		;2
+   1140  d583		       85 08		      STA	COLUPF	;		   ;5
+   1141  d585		       a6 a2		      LDX	P0CNT	;		    ;8
+   1142  d587		       b5 90		      LDA	STAMP0,X	;		 ;12
+   1143  d589		       85 8c		      STA	PTR0	;		     ;15
+   1144  d58b		       b5 a4		      LDA	COLOR0,X	;		 ;19
+   1145  d58d		       85 06		      STA	COLUP0	;		   ;22
+   1146  d58f		       a0 00		      LDY	#0	;		       ;24
+   1147  d591		       b5 aa		      LDA	INFP0,X	;		  ;28
+   1148  d593		       85 0b		      STA	REFP0	;		    ;31
+   1149  d595		       10 02		      BPL	STNSIZ0	;		  ;33/34
+   1150  d597		       a0 05		      LDY	#5	;		       ;35
+   1151  d599		       84 04	   STNSIZ0    STY	NUSIZ0	;		   ;38
+   1152  d59b		       a6 a3		      LDX	P1CNT	;		    ;41
+   1153  d59d		       b5 93		      LDA	STAMP1,X	;		 ;45
+   1154  d59f		       85 8e		      STA	PTR1	;		     ;48
+   1155  d5a1		       b5 a7		      LDA	COLOR1,X	;		 ;52
+   1156  d5a3		       85 07		      STA	COLUP1	;		   ;55
+   1157  d5a5		       a0 00		      LDY	#0	;		       ;57
+   1158  d5a7		       b5 ad		      LDA	INFP1,X	;		  ;61
+   1159  d5a9		       85 0c		      STA	REFP1	;		    ;64
+   1160  d5ab		       10 02		      BPL	STNSIZ1	;		  ;66/67
+   1161  d5ad		       a0 05		      LDY	#5	;		       ;68
+   1162  d5af		       84 05	   STNSIZ1    STY	NUSIZ1	;		   ;71
+   1163  d5b1		       85 02		      STA	WSYNC	;		    ;74
+   1164  d5b3							;RASTER 2
+   1165  d5b3		       a9 26		      LDA	#PFCOLOR2	;		;2
+   1166  d5b5		       85 08		      STA	COLUPF	;		   ;5
+   1167  d5b7		       c6 b1		      DEC	P0VOFF	;		   ;10
+   1168  d5b9		       b5 9f		      LDA	P1HPOS,X	;		 ;14
+   1169  d5bb		       85 21		      STA	HMP1	;		     ;17
+   1170  d5bd		       29 0f		      AND	#$F	;		      ;19
+   1171  d5bf		       a8		      TAY		;			      ;21
+   1172  d5c0		       88	   POS1       DEY		;			      ;23
+   1173  d5c1		       10 fd		      BPL	POS1	;		     ;25/26
+   1174  d5c3		       85 11		      STA	RESP1	;		    ;28---->68
+   1175  d5c5		       a6 a2		      LDX	P0CNT	;		    ;71
+   1176  d5c7		       85 02		      STA	WSYNC	;		    ;74
+   1177  d5c9							;RASTER 3
+   1178  d5c9		       a9 24		      LDA	#PFCOLOR3	;		;2
+   1179  d5cb		       85 08		      STA	COLUPF	;		   ;5
+   1180  d5cd		       c6 b4		      DEC	ZONECNT	;		  ;10
+   1181  d5cf		       b5 9c		      LDA	P0HPOS,X	;		 ;14
+   1182  d5d1		       85 20		      STA	HMP0	;		     ;17
+   1183  d5d3		       29 0f		      AND	#$F	;		      ;19
+   1184  d5d5		       a8		      TAY		;			      ;21
+   1185  d5d6		       88	   POS0       DEY		;			      ;23
+   1186  d5d7		       10 fd		      BPL	POS0	;		     ;25/26
+   1187  d5d9		       85 10		      STA	RESP0	;		    ;28--->68
+   1188  d5db		       a2 22		      LDX	#PFCOLOR4	;		;70
+   1189  d5dd		       a9 05		      LDA	#HEIGHT	;		  ;72
+   1190  d5df		       85 02		      STA	WSYNC	;		    ;75
+   1191  d5e1							;RASTER 4
+   1192  d5e1		       85 2a		      STA	HMOVE	;		    ;3
+   1193  d5e3		       86 08		      STX	COLUPF	;		   ;6
+   1194  d5e5		       a6 b4		      LDX	ZONECNT	;		  ;9
+   1195  d5e7		       d0 03		      BNE	NOEND	;		    ;11/12
+   1196  d5e9		       4c c2 d8 	      JMP	ENDKERN
+   1197  d5ec		       a4 b1	   NOEND      LDY	P0VOFF	;		   ;15
+   1198  d5ee		       f0 0b		      BEQ	GOINP0	;		   ;17/18
+   1199  d5f0		       c6 b2		      DEC	P1VOFF	;		   ;22
+   1200  d5f2		       d0 15		      BNE	POOPP1PF	;		 ;24/25
+   1201  d5f4		       85 b2		      STA	P1VOFF	;		   ;27
+   1202  d5f6		       85 2b		      STA	HMCLR
+   1203  d5f8
+   1204  d5f8		       4c d0 d6 	      JMP	PP0DP1PF	;		 ;30
+   1205  d5fb		       85 b1	   GOINP0     STA	P0VOFF	;		   ;21
+   1206  d5fd		       c6 b2		      DEC	P1VOFF	;		   ;26
+   1207  d5ff		       d0 05		      BNE	DPFPP0	;		   ;28/29
+   1208  d601		       85 b2		      STA	P1VOFF	;		   ;31
+   1209  d603		       4c 96 d7 	      JMP	DP0DP1PF	;		 ;34
+   1210  d606		       4c 66 d8    DPFPP0     JMP	WASTE303	;		 ;32
+   1211  d609		       ea	   POOPP1PF   NOP		;			      ;27 (28 ON PAGE CROSS)
+   1212  d60a		       ea	   WASTE102   NOP		;			      ;32
+   1213  d60b		       ea		      NOP		;			      ;34
+   1214  d60c		       ea	   WASTE101   NOP
+   1215  d60d							;WASTE TIME HERE
+   1216  d60d		       85 2b	   PP0PP1PF   STA	HMCLR	;		    ;37     3
+   1217  d60f		       8a	   OHMY       TXA		;			      ;39     5
+   1218  d610		       4a		      LSR		;			;41	7
+   1219  d611		       a4 b3		      LDY	MPTR	;		     ;44     10
+   1220  d613		       bd c3 df 	      LDA	PF,X	;		     ;48     14
+   1221  d616		       f0 18		      BEQ	AROUND	;		   ;50/51  16/17
+   1222  d618		       e6 b3		      INC	MPTR	;		     ;55     21
+   1223  d61a		       39 be d7 	      AND	MTABLE,Y	;		 ;59	 25
+   1224  d61d		       a0 00	   ARNDINC    LDY	#0	;		       ;61     27
+   1225  d61f		       90 08		      BCC	PF1ST	;		    ;63/64  29/30
+   1226  d621		       8d 0f 01 	      STA	PF2+$100	;		 ;66	 32
+   1227  d624		       84 0e		      STY	PF1	;		      ;69     35
+   1228  d626		       4c 7f d5 	      JMP	PP0PP1	;		   ;72	   38
+   1229  d629		       84 0f	   PF1ST      STY	PF2	;		      ;67     33
+   1230  d62b		       85 0e		      STA	PF1	;		      ;70     36
+   1231  d62d		       4c 7f d5 	      JMP	PP0PP1	;		   ;73	   39
+   1232  d630		       85 2b	   AROUND     STA	HMCLR
+   1233  d632		       ea		      NOP
+   1234  d633		       f0 e8		      BEQ	ARNDINC	;		  ;
+   1235  d635
+   1236  d635
+   1237  d635							;DRAW PLAYER1
+   1238  d635							;RASTER 1
+   1239  d635		       85 02	   PP0DP1     STA	WSYNC
+   1240  d637		       a9 28		      LDA	#PFCOLOR1	;		;2
+   1241  d639		       85 08		      STA	COLUPF	;		   ;5
+   1242  d63b		       b1 8e		      LDA	(PTR1),Y	;		 ;10
+   1243  d63d		       85 1c		      STA	GRP1	;		     ;13
+   1244  d63f		       a6 a2		      LDX	P0CNT	;		    ;16
+   1245  d641		       b5 90		      LDA	STAMP0,X	;		 ;20
+   1246  d643		       85 8c		      STA	PTR0	;		     ;23
+   1247  d645		       b5 a4		      LDA	COLOR0,X	;		 ;27
+   1248  d647		       85 06		      STA	COLUP0	;		   ;30
+   1249  d649		       b5 aa		      LDA	INFP0,X	;		  ;34
+   1250  d64b		       85 0b		      STA	REFP0	;		    ;37
+   1251  d64d		       10 02		      BPL	STNS0	;		    ;39/40
+   1252  d64f		       a0 05		      LDY	#5	;		       ;41
+   1253  d651		       84 04	   STNS0      STY	NUSIZ0	;		   ;44
+   1254  d653		       e6 8e		      INC	PTR1	;		     ;49
+   1255  d655		       a0 00		      LDY	#0	;		       ;51
+   1256  d657		       84 b0		      STY	TEMP0	;		    ;54
+   1257  d659		       b1 8e		      LDA	(PTR1),Y	;		 ;59
+   1258  d65b		       a0 26		      LDY	#PFCOLOR2	;		;61
+   1259  d65d		       e6 8e		      INC	PTR1	;		     ;66
+   1260  d65f		       a6 a2		      LDX	P0CNT	;		    ;69
+   1261  d661		       84 08		      STY	COLUPF	;		   ;72
+   1262  d663		       85 02		      STA	WSYNC	;		    ;75
+   1263  d665							;RASTER 2
+   1264  d665		       85 1c		      STA	GRP1
+   1265  d667		       a0 00		      LDY	#0
+   1266  d669		       c6 b1		      DEC	P0VOFF
+   1267  d66b		       b5 9c		      LDA	P0HPOS,X
+   1268  d66d		       85 20		      STA	HMP0
+   1269  d66f		       29 0f		      AND	#$F
+   1270  d671		       aa		      TAX
+   1271  d672		       ca	   POS0A      DEX
+   1272  d673		       10 fd		      BPL	POS0A
+   1273  d675		       85 10		      STA	RESP0
+   1274  d677							;3 CYCLES AVAILABLE HERE
+   1275  d677		       a9 24		      LDA	#PFCOLOR3
+   1276  d679		       85 02		      STA	WSYNC
+   1277  d67b							;RASTER 3
+   1278  d67b		       85 2a		      STA	HMOVE	;		    ;3
+   1279  d67d		       85 08		      STA	COLUPF	;		   ;6
+   1280  d67f		       b1 8e		      LDA	(PTR1),Y	;		 ;11
+   1281  d681		       85 1c		      STA	GRP1	;		     ;14
+   1282  d683		       e6 8e		      INC	PTR1	;		     ;19
+   1283  d685		       c6 b2		      DEC	P1VOFF	;		   ;24
+   1284  d687		       d0 13		      BNE	DONE31A	;		  ;26/27
+   1285  d689		       a9 40		      LDA	#$40	;		     ;28
+   1286  d68b		       85 b0		      STA	TEMP0	;		    ;31
+   1287  d68d		       a6 a3		      LDX	P1CNT	;		    ;34
+   1288  d68f		       ca		      DEX		;			      ;36
+   1289  d690		       b5 99		      LDA	P1VTBL,X	;		 ;40
+   1290  d692		       85 b2		      STA	P1VOFF	;		   ;43
+   1291  d694		       8a		      TXA		;			      ;45
+   1292  d695		       10 03		      BPL	NO1A	;		     ;47/48
+   1293  d697		       86 b2		      STX	P1VOFF	;		   ;50
+   1294  d699		       e8		      INX		;			      ;52
+   1295  d69a		       86 a3	   NO1A       STX	P1CNT	;		    ;55
+   1296  d69c		       b1 8e	   DONE31A    LDA	(PTR1),Y	;		 ;60
+   1297  d69e		       a2 22		      LDX	#PFCOLOR4	;		;62
+   1298  d6a0		       c6 b4		      DEC	ZONECNT	;		  ;67
+   1299  d6a2		       e6 8e		      INC	PTR1	;		     ;72
+   1300  d6a4		       85 02		      STA	WSYNC	;		    ;75
+   1301  d6a6							;RASTER 4
+   1302  d6a6		       85 1c		      STA	GRP1
+   1303  d6a8		       86 08		      STX	COLUPF
+   1304  d6aa		       a6 b4		      LDX	ZONECNT
+   1305  d6ac		       d0 03		      BNE	FOOBAR
+   1306  d6ae		       4c c2 d8 	      JMP	ENDKERN
+   1307  d6b1		       a9 05	   FOOBAR     LDA	#HEIGHT
+   1308  d6b3		       24 b0		      BIT	TEMP0
+   1309  d6b5		       a4 b1		      LDY	P0VOFF
+   1310  d6b7		       f0 05		      BEQ	NXTP0
+   1311  d6b9		       50 10		      BVC	WASTCAS
+   1312  d6bb		       4c 0a d6 	      JMP	WASTE102	;		 ;3 NOP"S THEN POS BOTH
+   1313  d6be		       85 b1	   NXTP0      STA	P0VOFF
+   1314  d6c0		       50 05		      BVC	DODP0PP1
+   1315  d6c2		       85 2b		      STA	HMCLR
+   1316  d6c4		       4c 67 d8 	      JMP	DP0PP1PF
+   1317  d6c7		       ea	   DODP0PP1   NOP
+   1318  d6c8		       4c 96 d7 	      JMP	DP0DP1PF
+   1319  d6cb		       ea	   WASTCAS    NOP
+   1320  d6cc		       ea		      NOP
+   1321  d6cd		       ea		      NOP
+   1322  d6ce		       85 2b		      STA	HMCLR
+   1323  d6d0		       85 2b	   PP0DP1PF   STA	HMCLR	;		    ;3
+   1324  d6d2		       8a		      TXA		;			      ;5
+   1325  d6d3		       4a		      LSR		;			;7
+   1326  d6d4		       a4 b3		      LDY	MPTR	;		     ;10
+   1327  d6d6		       bd c3 df 	      LDA	PF,X	;		     ;14
+   1328  d6d9		       f0 18		      BEQ	UNINCM	;		   ;16/17
+   1329  d6db		       e6 b3		      INC	MPTR	;		     ;21
+   1330  d6dd		       39 be d7 	      AND	MTABLE,Y	;		 ;25
+   1331  d6e0		       a0 00	   UNINC      LDY	#0	;		       ;27
+   1332  d6e2		       90 08		      BCC	PF1OK
+   1333  d6e4		       8d 0f 01 	      STA	PF2+$100
+   1334  d6e7		       84 0e		      STY	PF1
+   1335  d6e9		       4c 35 d6 	      JMP	PP0DP1
+   1336  d6ec		       84 0f	   PF1OK      STY	PF2
+   1337  d6ee		       85 0e		      STA	PF1
+   1338  d6f0		       4c 35 d6 	      JMP	PP0DP1
+   1339  d6f3		       85 2b	   UNINCM     STA	HMCLR	;		    ;20
+   1340  d6f5		       ea		      NOP		;			      ;22
+   1341  d6f6		       f0 e8		      BEQ	UNINC	;		    ;25
+   1342  d6f8							;DRAW BOTH CASE
+   1343  d6f8							;RASTER1
+   1344  d6f8		       85 02	   DP0DP1     STA	WSYNC
+   1345  d6fa		       a9 28		      LDA	#PFCOLOR1	;		;2
+   1346  d6fc		       85 08		      STA	COLUPF	;		   ;5
+   1347  d6fe		       b1 8c		      LDA	(PTR0),Y	;		 ;10
+   1348  d700		       85 1b		      STA	GRP0	;		     ;13
+   1349  d702		       b1 8e		      LDA	(PTR1),Y	;		 ;18
+   1350  d704		       85 1c		      STA	GRP1	;		     ;21
+   1351  d706		       e6 8c		      INC	PTR0	;		     ;26
+   1352  d708		       e6 8e		      INC	PTR1	;		     ;31
+   1353  d70a		       b1 8c		      LDA	(PTR0),Y	;		 ;36
+   1354  d70c		       85 1b		      STA	GRP0	;		     ;39
+   1355  d70e		       b1 8e		      LDA	(PTR1),Y	;		 ;44
+   1356  d710		       a2 26		      LDX	#PFCOLOR2	;		;46
+   1357  d712		       e6 8c		      INC	PTR0	;		     ;51
+   1358  d714		       e6 8e		      INC	PTR1	;		     ;56
+   1359  d716		       84 b0		      STY	TEMP0	;		    ;59
+   1360  d718		       85 02		      STA	WSYNC	;		    ;62
+   1361  d71a
+   1362  d71a
+   1363  d71a							;RASTER2
+   1364  d71a		       85 1c		      STA	GRP1	;		     ;3
+   1365  d71c		       86 08		      STX	COLUPF	;		   ;6
+   1366  d71e		       c6 b4		      DEC	ZONECNT	;		  ;11
+   1367  d720		       c6 b2		      DEC	P1VOFF	;		   ;16
+   1368  d722		       c6 b1		      DEC	P0VOFF	;		   ;21
+   1369  d724		       d0 13		      BNE	NOTEST	;		   ;23/24
+   1370  d726		       a9 80		      LDA	#$80	;		     ;25
+   1371  d728		       85 b0		      STA	TEMP0	;		    ;28
+   1372  d72a		       a6 a2		      LDX	P0CNT	;		    ;31
+   1373  d72c		       ca		      DEX		;			      ;33
+   1374  d72d		       b5 96		      LDA	P0VTBL,X	;		 ;37
+   1375  d72f		       85 b1		      STA	P0VOFF	;		   ;40
+   1376  d731		       8a		      TXA		;			      ;42
+   1377  d732		       10 03		      BPL	NO0	;		      ;44/45
+   1378  d734		       86 b1		      STX	P0VOFF	;		   ;47
+   1379  d736		       e8		      INX		;			      ;49
+   1380  d737		       86 a2	   NO0	      STX	P0CNT	;		    ;52
+   1381  d739		       b1 8c	   NOTEST     LDA	(PTR0),Y	;		 ;57
+   1382  d73b		       85 1b		      STA	GRP0	;		     ;60
+   1383  d73d		       b1 8e		      LDA	(PTR1),Y	;		 ;65
+   1384  d73f		       85 02		      STA	WSYNC	;		    ;68
+   1385  d741
+   1386  d741							;RASTER3
+   1387  d741		       85 2a		      STA	HMOVE	;		    ;3
+   1388  d743		       85 1c		      STA	GRP1	;		     ;6
+   1389  d745		       a9 24		      LDA	#PFCOLOR3	;		;8
+   1390  d747		       85 08		      STA	COLUPF	;		   ;11
+   1391  d749		       e6 8c		      INC	PTR0	;		     ;16
+   1392  d74b		       e6 8e		      INC	PTR1	;		     ;21
+   1393  d74d		       a5 b2		      LDA	P1VOFF	;		   ;24
+   1394  d74f		       d0 15		      BNE	DONE3	;		    ;27/28
+   1395  d751		       a5 b0		      LDA	TEMP0	;		    ;29
+   1396  d753		       09 40		      ORA	#$40	;		     ;31
+   1397  d755		       85 b0		      STA	TEMP0	;		    ;34
+   1398  d757		       a6 a3		      LDX	P1CNT	;		    ;37
+   1399  d759		       ca		      DEX		;			      ;39
+   1400  d75a		       b5 99		      LDA	P1VTBL,X	;		 ;43
+   1401  d75c		       85 b2		      STA	P1VOFF	;		   ;46
+   1402  d75e		       8a		      TXA		;			      ;48
+   1403  d75f		       10 03		      BPL	NO1	;		      ;50/51
+   1404  d761		       86 b2		      STX	P1VOFF	;		   ;53
+   1405  d763		       e8		      INX		;			      ;55
+   1406  d764		       86 a3	   NO1	      STX	P1CNT	;		    ;58
+   1407  d766		       b1 8c	   DONE3      LDA	(PTR0),Y	;		 ;63
+   1408  d768		       85 1b		      STA	GRP0	;		     ;66
+   1409  d76a		       b1 8e		      LDA	(PTR1),Y	;		 ;71
+   1410  d76c		       a2 22		      LDX	#PFCOLOR4	;		;73
+   1411  d76e		       85 02		      STA	WSYNC	;		    ;76
+   1412  d770
+   1413  d770
+   1414  d770							;RASTER4
+   1415  d770		       85 1c		      STA	GRP1	;		     ;3
+   1416  d772		       86 08		      STX	COLUPF	;		   ;6
+   1417  d774		       a6 b4		      LDX	ZONECNT	;		  ;9
+   1418  d776		       d0 03		      BNE	MORE	;		     ;11/12
+   1419  d778		       4c c2 d8 	      JMP	ENDKERN	;		  ;14
+   1420  d77b		       e6 8c	   MORE       INC	PTR0	;		     ;17
+   1421  d77d		       e6 8e		      INC	PTR1	;		     ;22
+   1422  d77f		       24 b0		      BIT	TEMP0	;		    ;25
+   1423  d781		       30 06		      BMI	GOTOP0	;		   ;27/28
+   1424  d783		       50 0f		      BVC	WASTEDD	;		  ;29/30
+   1425  d785		       ea		      NOP
+   1426  d786		       4c 67 d8 	      JMP	DP0PP1PF	;		 ;25
+   1427  d789		       50 06	   GOTOP0     BVC	DOPP0DP1	;		 ;30/31
+   1428  d78b		       8d 2b 01 	      STA	HMCLR+$100	;	       ;34
+   1429  d78e		       4c 0f d6 	      JMP	OHMY	;		     ;37
+   1430  d791		       4c d0 d6    DOPP0DP1   JMP	PP0DP1PF	;		 ;27
+   1431  d794							;PADDING AS NEEDED
+   1432  d794		       ea	   WASTEDD    NOP
+   1433  d795		       ea		      NOP
+   1434  d796		       85 2b	   DP0DP1PF   STA	HMCLR	;		    ;26
+   1435  d798		       8a		      TXA		;			      ;28
+   1436  d799		       4a		      LSR		;			;30
+   1437  d79a		       a4 b3		      LDY	MPTR	;		     ;33
+   1438  d79c		       bd c3 df 	      LDA	PF,X	;		     ;37
+   1439  d79f		       f0 18		      BEQ	NOINCMK	;		  ;39/40
+   1440  d7a1		       e6 b3		      INC	MPTR	;		     ;44
+   1441  d7a3		       39 be d7 	      AND	MTABLE,Y	;		  ;48	47 ON BRANCH
+   1442  d7a6		       a0 00	   NOINCM     LDY	#0	;		       ;50
+   1443  d7a8		       90 08		      BCC	PF1IN	;		    ;52/53
+   1444  d7aa		       8d 0f 01 	      STA	PF2+$100	;		 ;55
+   1445  d7ad		       84 0e		      STY	PF1	;		      ;58
+   1446  d7af		       4c f8 d6 	      JMP	DP0DP1	;		   ;61
+   1447  d7b2		       84 0f	   PF1IN      STY	PF2	;		      ;56
+   1448  d7b4		       85 0e		      STA	PF1	;		      ;59
+   1449  d7b6		       4c f8 d6 	      JMP	DP0DP1	;		   ;62
+   1450  d7b9		       85 2b	   NOINCMK    STA	HMCLR
+   1451  d7bb		       ea		      NOP
+   1452  d7bc		       f0 e8		      BEQ	NOINCM
+   1453  d7be
+   1454  d7be							;THIS TABLE IS HERE FOR PAGE BOUNDARY CROSSING PROTECTION
+   1455  d7be
+   1456  d7be		       00 00 ff 00 MTABLE     DC.B	$00,$00,$FF,$00
+   1457  d7c2		       ff ff ff ff	      DC.B	$FF,$FF,$FF,$FF
+   1458  d7c6		       00 ff 00 00	      DC.B	$00,$FF,$00,$00
+   1459  d7ca		       ff ff 00 	      DC.B	$FF,$FF,$00
+   1460  d7cd							;DRAW PLAYER0
+   1461  d7cd							;RASTER 1
+   1462  d7cd		       85 02	   DP0PP1     STA	WSYNC
+   1463  d7cf		       a9 28		      LDA	#PFCOLOR1	;		;2
+   1464  d7d1		       85 08		      STA	COLUPF	;		   ;5
+   1465  d7d3		       b1 8c		      LDA	(PTR0),Y	;		 ;10
+   1466  d7d5		       85 1b		      STA	GRP0	;		     ;13
+   1467  d7d7		       84 1c		      STY	GRP1	;		     ;16
+   1468  d7d9		       a6 a3		      LDX	P1CNT	;		    ;19
+   1469  d7db		       b5 93		      LDA	STAMP1,X	;		 ;23
+   1470  d7dd		       85 8e		      STA	PTR1	;		     ;26
+   1471  d7df		       b5 a7		      LDA	COLOR1,X	;		 ;30
+   1472  d7e1		       85 07		      STA	COLUP1	;		   ;33
+   1473  d7e3		       b5 ad		      LDA	INFP1,X	;		  ;37
+   1474  d7e5		       85 0c		      STA	REFP1	;		    ;40
+   1475  d7e7		       10 02		      BPL	STNS1	;		    ;42/43
+   1476  d7e9		       a0 05		      LDY	#5	;		       ;44
+   1477  d7eb		       84 05	   STNS1      STY	NUSIZ1	;		   ;47
+   1478  d7ed		       e6 8c		      INC	PTR0	;		     ;52
+   1479  d7ef		       a0 00		      LDY	#0	;		       ;54
+   1480  d7f1		       b1 8c		      LDA	(PTR0),Y	;		 ;59
+   1481  d7f3		       e6 8c		      INC	PTR0	;		     ;64
+   1482  d7f5		       84 b0		      STY	TEMP0	;		    ;67
+   1483  d7f7		       85 1b		      STA	GRP0	;		     ;70
+   1484  d7f9		       84 1c		      STY	GRP1	;		     ;73
+   1485  d7fb		       85 02		      STA	WSYNC	;		    ;76
+   1486  d7fd							;RASTER 2
+   1487  d7fd		       a9 26		      LDA	#PFCOLOR2	;		;2
+   1488  d7ff		       85 08		      STA	COLUPF	;		   ;5
+   1489  d801		       c6 b2		      DEC	P1VOFF	;		   ;10
+   1490  d803		       b5 9f		      LDA	P1HPOS,X	;		 ;14
+   1491  d805		       85 21		      STA	HMP1	;		     ;17
+   1492  d807		       29 0f		      AND	#$F	;		      ;19
+   1493  d809		       aa		      TAX		;			      ;21
+   1494  d80a		       ca	   POS1A      DEX		;			      ;23
+   1495  d80b		       10 fd		      BPL	POS1A	;		    ;25
+   1496  d80d		       85 11		      STA	RESP1	;		    ;28
+   1497  d80f		       b1 8c		      LDA	(PTR0),Y
+   1498  d811		       85 02		      STA	WSYNC
+   1499  d813							;RASTER 3
+   1500  d813		       a2 24		      LDX	#PFCOLOR3	;		;2
+   1501  d815		       86 08		      STX	COLUPF	;		   ;5
+   1502  d817		       85 1b		      STA	GRP0	;		     ;8
+   1503  d819		       84 1c		      STY	GRP1	;		     ;11
+   1504  d81b		       e6 8c		      INC	PTR0	;		     ;16
+   1505  d81d		       c6 b1		      DEC	P0VOFF	;		   ;21
+   1506  d81f		       d0 13		      BNE	DONE30A	;		  ;23/24
+   1507  d821		       a9 40		      LDA	#$40	;		     ;25
+   1508  d823		       85 b0		      STA	TEMP0	;		    ;28
+   1509  d825		       a6 a2		      LDX	P0CNT	;		    ;31
+   1510  d827		       ca		      DEX		;			      ;33
+   1511  d828		       b5 96		      LDA	P0VTBL,X	;		 ;37
+   1512  d82a		       85 b1		      STA	P0VOFF	;		   ;40
+   1513  d82c		       8a		      TXA		;			      ;42
+   1514  d82d		       10 03		      BPL	NO0A	;		     ;44/45
+   1515  d82f		       86 b1		      STX	P0VOFF	;		   ;47
+   1516  d831		       e8		      INX		;			      ;49
+   1517  d832		       86 a2	   NO0A       STX	P0CNT	;		    ;52
+   1518  d834		       b1 8c	   DONE30A    LDA	(PTR0),Y	;		 ;57
+   1519  d836		       a2 22		      LDX	#PFCOLOR4	;		;59
+   1520  d838		       c6 b4		      DEC	ZONECNT	;		  ;64
+   1521  d83a		       e6 8c		      INC	PTR0	;		     ;69
+   1522  d83c		       85 1b		      STA	GRP0	;		     ;72
+   1523  d83e		       85 02		      STA	WSYNC	;		    ;75
+   1524  d840							;RASTER 4
+   1525  d840		       85 2a		      STA	HMOVE	;		    ;3
+   1526  d842		       84 1c		      STY	GRP1	;		     ;6
+   1527  d844		       86 08		      STX	COLUPF	;		   ;9
+   1528  d846		       a6 b4		      LDX	ZONECNT	;		  ;12
+   1529  d848		       f0 78		      BEQ	ENDKERN	;		  ;14/15
+   1530  d84a		       a9 05		      LDA	#HEIGHT	;		  ;16
+   1531  d84c		       24 b0		      BIT	TEMP0	;		    ;19
+   1532  d84e		       a4 b2		      LDY	P1VOFF	;		   ;22
+   1533  d850		       f0 07		      BEQ	NXTP1	;		    ;24/25
+   1534  d852		       50 0f		      BVC	WASTE0	;		   ;26/27
+   1535  d854		       85 2b		      STA	HMCLR	;		    ;29
+   1536  d856		       4c 0c d6 	      JMP	WASTE101	;		 ;32	  1 NOP"S THEN POS BOTH
+   1537  d859		       85 b2	   NXTP1      STA	P1VOFF	;		   ;28
+   1538  d85b		       50 03		      BVC	DPP0DP1	;		  ;30/31
+   1539  d85d		       4c d0 d6 	      JMP	PP0DP1PF	;		 ;33
+   1540  d860		       4c 96 d7    DPP0DP1    JMP	DP0DP1PF	;		 ;34
+   1541  d863		       ea	   WASTE0     NOP
+   1542  d864		       85 2b		      STA	HMCLR
+   1543  d866		       ea	   WASTE303   NOP
+   1544  d867		       85 2b	   DP0PP1PF   STA	HMCLR	;		    ;30
+   1545  d869		       8a		      TXA		;			      ;32
+   1546  d86a		       4a		      LSR		;			;34
+   1547  d86b		       a4 b3		      LDY	MPTR	;		     ;37
+   1548  d86d		       bd c3 df 	      LDA	PF,X	;		     ;41
+   1549  d870		       f0 18		      BEQ	UNINCMX	;		  ;43/44
+   1550  d872		       e6 b3		      INC	MPTR	;		     ;48
+   1551  d874		       39 be d7 	      AND	MTABLE,Y	;		 ;52
+   1552  d877		       a0 00	   UNINCX     LDY	#0	;		       ;54
+   1553  d879		       90 08		      BCC	PF10K	;		    ;56/57
+   1554  d87b		       8d 0f 01 	      STA	PF2+$100	;		 ;59
+   1555  d87e		       84 0e		      STY	PF1	;		      ;62
+   1556  d880		       4c cd d7 	      JMP	DP0PP1	;		   ;65
+   1557  d883		       84 0f	   PF10K      STY	PF2	;		      ;60
+   1558  d885		       85 0e		      STA	PF1	;		      ;63
+   1559  d887		       4c cd d7 	      JMP	DP0PP1	;		   ;66
+   1560  d88a		       85 2b	   UNINCMX    STA	HMCLR
+   1561  d88c		       ea		      NOP
+   1562  d88d		       f0 e8		      BEQ	UNINCX	;		   ;47
+   1563  d88f
+   1564  d88f
+   1565  d88f				   SQUISH
+   1566  d88f		       a2 01		      LDX	#1
+   1567  d891		       a0 00	   SQUISHER   LDY	#0
+   1568  d893		       b1 8c		      LDA	(PTR0),Y
+   1569  d895		       d0 0e		      BNE	TOPNOTB
+   1570  d897		       c8		      INY		;			      ;Y=1
+   1571  d898		       b1 8c		      LDA	(PTR0),Y
+   1572  d89a		       d0 10		      BNE	TOPYMIDN
+   1573  d89c		       c8		      INY		;			      ;Y=2
+   1574  d89d		       b1 8c		      LDA	(PTR0),Y	;		 ;NOW TOP AND MIDDLE ARE BLANK
+   1575  d89f		       a0 00		      LDY	#0	;		       ;Y=0
+   1576  d8a1		       91 8c		      STA	(PTR0),Y
+   1577  d8a3		       f0 13		      BEQ	LOOPER
+   1578  d8a5		       c8	   TOPNOTB    INY		;			      ;Y=1
+   1579  d8a6		       b1 8c		      LDA	(PTR0),Y
+   1580  d8a8		       f0 07		      BEQ	HALFWAY
+   1581  d8aa		       d0 0c		      BNE	LOOPER
+   1582  d8ac		       b1 8c	   TOPYMIDN   LDA	(PTR0),Y	;		 ;Y STILL = 1
+   1583  d8ae		       88		      DEY		;			      ;Y = 0
+   1584  d8af		       91 8c		      STA	(PTR0),Y
+   1585  d8b1		       a0 02	   HALFWAY    LDY	#2	;		       ;Y = 2
+   1586  d8b3		       b1 8c		      LDA	(PTR0),Y
+   1587  d8b5		       88		      DEY		;			      ;Y = 1
+   1588  d8b6		       91 8c		      STA	(PTR0),Y
+   1589  d8b8		       a5 8e	   LOOPER     LDA	PTR1
+   1590  d8ba		       85 8c		      STA	PTR0
+   1591  d8bc		       ca		      DEX
+   1592  d8bd		       10 d2		      BPL	SQUISHER
+   1593  d8bf		       4c 9f d2 	      JMP	RESTLOAD
+   1594  d8c2
+   1595  d8c2				   ENDKERN
+   1596  d8c2		       a9 de		      LDA	#>ZERO	;		 ;17
+   1597  d8c4		       85 8d		      STA	PTR0H	;		    ;20
+   1598  d8c6		       85 8f		      STA	PTR1H	;		    ;23
+   1599  d8c8		       85 91		      STA	PTR2H	;		    ;26
+   1600  d8ca		       85 93		      STA	PTR3H	;		    ;29
+   1601  d8cc		       85 95		      STA	PTR4H	;		    ;32
+   1602  d8ce		       a9 26		      LDA	#$26	;		     ;34
+   1603  d8d0		       85 08		      STA	COLUPF	;		   ;37
+   1604  d8d2		       a0 50		      LDY	#<BLANK	;		;39
+   1605  d8d4		       a5 b5		      LDA	CFIGINDX	;		 ;42
+   1606  d8d6		       c9 02		      CMP	#2	;		       ;44
+   1607  d8d8		       30 02		      BMI	NOTHING	;		  ;46/47
+   1608  d8da		       86 b3		      STX	MPTR	;		     ;49
+   1609  d8dc
+   1610  d8dc		       a5 fa	   NOTHING    LDA	GAMETYPE	;		 ;52
+   1611  d8de		       c9 02		      CMP	#2	;		       ;54
+   1612  d8e0		       90 0a		      BCC	NONTED	;		   ;56/57
+   1613  d8e2
+   1614  d8e2		       a9 d4		      LDA	#>TEDDY	;		;58
+   1615  d8e4		       85 8d		      STA	PTR0H	;		    ;61
+   1616  d8e6		       a9 d5		      LDA	#<TEDDY	;		;63
+   1617  d8e8		       85 8c		      STA	PTR0	;		     ;66
+   1618  d8ea		       b0 0e		      BCS	NEXT3	;		    ;69
+   1619  d8ec
+   1620  d8ec		       38	   NONTED     SEC		;			      ;59
+   1621  d8ed		       a5 83		      LDA	HISCORE	;		  ;62
+   1622  d8ef		       29 f0		      AND	#$F0	;		     ;64
+   1623  d8f1		       d0 04		      BNE	DOIT4	;		    ;66/67
+   1624  d8f3		       84 8c		      STY	PTR0	;		     ;69
+   1625  d8f5		       f0 03		      BEQ	NEXT3	;		    ;72
+   1626  d8f7		       4a	   DOIT4      LSR		;			;69
+   1627  d8f8		       85 8c		      STA	PTR0	;		     ;72
+   1628  d8fa		       85 02	   NEXT3      STA	WSYNC	;		    ;75
+   1629  d8fc
+   1630  d8fc		       86 1b		      STX	GRP0	;		     ;3
+   1631  d8fe		       86 1c		      STX	GRP1	;		     ;6
+   1632  d900		       86 96		      STX	PTR5	;		     ;9
+   1633  d902		       ca		      DEX		;			      ;11
+   1634  d903		       a5 b3		      LDA	MPTR	;		     ;14
+   1635  d905		       f0 02		      BEQ	ST2ONLY	;		  ;16/17
+   1636  d907		       86 0e		      STX	PF1	;		      ;19
+   1637  d909		       86 0f	   ST2ONLY    STX	PF2	;		      ;22
+   1638  d90b		       84 0b		      STY	REFP0	;		    ;25
+   1639  d90d		       84 0c		      STY	REFP1	;		    ;28
+   1640  d90f
+   1641  d90f
+   1642  d90f		       a5 83	   NOTED      LDA	HISCORE	;		  ;33
+   1643  d911		       29 0f		      AND	#$0F	;		     ;35
+   1644  d913		       90 06		      BCC	DOIT3	;		    ;37/38
+   1645  d915		       d0 04		      BNE	DOIT3	;		    ;39/40
+   1646  d917		       84 8e	   SUCKER     STY	PTR1	;		     ;42
+   1647  d919		       f0 05		      BEQ	NEXT2	;		    ;45
+   1648  d91b		       0a	   DOIT3      ASL		;			;42
+   1649  d91c		       0a		      ASL		;			;44
+   1650  d91d		       0a		      ASL		;			;46
+   1651  d91e		       85 8e		      STA	PTR1	;		     ;49
+   1652  d920				   NEXT2
+   1653  d920		       a5 85		      LDA	MIDSCORE	;		 ;52
+   1654  d922		       29 f0		      AND	#$F0	;		     ;54
+   1655  d924		       90 06		      BCC	DOIT2	;		    ;56/57
+   1656  d926		       d0 04		      BNE	DOIT2	;		    ;58/59
+   1657  d928		       84 90		      STY	PTR2	;		     ;61
+   1658  d92a		       f0 03		      BEQ	NEXT1	;		    ;64
+   1659  d92c		       4a	   DOIT2      LSR		;			;61
+   1660  d92d		       85 90		      STA	PTR2	;		     ;64
+   1661  d92f		       a5 85	   NEXT1      LDA	MIDSCORE	;		 ;67
+   1662  d931		       29 0f		      AND	#$0F	;		     ;69
+   1663  d933		       85 02		      STA	WSYNC	;		    ;72
+   1664  d935		       90 08		      BCC	DOIT1A	;		   ;2/3
+   1665  d937		       d0 07		      BNE	DOIT1	;		    ;4/5
+   1666  d939		       84 92		      STY	PTR3	;		     ;7
+   1667  d93b		       ea		      NOP
+   1668  d93c		       ea		      NOP
+   1669  d93d		       f0 06		      BEQ	NEXT0	;		    ;14
+   1670  d93f		       ea	   DOIT1A     NOP		;			      ;5
+   1671  d940		       0a	   DOIT1      ASL		;			;7
+   1672  d941		       0a		      ASL		;			;9
+   1673  d942		       0a		      ASL		;			;11
+   1674  d943		       85 92		      STA	PTR3	;		     ;14
+   1675  d945		       a5 87	   NEXT0      LDA	LOWSCORE	;		 ;17
+   1676  d947		       29 f0		      AND	#$F0	;		     ;19
+   1677  d949		       90 06		      BCC	DOIT0A	;		   ;21/22
+   1678  d94b		       d0 05		      BNE	DOIT0	;		    ;23/24
+   1679  d94d		       84 94		      STY	PTR4	;		     ;26
+   1680  d94f		       f0 04		      BEQ	NOMORE	;		   ;29
+   1681  d951		       ea	   DOIT0A     NOP		;			      ;24
+   1682  d952		       4a	   DOIT0      LSR		;			;26
+   1683  d953		       85 94		      STA	PTR4	;		     ;29
+   1684  d955		       a9 28	   NOMORE     LDA	#$28	;		     ;36
+   1685  d957		       85 06		      STA	COLUP0	;		   ;39
+   1686  d959		       85 07		      STA	COLUP1	;		   ;42
+   1687  d95b		       a9 de		      LDA	#>ZERO
+   1688  d95d		       85 97		      STA	PTR5H
+   1689  d95f		       a0 06		      LDY	#$6	;		      ;44
+   1690  d961		       a9 d8		      LDA	#>RETURN-1	;	     ;46
+   1691  d963		       48		      PHA		;			      ;49
+   1692  d964		       a9 76		      LDA	#<RETURN-1	;	     ;51
+   1693  d966		       48		      PHA		;			      ;54
+   1694  d967		       a9 01		      LDA	#$1	;		      ;56
+   1695  d969		       85 0f		      STA	PF2	;		      ;59
+   1696  d96b		       a9 42		      LDA	#$42	;		     ;61
+   1697  d96d		       ea		      NOP		;			      ;63
+   1698  d96e		       ea		      NOP		;			      ;65
+   1699  d96f		       ea		      NOP		;			      ;67
+   1700  d970		       86 0e		      STX	PF1	;		      ;70
+   1701  d972		       85 08		      STA	COLUPF	;		   ;73
+   1702  d974		       4c 23 d0 	      JMP	BITMAPPL	;		 ;76
+   1703  d977
+   1704  d977				   RETURN
+   1705  d977		       a5 fa		      LDA	GAMETYPE	;		 ;22
+   1706  d979		       c9 02		      CMP	#2	;		       ;24
+   1707  d97b		       a0 50		      LDY	#<BLANK	;		;26
+   1708  d97d		       b0 0e		      BCS	OEXT3	;		    ;28/29
+   1709  d97f		       38		      SEC		;			      ;30
+   1710  d980		       a5 84		      LDA	HISCORE+1	;		;33
+   1711  d982		       29 f0		      AND	#$F0	;		     ;35
+   1712  d984		       d0 04		      BNE	OOIT4	;		    ;37/38
+   1713  d986		       84 8c		      STY	PTR0	;		     ;40
+   1714  d988		       f0 03		      BEQ	OEXT3	;		    ;43
+   1715  d98a		       4a	   OOIT4      LSR		;			;40
+   1716  d98b		       85 8c		      STA	PTR0	;		     ;43
+   1717  d98d		       a5 84	   OEXT3      LDA	HISCORE+1	;		;46
+   1718  d98f		       29 0f		      AND	#$0F	;		     ;48
+   1719  d991		       90 06		      BCC	OOIT3	;		    ;50/51
+   1720  d993		       d0 04		      BNE	OOIT3	;		    ;52/53
+   1721  d995		       84 8e		      STY	PTR1	;		     ;55
+   1722  d997		       f0 05		      BEQ	OEXT2	;		    ;58
+   1723  d999		       0a	   OOIT3      ASL		;			;55
+   1724  d99a		       0a		      ASL		;			;57
+   1725  d99b		       0a		      ASL		;			;59
+   1726  d99c		       85 8e		      STA	PTR1	;		     ;62
+   1727  d99e		       a5 86	   OEXT2      LDA	MIDSCORE+1	;	       ;65
+   1728  d9a0		       29 f0		      AND	#$F0	;		     ;67
+   1729  d9a2		       90 08		      BCC	OOIT2	;		    ;69/70
+   1730  d9a4		       d0 06		      BNE	OOIT2	;		    ;71/72
+   1731  d9a6		       85 02		      STA	WSYNC	;		    ;74
+   1732  d9a8		       84 90		      STY	PTR2	;		     ;3
+   1733  d9aa		       f0 05		      BEQ	OEXT1	;		    ;6
+   1734  d9ac		       85 02	   OOIT2      STA	WSYNC	;		    ;75
+   1735  d9ae		       4a		      LSR		;			;2
+   1736  d9af		       85 90		      STA	PTR2	;		     ;5
+   1737  d9b1		       a9 ff	   OEXT1      LDA	#$FF	;		     ;8
+   1738  d9b3		       85 0f		      STA	PF2	;		      ;11
+   1739  d9b5		       a5 86		      LDA	MIDSCORE+1	;	       ;14
+   1740  d9b7		       29 0f		      AND	#$0F	;		     ;16
+   1741  d9b9		       90 06		      BCC	OOIT1	;		    ;18/19
+   1742  d9bb		       d0 04		      BNE	OOIT1	;		    ;20/21
+   1743  d9bd		       84 92		      STY	PTR3	;		     ;23
+   1744  d9bf		       f0 05		      BEQ	OEXT0	;		    ;26
+   1745  d9c1		       0a	   OOIT1      ASL		;			;23
+   1746  d9c2		       0a		      ASL		;			;25
+   1747  d9c3		       0a		      ASL		;			;27
+   1748  d9c4		       85 92		      STA	PTR3	;		     ;30
+   1749  d9c6		       a5 88	   OEXT0      LDA	LOWSCORE+1	;	       ;33
+   1750  d9c8		       29 f0		      AND	#$F0	;		     ;35
+   1751  d9ca		       90 06		      BCC	OOIT0	;		    ;37/38
+   1752  d9cc		       d0 04		      BNE	OOIT0	;		    ;39/40
+   1753  d9ce		       84 94		      STY	PTR4	;		     ;42
+   1754  d9d0		       f0 03		      BEQ	OOMORE	;		   ;45
+   1755  d9d2		       4a	   OOIT0      LSR		;			;42
+   1756  d9d3		       85 94		      STA	PTR4	;		     ;45
+   1757  d9d5		       a0 06	   OOMORE     LDY	#6	;		       ;47
+   1758  d9d7		       a9 76		      LDA	#$76	;		     ;49
+   1759  d9d9		       85 06		      STA	COLUP0	;		   ;52
+   1760  d9db		       85 07		      STA	COLUP1	;		   ;55
+   1761  d9dd		       a5 fa		      LDA	GAMETYPE	;		 ;58
+   1762  d9df		       4a		      LSR		;			;60
+   1763  d9e0		       90 04		      BCC	DOBITMAP	;		 ;62/63
+   1764  d9e2		       a9 01		      LDA	#1	;		       ;64
+   1765  d9e4		       85 0f		      STA	PF2	;		      ;67
+   1766  d9e6		       20 21 d0    DOBITMAP   JSR	BITMAP	;		   ;73	WORST CASE
+   1767  d9e9		       a9 70		      LDA	#$70	;		     ;57
+   1768  d9eb		       85 20		      STA	HMP0	;		     ;60
+   1769  d9ed		       a9 80		      LDA	#$80	;		     ;62
+   1770  d9ef		       85 21		      STA	HMP1	;		     ;65
+   1771  d9f1		       a2 50		      LDX	#<BLANK	;		;5
+   1772  d9f3		       a0 ff		      LDY	#$FF	;		     ;67
+   1773  d9f5		       85 02		      STA	WSYNC	;		    ;75
+   1774  d9f7		       85 2a		      STA	HMOVE	;		    ;3
+   1775  d9f9		       84 0f		      STY	PF2	;		      ;70
+   1776  d9fb		       a5 81		      LDA	LIVES	;		    ;8
+   1777  d9fd		       10 03		      BPL	CMP10	;		    ;10/11
+   1778  d9ff		       8a		      TXA		;			      :12
+   1779  da00		       10 09		      BPL	STPR0	;		    ;15
+   1780  da02		       c9 0a	   CMP10      CMP	#10	;		      ;13
+   1781  da04		       90 02		      BCC	AROO	;		     ;15/16
+   1782  da06		       a9 09		      LDA	#9	;		       ;17
+   1783  da08		       0a	   AROO       ASL		;			;19
+   1784  da09		       0a		      ASL		;			;21
+   1785  da0a		       0a		      ASL		;			;23
+   1786  da0b		       85 8c	   STPR0      STA	PTR0	;		     ;26
+   1787  da0d		       a5 fa		      LDA	GAMETYPE	;		 ;34
+   1788  da0f		       4a		      LSR
+   1789  da10		       90 04		      BCC	DOBLNK	;		   ;36/37
+   1790  da12		       a5 82		      LDA	LIVES+1	;		  ;29
+   1791  da14		       10 03		      BPL	CMP10A	;		   ;31/32
+   1792  da16		       8a	   DOBLNK     TXA		;			      ;38
+   1793  da17		       10 09		      BPL	STPR1	;		    ;41
+   1794  da19		       c9 0a	   CMP10A     CMP	#10	;		      ;39
+   1795  da1b		       90 02		      BCC	ARF	;		      ;41/42
+   1796  da1d		       a9 09		      LDA	#9	;		       ;43
+   1797  da1f		       0a	   ARF	      ASL		;			;45
+   1798  da20		       0a		      ASL		;			;47
+   1799  da21		       0a		      ASL		;			;49
+   1800  da22		       85 8e	   STPR1      STA	PTR1	;		     ;52
+   1801  da24		       a0 06		      LDY	#6	;		       ;54
+   1802  da26		       a2 02		      LDX	#2	;		       ;56
+   1803  da28		       86 04		      STX	NUSIZ0	;		   ;59
+   1804  da2a		       86 05		      STX	NUSIZ1	;		   ;62
+   1805  da2c		       a2 28		      LDX	#$28	;		     ;64
+   1806  da2e		       85 02		      STA	WSYNC	;		    ;70
+   1807  da30		       a9 00		      LDA	#0
+   1808  da32		       85 0f		      STA	PF2
+   1809  da34		       a9 de		      LDA	#>ZERO
+   1810  da36		       85 8d		      STA	PTR0H
+   1811  da38		       85 02		      STA	WSYNC	;		    ;29
+   1812  da3a		       86 06		      STX	COLUP0	;		   ;67
+   1813  da3c		       b1 8c	   LIFLUP     LDA	(PTR0),Y	;		 ;8
+   1814  da3e		       85 1b		      STA	GRP0	;		     ;11
+   1815  da40		       b9 15 d4 	      LDA	LIVES1,Y	;		 ;15
+   1816  da43		       85 1c		      STA	GRP1	;		     ;18
+   1817  da45		       b9 bc df 	      LDA	LIVES0,Y	;		 ;22
+   1818  da48		       85 1b		      STA	GRP0	;		     ;25
+   1819  da4a		       a2 26		      LDX	#$26	;		     ;27
+   1820  da4c		       86 07		      STX	COLUP1	;		   ;30
+   1821  da4e		       b1 8e		      LDA	(PTR1),Y	;		 ;35
+   1822  da50		       ea		      NOP		;			      ;37
+   1823  da51		       ea		      NOP
+   1824  da52		       86 06		      STX	COLUP0	;		   ;42
+   1825  da54		       a2 76		      LDX	#$76	;		     ;44
+   1826  da56		       85 1c		      STA	GRP1	;		     ;47
+   1827  da58		       86 07		      STX	COLUP1	;		   ;50
+   1828  da5a		       85 1b		      STA	GRP0	;		     ;53
+   1829  da5c		       a2 28		      LDX	#$28	;		     ;55
+   1830  da5e		       86 06		      STX	COLUP0	;		   ;58
+   1831  da60
+   1832  da60		       88		      DEY		;			      ;60
+   1833  da61		       85 02		      STA	WSYNC	;		    ;63
+   1834  da63		       10 d7		      BPL	LIFLUP	;		   ;2/3
+   1835  da65		       c8		      INY
+   1836  da66		       84 1b		      STY	GRP0
+   1837  da68		       84 1c		      STY	GRP1
+   1838  da6a		       84 26		      STY	VDELP1
+   1839  da6c		       85 02		      STA	WSYNC
+   1840  da6e		       88		      DEY
+   1841  da6f		       84 0f		      STY	PF2
+   1842  da71							;	   STA	   WSYNC
+   1843  da71							;	   INY
+   1844  da71							;	   STY	   PF1
+   1845  da71							;	   STY	   PF2
+   1846  da71
+   1847  da71		       4c 51 db 	      JMP	NEWFRAME
+   1848  da74
+   1849  da74							;* VISIBLE ======================================================================
+   1850  da74
+   1851  da74				   TTLKERN
+   1852  da74		       a9 03		      LDA	#3	;		       ;23     NEED VERT. DELAY AND NUSIZE
+   1853  da76		       85 25		      STA	VDELP0	;		   ;26	   FOR BITMAP
+   1854  da78		       85 26		      STA	VDELP1	;		   ;29
+   1855  da7a		       a2 00		      LDX	#0	;		       ;31
+   1856  da7c		       86 1b		      STX	GRP0	;		     ;34
+   1857  da7e		       86 1c		      STX	GRP1	;		     ;37
+   1858  da80		       8d 10 01 	      STA	RESP0+$100	;	       ;41     POSITION FOR BITMAP
+   1859  da83		       85 11		      STA	RESP1	;		    ;44
+   1860  da85		       86 1b		      STX	GRP0	;		     ;47
+   1861  da87		       85 04		      STA	NUSIZ0	;		   ;50
+   1862  da89		       85 05		      STA	NUSIZ1	;		   ;53
+   1863  da8b		       a2 40		      LDX	#$40	;		     ;55     THESE ARE ONE TO THE LEFT OF
+   1864  da8d		       86 20		      STX	HMP0	;		     ;58     THE ONE CURRENTLY IN JOUST
+   1865  da8f		       a9 50		      LDA	#$50	;		     ;60     BUT THESE ARE CENTERED
+   1866  da91		       85 21		      STA	HMP1	;		     ;63
+   1867  da93		       85 02		      STA	WSYNC	;		    ;66
+   1868  da95
+   1869  da95		       a5 aa		      LDA	PLAYCOL	;		  ;3	  STORE PLAYER COLORS FOR BITMAP
+   1870  da97		       85 06		      STA	COLUP0	;		   ;6
+   1871  da99		       85 07		      STA	COLUP1	;		   ;9
+   1872  da9b		       a9 54		      LDA	#<LOGO0	;		;11	POINTERS ARE LOW BYTE PLUS
+   1873  da9d		       18		      CLC		;			      ;13     LINECNT SO THAT THE TOP IS
+   1874  da9e		       65 ab		      ADC	LINECNT	;		  ;16	  ALWAYS DRAWN
+   1875  daa0		       85 8c		      STA	PTR0	;		     ;19
+   1876  daa2		       a9 70		      LDA	#<LOGO1	;		;21	CARRY REMAINS CLEAR THROUGHOUT
+   1877  daa4		       65 ab		      ADC	LINECNT	;		  ;24
+   1878  daa6		       85 8e		      STA	PTR1	;		     ;27
+   1879  daa8		       a9 8d		      LDA	#<LOGO2	;		;29
+   1880  daaa		       65 ab		      ADC	LINECNT	;		  ;32
+   1881  daac		       85 90		      STA	PTR2	;		     ;35
+   1882  daae		       a9 aa		      LDA	#<LOGO3	;		;37
+   1883  dab0		       65 ab		      ADC	LINECNT	;		  ;40
+   1884  dab2		       85 92		      STA	PTR3	;		     ;43
+   1885  dab4		       a9 c7		      LDA	#<LOGO4	;		;45
+   1886  dab6		       65 ab		      ADC	LINECNT	;		  ;48
+   1887  dab8		       85 94		      STA	PTR4	;		     ;51
+   1888  daba		       a9 e3		      LDA	#<LOGO5	;		;53
+   1889  dabc		       65 ab		      ADC	LINECNT	;		  ;58
+   1890  dabe		       85 96		      STA	PTR5	;		     ;61
+   1891  dac0		       a9 52		      LDA	#$52	;		     ;63     COLOR OF PLAYFIELD BOX
+   1892  dac2		       85 08		      STA	COLUPF	;		   ;66
+   1893  dac4		       85 02		      STA	WSYNC	;		    ;69
+   1894  dac6
+   1895  dac6		       a9 de		      LDA	#>LOGO0	;		;2
+   1896  dac8		       85 8d		      STA	PTR0H	;		    ;5	    STORE HIGH POINTERS
+   1897  daca		       85 8f		      STA	PTR1H	;		    ;8
+   1898  dacc		       85 91		      STA	PTR2H	;		    ;11
+   1899  dace		       85 93		      STA	PTR3H	;		    ;14
+   1900  dad0		       85 95		      STA	PTR4H	;		    ;17
+   1901  dad2		       85 97		      STA	PTR5H	;		    ;20
+   1902  dad4
+   1903  dad4		       a9 01		      LDA	#1
+   1904  dad6		       85 0a		      STA	CTRLPF
+   1905  dad8		       a9 1c		      LDA	#28	;		      ;22     Y IS NUMBER OF LINES USED BY
+   1906  dada		       38		      SEC		;			      ;24     BITMAP ROUTINE
+   1907  dadb		       e5 ab		      SBC	LINECNT	;		  ;27
+   1908  dadd		       a8		      TAY		;			      ;29
+   1909  dade		       a9 4a		      LDA	#74	;		      ;31     X IS NUMBER OF LINES TO WAIT
+   1910  dae0		       18		      CLC		;			      ;33     BEFORE DRAWING BITMAP
+   1911  dae1		       65 ab		      ADC	LINECNT	;		  ;36
+   1912  dae3		       aa		      TAX		;			      ;38
+   1913  dae4		       85 02	   WAITLP     STA	WSYNC	;		    ;41     THIS LOOP WAITS UNTIL BITMAP
+   1914  dae6		       ca		      DEX		;			      ;       IS TO START
+   1915  dae7		       10 fb		      BPL	WAITLP
+   1916  dae9		       86 0f		      STX	PF2	;		      ;X IS FF, FOR TOP OF BOX
+   1917  daeb		       85 02		      STA	WSYNC	;		    ;FOR TWO LINES, JUST HAVE TOP OF BOX
+   1918  daed		       85 02		      STA	WSYNC
+   1919  daef		       a9 07		      LDA	#7	;		       ;NO MAKE HOLE IN BOX
+   1920  daf1		       85 0f		      STA	PF2
+   1921  daf3		       98		      TYA		;			      ;IF Y IS NEGATIVE, DON"T CALL BITMAP
+   1922  daf4		       10 04		      BPL	DOBITM
+   1923  daf6		       85 02		      STA	WSYNC	;		    ;EXTRA WSYNC TO KEEP BOX IN ONE SPOT
+   1924  daf8		       30 03		      BMI	NOBITM	;		   ;ON SCREEN
+   1925  dafa
+   1926  dafa		       20 42 d0    DOBITM     JSR	MINBIT	;		   ;DRAW "JOUST"
+   1927  dafd
+   1928  dafd		       85 02	   NOBITM     STA	WSYNC	;		    ;END OF BLANK LINE UNDER JOUST
+   1929  daff		       a2 ff		      LDX	#$FF	;		     ;MAKE BOTTOM OF BOX
+   1930  db01		       86 0f		      STX	PF2
+   1931  db03		       85 02		      STA	WSYNC	;		    ;IT LASTS FOR TWO LINES
+   1932  db05		       85 02		      STA	WSYNC
+   1933  db07		       e8		      INX		;			      ;NOW CLEAR OUT PLAYFIELD 2
+   1934  db08		       86 0f		      STX	PF2
+   1935  db0a		       a5 ab		      LDA	LINECNT	;		  ;22	  IF LINECNT = 0, DO COPYRIGHT
+   1936  db0c		       d0 3c		      BNE	VWLOOP	;		   ;24/25
+   1937  db0e		       a9 df		      LDA	#>COPY0	;		;26	SET HIGH BYTES
+   1938  db10		       85 8d		      STA	PTR0H	;		    ;29
+   1939  db12		       85 8f		      STA	PTR1H	;		    ;32
+   1940  db14		       85 91		      STA	PTR2H	;		    ;35
+   1941  db16		       85 93		      STA	PTR3H	;		    ;38
+   1942  db18		       85 95		      STA	PTR4H	;		    ;41
+   1943  db1a		       85 97		      STA	PTR5H	;		    ;44
+   1944  db1c		       a9 96		      LDA	#<COPY0	;		;46	AND LOW BYTES
+   1945  db1e		       85 8c		      STA	PTR0	;		     ;49
+   1946  db20		       a9 9d		      LDA	#<COPY1	;		;51
+   1947  db22		       85 8e		      STA	PTR1	;		     ;54
+   1948  db24		       a9 a3		      LDA	#<COPY2	;		;56
+   1949  db26		       85 90		      STA	PTR2	;		     ;59
+   1950  db28		       a9 a9		      LDA	#<COPY3	;		;61
+   1951  db2a		       85 92		      STA	PTR3	;		     ;64
+   1952  db2c		       a9 af		      LDA	#<COPY4	;		;66
+   1953  db2e		       85 94		      STA	PTR4	;		     ;69
+   1954  db30		       a9 b5		      LDA	#<COPY5	;		;71
+   1955  db32		       85 02		      STA	WSYNC	;		    ;74
+   1956  db34		       85 96		      STA	PTR5	;		     ;3
+   1957  db36		       85 2b		      STA	HMCLR	;		    ;6	    CLEAR OUT HM"S
+   1958  db38		       a0 06		      LDY	#6	;		       ;8      Y = 6 FOR HEIGHT OF COPY
+   1959  db3a		       a9 26		      LDA	#$26	;		     ;MAKE IT A DARKER YELLOW THAN JOUST
+   1960  db3c		       85 06		      STA	COLUP0
+   1961  db3e		       85 07		      STA	COLUP1
+   1962  db40		       a2 1d		      LDX	#29	;		      ;WAIT THIS MANY LINES BEFOR DOING COPY
+   1963  db42		       85 02	   CPWAIT     STA	WSYNC
+   1964  db44		       ca		      DEX
+   1965  db45		       d0 fb		      BNE	CPWAIT
+   1966  db47		       20 42 d0 	      JSR	MINBIT
+   1967  db4a
+   1968  db4a							;*;*;*;*;*;*;*;*;*;*;*
+   1969  db4a							;		      ;NOW LET TIMER RUN OUT FOR END OF SCREEN
+   1970  db4a		       ad 84 02    VWLOOP     LDA	INTIM
+   1971  db4d		       d0 fb		      BNE	VWLOOP
+   1972  db4f		       85 02		      STA	WSYNC
+   1973  db51
+   1974  db51
+   1975  db51
+   1976  db51							;* OVERSCAN =====================================================================
+   1977  db51
+   1978  db51		       a9 24	   NEWFRAME   LDA	#$24	;		     ; (35 decimal)
+   1979  db53		       8d 96 02 	      STA	TIM64T
+   1980  db56
+   1981  db56							;	   JSR	   FRZEOS;		   ;COMMENT THIS OUT FOR NO FREEZE FRAMER
+   1982  db56							;				 ;OR TO BURN A CART
+   1983  db56							;				 ;MAY NOT HAVE ROM FOR THIS NOW
+   1984  db56							;*	    GAME OVERSCAN MAINLINE
+   1985  db56
+   1986  db56		       e6 80	   GPENTRY    INC	FRMCNT
+   1987  db58		       d0 14		      BNE	NOALT
+   1988  db5a
+   1989  db5a		       a5 89		      LDA	ATTRACT
+   1990  db5c		       29 c0		      AND	#$C0
+   1991  db5e		       f0 0e		      BEQ	NOALT
+   1992  db60		       a5 89		      LDA	ATTRACT
+   1993  db62				   DOALT
+   1994  db62		       49 40		      EOR	#$40
+   1995  db64		       85 89		      STA	ATTRACT
+   1996  db66		       a9 1d		      LDA	#29
+   1997  db68		       85 ab		      STA	LINECNT
+   1998  db6a		       a9 00		      LDA	#0
+   1999  db6c		       85 ac		      STA	COLORCNT
+   2000  db6e
+   2001  db6e
+   2002  db6e		       a5 89	   NOALT      LDA	ATTRACT
+   2003  db70		       29 c0		      AND	#$C0
+   2004  db72		       f0 08		      BEQ	NOAXE
+   2005  db74
+   2006  db74		       24 3c		      BIT	INPT4
+   2007  db76		       10 09		      BPL	DOASET
+   2008  db78
+   2009  db78		       24 3d		      BIT	INPT5
+   2010  db7a		       10 05		      BPL	DOASET
+   2011  db7c
+   2012  db7c		       4e 82 02    NOAXE      LSR	SWCHB
+   2013  db7f		       b0 1d		      BCS	NORST
+   2014  db81
+   2015  db81		       20 77 dc    DOASET     JSR	GMINIT
+   2016  db84		       a5 89		      LDA	ATTRACT	;		  ;CLEAR ATTRACT AND TITLE
+   2017  db86		       29 3f		      AND	#$3F
+   2018  db88		       85 89		      STA	ATTRACT
+   2019  db8a
+   2020  db8a		       a9 00		      LDA	#0
+   2021  db8c		       85 f1		      STA	SNDTYP0
+   2022  db8e		       85 f2		      STA	SNDTYP1
+   2023  db90		       a2 05		      LDX	#5	;		       CLEAR SCORE
+   2024  db92		       85 a4		      STA	SCNTRLI0
+   2025  db94		       85 a5		      STA	SCNTRLI1
+   2026  db96		       95 83	   SCOREZIP   STA	HISCORE,X
+   2027  db98		       ca		      DEX
+   2028  db99		       10 fb		      BPL	SCOREZIP
+   2029  db9b
+   2030  db9b							;				 ;NEED MINUS SET FOR BANK SELECT
+   2031  db9b		       4c 13 dc 	      JMP	GBEF
+   2032  db9e
+   2033  db9e		       a5 81	   NORST      LDA	LIVES
+   2034  dba0		       10 22		      BPL	SELCHK
+   2035  dba2		       a5 fa		      LDA	GAMETYPE
+   2036  dba4		       4a		      LSR
+   2037  dba5		       90 04		      BCC	GAMEOVER
+   2038  dba7		       a5 82		      LDA	LIVES+1
+   2039  dba9		       10 19		      BPL	SELCHK
+   2040  dbab
+   2041  dbab				   GAMEOVER
+   2042  dbab		       a9 c0		      LDA	#$C0
+   2043  dbad		       85 89		      STA	ATTRACT
+   2044  dbaf
+   2045  dbaf
+   2046  dbaf		       20 77 dc 	      JSR	GMINIT
+   2047  dbb2		       a9 1d		      LDA	#29
+   2048  dbb4		       85 ab		      STA	LINECNT
+   2049  dbb6		       a9 00		      LDA	#0
+   2050  dbb8		       85 80		      STA	FRMCNT	;		   ;TO INSURE FULL TITLE PAGE
+   2051  dbba		       85 b5		      STA	CFIGINDX
+   2052  dbbc		       85 19		      STA	AUDV0
+   2053  dbbe		       85 1a		      STA	AUDV1
+   2054  dbc0		       85 ac		      STA	COLORCNT
+   2055  dbc2		       f0 4f		      BEQ	GBEF
+   2056  dbc4
+   2057  dbc4		       ad 82 02    SELCHK     LDA	SWCHB
+   2058  dbc7		       4a		      LSR
+   2059  dbc8		       4a		      LSR
+   2060  dbc9		       90 06		      BCC	SELHIT
+   2061  dbcb		       a5 89		      LDA	ATTRACT
+   2062  dbcd		       29 c0		      AND	#$C0
+   2063  dbcf		       b0 3e		      BCS	GBEFM	;		    ;STORES ATTRACT
+   2064  dbd1				   SELHIT
+   2065  dbd1		       a9 00		      LDA	#0
+   2066  dbd3		       85 19		      STA	AUDV0
+   2067  dbd5		       85 1a		      STA	AUDV1
+   2068  dbd7		       a5 89		      LDA	ATTRACT	;		  ;CLEAR TITLE
+   2069  dbd9		       29 bf		      AND	#$BF
+   2070  dbdb		       09 80		      ORA	#$80
+   2071  dbdd		       85 89		      STA	ATTRACT
+   2072  dbdf		       29 1f		      AND	#$1F
+   2073  dbe1		       f0 0a		      BEQ	TOGGLE
+   2074  dbe3		       c9 1f		      CMP	#$1F
+   2075  dbe5		       d0 19		      BNE	ORON
+   2076  dbe7		       a5 89		      LDA	ATTRACT	;		  ;CLEAR COUNTER
+   2077  dbe9		       29 c0		      AND	#$C0
+   2078  dbeb		       85 89		      STA	ATTRACT
+   2079  dbed
+   2080  dbed
+   2081  dbed				   TOGGLE
+   2082  dbed		       a6 fa		      LDX	GAMETYPE
+   2083  dbef		       e8		      INX
+   2084  dbf0		       8a		      TXA
+   2085  dbf1		       29 03		      AND	#3
+   2086  dbf3		       85 fa		      STA	GAMETYPE
+   2087  dbf5		       4a		      LSR
+   2088  dbf6		       90 04		      BCC	DOAFF
+   2089  dbf8		       a9 8d		      LDA	#$8D
+   2090  dbfa		       d0 02		      BNE	STYPOS1
+   2091  dbfc		       a9 ff	   DOAFF      LDA	#$FF
+   2092  dbfe		       85 bf	   STYPOS1    STA	YPOSINT+1
+   2093  dc00
+   2094  dc00		       a5 89	   ORON       LDA	ATTRACT
+   2095  dc02		       29 1f		      AND	#$1F
+   2096  dc04		       18		      CLC
+   2097  dc05		       69 01		      ADC	#1
+   2098  dc07		       85 b0		      STA	TEMP0	;		    ;CAN"T GO OVER $1F
+   2099  dc09		       a5 89		      LDA	ATTRACT
+   2100  dc0b		       29 c0		      AND	#$C0
+   2101  dc0d		       05 b0		      ORA	TEMP0
+   2102  dc0f		       85 89	   GBEFM      STA	ATTRACT
+   2103  dc11		       a9 00		      LDA	#0
+   2104  dc13		       4c f2 df    GBEF       JMP	GOBANKF
+   2105  dc16
+   2106  dc16
+   2107  dc16
+   2108  dc16				   PICKSTP
+   2109  dc16		       a0 04		      LDY	#4
+   2110  dc18		       e0 02		      CPX	#2
+   2111  dc1a		       90 1e		      BCC	DOPICK
+   2112  dc1c
+   2113  dc1c		       b5 c6		      LDA	TYPE-2,X
+   2114  dc1e		       29 0c		      AND	#$0C
+   2115  dc20		       f0 10		      BEQ	REGULAR
+   2116  dc22		       a0 0c		      LDY	#12
+   2117  dc24		       c9 04		      CMP	#$04
+   2118  dc26		       f0 40		      BEQ	P050
+   2119  dc28							;				 ;OTHERWISE A TERRY
+   2120  dc28		       88		      DEY
+   2121  dc29		       b5 c6		      LDA	TYPE-2,X
+   2122  dc2b		       29 10		      AND	#$10
+   2123  dc2d		       d0 39		      BNE	P050
+   2124  dc2f		       88		      DEY
+   2125  dc30		       d0 36		      BNE	P050
+   2126  dc32
+   2127  dc32				   REGULAR
+   2128  dc32		       b5 c6		      LDA	TYPE-2,X
+   2129  dc34		       29 10		      AND	#$10
+   2130  dc36		       d0 2e		      BNE	WDN
+   2131  dc38		       f0 2d		      BEQ	WUP
+   2132  dc3a
+   2133  dc3a		       b5 ce	   DOPICK     LDA	STAT2,X
+   2134  dc3c
+   2135  dc3c		       c9 0d		      CMP	#BIRTH1ST
+   2136  dc3e		       f0 19		      BEQ	BSTAND
+   2137  dc40
+   2138  dc40		       c9 0f		      CMP	#PDEATH
+   2139  dc42		       f0 18		      BEQ	P019
+   2140  dc44
+   2141  dc44		       b5 c6		      LDA	STATES,X
+   2142  dc46		       29 60		      AND	#$60
+   2143  dc48		       f0 16		      BEQ	P015
+   2144  dc4a
+   2145  dc4a		       c9 20		      CMP	#$20
+   2146  dc4c		       f0 1a		      BEQ	P020
+   2147  dc4e
+   2148  dc4e		       b5 c6	   WALKER     LDA	STATES,X
+   2149  dc50		       29 30		      AND	#$30
+   2150  dc52		       4a		      LSR
+   2151  dc53		       4a		      LSR
+   2152  dc54		       4a		      LSR
+   2153  dc55		       4a		      LSR
+   2154  dc56		       a8		      TAY
+   2155  dc57		       10 0f		      BPL	P050
+   2156  dc59
+   2157  dc59		       88	   BSTAND     DEY
+   2158  dc5a		       10 0c		      BPL	P050
+   2159  dc5c
+   2160  dc5c		       b4 e8	   P019       LDY	PDTHSNUM,X
+   2161  dc5e		       d0 08		      BNE	P050
+   2162  dc60
+   2163  dc60		       b5 d0	   P015       LDA	GEN2,X
+   2164  dc62		       c9 05		      CMP	#FLYFEFST
+   2165  dc64		       f0 01		      BEQ	P018
+   2166  dc66
+   2167  dc66				   SIXER
+   2168  dc66				   WDN
+   2169  dc66		       c8		      INY		;			      ;ENTER HERE FOR Y = 6
+   2170  dc67				   WUP
+   2171  dc67		       c8	   P018       INY		;			      ;ENTER HERE FOR Y = 5
+   2172  dc68
+   2173  dc68				   P020 		;				 ;ENTER HERE FOR Y = 4
+   2174  dc68
+   2175  dc68				   P050
+   2176  dc68		       b5 be		      LDA	YPOSINT,X
+   2177  dc6a		       29 03		      AND	#3
+   2178  dc6c		       85 b0		      STA	TEMP0
+   2179  dc6e
+   2180  dc6e		       b9 08 d4 	      LDA	LOWBYTE,Y
+   2181  dc71		       38		      SEC
+   2182  dc72		       e5 b0		      SBC	TEMP0
+   2183  dc74		       a4 b2		      LDY	PREVIOUS
+   2184  dc76		       60		      RTS
+   2185  dc77
+   2186  dc77				   GMINIT
+   2187  dc77
+   2188  dc77		       a2 04		      LDX	#ITITI	;		   SET UP TERRY TIMER...
+   2189  dc79		       86 f9		      STX	TITIMNDX
+   2190  dc7b		       a9 0b		      LDA	#11
+   2191  dc7d		       85 f8		      STA	TERYTIME
+   2192  dc7f
+   2193  dc7f		       a5 fa		      LDA	GAMETYPE
+   2194  dc81		       4a		      LSR
+   2195  dc82		       a9 8d		      LDA	#141
+   2196  dc84		       85 be		      STA	YPOSINT
+   2197  dc86		       b0 02		      BCS	STY1
+   2198  dc88		       a9 ff		      LDA	#$FF
+   2199  dc8a		       85 bf	   STY1       STA	YPOSINT+1
+   2200  dc8c		       a9 28		      LDA	#40
+   2201  dc8e		       85 b6		      STA	XPOS
+   2202  dc90		       a9 52		      LDA	#82
+   2203  dc92		       85 b7		      STA	XPOS+1
+   2204  dc94		       a9 01		      LDA	#1
+   2205  dc96		       85 d2		      STA	GENERALS
+   2206  dc98		       85 d3		      STA	GENERALS+1
+   2207  dc9a
+   2208  dc9a		       a9 70		      LDA	#$70
+   2209  dc9c		       85 c6		      STA	STATES
+   2210  dc9e		       85 c7		      STA	STATES+1
+   2211  dca0
+   2212  dca0		       a2 04		      LDX	#4
+   2213  dca2		       86 81		      STX	LIVES
+   2214  dca4		       86 82		      STX	LIVES+1
+   2215  dca6		       a2 01		      LDX	#1	;		       ;SETS UP END OF RACK FF
+   2216  dca8		       86 8b		      STX	TIMER
+   2217  dcaa		       ca		      DEX
+   2218  dcab		       86 ec		      STX	ENEMA
+   2219  dcad		       86 ce		      STX	STAT2
+   2220  dcaf		       86 cf		      STX	STAT2+1
+   2221  dcb1		       86 fb		      STX	GLADRAG
+   2222  dcb3		       ca		      DEX
+   2223  dcb4		       86 8a		      STX	RACKNUM
+   2224  dcb6		       86 b5		      STX	CFIGINDX
+   2225  dcb8		       86 f3		      STX	DEPNUM
+   2226  dcba		       60		      RTS
+   2227  dcbb
+   2228  dcbb				   ENDD
+   2229  dcbb
+   2230  dcbb
+   2231  dcbb
+   2232  dcbb		       00 02 00 00*DUR	      DC.B	$00,$02,$00,$00,$00,$02,$03,$0D,$00,$02,$01,$02
+   2233  dcc7		       01 00 01 	      DC.B	1,0,1
+   2234  dcca
+   2235  dcca		       97	   LVTABL     DC.B	<WALKVOL
+   2236  dccb		       88 b6		      DC.B	<FLAPVOL,<BNCEVOL
+   2237  dccd		       21 21		      DC.B	<NULL,<NULL
+   2238  dccf		       91 b9		      DC.B	<EXPLVOL,<BRTHVOL
+   2239  dcd1		       21 21		      DC.B	<NULL,<NULL
+   2240  dcd3		       8d		      DC.B	<TIEDVOL
+   2241  dcd4		       21 21		      DC.B	<NULL,<NULL
+   2242  dcd6		       80 c1		      DC.B	<EGGHHVOL,<EATEGVOL
+   2243  dcd8		       cf		      DC.B	<EXTRVOL
+   2244  dcd9		       0e 0a 08 06*COLORTAB   DC.B	$0E,$0A,$08,$06,$0A,$08,$06,0
+   2245  dce1		       2a 78 56 08*	      DC.B	$2A,$78,$56,$08,$D8,$C8,$46
+   2246  dce8		       06 08 04 04*SCNTRLS    DC.B	6,8,4,4,0,8,$D,7,0,4,7,3,8,4,4
+   2247  dcf7
+   2248  dcf7				   ENDDC
+   2249  dcf7
+   2250  dcf7							;*	    THE FOLLOWING ARE PLAYER STAMPS
+   2251  dcf7
+   2252  dd00					      ORG	$DD00
+   2253  dd00							;ALL STAMPS ON THIS PAGE HAVE BEEN PACKED .  DON"T TOUCH WITHOUT CARE
+   2254  dd00		       00 00 00 	      DC.B	0,0,0
+   2255  dd03		       06 37 26 32*RWALK0     DC.B	$06,$37,$26,$32,$3F,$32,$7A,$FE,$FC,$78,$60,$70,$18,$40,$60,0
+   2256  dd13		       00 00 00 00	      DC.B	0,0,0,0
+   2257  dd17		       06 37 26 32*RWALK1     DC.B	$06,$37,$26,$32,$3F,$32,$7A,$FE,$FC,$78,$30,$60,$30,$20,$30,0
+   2258  dd27		       00 00 00 00	      DC.B	0,0,0,0
+   2259  dd2b		       06 37 26 32*RWALK2     DC.B	$06,$37,$26,$32,$3F,$32,$7A,$FE,$FC,$78,$70,$50,$50,$90,$08,0
+   2260  dd3b		       00 00 00 00	      DC.B	0,0,0,0
+   2261  dd3f		       06 37 26 32*RWALK3     DC.B	$06,$37,$26,$32,$3F,$32,$7A,$FE,$FC,$78,$30,$28,$28,$24,$24,0
+   2262  dd4f		       00 00 00 00	      DC.B	0,0,0,0
+   2263  dd53		       0c 6e 4c 68*RSKID      DC.B	$0C,$6E,$4C,$68,$7F,$34,$7A,$FE,$FC,$78,$28,$24,$12,$00,$00,0
+   2264  dd63		       00 00 00 00	      DC.B	0,0,0,0
+   2265  dd67		       06 37 26 32*RWINGDWN   DC.B	$06,$37,$26,$32,$3F,$32,$7A,$FE,$FC,$78,$70,$60,$40,$00,$00,0
+   2266  dd77		       00 00 00 00	      DC.B	0,0,0,0
+   2267  dd7b		       06 b7 e6 f2*RWINGUP    DC.B	$06,$B7,$E6,$F2,$FF,$F2,$7A,$FE,$FC,$78,$10,$00,$00,$00,$00,0
+   2268  dd8b		       00		      DC.B	0
+   2269  dd8c		       00 00 00 08*REXPL0     DC.B	$00,$00,$00,$08,$1C,$36,$1C,$08,$00,$00,$00,$00,$00,$00,$00,0
+   2270  dd9c		       00 00		      DC.B	0,0
+   2271  dd9e		       00 00 49 2a*REXPL1     DC.B	$00,$00,$49,$2A,$1C,$77,$1C,$2A,$49,$00,$00,$00,$00,$00,$00,0
+   2272  ddae		       00 00 00 00	      DC.B	0,0,0,0
+   2273  ddb2		       14 08 49 22*REXPL2     DC.B	$14,$08,$49,$22,$00,$63,$00,$22,$49,$08,$14,$00,$00,$00,$00,0
+   2274  ddc2		       00 00 00 00	      DC.B	0,0,0,0
+   2275  ddc6		       00 e0 71 3e*RTERYWUP   DC.B	$00,$E0,$71,$3E,$74,$FE,$7D,$00,$00,$00,$00,$00,$00,$00,$00,0
+   2276  ddd6		       00 00		      DC.B	0,0
+   2277  ddd8		       00 00 00 0f*RTERYWDN   DC.B	$00,$00,$00,$0F,$74,$FF,$7C,$38,$70,$E0,$00,$00,$00,$00,$00,0
+   2278  dde8		       00 00 00 00	      DC.B	0,0,0,0
+   2279  ddec		       18 3c 7c 7c*EGG	      DC.B	$18,$3C,$7C,$7C,$38,$00,$00,$00,$00,$00,$00,$00,$00,$00,$00,0
+   2280  ddfc		       00 00 00 00	      DC.B	0,0,0,0
+   2281  de00				   ENDSTAMP
+   2282  de00				   ENDDD
+   2283  de00					      ORG	$DE00
+   2284  de00
+   2285  de00		       38 6c 6c 6c*ZERO       DC.B	$38,$6C,$6C,$6C,$6C,$7C,$38,0
+   2286  de08		       7e 18 18 18*ONE	      DC.B	$7E,$18,$18,$18,$18,$58,$38,0
+   2287  de10		       7e 7a 38 1c*TWO	      DC.B	$7E,$7A,$38,$1C,$0C,$6C,$38,0
+   2288  de18		       38 6c 0c 18*THREE      DC.B	$38,$6C,$0C,$18,$0C,$6C,$38,0
+   2289  de20		       1c 0c fe cc*FOUR       DC.B	$1C,$0C,$FE,$CC,$6C,$3C,$1C,0
+   2290  de28		       38 6c 0c 6c*FIVE       DC.B	$38,$6C,$0C,$6C,$78,$40,$7C,0
+   2291  de30		       38 6c 6c 78*SIX	      DC.B	$38,$6C,$6C,$78,$60,$6C,$38,0
+   2292  de38		       70 70 30 18*SEVEN      DC.B	$70,$70,$30,$18,$4C,$64,$7C,0
+   2293  de40		       38 6c 6c 38*EIGHT      DC.B	$38,$6C,$6C,$38,$6C,$6C,$38,0
+   2294  de48		       38 18 0c 3c*NINE       DC.B	$38,$18,$0C,$3C,$66,$66,$3C,0
+   2295  de50		       00 00 00 00 BLANK      DC.B	$00,$00,$00,$00
+   2296  de54
+   2297  de54							;GRAPHICS FOR JOUST LOGO
+   2298  de54		       00 00 00 fe*LOGO0      DC.B	0,0,0,$FE,$FF,$FF,$FF,$FF,$FF,$07,$03,$03,$03,$03,$03,$03
+   2299  de64		       03 43 63 73*	      DC.B	$03,$43,$63,$73,$7F,$3F,$3F,$1F,$0F,$03,0,0
+   2300  de70
+   2301  de70		       00 0f 1f 1f*LOGO1      DC.B	0,$0F,$1F,$1F,$3F,$3F,$BF,$BF,$F9,$F9,$F0,$F0,$F0,$F0,$F0
+   2302  de7f		       f0 f0 f0 f0*	      DC.B	$F0,$F0,$F0,$F0,$F0,$F9,$B9,$BF,$BF,$DF,$DF,$DF,$0F,0
+   2303  de8d
+   2304  de8d		       03 07 8f 8f*LOGO2      DC.B	$03,$07,$8F,$8F,$DF,$DF,$DF,$DE,$FC,$FC,$F8,$F8,$F8,$F8,$F8
+   2305  de9c		       f8 f8 f8 f8*	      DC.B	$F8,$F8,$F8,$F8,$F8,$F8,$D8,$DC,$DC,$DC,$8C,$8C,$1C,$3E
+   2306  deaa
+   2307  deaa		       80 c1 e7 ef*LOGO3      DC.B	$80,$C1,$E7,$EF,$FF,$FF,$FF,$FE,$7C,$78,$38,$38,$38,$39,$3B
+   2308  deb9		       3f 3f 3f 3f*	      DC.B	$3F,$3F,$3F,$3F,$3F,$3F,$3F,$77,$77,$73,$63,$61,$60,$F0
+   2309  dec7
+   2310  dec7		       00 f0 f8 fd*LOGO4      DC.B	0,$F0,$F8,$FD,$FF,$FF,$1F,$0F,$0F,$1F,$3F,$7F,$FD,$FD,$F9
+   2311  ded6		       f0 e0 c0 82*	      DC.B	$F0,$E0,$C0,$82,$03,$07,$8F,$9F,$FF,$FE,$FC,$F8,$F0
+   2312  dee3
+   2313  dee3		       00 00 00 ff*LOGO5      DC.B	0,0,0,$FF,$FF,$FF,$FF,$FF,$FF,$E0,$C0,$C0,$C0,$E0,$E0,$E0
+   2314  def3		       f0 70 ff ff*	      DC.B	$F0,$70,$FF,$FF,$FF,$FF,$FE,$F8,$F8,$98,$0C,$04,0
+   2315  df00
+   2316  df00
+   2317  df00				   ENDDE
+   2318  df00					      ORG	$DF00
+   2319  df00
+   2320  df00		       04 07 07 04 MTINDX     DC.B	4,7,7,4
+   2321  df04		       02 0a 00 04	      DC.B	2,10,0,4
+   2322  df08		       03 0b 00 04	      DC.B	3,11,0,4
+   2323  df0c		       05 07 00 	      DC.B	5,7,0
+   2324  df0f
+   2325  df0f
+   2326  df0f		       60 50 40 30*HTABLE     DC.B	$60,$50,$40,$30,$20,$10,$00,$F0,$E0,$D0,$C0,$B0,$A0,$90,$80
+   2327  df1e		       61 51 41 31*	      DC.B	$61,$51,$41,$31,$21,$11,$01,$F1,$E1,$D1,$C1,$B1,$A1,$91,$81
+   2328  df2d		       62 52 42 32*	      DC.B	$62,$52,$42,$32,$22,$12,$02,$F2,$E2,$D2,$C2,$B2,$A2,$92,$82
+   2329  df3c		       63 53 43 33*	      DC.B	$63,$53,$43,$33,$23,$13,$03,$F3,$E3,$D3,$C3,$B3,$A3,$93,$83
+   2330  df4b		       64 54 44 34*	      DC.B	$64,$54,$44,$34,$24,$14,$04,$F4,$E4,$D4,$C4,$B4,$A4,$94,$84
+   2331  df5a		       65 55 45 35*	      DC.B	$65,$55,$45,$35,$25,$15,$05,$F5,$E5,$D5,$C5,$B5,$A5,$95,$85
+   2332  df69		       66 56 46 36*	      DC.B	$66,$56,$46,$36,$26,$16,$06,$F6,$E6,$D6,$C6,$B6,$A6,$96,$86
+   2333  df78		       67 57 47 37*	      DC.B	$67,$57,$47,$37,$27,$17,$07,$F7,$E7,$D7,$C7,$B7,$A7,$97,$87
+   2334  df87		       68 58 48 38*	      DC.B	$68,$58,$48,$38,$28,$18,$08,$F8,$E8,$D8,$C8,$B8,$A8,$98,$88
+   2335  df96
+   2336  df96
+   2337  df96							;GRAPHICS FOR COPYRIGHT (38 BYTES)
+   2338  df96		       06 09 16 14*COPY0      DC.B	$06,$09,$16,$14,$16,$09,$06
+   2339  df9d		       00 29 a9 b9*COPY1      DC.B	0,$29,$A9,$B9,$A9,$13
+   2340  dfa3		       00 2a 2a 3b*COPY2      DC.B	0,$2A,$2A,$3B,$2A,$93
+   2341  dfa9		       00 a3 a1 21*COPY3      DC.B	0,$A3,$A1,$21,$A3,$A1
+   2342  dfaf		       00 97 15 77*COPY4      DC.B	0,$97,$15,$77,$55,$77
+   2343  dfb5		       00 70 10 30*COPY5      DC.B	0,$70,$10,$30,$10,$70,0
+   2344  dfbc
+   2345  dfbc		       ee 82 82 ce*LIVES0     DC.B	$EE,$82,$82,$CE,$88,$88,$EE
+   2346  dfc3
+   2347  dfc3		       00 00 00 00*PF	      DC.B	$00,$00,$00,$00,$00,$00,$00
+   2348  dfca		       00 00 00 00*	      DC.B	$00,$00,$00,$00,$00,$00,$F0,$00,$00,$00,$00,$FF,$00,$00,$00
+   2349  dfd9		       00 00 00 00*	      DC.B	$00,$00,$00,$00,$00,$F8,$00,$00,$00,$00,$FC,$00,$00,$00,$00
+   2350  dfe8		       00 00 00 00	      DC.B	$00,$00,$00,$00
+   2351  dfec
+   2352  dfec				   ENDDF
+   2353  dfec
+   2354  dff2					      ORG	$DFF2
+   2355  dff2		       4c f5 df    GOBANKF    JMP	GOBANKF + 3
+   2356  dff5		       4c 80 d0    DOBANKD    JMP	DLOAD
+   2357  dff8
+   2358  dffc				   ROMTOP     ORG	$DFFC
+   2359  dffc		       03 d0		      DC.B	<START,>START
+   2360  dffe
+   2361  dffe					      END	$F000

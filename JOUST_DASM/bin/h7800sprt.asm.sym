@@ -1,0 +1,78 @@
+--- Symbol List (sorted by symbol)
+AUDC0                    0015                  
+AUDC1                    0016                  
+AUDF0                    0017                  
+AUDF1                    0018                  
+AUDV0                    0019                  
+AUDV1                    001a                  
+BACKGRND                 0020                  
+CHARBASE                 0034                  
+crloop1                  8017              (R )
+crloop3                  8029              (R )
+crloop4                  8042              (R )
+crloop5                  8055              (R )
+CTLSWA                   0281              (R )
+CTLSWB                   0283              (R )
+CTRL                     003c              (R )
+dlclearloop              8125              (R )
+dlend                    0045              (R )
+dlendloop                8197              (R )
+DLLloop2                 8085              (R )
+dlpnt                    0043              (R )
+DLPOINTH                 81b7              (R )
+DLPOINTL                 81c3              (R )
+doneDL                   8195              (R )
+DPPH                     002c              (R )
+DPPL                     0030              (R )
+HEADER                   7f80              (R )
+INPT0                    0008                  
+INPT1                    0009                  
+INPT2                    000a                  
+INPT3                    000b                  
+INPT4                    000c                  
+INPT5                    000d                  
+INPTCTRL                 0001              (R )
+IRQ                      81b6              (R )
+mainloop                 80e5              (R )
+MSTAT                    0028              (R )
+NMI                      81b5              (R )
+OFFSET                   0038              (R )
+P0C1                     0021              (R )
+P0C2                     0022              (R )
+P0C3                     0023              (R )
+P1C1                     0021                  
+P1C2                     0022                  
+P1C3                     0023                  
+P2C1                     0029                  
+P2C2                     002a                  
+P2C3                     002b                  
+P3C1                     002d                  
+P3C2                     002e                  
+P3C3                     002f                  
+P4C1                     0031                  
+P4C2                     0032                  
+P4C3                     0033                  
+P5C1                     0035                  
+P5C2                     0036                  
+P5C3                     0037                  
+P6C1                     0039                  
+P6C2                     003a                  
+P6C3                     003b                  
+P7C1                     003d                  
+P7C2                     003e                  
+P7C3                     003f                  
+redraw                   81b5                  
+ROMTOP                   8000              (R )
+skip1                    80f7              (R )
+skip2                    8103              (R )
+skip3                    8113              (R )
+skip4                    8121              (R )
+START                    8000              (R )
+SWCHA                    0280              (R )
+SWCHB                    0282                  
+temp                     0042              (R )
+vbloop                   81ac              (R )
+WSYNC                    0020                  
+xpos                     0040              (R )
+ypos                     0041              (R )
+--- End of Symbol List.
