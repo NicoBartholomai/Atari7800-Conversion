@@ -12,7 +12,7 @@ HEADER  ORG     $0000
     ; DS HEADER+49-., 0   ; name must be 32 bytes ; todo double check this
     ; DC.B $00, $00,256->ROMTOP,$00 ; rom size without header - 4 bytes
     ; DC.B $00, $00, $3F, $7E ; rom size without header - 4bytes
-    DC.B $00, $00, $FF, $00 ; rom size without header - 4bytes
+    DC.B $00, $00, >ROMTOP, $00 ; rom size without header - 4bytes
     
     DC.B $00, $00; cart type - 2 bytes
     ;    bit  0 - pokey at 4000
