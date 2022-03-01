@@ -1,5 +1,5 @@
 *.lst
 *.sym
-*/bin/*
+*bin*
 *.bin
 errors*
