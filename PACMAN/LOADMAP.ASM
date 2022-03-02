@@ -19,9 +19,11 @@ LOADMAP   LDA     #$00
           STA     DOTS+1
 
           LDY     RACK
-          LDA     MAZEBEGL,Y
+        ;   LDA     MAZEBEGL,Y
+          LDA     MAZEBEGL
           STA     TEMP8
-          LDA     MAZEBEGH,Y
+        ;   LDA     MAZEBEGH,Y
+          LDA     MAZEBEGH
           STA     TEMP8+1
 
           LDA     #0
@@ -201,9 +203,11 @@ LDSHFT3   RTS
 ;*  THIS ROUTINE LOADS IN THE DOTS FOR A NEW RACK INTO DOTARRAY
 ;*  USES:  TEMP0-1, X
 LOADDOTS  LDX     RACK;                   ;SET UP FOR TRANSFER
-          LDA     DOTBEGL,X
+        ;   LDA     DOTBEGL,X
+          LDA     DOTBEGL
           STA     TEMP0
-          LDA     DOTBEGH,X
+        ;   LDA     DOTBEGH,X
+          LDA     DOTBEGH
           STA     TEMP1
 
           LDY     #$7F
@@ -265,10 +269,10 @@ NCOUT     RTS
 
 ;TABLES OF POINTERS TO TABLES...
 
-MAZEBEGL  DC.B      <MAZE1,<MAZE2,<MAZE3,<MAZE4
+MAZEBEGL  DC.B      <MAZE1,<MAZE2,<MAZE3,<MAZE4; theses seem to be the dots actually lolz
 MAZEBEGH  DC.B      >MAZE1,>MAZE2,>MAZE3,>MAZE4
 
-DOTBEGL   DC.B      <DOT1,<DOT2,<DOT3,<DOT4
+DOTBEGL   DC.B      <DOT1,<DOT2,<DOT3,<DOT4; this appears to be the maze?????
 DOTBEGH   DC.B      >DOT1,>DOT2,>DOT3,>DOT4
 
 ; <=======================================================================>
