@@ -4,7 +4,7 @@
 ;*                 FIRST FILE TO BE LOADED TO MAKE SURE ALL GRAPHICS ON EVEN
 ;*                 CHARACTERS
 
-          ;ASEG <-- Im not sure what this does so Im removing it - Nico
+          ;ASEG ;<-- Im not sure what this does so Im removing it - Nico
 
           ORG     $C000;                  ; CART STARTS AT C000
 
