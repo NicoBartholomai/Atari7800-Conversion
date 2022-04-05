@@ -68,24 +68,28 @@ FDEND     JMP     FRTMOVE
 FDCLEAR   JMP     CLEARFRT
 
 ;*  MOVE THE FRUIT
-FRTMOVE   LDY     FDIR
-          LDX     FOFF
-          LDA     FHPOS;                  ;MOVE HORIZONTALLY
-          JSR     HPOSADJ
+FRTMOVE   
+        ;   LDY     FDIR
+        ;   LDX     FOFF
+        ;   LDA     FHPOS;                  ;MOVE HORIZONTALLY
+        ;   JSR     HPOSADJ
+        ;   STA     FHPOS
+        ;   LDA     FVPOS;                  ;MOVE VERTICALLY
+        ;   JSR     VPOSADJ
+        ;   STA     FVPOS
+
+        ;   LDY     FCOUNT
+        ;   LDA     FVPOS;                  ;MOVING VERTICALLY
+        ;   CLC
+        ;   ADC     BOUNCTB,Y;              ;ADJUST FOR BOUNCE
+        ;   STA     FVPOS
+
+        ;   DEY;                            ;ADJUST COUNT
+        ;   BPL     FMJMP0
+        ;   LDY     #$03
+          LDA     #15
           STA     FHPOS
-          LDA     FVPOS;                  ;MOVE VERTICALLY
-          JSR     VPOSADJ
           STA     FVPOS
-
-          LDY     FCOUNT
-          LDA     FVPOS;                  ;MOVING VERTICALLY
-          CLC
-          ADC     BOUNCTB,Y;              ;ADJUST FOR BOUNCE
-          STA     FVPOS
-
-          DEY;                            ;ADJUST COUNT
-          BPL     FMJMP0
-          LDY     #$03
 FMJMP0    STY     FCOUNT
 
           LDA     FHPOS;                  ;SEE IF IN TUNNEL OR OFF SCREEN
