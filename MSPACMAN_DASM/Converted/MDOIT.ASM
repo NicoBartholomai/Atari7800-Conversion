@@ -1,3 +1,6 @@
+	processor 6502 
+
+
 JE
 LMARIAOS
 LMSDEF

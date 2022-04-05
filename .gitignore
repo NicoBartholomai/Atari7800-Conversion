@@ -1,0 +1,5 @@
+*.lst
+*.sym
+*bin*
+*.bin
+errors*
