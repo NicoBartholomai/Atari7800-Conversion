@@ -1,0 +1,8 @@
+Here is where I take note of all the orgs, so that I can reorganize everything
+
+END.ASM -> org $FFF8
+MSCHAR.ASM -> org $C000;
+
+
+ welp thats not really that helpful
+
