@@ -5,6 +5,8 @@ Converted code that can be fully compiled using Atari Dev Studio and the DASM co
 - DIGDUG_DASM: The classic DIGDUG game fully restored.
 - GALAGA_STANDARD_DASM: The standard version of GALAGA ported using DASM.
 - GALAGA_ENHANCED_DASM: The enhanced higher graphics version of GALAGA ported using DASM.
+- MSPACMAN: The classic MS. PACMAN game fully restored.
+- PACMAN: A romhack of MS. PACMAN into the classic PACMAN.
 
 The games in Unfinished_Games_DASM are yet to be ported and compiled.
 
