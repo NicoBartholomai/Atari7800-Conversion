@@ -49,12 +49,12 @@ HEADER  ORG     $0000
     DS 36, 0 ; reserved
     DC.B "ACTUAL CART DATA STARTS HERE" ; magic end header text
 
-    include "MARIAOS.ASM" ; this checks out
-    include "MSDEF.ASM"   ; this also checks out
-    include "MSCHAR.ASM"  ; checks out
+    include "MARIAOS.ASM"
+    include "MSDEF.ASM"
+    include "MSCHAR.ASM"
     align 2
-    include "MAIN.ASM"      ;some differences
-    include "INIT.ASM"      ; also some differences
+    include "MAIN.ASM"
+    include "INIT.ASM"
     align 2
     include "MSMOVE.ASM"  
     include "FRUIT.ASM"
@@ -83,40 +83,3 @@ HEADER  ORG     $0000
     align 2
     include "MACRO.ASM"
     align 2
-
- ; I'm pretty sure these are all of the files you would need to use
-
-    ; include "HIGH.ASM"
-    ; ; include "MUP.ASM"
-    ; include "MARIAOS.ASM"
-    ; include "MSDEF.ASM"
-    ; align 2
-    ; include "MAIN.ASM"
-    ; include "INIT.ASM"
-    ; align 2
-    ; include "MSMOVE.ASM"
-    ; include "FRUIT.ASM"
-    ; align 2
-    ; include "MONSTER.ASM"
-    ; include "PATH.ASM"
-    ; align 2
-    ; include "SPEED.ASM"
-    ; include "INTRSECT.ASM"
-    ; align 2
-    ; include "UTIL.ASM"
-    ; include "TUNES.ASM"
-    ; align 2
-    ; include "KERNAL.ASM"
-    ; include "GETJOY.ASM"
-    ; align 2
-    ; include "PUTCHAR.ASM"
-    ; include "LOADMAP.ASM"
-    ; align 2
-    ; include "MSCHAR.ASM"
-    ; include "ANIMATE.ASM"
-    ; align 2
-    ; include "TITLE.ASM"
-    ; align 2
-    ; include "END.ASM"
-    ; align 2
-    ; include "MACRO.ASM"

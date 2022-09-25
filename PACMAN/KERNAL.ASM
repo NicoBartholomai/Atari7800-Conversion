@@ -10,7 +10,6 @@ DLIFRUIT  LDA     #RED;                   ;ADJUST COLORS FOR FRUIT PALETTES
           LDA     #WHITE
           STA     Z3C2
           STA     Z4C2
-        ;   STA     Z1C3
           LDA     #ORANGE
           STA     Z5C1
           LDA     #BROWN;                 ;ADJUST COLORS FOR FRUIT PALETTES
@@ -26,20 +25,8 @@ DLIFRUIT  LDA     #RED;                   ;ADJUST COLORS FOR FRUIT PALETTES
           STA     Z1C1
           STA     Z7C1
           STA     Z6C1 
-          ; LDA     $CA; Neon Green
-          ; STA     Z6C1
-
-          ; nico's tests for which color gooes where
           LDA     #WHITE
-        ;   STA     Z1C1 ; idk
-        ;   STA     Z1C2 ; the keys handle
-          STA     Z1C3 ; the keys metal bits
-        ;   STA     Z3C1 ; the cherry's red; and the grenade's
-        ;   STA     Z3C2 ;  the cherry's white bits; and the grenade's
-        ;   STA     Z3C3 ; the cherry's stem; and the grenade specs
-        ;   STA     Z4C1 ; the strawberry
-        ;   STA     Z5C1 ; the orange
-        ;   STA     Z6C1; the bell
+          STA     Z1C3
           STA     Z7C2
 
 
