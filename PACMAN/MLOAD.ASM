@@ -7,8 +7,8 @@ HEADER  ORG     $0000
     ; Version 3 requires zero filling, dasm defaults to 1's so this must be manually added.
     DC.B "ATARI7800"    ; Atari 7800 magic text
     DS 7, 32            ; magic text must be 16 bytes
-    DC.B "Ms. Pac-Man"
-    DS 21, 32           ; name must be 32 bytes
+    DC.B "Pac-Man"
+    DS 25, 32           ; name must be 32 bytes
     ; DS HEADER+49-., 0   ; name must be 32 bytes ; todo double check this
     ; DC.B $00, $00,256->ROMTOP,$00 ; rom size without header - 4 bytes
     ; DC.B $00, $00, $3F, $7E ; rom size without header - 4bytes

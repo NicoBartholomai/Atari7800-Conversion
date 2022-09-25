@@ -362,7 +362,7 @@ RED       EQU     $32
 GREEN     EQU     $E7
 PURPLE    EQU     $63
 BLUE      EQU     $98
-YELLOW    EQU     $1E
+YELLOW    EQU     $1C
 LTBLUE    EQU     $AE
 DKBLUE    EQU     $82
 BROWN     EQU     $15

@@ -10,20 +10,38 @@ DLIFRUIT  LDA     #RED;                   ;ADJUST COLORS FOR FRUIT PALETTES
           LDA     #WHITE
           STA     Z3C2
           STA     Z4C2
-          STA     Z6C2
+        ;   STA     Z1C3
           LDA     #ORANGE
           STA     Z5C1
           LDA     #BROWN;                 ;ADJUST COLORS FOR FRUIT PALETTES
           STA     Z3C3
           STA     Z5C2
-          STA     Z6C3
           LDA     #GREEN;                 ;ADJUST COLORS FOR FRUIT PALETTES
           STA     Z4C3
           STA     Z5C3
-          STA     Z6C1
+          LDA     #BLUE
+          STA     Z1C2
+          STA     Z6C3 
           LDA     #YELLOW;                ;MAKE SURE BANANA AND MS GET RIGHT CLR
           STA     Z1C1
           STA     Z7C1
+          STA     Z6C1 
+          ; LDA     $CA; Neon Green
+          ; STA     Z6C1
+
+          ; nico's tests for which color gooes where
+          LDA     #WHITE
+        ;   STA     Z1C1 ; idk
+        ;   STA     Z1C2 ; the keys handle
+          STA     Z1C3 ; the keys metal bits
+        ;   STA     Z3C1 ; the cherry's red; and the grenade's
+        ;   STA     Z3C2 ;  the cherry's white bits; and the grenade's
+        ;   STA     Z3C3 ; the cherry's stem; and the grenade specs
+        ;   STA     Z4C1 ; the strawberry
+        ;   STA     Z5C1 ; the orange
+        ;   STA     Z6C1; the bell
+          STA     Z7C2
+
 
           LDA     #$00;                   ;SET "VBLANK" TO HAPPEN NEXT
           STA     KNLTEMP0

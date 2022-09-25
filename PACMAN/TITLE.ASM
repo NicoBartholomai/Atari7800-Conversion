@@ -61,7 +61,7 @@ INITSCRN  LDA     #WHITE;                 ;FIRST - SET COLORS
           STA     P0C3
           LDA     #YELLOW
           STA     P0C2
-          LDA     #PINK
+          LDA     #DKBLUE
           STA     P0C1
           STA     P7C2;                   ;SET COLOR FOR SECOND PLAYER
 

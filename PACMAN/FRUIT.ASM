@@ -291,10 +291,15 @@ NHSTAMP   DC.B      >FRUITNUM,>(FRUITNUM+$18),>(FRUITNUM+$30)
           DC.B      >(FRUITNUM+$90),>(FRUITNUM+$A8)
 
 ;*  TABLES TO SET FRUIT COLORS
-FPALETTE  DC.B      0,0,1,2,0,0,3,4
-FCOLOR1   DC.B      RED,RED,ORANGE,GREEN,YELLOW
-FCOLOR2   DC.B      WHITE,WHITE,BROWN,WHITE,BLACK
-FCOLOR3   DC.B      BROWN,GREEN,GREEN,BROWN,BLACK
+; This table is  useless and I'm removing it
+; FPALETTE  DC.B      0,0,0,0,0,0,0,0; teddy bear; cherry; strawberry; orange; apple; melon; bell; key
+FPALETTE  DC.B      0,0,1,2,0,3,4,4; teddy bear; cherry; strawberry; orange; apple; melon; bell; key
+; FCOLOR1   DC.B      RED,RED,ORANGE,GREEN,YELLOW
+; FCOLOR2   DC.B      WHITE,WHITE,BROWN,WHITE,BLUE
+; FCOLOR3   DC.B      BROWN,GREEN,GREEN,BROWN,WHITE
+FCOLOR1   DC.B      RED,RED,RED,RED,RED ; this is for the animated frui that appears on the stage.
+FCOLOR2   DC.B      RED,RED,RED,RED,RED
+FCOLOR3   DC.B      RED,RED,RED,RED,RED
 
 ;*  TABLES TO SET TUNNEL ENTRANCES
 TNLZONE   DC.B      $07,$10,$01,$16
