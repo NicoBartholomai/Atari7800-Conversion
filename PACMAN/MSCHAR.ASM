@@ -106,7 +106,7 @@ MSFONT    DC.B      $B0,$B0,$C0,$00,$00,$00        ; 30 -  UPPER LEFT FULL
           DC.B      $00,$00,$3C,$3C,$00,$00        ;81
           DC.B      $00,$00,$3C,$3C,$00,$00        ;82
 
-;*  STAMPS FOR "MS. PAC-MAN" LOGO
+;*  STAMPS FOR "PAC-MAN" LOGO
           DC.B      $00,$00,$00,$00,$00,$00 
           DC.B      $00,$00,$00,$00,$00,$00 
           DC.B      $00,$55,$55,$6A,$6A,$6A        ;85
