@@ -204,5 +204,3 @@ DELTAX:
    	DC.B	     2,3,5,3,2,3,0	;XCENTER
 DELTAY:
    	DC.B	     13,10,8,9,13,12,0	;YCENTER
-
-END

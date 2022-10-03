@@ -2,7 +2,7 @@
 ;*
 ;*
 ;*
-	.subttl		"Remnants of old Maria OS"
+;.subttl		"Remnants of old Maria OS"
 ;*
 ramcode	equ	$2300		;AREA RESERVED FOR CODE
 tiaram	equ	$480
@@ -209,7 +209,7 @@ SETMARIA:
 	lda	#02
 	sta	PTCTRL		;turn on internal rom (for NMI processing)
 ;*
-	jsr	ramcode+(wait00-ROMCODE)	;wait for V-blank start
+	jsr	ramcode+wait00-ROMCODE	;wait for V-blank start
 ;*
 	lda	#$27		;install our practice zone list
 	sta	DPPH
@@ -222,7 +222,7 @@ SETMARIA:
 ;*
 	ldx	#1
 frame2:
-	jsr	ramcode+(wait00-ROMCODE)	;wait for V-blank start
+	jsr	ramcode+wait00-ROMCODE	;wait for V-blank start
 	dex			;do 2 frames of this stuff
 	bpl	frame2
 ;*
@@ -434,6 +434,7 @@ HSCTAB:
 	DC.B	$20,$20,$20,$20,$20,$20,$20,$20,$20
 	.ENDIF
 ;*
+ROMTOP
 CODEDIF	equ	ROMCODE-ramcode		;DIFFERENCE BETWEEN OLD AND NEW ADDRESS
 ;*
 END

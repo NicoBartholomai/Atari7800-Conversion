@@ -881,4 +881,3 @@ ENDSTAMP:
 ;*
 ;*  the following was added to make the source generate what is in the rom
 	DC.B	$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff,$ff	;added by dave
-END

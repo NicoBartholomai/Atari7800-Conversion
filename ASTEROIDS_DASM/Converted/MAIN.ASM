@@ -591,13 +591,13 @@ NMI:
 	lda	NMICTRL		;see if NMI routine active
 	bne	NMIOVER		;br if not active
 ;*
-	lda	DLL+(2;*3)	;pick up top optional dli byte
+	lda	DLL+2;*3)	;pick up top optional dli byte ; illegal addressing mode fix
 	bpl	NMIHNDL		;skip to normal dli processing
 ;*
 ;*  this must be an added top of screen dli
 ;*
 	and	#$7f
-	sta	DLL+(2;*3)	;restore to normal display list
+	sta	DLL+2;*3)	;restore to normal display list ; illegal addressing mode fix
 	jsr	TUNER
 	inc	FRMCNT
 	jmp	NMIOVER
@@ -624,9 +624,9 @@ NMIHNDL:
 	adc	DDASUM
 	sta	DDASUM
 	bcc	.10
-	lda	DLL+(2;*3)	;pick up top optional dli byte
+	lda	DLL+2;*3)	;pick up top optional dli byte ; illegal adressing mode fix
 	ora	#$80		;set dli for next screen top
-	sta	DLL+(2;*3)	;save
+	sta	DLL+2;*3)	;save ; illegal adressing mode fix
 .10:
 ;*
 ;*  end dave"s additions
@@ -649,4 +649,3 @@ NMIOVER:
 	PLA
 IRQ:
 	RTI		        ;VECTOR IRQ"S TO THIS LABEL
-END

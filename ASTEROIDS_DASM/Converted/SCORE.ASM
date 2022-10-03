@@ -380,4 +380,3 @@ ZMOO:
 
 ENDSCOR:
 	DS.B	0
-END
