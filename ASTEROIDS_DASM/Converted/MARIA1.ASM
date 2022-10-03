@@ -1,0 +1,102 @@
+	processor 6502 
+	; .SUBTTL	"MARIA EQUATES -- ATARI CONFIDENTIAL"
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;*	THIS DOCUMENT CONTAINS CONFIDENTIAL PROPRIETARY INFORMATION	;*
+;*	OF ATARI WHICH MAY NOT BE COPIED, DISCLOSED, OR USED EXCEPT	;*
+;*	AS EXPRESSLY AUTHORIZED IN WRITING BY ATARI.;               	;*
+;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;*
+;*	MEMORY MAP USAGE OF THE 7800
+;*
+;*	0-1F		TIA REGISTERS
+;*	20-3F		MARIA REGISTERS
+;*	40-FF		ZERO PAGE RAM
+;*	100-13F		SHADOW OF TIA AND MARIA REGISTERS -- USED FOR 
+;*			PUSHING ACCUMULATOR ONTO REGISTERS
+;*	140-1FF		RAM (STACK)
+;*	200-27F		NOT USED
+;*	280-2FF		PIA PORTS AND TIMERS
+;*	300-17FF	NOT USED
+;*	1800-203F	RAM
+;*	2040-20FF	SHADOW OF ZERO PAGE RAM
+;*	2100-213F	RAM
+;*	2140-21FF	SHADOW OF STACK RAM
+;*	2200-27FF	RAM
+;*	2800-3FFF	DUPLICATION OF ADDRESS SPACE 2000-27FF
+;*	4000-FF7F	UNUSED ADDRESS SPACE
+;*	FF80-FFF9	RESERVED FOR ENCRYPTION
+;*	FFFA-FFFF	6502 VECTORS
+;*
+	.org	0
+TIA:	ds.b	1	;BASE ADDRESS FOR TIA CHIP
+
+PTCTRL:	ds.b	1	;INPUT PORT CONTROL ("VBLANK" IN TIA )
+	ds.b	6
+;*
+;*   AFTER INITIALIZING SWCHB AS FOLLOWS:
+;*
+;*	LDA  #$14
+;*	STA  CTLSWB
+;*	LDA  #0
+;*	STA  SWCHB
+;*
+;*   ...LEFT AND RIGHT FIRE BUTTONS CAN BE READ FROM THE FOLLOWING 4 LOCATIONS:
+;*
+;*			   THESE ARE ALSO USED FOR PADDLE INPUT
+INPT4B:	ds.b	1	;PLAYER 0, RIGHT FIRE BUTTON (D7=1 WHEN PUSHED)
+INPT4A:	ds.b	1	;PLAYER 0, LEFT FIRE BUTTON  (D7=1 WHEN PUSHED)
+INPT5B:	ds.b	1	;PLAYER 1, RIGHT FIRE BUTTON (D7=1 WHEN PUSHED)
+INPT5A:	ds.b	1	;PLAYER 1, LEFT FIRE BUTTON  (D7=1 WHEN PUSHED)
+;*
+;*   LEFT OR RIGHT FIRE BUTTONS READ FROM THESE LOCATIONS:
+;*
+INPT4:	ds.b	1	;PLAYER 0 FIRE BUTTON INPUT (D7=0 WHEN PUSHED)
+INPT5:	ds.b	1	;PLAYER 1 FIRE BUTTON INPUT (D7=0 WHEN PUSHED)
+	ds.b	7
+;*
+AUDC0:	ds.b	1	;AUDIO CONTROL CHANNEL 0
+AUDC1:	ds.b	1	;AUDIO CONTROL CHANNEL 1
+AUDF0:	ds.b	1	;AUDIO FREQUENCY CHANNEL 0
+AUDF1:	ds.b	1	;AUDIO FREQUENCY CHANNEL 1
+AUDV0:	ds.b	1	;AUDIO VOLUME CHANNEL 0
+AUDV1:	ds.b	1	;AUDIO VOLUME CHANNEL 1
+;
+;;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
+;
+	.org	$20
+;*
+MARIA:				;BASE ADDRESS FOR MARIA CHIP
+
+BKGRND:				;BACKGROUND COLOR
+BACKGRND:	ds.b	1	;synonym used by GCC
+P0C1:		ds.b	1	;PALETTE 0 - COLOR 1
+P0C2:		ds.b	1	;;          - COLOR 2
+P0C3:		ds.b	1	;;          - COLOR 3
+WSYNC:		ds.b	1	;WAIT FOR SYNC
+P1C1:		ds.b	1	;PALETTE 1 - COLOR 1
+P1C2:		ds.b	1	;;          - COLOR 2
+P1C3:		ds.b	1	;;          - COLOR 3
+MSTAT:		ds.b	1	;MARIA STATUS
+P2C1:		ds.b	1	;PALETTE 2 - COLOR 1
+P2C2:		ds.b	1	;;          - COLOR 2
+P2C3:		ds.b	1	;;          - COLOR 3
+DPPH:		ds.b	1	;DISPLAY LIST LIST POINT HIGH BYTE
+P3C1:		ds.b	1	;PALETTE 3 - COLOR 1
+P3C2:		ds.b	1	;;          - COLOR 2
+P3C3:		ds.b	1	;;          - COLOR 3
+DPPL:		ds.b	1	;DISPLAY LIST LIST POINT LOW BYTE
+P4C1:		ds.b	1	;PALETTE 4 - COLOR 1
+P4C2:		ds.b	1	;;          - COLOR 2
+P4C3:		ds.b	1	;;          - COLOR 3
+CHARBASE:	ds.b	1	;CHARACTER BASE ADDRESS
+P5C1:		ds.b	1	;PALETTE 5 - COLOR 1
+P5C2:		ds.b	1	;;          - COLOR 2
+P5C3:		ds.b	1	;;          - COLOR 3
+OFFSET:		ds.b	1	;FOR FUTURE EXPANSION HERE - STORE ZER0 HERE
+P6C1:		ds.b	1	;PALETTE 6 - COLOR 1
+P6C2:		ds.b	1	;;          - COLOR 2
+P6C3:		ds.b	1	;;          - COLOR 3
+CTRL:		ds.b	1	;MARIA CONTROL REGISTER
+P7C1:		ds.b	1	;PALETTE 7 - COLOR 1
+P7C2:		ds.b	1	;;          - COLOR 2
+P7C3:		ds.b	1	;;          - COLOR 3

@@ -406,35 +406,35 @@ UTOOPOOR:
 	JMP	USHOOT
 
 UFOPMASK:
-	.DC.B	$03,$07,$07,$0F	;RANGE MASKS FOR RANDOM #"S
+	DC.B	$03,$07,$07,$0F	;RANGE MASKS FOR RANDOM #"S
 
 
 ;* UFO SHOT VECTORS.
 HUSHVCTX:
-	.DC.B	$00,$00,$01,$02,$03,$03,$04,$04
-	.DC.B	$04,$04,$04,$03,$03,$02,$01,$00
-	.DC.B	$00,$FF,$FE,$FD,$FC,$FC,$FB,$FB
-	.DC.B	$FB,$FB,$FB,$FC,$FC,$FD,$FE,$FF
+	DC.B	$00,$00,$01,$02,$03,$03,$04,$04
+	DC.B	$04,$04,$04,$03,$03,$02,$01,$00
+	DC.B	$00,$FF,$FE,$FD,$FC,$FC,$FB,$FB
+	DC.B	$FB,$FB,$FB,$FC,$FC,$FD,$FE,$FF
 
 USHVCTX:
-	.DC.B	$00,$DB,$AD,$6E,$18,$A3,$0B,$4A
-	.DC.B	$60,$4A,$0B,$A3,$18,$6E,$AD,$DB
-	.DC.B	$00,$26,$54,$93,$E9,$5E,$F6,$B7
-	.DC.B	$A1,$B7,$F6,$5E,$E9,$93,$54,$26
+	DC.B	$00,$DB,$AD,$6E,$18,$A3,$0B,$4A
+	DC.B	$60,$4A,$0B,$A3,$18,$6E,$AD,$DB
+	DC.B	$00,$26,$54,$93,$E9,$5E,$F6,$B7
+	DC.B	$A1,$B7,$F6,$5E,$E9,$93,$54,$26
 
 HUSHVCTY:
-	.DC.B	$07,$06,$06,$05,$04,$03,$02,$01
-	.DC.B	$00,$FE,$FD,$FC,$FB,$FA,$F9,$F9
-	.DC.B	$F9,$F9,$F9,$FA,$FB,$FC,$FD,$FE
-	.DC.B	$00,$01,$02,$03,$04,$05,$06,$06
+	DC.B	$07,$06,$06,$05,$04,$03,$02,$01
+	DC.B	$00,$FE,$FD,$FC,$FB,$FA,$F9,$F9
+	DC.B	$F9,$F9,$F9,$FA,$FB,$FC,$FD,$FE
+	DC.B	$00,$01,$02,$03,$04,$05,$06,$06
 
 USHVCTY:
-	.DC.B	$00,$DE,$78,$D2,$F3,$E4,$AE,$5E
-	.DC.B	$00,$A3,$53,$1D,$0E,$2F,$89,$23
-	.DC.B	$01,$23,$89,$2F,$0E,$1D,$53,$A3
-	.DC.B	$00,$5E,$AE,$E4,$F3,$D2,$78,$DE
+	DC.B	$00,$DE,$78,$D2,$F3,$E4,$AE,$5E
+	DC.B	$00,$A3,$53,$1D,$0E,$2F,$89,$23
+	DC.B	$01,$23,$89,$2F,$0E,$1D,$53,$A3
+	DC.B	$00,$5E,$AE,$E4,$F3,$D2,$78,$DE
 
-	.DC.B	$01,$23,$89,$2F,$0E,$1D,$53,$A3
-	.DC.B	$00,$5E,$AE,$E4,$F3,$D2,$78,$DE
+	DC.B	$01,$23,$89,$2F,$0E,$1D,$53,$A3
+	DC.B	$00,$5E,$AE,$E4,$F3,$D2,$78,$DE
 
 END

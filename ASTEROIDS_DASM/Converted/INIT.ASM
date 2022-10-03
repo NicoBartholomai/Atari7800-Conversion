@@ -135,7 +135,7 @@ ZSETTWO:  LDA     #BIRTH;                 ;IN > 1 PLAYER GAME,
           STA     TIMER+1
           RTS
 
-MAXLVLS:  .DC.B   $40,$60,$80,$DF        ;$DF = "AVOID WRAP" WHEN ADDING $20!
+MAXLVLS:  DC.B   $40,$60,$80,$DF        ;$DF = "AVOID WRAP" WHEN ADDING $20!
 
 ;*;* ROUTINES THAT USED TO BE IN MAIN.S ;*;*
 

@@ -9,7 +9,8 @@
 ;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*;*
 ;*
 ;*
-	include	"RASTDEF.ASM"
+	include	"RASTDEF1.ASM"
+	include "RASTDEF2.ASM"
 	include	"STAMPS.ASM"
 	include	"MAIN.ASM"
 	include	"JOY.ASM"
